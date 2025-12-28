@@ -4,7 +4,7 @@
 
 ## Overview
 
-**Sisyphus** is a Czech Republic government debt visualization web application. It displays a real-time debt counter and historical debt chart, served as a static site with unlimited scaling capacity. All data processing happens client-side. The application is in Czech language.
+**Sisyphus** is a Czech Republic government debt visualization web application. It displays a real-time debt counter and interactive historical debt chart with multiple visualization modes. Served as a static site with unlimited scaling capacity. All data processing happens client-side. The application is in Czech language.
 
 **Motto:** „Ať ho tlačíš, nebo ženeš, Sisyfe — balvan se vždy vrací." (Ovidius)
 
@@ -20,7 +20,7 @@
 | Fonts | Bebas Neue, Crimson Pro, Source Sans 3, JetBrains Mono (OFL) |
 | Hosting | Cloudflare Pages |
 | Data Storage | Static JSON files (public/data/) |
-| Testing | Vitest |
+| Testing | Vitest + @vitest/coverage-v8 |
 
 ## Architecture
 
@@ -32,10 +32,15 @@
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │   ┌──────────────────┐              ┌──────────────────────────────────┐   │
-│   │ Pages            │              │ Static JSON                       │   │
+│   │ Pages            │              │ Static JSON Data                  │   │
 │   │ (Static React)   │              │ - debt-anchor.json                │   │
 │   │                  │              │ - debt-historical.json            │   │
-│   └──────────────────┘              └──────────────────────────────────┘   │
+│   └──────────────────┘              │ - events.json                     │   │
+│                                      │ - governments.json                │   │
+│                                      │ - budget-plans.json               │   │
+│                                      │ - economic-data.json              │   │
+│                                      │ - demographic-data.json           │   │
+│                                      └──────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
@@ -53,18 +58,40 @@
 │                                                                              │
 │   ┌────────────────────────────────────────────────────────────────────┐   │
 │   │ DebtChart                                                           │   │
-│   │ - Fetches historical data once on load                              │   │
-│   │ - D3.js bar chart showing debt 1993-2025                            │   │
-│   │ - Interactive tooltips                                              │   │
+│   │ - 6 graph variants (debt/deficit × absolute/inflation/GDP%)         │   │
+│   │ - 3 population modes (country/per capita/per working age)           │   │
+│   │ - Interactive government timeline with party colors                 │   │
+│   │ - Event markers with precise date positioning                       │   │
+│   │ - 2026 budget predictions (Fiala vs Babiš plans)                    │   │
 │   └────────────────────────────────────────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Data Flow:**
-```
-[Static JSON] → [React App fetches on load] → [Client processes & renders]
-```
+## Features
+
+### Graph Variants (6 types)
+| ID | Name | Description |
+|----|------|-------------|
+| `debt-absolute` | Dluh | Cumulative debt in billions CZK |
+| `debt-inflation-adjusted` | Dluh (reálný) | Inflation-adjusted to 2025 prices |
+| `debt-gdp-percent` | Dluh/HDP | Debt as % of GDP |
+| `deficit-absolute` | Schodek | Yearly deficit in billions CZK |
+| `deficit-inflation-adjusted` | Schodek (reálný) | Inflation-adjusted deficit |
+| `deficit-gdp-percent` | Schodek/HDP | Deficit as % of GDP |
+
+### Population Modes (3 types)
+| ID | Name | Description |
+|----|------|-------------|
+| `country` | Celá země | Absolute values |
+| `per-capita` | Na obyvatele | Divided by total population |
+| `per-working` | Na prac. obyvatele | Divided by working age (15-64) |
+
+### Chart Annotations
+- **Government timeline**: Colored bars showing each government's term with party colors
+- **Event markers**: Red dots at exact dates (Lehman Brothers, Covid-19, Ukraine invasion)
+- **Staggered event labels**: Automatically positioned to prevent overlap
+- **2026 predictions**: Toggle between Fiala and Babiš budget plans
 
 ## Project Structure
 
@@ -76,30 +103,42 @@ sisyphus/
 │   │   │   ├── DebtCounter.tsx
 │   │   │   ├── DebtCounter.module.css
 │   │   │   └── index.ts
-│   │   └── DebtChart/          # D3.js historical chart
+│   │   └── DebtChart/          # D3.js interactive chart
 │   │       ├── DebtChart.tsx
 │   │       ├── DebtChart.module.css
 │   │       └── index.ts
+│   ├── config/
+│   │   ├── graphVariants.ts    # Graph variant definitions
+│   │   └── populationModes.ts  # Population mode definitions
 │   ├── hooks/
 │   │   ├── useDebtCounter.ts   # Counter logic hook
-│   │   └── useHistoricalDebt.ts # Historical data hook
+│   │   └── useHistoricalDebt.ts # All data fetching hook
 │   ├── utils/
 │   │   ├── calculations.ts     # Debt calculations (TDD)
 │   │   ├── calculations.test.ts
 │   │   ├── formatters.ts       # Czech currency formatting (TDD)
 │   │   ├── formatters.test.ts
 │   │   ├── historicalData.ts   # Historical data processing (TDD)
-│   │   └── historicalData.test.ts
+│   │   ├── historicalData.test.ts
+│   │   ├── chartHelpers.ts     # Chart utilities (TDD)
+│   │   ├── chartHelpers.test.ts
+│   │   ├── graphCalculations.ts # Inflation, GDP%, deficit (TDD)
+│   │   └── graphCalculations.test.ts
 │   ├── types/
 │   │   └── debt.ts             # TypeScript interfaces
-│   ├── App.tsx
+│   ├── App.tsx                 # Main app with data sources footer
 │   ├── App.module.css
 │   ├── main.tsx
 │   └── index.css               # Global styles, light theme
 ├── public/
 │   └── data/
-│       ├── debt-anchor.json    # Anchor data for debt counter
-│       └── debt-historical.json # Historical data 1993-2025
+│       ├── debt-anchor.json    # Anchor for real-time counter
+│       ├── debt-historical.json # Historical debt 1993-2025
+│       ├── events.json         # Significant events with dates
+│       ├── governments.json    # Government timeline + party colors
+│       ├── budget-plans.json   # 2026 budget predictions
+│       ├── economic-data.json  # Inflation rates + GDP 1993-2026
+│       └── demographic-data.json # Population data 1993-2026
 ├── package.json
 ├── vite.config.ts
 ├── vitest.config.ts
@@ -113,12 +152,14 @@ sisyphus/
 | Component | Location | Purpose |
 |-----------|----------|---------|
 | `DebtCounter` | src/components/DebtCounter/ | Real-time debt display with Kč |
-| `DebtChart` | src/components/DebtChart/ | D3.js bar chart 1993-2025 |
+| `DebtChart` | src/components/DebtChart/ | D3.js interactive chart with variants |
 | `useDebtCounter` | src/hooks/ | Fetches anchor, computes & updates every second |
-| `useHistoricalDebt` | src/hooks/ | Fetches & processes historical data |
+| `useHistoricalDebt` | src/hooks/ | Fetches all JSON data files |
 | `calculations.ts` | src/utils/ | Deficit per second, elapsed time, current debt |
 | `formatters.ts` | src/utils/ | Czech locale currency formatting |
 | `historicalData.ts` | src/utils/ | Extract Q4 data for chart display |
+| `chartHelpers.ts` | src/utils/ | Year formatting, government lookup |
+| `graphCalculations.ts` | src/utils/ | Inflation adjustment, GDP %, yearly deficit |
 
 ## Data Models
 
@@ -134,28 +175,39 @@ interface DebtAnchor {
 }
 ```
 
-### Historical Data (debt-historical.json)
+### Governments (governments.json)
 ```typescript
-interface HistoricalDebtData {
-  source: string;               // "Ministerstvo financí ČR"
-  sourceUrl: string;            // MFCR URL
-  lastUpdated: string;
-  currency: string;
-  unit: string;                 // "billionCZK"
-  description: string;
-  data: HistoricalDebtPoint[];
+interface Government {
+  name: string;           // e.g., "Fiala"
+  startDate: string;      // ISO date
+  endDate: string | null; // null for current government
+  party: string;          // Party ID
 }
 
-interface HistoricalDebtPoint {
-  year: number;
-  q1?: number;  // Q1 value in billion CZK
-  q2?: number;
-  q3?: number;
-  q4?: number;
+interface GovernmentsData {
+  parties: Record<string, { name: string; color: string }>;
+  governments: Government[];
 }
 ```
 
-**Data Source:** [Ministerstvo financí ČR](https://www.mfcr.cz/cs/rozpoctova-politika/makroekonomika/statistika-vladniho-sektoru/2025/ctvrtletni-prehledy-o-stavu-a-vyvoji-statniho-dluh-61526)
+### Demographic Data (demographic-data.json)
+```typescript
+interface DemographicYearData {
+  year: number;
+  population: number;   // Total population
+  workingAge: number;   // Population 15-64
+}
+```
+
+## Data Sources
+
+| Data | Source | URL |
+|------|--------|-----|
+| Státní dluh ČR | Ministerstvo financí ČR | [mfcr.cz](https://www.mfcr.cz/cs/rozpoctova-politika/makroekonomika/statistika-vladniho-sektoru/2025/ctvrtletni-prehledy-o-stavu-a-vyvoji-statniho-dluh-61526) |
+| Seznam vlád Česka | Wikipedia | [wikipedia.org](https://cs.wikipedia.org/wiki/Seznam_vlád_Česka) |
+| Rozpočtové plány | Ministerstvo financí ČR | [mfcr.cz](https://www.mfcr.cz/) |
+| Inflace a HDP | Český statistický úřad | [czso.cz](https://www.czso.cz/) |
+| Demografická data | Český statistický úřad | [csu.gov.cz](https://csu.gov.cz/produkty/obyvatelstvo_hu) |
 
 ## Testing Strategy
 
@@ -163,38 +215,63 @@ interface HistoricalDebtPoint {
 - Debt growth calculations
 - Czech currency formatting
 - Historical data processing (Q4 extraction)
+- Inflation adjustment calculations
+- GDP percentage calculations
+- Yearly deficit calculations
+- Chart helper functions
 
-**Test Files (22 tests total):**
+**Test Coverage: 100%**
 ```
-src/utils/calculations.test.ts      (8 tests)
-src/utils/formatters.test.ts        (4 tests)
-src/utils/historicalData.test.ts    (10 tests)
+-------------------|---------|----------|---------|---------|
+File               | % Stmts | % Branch | % Funcs | % Lines |
+-------------------|---------|----------|---------|---------|
+All files          |     100 |      100 |     100 |     100 |
+ calculations.ts   |     100 |      100 |     100 |     100 |
+ chartHelpers.ts   |     100 |      100 |     100 |     100 |
+ formatters.ts     |     100 |      100 |     100 |     100 |
+ graphCalculations |     100 |      100 |     100 |     100 |
+ historicalData.ts |     100 |      100 |     100 |     100 |
+-------------------|---------|----------|---------|---------|
 ```
+
+**Test Summary:**
+- 59 tests across 5 test files
+- 122 statements, 52 branches, 14 functions covered
 
 ## Current State
 
-**Phase:** MVP - Counter + Chart
+**Phase:** MVP Complete
 
 **Completed:**
 - [x] Project scaffolding (Vite + React + TypeScript)
 - [x] Debt counter with real-time updates (Kč)
 - [x] Historical data JSON from MFCR (1993-2025, quarterly)
-- [x] D3.js bar chart showing yearly debt
+- [x] D3.js bar chart with 6 graph variants
+- [x] 3 population modes (country/per capita/per working age)
+- [x] Government timeline with party colors
+- [x] Event markers with precise date positioning
+- [x] 2026 budget plan predictions with toggle
+- [x] Inflation adjustment (2025 baseline)
+- [x] GDP percentage calculations
+- [x] Yearly deficit calculations
 - [x] Ovidius motto at top of page
 - [x] Light theme with CSS Modules
 - [x] Czech-compatible fonts
-- [x] TDD: 22 tests passing
+- [x] Data sources footer with links
+- [x] Responsive design (up to 2400px width)
+- [x] TDD: 59 tests, 100% coverage
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates
 - [ ] Cloudflare Pages deployment
-- [ ] Additional visualizations
 
 ## Notes
 
-- All business logic has tests (TDD)
+- All business logic has 100% test coverage (TDD)
 - Application is in Czech language
 - Light theme only
 - Fonts support Czech diacritics (háčky, čárky)
 - Chart uses Q4 values (or latest available quarter)
+- Time scale positioning for governments and events (precise dates)
+- Inflation baseline: 2025
 - Historical data updated from MFCR as of 2025-10-17
