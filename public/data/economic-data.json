@@ -1,0 +1,48 @@
+{
+  "description": "Ekonomická data České republiky pro přepočty",
+  "sources": [
+    "Český statistický úřad (ČSÚ)",
+    "Česká národní banka (ČNB)"
+  ],
+  "data": [
+    { "year": 1993, "inflationRate": 20.8, "gdp": 1020 },
+    { "year": 1994, "inflationRate": 10.0, "gdp": 1183 },
+    { "year": 1995, "inflationRate": 9.1, "gdp": 1381 },
+    { "year": 1996, "inflationRate": 8.8, "gdp": 1567 },
+    { "year": 1997, "inflationRate": 8.5, "gdp": 1680 },
+    { "year": 1998, "inflationRate": 10.7, "gdp": 1839 },
+    { "year": 1999, "inflationRate": 2.1, "gdp": 1902 },
+    { "year": 2000, "inflationRate": 3.9, "gdp": 2040 },
+    { "year": 2001, "inflationRate": 4.7, "gdp": 2242 },
+    { "year": 2002, "inflationRate": 1.8, "gdp": 2358 },
+    { "year": 2003, "inflationRate": 0.1, "gdp": 2465 },
+    { "year": 2004, "inflationRate": 2.8, "gdp": 2741 },
+    { "year": 2005, "inflationRate": 1.9, "gdp": 2983 },
+    { "year": 2006, "inflationRate": 2.5, "gdp": 3222 },
+    { "year": 2007, "inflationRate": 2.8, "gdp": 3535 },
+    { "year": 2008, "inflationRate": 6.3, "gdp": 3848 },
+    { "year": 2009, "inflationRate": 1.0, "gdp": 3739 },
+    { "year": 2010, "inflationRate": 1.5, "gdp": 3791 },
+    { "year": 2011, "inflationRate": 1.9, "gdp": 3973 },
+    { "year": 2012, "inflationRate": 3.3, "gdp": 4042 },
+    { "year": 2013, "inflationRate": 1.4, "gdp": 4077 },
+    { "year": 2014, "inflationRate": 0.4, "gdp": 4261 },
+    { "year": 2015, "inflationRate": 0.3, "gdp": 4477 },
+    { "year": 2016, "inflationRate": 0.7, "gdp": 4712 },
+    { "year": 2017, "inflationRate": 2.5, "gdp": 5047 },
+    { "year": 2018, "inflationRate": 2.1, "gdp": 5310 },
+    { "year": 2019, "inflationRate": 2.8, "gdp": 5647 },
+    { "year": 2020, "inflationRate": 3.2, "gdp": 5694 },
+    { "year": 2021, "inflationRate": 3.8, "gdp": 6109 },
+    { "year": 2022, "inflationRate": 15.1, "gdp": 6790 },
+    { "year": 2023, "inflationRate": 10.7, "gdp": 7344 },
+    { "year": 2024, "inflationRate": 2.4, "gdp": 7650 },
+    { "year": 2025, "inflationRate": 2.5, "gdp": 7900 },
+    { "year": 2026, "inflationRate": 2.0, "gdp": 8150 }
+  ],
+  "units": {
+    "inflationRate": "percent (year-over-year CPI)",
+    "gdp": "billion CZK (current prices)"
+  }
+}
+

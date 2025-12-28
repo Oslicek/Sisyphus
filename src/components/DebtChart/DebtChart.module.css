@@ -12,7 +12,41 @@
   text-transform: uppercase;
   color: var(--color-text);
   text-align: center;
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.75rem 0;
+}
+
+/* Graph variant selector */
+.variantSelector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+}
+
+.variantButton {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--color-text-muted);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.variantButton:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.variantButtonActive {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
 }
 
 .svgContainer {
@@ -43,6 +77,16 @@
 
 .barPrediction:hover {
   opacity: 1;
+}
+
+.barSurplus {
+  fill: #22c55e;
+  cursor: pointer;
+  transition: fill 0.2s ease;
+}
+
+.barSurplus:hover {
+  fill: #16a34a;
 }
 
 .axisLabel {

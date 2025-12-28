@@ -58,7 +58,7 @@ export interface HistoricalDebtData {
  */
 export interface ChartDataPoint {
   year: number;
-  amount: number; // in billion CZK
+  amount: number; // value depends on graph variant
   isPrediction?: boolean;
   planId?: string;
   planName?: string;
@@ -124,4 +124,42 @@ export interface BudgetPlansData {
   description: string;
   source: string;
   plans: BudgetPlan[];
+}
+
+/**
+ * Economic data for a year
+ */
+export interface EconomicYearData {
+  year: number;
+  inflationRate: number; // percent year-over-year
+  gdp: number; // billion CZK
+}
+
+export interface EconomicData {
+  description: string;
+  sources: string[];
+  data: EconomicYearData[];
+  units: {
+    inflationRate: string;
+    gdp: string;
+  };
+}
+
+/**
+ * Graph variant types
+ */
+export type GraphVariant = 
+  | 'debt-absolute'           // A. Cumulative debt in absolute value
+  | 'debt-inflation-adjusted' // B. Cumulative debt adjusted to inflation
+  | 'debt-gdp-percent'        // C. Cumulative debt as GDP percentage
+  | 'deficit-absolute'        // D. Yearly deficit in absolute value
+  | 'deficit-inflation-adjusted' // E. Yearly deficit adjusted to inflation
+  | 'deficit-gdp-percent';    // F. Yearly deficit as GDP percentage
+
+export interface GraphVariantInfo {
+  id: GraphVariant;
+  name: string;
+  shortName: string;
+  unit: string;
+  description: string;
 }

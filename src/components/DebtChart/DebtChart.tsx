@@ -1,9 +1,15 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import * as d3 from 'd3';
 import { useHistoricalDebt } from '../../hooks/useHistoricalDebt';
 import { formatBillionsCzech } from '../../utils/formatters';
 import { formatYearLabel, getGovernmentForYear } from '../../utils/chartHelpers';
-import type { ChartDataPoint, Government, BudgetPlan } from '../../types/debt';
+import {
+  adjustForInflation,
+  calculateGdpPercentage,
+  calculateYearlyDeficit,
+} from '../../utils/graphCalculations';
+import { GRAPH_VARIANTS, getGraphVariantInfo } from '../../config/graphVariants';
+import type { ChartDataPoint, Government, BudgetPlan, GraphVariant, EconomicYearData } from '../../types/debt';
 import styles from './DebtChart.module.css';
 
 const CHART_CONFIG = {
@@ -35,12 +41,7 @@ interface GovernmentSpan {
   yearsCount: number;
 }
 
-interface DebtChartProps {
-  selectedPlanId?: string;
-  onPlanChange?: (planId: string) => void;
-}
-
-export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartProps) {
+export function DebtChart() {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 450 });
@@ -50,9 +51,10 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
     y: number;
     data: ChartDataPoint | null;
   }>({ visible: false, x: 0, y: 0, data: null });
-  const [activePlan, setActivePlan] = useState(selectedPlanId);
+  const [activePlan, setActivePlan] = useState('fiala');
+  const [activeVariant, setActiveVariant] = useState<GraphVariant>('debt-absolute');
 
-  const { chartData, events, governments, parties, budgetPlans, isLoading, error } = useHistoricalDebt();
+  const { chartData, events, governments, parties, budgetPlans, economicData, isLoading, error } = useHistoricalDebt();
 
   // Handle responsive sizing
   useEffect(() => {
@@ -70,25 +72,23 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
   }, []);
 
   // Build chart data with prediction
-  const getChartDataWithPrediction = (): ChartDataPoint[] => {
-    if (chartData.length === 0 || budgetPlans.length === 0) return chartData;
+  const getChartDataWithPrediction = (baseData: ChartDataPoint[]): ChartDataPoint[] => {
+    if (baseData.length === 0 || budgetPlans.length === 0) return baseData;
 
     const plan = budgetPlans.find((p) => p.id === activePlan);
-    if (!plan) return chartData;
+    if (!plan) return baseData;
 
     const prediction2026 = plan.predictions.find((p) => p.year === 2026);
-    if (!prediction2026) return chartData;
+    if (!prediction2026) return baseData;
 
-    // Get 2025 value as base
-    const debt2025 = chartData.find((d) => d.year === 2025);
-    if (!debt2025) return chartData;
+    const debt2025 = baseData.find((d) => d.year === 2025);
+    if (!debt2025) return baseData;
 
-    // Calculate 2026 debt: 2025 debt + 2026 deficit (convert to billions)
     const deficit2026InBillions = prediction2026.deficit / 1_000_000_000;
     const debt2026 = debt2025.amount + deficit2026InBillions;
 
     return [
-      ...chartData,
+      ...baseData,
       {
         year: 2026,
         amount: debt2026,
@@ -101,11 +101,57 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
     ];
   };
 
-  const fullChartData = getChartDataWithPrediction();
+  // Transform data based on active variant
+  const transformedData = useMemo(() => {
+    if (chartData.length === 0 || economicData.length === 0) return [];
+
+    let baseData = [...chartData];
+    const targetYear = 2024; // Base year for inflation adjustment
+
+    // Add prediction for debt variants
+    if (activeVariant.startsWith('debt-')) {
+      baseData = getChartDataWithPrediction(baseData);
+    }
+
+    switch (activeVariant) {
+      case 'debt-absolute':
+        return baseData;
+      
+      case 'debt-inflation-adjusted':
+        return adjustForInflation(baseData, economicData, targetYear);
+      
+      case 'debt-gdp-percent':
+        return calculateGdpPercentage(baseData, economicData);
+      
+      case 'deficit-absolute': {
+        const withPrediction = getChartDataWithPrediction(chartData);
+        return calculateYearlyDeficit(withPrediction);
+      }
+      
+      case 'deficit-inflation-adjusted': {
+        const withPrediction = getChartDataWithPrediction(chartData);
+        const adjusted = adjustForInflation(withPrediction, economicData, targetYear);
+        return calculateYearlyDeficit(adjusted);
+      }
+      
+      case 'deficit-gdp-percent': {
+        const withPrediction = getChartDataWithPrediction(chartData);
+        const deficits = calculateYearlyDeficit(withPrediction);
+        return calculateGdpPercentage(deficits, economicData);
+      }
+      
+      default:
+        return baseData;
+    }
+  }, [chartData, economicData, activeVariant, activePlan, budgetPlans]);
+
+  const variantInfo = getGraphVariantInfo(activeVariant);
+  const isDeficitVariant = activeVariant.startsWith('deficit-');
+  const isPercentVariant = activeVariant.includes('gdp-percent');
 
   // Draw chart with D3
   useEffect(() => {
-    if (!svgRef.current || fullChartData.length === 0) return;
+    if (!svgRef.current || transformedData.length === 0) return;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
@@ -118,18 +164,23 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
     // Scales
     const xScale = d3
       .scaleBand<number>()
-      .domain(fullChartData.map((d) => d.year))
+      .domain(transformedData.map((d) => d.year))
       .range([0, innerWidth])
       .padding(barPadding);
 
+    // For deficit charts, we need to handle negative values
+    const minValue = isDeficitVariant ? Math.min(0, d3.min(transformedData, (d) => d.amount) ?? 0) : 0;
+    const maxValue = d3.max(transformedData, (d) => d.amount) ?? 0;
+
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(fullChartData, (d) => d.amount) ?? 0])
+      .domain([minValue, maxValue])
       .nice()
       .range([innerHeight, 0]);
 
     const barWidth = xScale.bandwidth();
     const showAllYears = barWidth >= minBarWidthForAllYears;
+    const zeroY = yScale(0);
 
     // Chart group
     const g = svg
@@ -147,15 +198,37 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
       .attr('y1', (d) => yScale(d))
       .attr('y2', (d) => yScale(d));
 
+    // Zero line for deficit charts
+    if (isDeficitVariant && minValue < 0) {
+      g.append('line')
+        .attr('x1', 0)
+        .attr('x2', innerWidth)
+        .attr('y1', zeroY)
+        .attr('y2', zeroY)
+        .attr('stroke', '#1a1a2e')
+        .attr('stroke-width', 1)
+        .attr('stroke-dasharray', '4,4');
+    }
+
     // Bars
     g.selectAll('rect.bar')
-      .data(fullChartData)
+      .data(transformedData)
       .join('rect')
-      .attr('class', (d) => d.isPrediction ? styles.barPrediction : styles.bar)
+      .attr('class', (d) => {
+        if (d.isPrediction) return styles.barPrediction;
+        if (isDeficitVariant && d.amount < 0) return styles.barSurplus;
+        return styles.bar;
+      })
       .attr('x', (d) => xScale(d.year) ?? 0)
-      .attr('y', (d) => yScale(d.amount))
+      .attr('y', (d) => {
+        if (d.amount >= 0) return yScale(d.amount);
+        return zeroY;
+      })
       .attr('width', xScale.bandwidth())
-      .attr('height', (d) => innerHeight - yScale(d.amount))
+      .attr('height', (d) => {
+        if (d.amount >= 0) return zeroY - yScale(d.amount);
+        return yScale(d.amount) - zeroY;
+      })
       .attr('fill', (d) => d.isPrediction ? (d.planColor || '#666') : '')
       .on('mouseenter', (event, d) => {
         const rect = event.target.getBoundingClientRect();
@@ -178,9 +251,9 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
       .append('g')
       .attr('transform', `translate(0,${innerHeight + 5})`);
 
-    const yearsToShow = getYearTickValues(fullChartData, showAllYears);
+    const yearsToShow = getYearTickValues(transformedData, showAllYears);
 
-    fullChartData.forEach((d) => {
+    transformedData.forEach((d) => {
       if (yearsToShow.includes(d.year)) {
         const x = (xScale(d.year) ?? 0) + xScale.bandwidth() / 2;
         yearsGroup
@@ -211,11 +284,11 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
     const govSpans: GovernmentSpan[] = [];
     const processedGovs = new Set<string>();
 
-    fullChartData.forEach((d) => {
-      if (d.isPrediction) return; // Skip prediction year for governments
+    transformedData.forEach((d) => {
+      if (d.isPrediction) return;
       const gov = getGovernmentForYear(d.year, governments);
       if (gov && !processedGovs.has(gov.name)) {
-        const govYears = fullChartData.filter(
+        const govYears = transformedData.filter(
           (point) => !point.isPrediction && getGovernmentForYear(point.year, governments)?.name === gov.name
         );
         
@@ -306,7 +379,7 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
     const yAxis = d3
       .axisLeft(yScale)
       .ticks(5)
-      .tickFormat((d) => `${d} mld`);
+      .tickFormat((d) => isPercentVariant ? `${d}%` : `${d} mld`);
 
     const yAxisGroup = g.append('g').call(yAxis);
 
@@ -322,11 +395,14 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
     yAxisGroup.selectAll('.tick text')
       .attr('class', styles.axisLabel);
 
-  }, [fullChartData, events, governments, parties, dimensions]);
+  }, [transformedData, events, governments, parties, dimensions, isDeficitVariant, isPercentVariant]);
 
-  const handlePlanChange = (planId: string) => {
-    setActivePlan(planId);
-    onPlanChange?.(planId);
+  const formatTooltipValue = (data: ChartDataPoint): string => {
+    if (data.note === '?') return '?';
+    if (isPercentVariant) {
+      return `${data.amount.toFixed(1)} % HDP`;
+    }
+    return formatBillionsCzech(data.amount);
   };
 
   if (isLoading) {
@@ -345,12 +421,26 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
     );
   }
 
-  // Find current plan for tooltip
-  const currentPlan = budgetPlans.find((p) => p.id === activePlan);
+  const titleYears = activeVariant.startsWith('deficit-') ? '1994–2026' : '1993–2026';
 
   return (
     <section className={styles.container} ref={containerRef}>
-      <h2 className={styles.chartTitle}>Vývoj státního dluhu (1993–2026)</h2>
+      <h2 className={styles.chartTitle}>{variantInfo.name} ({titleYears})</h2>
+      
+      {/* Graph variant selector */}
+      <div className={styles.variantSelector}>
+        {GRAPH_VARIANTS.map((variant) => (
+          <button
+            key={variant.id}
+            className={`${styles.variantButton} ${activeVariant === variant.id ? styles.variantButtonActive : ''}`}
+            onClick={() => setActiveVariant(variant.id)}
+            title={variant.description}
+          >
+            {variant.shortName}
+          </button>
+        ))}
+      </div>
+
       <div className={styles.svgContainer}>
         <svg
           ref={svgRef}
@@ -376,7 +466,7 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
               {tooltip.data.isPrediction && ' (predikce)'}
             </div>
             <div className={styles.tooltipAmount}>
-              {tooltip.data.note === '?' ? '?' : formatBillionsCzech(tooltip.data.amount)}
+              {formatTooltipValue(tooltip.data)}
             </div>
             {tooltip.data.planName && (
               <div className={styles.tooltipPlan}>{tooltip.data.planName}</div>
@@ -396,7 +486,7 @@ export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartP
               style={{
                 '--plan-color': plan.color,
               } as React.CSSProperties}
-              onClick={() => handlePlanChange(plan.id)}
+              onClick={() => setActivePlan(plan.id)}
             >
               {plan.name}
             </button>

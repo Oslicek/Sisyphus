@@ -8,7 +8,9 @@ import type {
   Government,
   PartyInfo,
   BudgetPlansData,
-  BudgetPlan
+  BudgetPlan,
+  EconomicData,
+  EconomicYearData
 } from '../types/debt';
 import { extractQ4Data } from '../utils/historicalData';
 
@@ -18,12 +20,13 @@ interface UseHistoricalDebtResult {
   governments: Government[];
   parties: Record<string, PartyInfo>;
   budgetPlans: BudgetPlan[];
+  economicData: EconomicYearData[];
   isLoading: boolean;
   error: string | null;
 }
 
 /**
- * Hook that fetches historical debt data, events, governments, and budget plans
+ * Hook that fetches historical debt data, events, governments, budget plans, and economic data
  */
 export function useHistoricalDebt(): UseHistoricalDebtResult {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
@@ -31,17 +34,19 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
   const [governments, setGovernments] = useState<Government[]>([]);
   const [parties, setParties] = useState<Record<string, PartyInfo>>({});
   const [budgetPlans, setBudgetPlans] = useState<BudgetPlan[]>([]);
+  const [economicData, setEconomicData] = useState<EconomicYearData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchAllData() {
       try {
-        const [debtResponse, eventsResponse, governmentsResponse, budgetResponse] = await Promise.all([
+        const [debtResponse, eventsResponse, governmentsResponse, budgetResponse, economicResponse] = await Promise.all([
           fetch('/data/debt-historical.json'),
           fetch('/data/events.json'),
           fetch('/data/governments.json'),
           fetch('/data/budget-plans.json'),
+          fetch('/data/economic-data.json'),
         ]);
 
         if (!debtResponse.ok) {
@@ -68,6 +73,11 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
           setBudgetPlans(budgetData.plans);
         }
 
+        if (economicResponse.ok) {
+          const economicDataJson: EconomicData = await economicResponse.json();
+          setEconomicData(economicDataJson.data);
+        }
+
         setIsLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Neznámá chyba');
@@ -78,5 +88,5 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
     fetchAllData();
   }, []);
 
-  return { chartData, events, governments, parties, budgetPlans, isLoading, error };
+  return { chartData, events, governments, parties, budgetPlans, economicData, isLoading, error };
 }
