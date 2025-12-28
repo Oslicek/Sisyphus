@@ -34,7 +34,7 @@ export function DebtCounter() {
       </div>
 
       <p className={styles.perSecond}>
-        Přírůstek: <span className={styles.perSecondValue}>
+        Přírůstek:   <span className={styles.perSecondValue}>
           +{formatCzechCurrency(deficitPerSecond)}
         </span> Kč/s
       </p>

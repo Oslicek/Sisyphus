@@ -1,5 +1,6 @@
 import { DebtCounter } from './components/DebtCounter';
 import { DebtChart } from './components/DebtChart';
+import { ShareButtons } from './components/ShareButtons';
 import styles from './App.module.css';
 
 const DATA_SOURCES = [
@@ -57,11 +58,13 @@ function App() {
         „Ať ho tlačíš, nebo ženeš, Sisyfe — balvan se vždy vrací."
         <span className={styles.mottoAuthor}>(Ovidius)</span>
       </p>
-      
+
       <main className={styles.main}>
         <DebtCounter />
         <DebtChart />
       </main>
+
+      <ShareButtons />
 
       <footer className={styles.footer}>
         <h3 className={styles.footerTitle}>Zdroje dat</h3>
