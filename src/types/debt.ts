@@ -163,6 +163,22 @@ export interface DemographicData {
 }
 
 /**
+ * Debt interest payment data for a year
+ */
+export interface InterestYearData {
+  year: number;
+  interest: number; // billion CZK
+}
+
+export interface InterestData {
+  description: string;
+  source: string;
+  sourceUrl: string;
+  unit: string;
+  data: InterestYearData[];
+}
+
+/**
  * Population mode for per-capita calculations
  */
 export type PopulationMode = 
@@ -186,7 +202,8 @@ export type GraphVariant =
   | 'debt-gdp-percent'        // C. Cumulative debt as GDP percentage
   | 'deficit-absolute'        // D. Yearly deficit in absolute value
   | 'deficit-inflation-adjusted' // E. Yearly deficit adjusted to inflation
-  | 'deficit-gdp-percent';    // F. Yearly deficit as GDP percentage
+  | 'deficit-gdp-percent'     // F. Yearly deficit as GDP percentage
+  | 'interest-absolute';      // G. Yearly interest payments in absolute value
 
 export interface GraphVariantInfo {
   id: GraphVariant;

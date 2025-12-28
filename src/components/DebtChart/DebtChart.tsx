@@ -2,7 +2,7 @@ import { useRef, useEffect, useState, useMemo } from 'react';
 import * as d3 from 'd3';
 import { useHistoricalDebt } from '../../hooks/useHistoricalDebt';
 import { formatBillionsCzech } from '../../utils/formatters';
-import { formatYearLabel, getGovernmentForYear } from '../../utils/chartHelpers';
+import { formatYearLabel } from '../../utils/chartHelpers';
 import {
   adjustForInflation,
   calculateGdpPercentage,
@@ -58,7 +58,7 @@ export function DebtChart() {
   const [populationMode, setPopulationMode] = useState<PopulationMode>('country');
   const [metricUnit, setMetricUnit] = useState<MetricUnit>('czk');
 
-  const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, foodPriceData, isLoading, error } = useHistoricalDebt();
+  const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, foodPriceData, interestData, isLoading, error } = useHistoricalDebt();
 
   // Reset metric unit to 'czk' when population mode changes
   const handlePopulationModeChange = (mode: PopulationMode) => {
@@ -175,6 +175,12 @@ export function DebtChart() {
         break;
       }
       
+      case 'interest-absolute': {
+        // Convert interest data to ChartDataPoint format
+        result = interestData.map(d => ({ year: d.year, amount: d.interest }));
+        break;
+      }
+      
       default:
         result = baseData;
     }
@@ -190,7 +196,7 @@ export function DebtChart() {
     }
 
     return result;
-  }, [chartData, economicData, demographicData, activeVariant, activePlan, budgetPlans, populationMode, metricUnit, priceData, wageData, foodPriceData]);
+  }, [chartData, economicData, demographicData, activeVariant, activePlan, budgetPlans, populationMode, metricUnit, priceData, wageData, foodPriceData, interestData]);
 
   // Get the minimum year for the current metric unit (for data-limited metrics like food)
   const metricMinYear = useMemo(() => {

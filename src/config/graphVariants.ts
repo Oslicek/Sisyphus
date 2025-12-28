@@ -43,6 +43,13 @@ export const GRAPH_VARIANTS: GraphVariantInfo[] = [
     unit: '% HDP',
     description: 'Roční přírůstek státního dluhu jako procento HDP',
   },
+  {
+    id: 'interest-absolute',
+    name: 'Roční úroky (nominální)',
+    shortName: 'Úroky',
+    unit: 'miliard Kč',
+    description: 'Roční náklady na dluhovou službu (úrokové náklady)',
+  },
 ];
 
 export function getGraphVariantInfo(id: GraphVariant): GraphVariantInfo {

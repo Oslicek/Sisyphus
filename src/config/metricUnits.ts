@@ -179,7 +179,7 @@ export function getMetricUnitInfo(unit: MetricUnit, mode: PopulationMode): Metri
 /**
  * Get default metric unit for a population mode
  */
-export function getDefaultMetricUnit(mode: PopulationMode): MetricUnit {
+export function getDefaultMetricUnit(_mode: PopulationMode): MetricUnit {
   return 'czk';
 }
 

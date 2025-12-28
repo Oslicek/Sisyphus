@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { extractQ4Data, getLatestQuarterValue } from './historicalData';
-import type { HistoricalDebtPoint, ChartDataPoint } from '../types/debt';
+import type { HistoricalDebtPoint } from '../types/debt';
 
 describe('extractQ4Data', () => {
   it('should extract Q4 values from historical data', () => {

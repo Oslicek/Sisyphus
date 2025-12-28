@@ -35,13 +35,15 @@
 │   │ Pages            │              │ Static JSON Data                  │   │
 │   │ (Static React)   │              │ - debt-anchor.json                │   │
 │   │                  │              │ - debt-historical.json            │   │
-│   └──────────────────┘              │ - events.json                     │   │
+│   └──────────────────┘              │ - debt-interest.json              │   │
+│                                      │ - events.json                     │   │
 │                                      │ - governments.json                │   │
 │                                      │ - budget-plans.json               │   │
 │                                      │ - economic-data.json              │   │
 │                                      │ - demographic-data.json           │   │
 │                                      │ - wage-data.json                  │   │
 │                                      │ - price-data.json                 │   │
+│                                      │ - food-prices.json                │   │
 │                                      └──────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -60,7 +62,7 @@
 │                                                                              │
 │   ┌────────────────────────────────────────────────────────────────────┐   │
 │   │ DebtChart                                                           │   │
-│   │ - 6 graph variants (debt/deficit × absolute/inflation/GDP%)         │   │
+│   │ - 7 graph variants (debt/deficit/interest × absolute/inflation/GDP%)│   │
 │   │ - 3 population modes (country/per capita/per working age)           │   │
 │   │ - Alternative metric units (highways, hospitals, petrol, salaries)  │   │
 │   │ - Interactive government timeline with party colors                 │   │
@@ -73,7 +75,7 @@
 
 ## Features
 
-### Graph Variants (6 types)
+### Graph Variants (7 types)
 | ID | Name | Description |
 |----|------|-------------|
 | `debt-absolute` | Dluh | Cumulative debt in billions CZK |
@@ -82,6 +84,7 @@
 | `deficit-absolute` | Schodek | Yearly deficit in billions CZK |
 | `deficit-inflation-adjusted` | Schodek (reálný) | Inflation-adjusted deficit |
 | `deficit-gdp-percent` | Schodek/HDP | Deficit as % of GDP |
+| `interest-absolute` | Úroky | Yearly interest payments in billions CZK |
 
 ### Population Modes (3 types)
 | ID | Name | Description |
@@ -137,7 +140,7 @@ sisyphus/
 │   │   │   ├── DebtCounter.tsx
 │   │   │   ├── DebtCounter.module.css
 │   │   │   └── index.ts
-│   │   └── DebtChart/          # D3.js interactive chart
+│   │   └── DebtChart/          # D3.js interactive chart (7 variants)
 │   │       ├── DebtChart.tsx
 │   │       ├── DebtChart.module.css
 │   │       └── index.ts
@@ -171,6 +174,7 @@ sisyphus/
 │   └── data/
 │       ├── debt-anchor.json    # Anchor for real-time counter
 │       ├── debt-historical.json # Historical debt 1993-2025
+│       ├── debt-interest.json  # Yearly interest payments 1993-2026
 │       ├── events.json         # Significant events with dates
 │       ├── governments.json    # Government timeline + party colors
 │       ├── budget-plans.json   # 2026 budget predictions
@@ -245,6 +249,7 @@ interface DemographicYearData {
 | Data | Source | URL |
 |------|--------|-----|
 | Státní dluh ČR | Ministerstvo financí ČR | [mfcr.cz](https://www.mfcr.cz/cs/rozpoctova-politika/makroekonomika/statistika-vladniho-sektoru/2025/ctvrtletni-prehledy-o-stavu-a-vyvoji-statniho-dluh-61526) |
+| Náklady dluhové služby | Ministerstvo financí ČR | [mfcr.cz](https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu) |
 | Seznam vlád Česka | Wikipedia | [wikipedia.org](https://cs.wikipedia.org/wiki/Seznam_vlád_Česka) |
 | Rozpočtové plány | Ministerstvo financí ČR | [mfcr.cz](https://www.mfcr.cz/) |
 | Inflace a HDP | Český statistický úřad | [czso.cz](https://www.czso.cz/) |
@@ -292,7 +297,7 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Project scaffolding (Vite + React + TypeScript)
 - [x] Debt counter with real-time updates (Kč)
 - [x] Historical data JSON from MFCR (1993-2025, quarterly)
-- [x] D3.js bar chart with 6 graph variants
+- [x] D3.js bar chart with 7 graph variants (incl. interest payments)
 - [x] 3 population modes (country/per capita/per working age)
 - [x] Alternative metric units (highways, hospitals, schools, petrol, salaries, food)
 - [x] Government timeline with party colors

@@ -18,7 +18,9 @@ import type {
   PriceData,
   PriceYearData,
   FoodPriceData,
-  FoodPriceYearData
+  FoodPriceYearData,
+  InterestData,
+  InterestYearData
 } from '../types/debt';
 import { extractQ4Data } from '../utils/historicalData';
 
@@ -33,6 +35,7 @@ interface UseHistoricalDebtResult {
   wageData: WageYearData[];
   priceData: PriceYearData[];
   foodPriceData: FoodPriceYearData[];
+  interestData: InterestYearData[];
   isLoading: boolean;
   error: string | null;
 }
@@ -51,6 +54,7 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
   const [wageData, setWageData] = useState<WageYearData[]>([]);
   const [priceData, setPriceData] = useState<PriceYearData[]>([]);
   const [foodPriceData, setFoodPriceData] = useState<FoodPriceYearData[]>([]);
+  const [interestData, setInterestData] = useState<InterestYearData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -67,7 +71,8 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
           demographicResponse,
           wageResponse,
           priceResponse,
-          foodPriceResponse
+          foodPriceResponse,
+          interestResponse
         ] = await Promise.all([
           fetch('/data/debt-historical.json', fetchOptions),
           fetch('/data/events.json', fetchOptions),
@@ -78,6 +83,7 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
           fetch('/data/wage-data.json', fetchOptions),
           fetch('/data/price-data.json', fetchOptions),
           fetch('/data/food-prices.json', fetchOptions),
+          fetch('/data/debt-interest.json', fetchOptions),
         ]);
 
         if (!debtResponse.ok) {
@@ -129,6 +135,11 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
           setFoodPriceData(foodPriceDataJson.data);
         }
 
+        if (interestResponse.ok) {
+          const interestDataJson: InterestData = await interestResponse.json();
+          setInterestData(interestDataJson.data);
+        }
+
         setIsLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Neznámá chyba');
@@ -139,5 +150,5 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
     fetchAllData();
   }, []);
 
-  return { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, foodPriceData, isLoading, error };
+  return { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, foodPriceData, interestData, isLoading, error };
 }

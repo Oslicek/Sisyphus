@@ -43,6 +43,11 @@ const DATA_SOURCES = [
     source: 'Český statistický úřad (ČSÚ)',
     url: 'https://csu.gov.cz/vyvoj-prumernych-cen-vybranych-potravin-2024',
   },
+  {
+    name: 'Náklady dluhové služby',
+    source: 'Ministerstvo financí ČR',
+    url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu',
+  },
 ];
 
 function App() {
