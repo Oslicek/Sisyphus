@@ -1,0 +1,94 @@
+.container {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.chartTitle {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-align: center;
+  margin: 0 0 1rem 0;
+}
+
+.svgContainer {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.chart {
+  display: block;
+  margin: 0 auto;
+}
+
+.bar {
+  fill: var(--color-accent);
+  transition: fill 0.2s ease;
+}
+
+.bar:hover {
+  fill: var(--color-accent-secondary);
+}
+
+.axisLabel {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 11px;
+  fill: var(--color-text-muted);
+}
+
+.axisLine {
+  stroke: var(--color-text-muted);
+  stroke-opacity: 0.3;
+}
+
+.gridLine {
+  stroke: var(--color-text-muted);
+  stroke-opacity: 0.15;
+}
+
+.loading,
+.error {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading {
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.tooltip {
+  position: absolute;
+  background: var(--color-text);
+  color: var(--color-bg);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.85rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 100;
+}
+
+.tooltip.visible {
+  opacity: 1;
+}
+
+.tooltipYear {
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.tooltipAmount {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+}
+

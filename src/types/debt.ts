@@ -3,7 +3,7 @@
  * Contains the base amount and planned deficit for debt calculation
  */
 export interface DebtAnchor {
-  /** Base debt amount in CZK (haléře - smallest unit) at anchor date */
+  /** Base debt amount in CZK at anchor date */
   baseAmount: number;
   /** Anchor date in ISO 8601 format (YYYY-MM-DD) */
   anchorDate: string;
@@ -29,3 +29,34 @@ export interface DebtState {
   calculatedAt: Date;
 }
 
+/**
+ * Historical debt data point with optional quarterly data
+ */
+export interface HistoricalDebtPoint {
+  year: number;
+  q1?: number;
+  q2?: number;
+  q3?: number;
+  q4?: number;
+}
+
+/**
+ * Historical debt data structure from JSON file
+ */
+export interface HistoricalDebtData {
+  source: string;
+  sourceUrl: string;
+  lastUpdated: string;
+  currency: string;
+  unit: string;
+  description: string;
+  data: HistoricalDebtPoint[];
+}
+
+/**
+ * Processed data point for chart display
+ */
+export interface ChartDataPoint {
+  year: number;
+  amount: number; // in billion CZK
+}

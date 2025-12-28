@@ -4,7 +4,9 @@
 
 ## Overview
 
-**Sisyphus** is a Czech Republic government debt visualization web application. It displays a real-time debt counter, served as a static site with virtually unlimited scaling capacity. All data processing and visualization happens client-side. The application is in Czech language.
+**Sisyphus** is a Czech Republic government debt visualization web application. It displays a real-time debt counter and historical debt chart, served as a static site with unlimited scaling capacity. All data processing happens client-side. The application is in Czech language.
+
+**Motto:** „Ať ho tlačíš, nebo ženeš, Sisyfe — balvan se vždy vrací." (Ovidius)
 
 ## Technology Stack
 
@@ -14,9 +16,9 @@
 | Build Tool | Vite 7 |
 | Language | TypeScript (strict mode) |
 | Styling | CSS Modules |
-| Fonts | Bebas Neue, Source Sans 3, JetBrains Mono (OFL) |
+| Charts | D3.js |
+| Fonts | Bebas Neue, Crimson Pro, Source Sans 3, JetBrains Mono (OFL) |
 | Hosting | Cloudflare Pages |
-| Scheduled Tasks | Cloudflare Workers (TypeScript) |
 | Data Storage | Static JSON files (public/data/) |
 | Testing | Vitest |
 
@@ -29,10 +31,11 @@
 │                              Cloudflare Edge                                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│   ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────────┐ │
-│   │ Pages            │    │ Workers          │    │ Static JSON          │ │
-│   │ (Static React)   │    │ (Cron Tasks)     │    │ (debt-anchor.json)   │ │
-│   └──────────────────┘    └──────────────────┘    └──────────────────────┘ │
+│   ┌──────────────────┐              ┌──────────────────────────────────┐   │
+│   │ Pages            │              │ Static JSON                       │   │
+│   │ (Static React)   │              │ - debt-anchor.json                │   │
+│   │                  │              │ - debt-historical.json            │   │
+│   └──────────────────┘              └──────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
@@ -42,10 +45,17 @@
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │   ┌────────────────────────────────────────────────────────────────────┐   │
-│   │ DebtCounter Component                                               │   │
+│   │ DebtCounter                                                         │   │
 │   │ - Fetches anchor data once on load                                  │   │
-│   │ - Computes deficit per second from yearly planned deficit           │   │
-│   │ - Updates display every second (client-side, no further fetches)    │   │
+│   │ - Computes deficit per second from yearly deficit                   │   │
+│   │ - Updates display every second (client-side)                        │   │
+│   └────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   ┌────────────────────────────────────────────────────────────────────┐   │
+│   │ DebtChart                                                           │   │
+│   │ - Fetches historical data once on load                              │   │
+│   │ - D3.js bar chart showing debt 1993-2025                            │   │
+│   │ - Interactive tooltips                                              │   │
 │   └────────────────────────────────────────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -53,34 +63,43 @@
 
 **Data Flow:**
 ```
-[Static JSON] → [React App fetches on load] → [Client computes & updates every second]
+[Static JSON] → [React App fetches on load] → [Client processes & renders]
 ```
 
 ## Project Structure
 
 ```
 sisyphus/
-├── src/                        # React application
+├── src/
 │   ├── components/
-│   │   └── DebtCounter/        # Real-time debt counter
-│   │       ├── DebtCounter.tsx
-│   │       ├── DebtCounter.module.css
+│   │   ├── DebtCounter/        # Real-time debt counter
+│   │   │   ├── DebtCounter.tsx
+│   │   │   ├── DebtCounter.module.css
+│   │   │   └── index.ts
+│   │   └── DebtChart/          # D3.js historical chart
+│   │       ├── DebtChart.tsx
+│   │       ├── DebtChart.module.css
 │   │       └── index.ts
 │   ├── hooks/
-│   │   └── useDebtCounter.ts   # Counter logic hook
+│   │   ├── useDebtCounter.ts   # Counter logic hook
+│   │   └── useHistoricalDebt.ts # Historical data hook
 │   ├── utils/
 │   │   ├── calculations.ts     # Debt calculations (TDD)
 │   │   ├── calculations.test.ts
 │   │   ├── formatters.ts       # Czech currency formatting (TDD)
-│   │   └── formatters.test.ts
+│   │   ├── formatters.test.ts
+│   │   ├── historicalData.ts   # Historical data processing (TDD)
+│   │   └── historicalData.test.ts
 │   ├── types/
 │   │   └── debt.ts             # TypeScript interfaces
 │   ├── App.tsx
+│   ├── App.module.css
 │   ├── main.tsx
 │   └── index.css               # Global styles, light theme
 ├── public/
 │   └── data/
-│       └── debt-anchor.json    # Anchor data for debt calculation
+│       ├── debt-anchor.json    # Anchor data for debt counter
+│       └── debt-historical.json # Historical data 1993-2025
 ├── package.json
 ├── vite.config.ts
 ├── vitest.config.ts
@@ -93,11 +112,13 @@ sisyphus/
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| `DebtCounter` | src/components/DebtCounter/ | Real-time debt display in Czech |
-| `useDebtCounter` | src/hooks/ | Fetches data, computes & updates debt every second |
-| `calculations.ts` | src/utils/ | Deficit per second, seconds since anchor, current debt |
+| `DebtCounter` | src/components/DebtCounter/ | Real-time debt display with Kč |
+| `DebtChart` | src/components/DebtChart/ | D3.js bar chart 1993-2025 |
+| `useDebtCounter` | src/hooks/ | Fetches anchor, computes & updates every second |
+| `useHistoricalDebt` | src/hooks/ | Fetches & processes historical data |
+| `calculations.ts` | src/utils/ | Deficit per second, elapsed time, current debt |
 | `formatters.ts` | src/utils/ | Czech locale currency formatting |
-| `debt.ts` | src/types/ | DebtAnchor and DebtState interfaces |
+| `historicalData.ts` | src/utils/ | Extract Q4 data for chart display |
 
 ## Data Models
 
@@ -106,64 +127,74 @@ sisyphus/
 interface DebtAnchor {
   baseAmount: number;           // Debt at anchor date in CZK
   anchorDate: string;           // ISO 8601 date (YYYY-MM-DD)
-  plannedDeficit2025: number;   // Planned budget deficit for 2025 in CZK
+  plannedDeficit2025: number;   // Planned deficit for 2025 in CZK
   currency: string;             // "CZK"
-  source: string;               // Data source name
-  lastUpdated: string;          // ISO 8601 date
+  source: string;
+  lastUpdated: string;
 }
 ```
 
-**Current values:**
-- Base amount: 3,365,200,000,000 CZK (as of 2024-12-31)
-- Planned deficit 2025: 241,000,000,000 CZK
+### Historical Data (debt-historical.json)
+```typescript
+interface HistoricalDebtData {
+  source: string;               // "Ministerstvo financí ČR"
+  sourceUrl: string;            // MFCR URL
+  lastUpdated: string;
+  currency: string;
+  unit: string;                 // "billionCZK"
+  description: string;
+  data: HistoricalDebtPoint[];
+}
 
-## Calculation Logic
+interface HistoricalDebtPoint {
+  year: number;
+  q1?: number;  // Q1 value in billion CZK
+  q2?: number;
+  q3?: number;
+  q4?: number;
+}
+```
 
-1. **On page load:** Fetch `debt-anchor.json`
-2. **Compute deficit per second:** `plannedDeficit2025 / secondsInYear`
-3. **Compute seconds elapsed:** `now - anchorDate`
-4. **Current debt:** `baseAmount + (deficitPerSecond × secondsElapsed)`
-5. **Every second:** Increment display by `deficitPerSecond`
+**Data Source:** [Ministerstvo financí ČR](https://www.mfcr.cz/cs/rozpoctova-politika/makroekonomika/statistika-vladniho-sektoru/2025/ctvrtletni-prehledy-o-stavu-a-vyvoji-statniho-dluh-61526)
 
 ## Testing Strategy
 
 **TDD Focus Areas:**
 - Debt growth calculations
 - Czech currency formatting
-- Leap year handling
+- Historical data processing (Q4 extraction)
 
-**Test Files:**
+**Test Files (22 tests total):**
 ```
-src/utils/calculations.test.ts  (8 tests)
-src/utils/formatters.test.ts    (4 tests)
+src/utils/calculations.test.ts      (8 tests)
+src/utils/formatters.test.ts        (4 tests)
+src/utils/historicalData.test.ts    (10 tests)
 ```
 
 ## Current State
 
-**Phase:** MVP - Debt Counter
+**Phase:** MVP - Counter + Chart
 
 **Completed:**
 - [x] Project scaffolding (Vite + React + TypeScript)
-- [x] PROJECT_RULES.md and PROJECT_CONTEXT.md
-- [x] Vitest configuration
-- [x] Core data types
-- [x] Debt calculation logic with TDD (12 tests passing)
-- [x] Czech currency formatting with TDD
-- [x] DebtCounter component with Czech UI
+- [x] Debt counter with real-time updates (Kč)
+- [x] Historical data JSON from MFCR (1993-2025, quarterly)
+- [x] D3.js bar chart showing yearly debt
+- [x] Ovidius motto at top of page
 - [x] Light theme with CSS Modules
-- [x] Czech-compatible fonts (Bebas Neue, Source Sans 3, JetBrains Mono)
+- [x] Czech-compatible fonts
+- [x] TDD: 22 tests passing
 
 **Pending:**
-- [ ] D3.js visualizations
-- [ ] Cloudflare Worker setup
-- [ ] Data import logic
+- [ ] Cloudflare Worker for data updates
 - [ ] Cloudflare Pages deployment
+- [ ] Additional visualizations
 
 ## Notes
 
 - All business logic has tests (TDD)
 - Application is in Czech language
 - Light theme only
-- Fonts chosen support Czech diacritics (háčky, čárky)
-- No server-side rendering - pure client-side React
-- Unlimited scaling via CDN edge caching
+- Fonts support Czech diacritics (háčky, čárky)
+- Chart uses Q4 values (or latest available quarter)
+- Historical data updated from MFCR as of 2025-10-17

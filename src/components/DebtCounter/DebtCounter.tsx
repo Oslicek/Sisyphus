@@ -7,30 +7,30 @@ export function DebtCounter() {
 
   if (isLoading) {
     return (
-      <main className={styles.container}>
+      <section className={styles.container}>
         <p className={styles.loading}>Načítání...</p>
-      </main>
+      </section>
     );
   }
 
   if (error) {
     return (
-      <main className={styles.container}>
+      <section className={styles.container}>
         <p className={styles.error}>{error}</p>
-      </main>
+      </section>
     );
   }
 
   return (
-    <main className={styles.container}>
-      <header>
+    <section className={styles.container}>
+      <header className={styles.header}>
         <h1 className={styles.title}>Státní dluh České republiky</h1>
         <p className={styles.subtitle}>Počítadlo státního dluhu v reálném čase</p>
       </header>
 
       <div className={styles.debtDisplay}>
         <p className={styles.amount}>{formatCzechCurrency(currentDebt)}</p>
-        <p className={styles.currency}>CZK</p>
+        <p className={styles.currency}>Kč</p>
       </div>
 
       <p className={styles.perSecond}>
@@ -38,7 +38,6 @@ export function DebtCounter() {
           +{formatCzechCurrency(deficitPerSecond)}
         </span> Kč/s
       </p>
-    </main>
+    </section>
   );
 }
-
