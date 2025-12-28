@@ -207,6 +207,7 @@ export function DebtChart() {
   const variantInfo = getGraphVariantInfo(activeVariant);
   const isDeficitVariant = activeVariant.startsWith('deficit-');
   const isPercentVariant = activeVariant.includes('gdp-percent');
+  const isNonCzkMetric = metricUnit !== 'czk';
 
   // Draw chart with D3
   useEffect(() => {
@@ -549,7 +550,6 @@ export function DebtChart() {
   const populationModeInfo = getPopulationModeInfo(populationMode);
   const metricUnitInfo = getMetricUnitInfo(metricUnit, populationMode);
   const isPerCapita = populationMode !== 'country';
-  const isNonCzkMetric = metricUnit !== 'czk';
 
   const formatTooltipValue = (data: ChartDataPoint): string => {
     if (data.note === '?') return '?';
