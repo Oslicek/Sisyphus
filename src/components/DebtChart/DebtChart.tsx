@@ -8,9 +8,11 @@ import {
   calculateGdpPercentage,
   calculateYearlyDeficit,
 } from '../../utils/graphCalculations';
+import { convertToMetricUnit } from '../../utils/unitConversions';
 import { GRAPH_VARIANTS, getGraphVariantInfo } from '../../config/graphVariants';
 import { POPULATION_MODES, getPopulationModeInfo } from '../../config/populationModes';
-import type { ChartDataPoint, Government, GraphVariant, PopulationMode, DemographicYearData } from '../../types/debt';
+import { getMetricUnitsForMode, getMetricUnitInfo } from '../../config/metricUnits';
+import type { ChartDataPoint, Government, GraphVariant, PopulationMode, MetricUnit, DemographicYearData } from '../../types/debt';
 import styles from './DebtChart.module.css';
 
 const CHART_CONFIG = {
@@ -54,8 +56,15 @@ export function DebtChart() {
   const [activePlan, setActivePlan] = useState('fiala');
   const [activeVariant, setActiveVariant] = useState<GraphVariant>('debt-absolute');
   const [populationMode, setPopulationMode] = useState<PopulationMode>('country');
+  const [metricUnit, setMetricUnit] = useState<MetricUnit>('czk');
 
-  const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, isLoading, error } = useHistoricalDebt();
+  const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, isLoading, error } = useHistoricalDebt();
+
+  // Reset metric unit to 'czk' when population mode changes
+  const handlePopulationModeChange = (mode: PopulationMode) => {
+    setPopulationMode(mode);
+    setMetricUnit('czk');
+  };
 
   // Handle responsive sizing
   useEffect(() => {
@@ -175,8 +184,13 @@ export function DebtChart() {
       result = applyPopulationMode(result, populationMode, demographicData);
     }
 
+    // Apply metric unit conversion (skip for GDP percentage which is already relative)
+    if (!activeVariant.includes('gdp-percent') && metricUnit !== 'czk' && priceData.length > 0) {
+      result = convertToMetricUnit(result, metricUnit, populationMode, priceData, wageData);
+    }
+
     return result;
-  }, [chartData, economicData, demographicData, activeVariant, activePlan, budgetPlans, populationMode]);
+  }, [chartData, economicData, demographicData, activeVariant, activePlan, budgetPlans, populationMode, metricUnit, priceData, wageData]);
 
   const variantInfo = getGraphVariantInfo(activeVariant);
   const isDeficitVariant = activeVariant.startsWith('deficit-');
@@ -480,6 +494,20 @@ export function DebtChart() {
       .ticks(5)
       .tickFormat((d) => {
         if (isPercentVariant) return `${d}%`;
+        
+        // Handle alternative metric units
+        if (isNonCzkMetric) {
+          const val = Number(d);
+          // For months, show with 1 decimal if small
+          if (metricUnit.includes('months')) {
+            return val >= 10 ? `${Math.round(val)}` : `${val.toFixed(1)}`;
+          }
+          // For other units, format large numbers
+          if (val >= 1000000) return `${(val / 1000000).toFixed(1)} mil`;
+          if (val >= 1000) return `${(val / 1000).toFixed(0)} tis`;
+          return `${Math.round(val)}`;
+        }
+        
         if (populationMode !== 'country') {
           // Format as thousands of CZK for per-capita
           const val = Number(d);
@@ -507,13 +535,30 @@ export function DebtChart() {
   }, [transformedData, events, governments, parties, dimensions, isDeficitVariant, isPercentVariant, populationMode]);
 
   const populationModeInfo = getPopulationModeInfo(populationMode);
+  const metricUnitInfo = getMetricUnitInfo(metricUnit, populationMode);
   const isPerCapita = populationMode !== 'country';
+  const isNonCzkMetric = metricUnit !== 'czk';
 
   const formatTooltipValue = (data: ChartDataPoint): string => {
     if (data.note === '?') return '?';
     if (isPercentVariant) {
       return `${data.amount.toFixed(1)} % HDP`;
     }
+    
+    // Handle alternative metric units
+    if (isNonCzkMetric) {
+      const suffix = metricUnitInfo.formatSuffix;
+      // For months, show 1 decimal
+      if (metricUnit.includes('months')) {
+        return `${data.amount.toFixed(1)} ${suffix}`;
+      }
+      // For large numbers (km, hospitals, schools, litres), format with thousands separator
+      if (data.amount >= 1000) {
+        return `${Math.round(data.amount).toLocaleString('cs-CZ')} ${suffix}`;
+      }
+      return `${data.amount.toFixed(0)} ${suffix}`;
+    }
+    
     if (isPerCapita) {
       // Format as CZK per person
       return `${Math.round(data.amount).toLocaleString('cs-CZ')} Kč`;
@@ -538,7 +583,17 @@ export function DebtChart() {
   }
 
   const titleYears = activeVariant.startsWith('deficit-') ? '1994–2026' : '1993–2026';
-  const titleSuffix = isPerCapita && !isPercentVariant ? ` – ${populationModeInfo.name}` : '';
+  const getMetricSuffix = (): string => {
+    if (isPercentVariant) return '';
+    if (isNonCzkMetric) {
+      return ` v ${metricUnitInfo.name.toLowerCase()}`;
+    }
+    if (isPerCapita) {
+      return ` – ${populationModeInfo.name}`;
+    }
+    return '';
+  };
+  const titleSuffix = getMetricSuffix();
 
   return (
     <section className={styles.container} ref={containerRef}>
@@ -565,10 +620,26 @@ export function DebtChart() {
             <button
               key={mode.id}
               className={`${styles.populationButton} ${populationMode === mode.id ? styles.populationButtonActive : ''}`}
-              onClick={() => setPopulationMode(mode.id)}
+              onClick={() => handlePopulationModeChange(mode.id)}
               title={mode.description}
             >
               {mode.shortName}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Metric unit selector - only show for non-GDP-percent variants */}
+      {!isPercentVariant && (
+        <div className={styles.metricSelector}>
+          {getMetricUnitsForMode(populationMode).map((unit) => (
+            <button
+              key={unit.id}
+              className={`${styles.metricButton} ${metricUnit === unit.id ? styles.metricButtonActive : ''}`}
+              onClick={() => setMetricUnit(unit.id)}
+              title={unit.description}
+            >
+              {unit.shortName}
             </button>
           ))}
         </div>

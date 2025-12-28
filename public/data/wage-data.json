@@ -1,0 +1,56 @@
+{
+  "description": "Mzdová data České republiky",
+  "sources": [
+    "Český statistický úřad (ČSÚ)",
+    "Ministerstvo práce a sociálních věcí (MPSV)"
+  ],
+  "sourceUrls": [
+    "https://www.czso.cz/csu/czso/prace_a_mzdy_prace",
+    "https://www.mpsv.cz/minimalni-mzda"
+  ],
+  "units": {
+    "wages": "CZK/month"
+  },
+  "notes": {
+    "netWage": "Approximately 75% of gross after taxes and social contributions",
+    "averageWage": "Průměrná hrubá měsíční mzda",
+    "minimumWage": "Minimální měsíční mzda"
+  },
+  "data": [
+    { "year": 1993, "averageGross": 5904, "averageNet": 4428, "minimumGross": 2200, "minimumNet": 1650 },
+    { "year": 1994, "averageGross": 7004, "averageNet": 5253, "minimumGross": 2200, "minimumNet": 1650 },
+    { "year": 1995, "averageGross": 8307, "averageNet": 6230, "minimumGross": 2200, "minimumNet": 1650 },
+    { "year": 1996, "averageGross": 9825, "averageNet": 7369, "minimumGross": 2500, "minimumNet": 1875 },
+    { "year": 1997, "averageGross": 10802, "averageNet": 8102, "minimumGross": 2500, "minimumNet": 1875 },
+    { "year": 1998, "averageGross": 11801, "averageNet": 8851, "minimumGross": 2650, "minimumNet": 1988 },
+    { "year": 1999, "averageGross": 12797, "averageNet": 9598, "minimumGross": 3250, "minimumNet": 2438 },
+    { "year": 2000, "averageGross": 13614, "averageNet": 10211, "minimumGross": 4000, "minimumNet": 3000 },
+    { "year": 2001, "averageGross": 14793, "averageNet": 11095, "minimumGross": 5000, "minimumNet": 3750 },
+    { "year": 2002, "averageGross": 15866, "averageNet": 11900, "minimumGross": 5700, "minimumNet": 4275 },
+    { "year": 2003, "averageGross": 16917, "averageNet": 12688, "minimumGross": 6200, "minimumNet": 4650 },
+    { "year": 2004, "averageGross": 18035, "averageNet": 13526, "minimumGross": 6700, "minimumNet": 5025 },
+    { "year": 2005, "averageGross": 18992, "averageNet": 14244, "minimumGross": 7185, "minimumNet": 5389 },
+    { "year": 2006, "averageGross": 20211, "averageNet": 15158, "minimumGross": 7955, "minimumNet": 5966 },
+    { "year": 2007, "averageGross": 21694, "averageNet": 16271, "minimumGross": 8000, "minimumNet": 6000 },
+    { "year": 2008, "averageGross": 23542, "averageNet": 17657, "minimumGross": 8000, "minimumNet": 6000 },
+    { "year": 2009, "averageGross": 23488, "averageNet": 17616, "minimumGross": 8000, "minimumNet": 6000 },
+    { "year": 2010, "averageGross": 23864, "averageNet": 17898, "minimumGross": 8000, "minimumNet": 6000 },
+    { "year": 2011, "averageGross": 24466, "averageNet": 18350, "minimumGross": 8000, "minimumNet": 6000 },
+    { "year": 2012, "averageGross": 25100, "averageNet": 18825, "minimumGross": 8000, "minimumNet": 6000 },
+    { "year": 2013, "averageGross": 25035, "averageNet": 18776, "minimumGross": 8500, "minimumNet": 6375 },
+    { "year": 2014, "averageGross": 25768, "averageNet": 19326, "minimumGross": 8500, "minimumNet": 6375 },
+    { "year": 2015, "averageGross": 26467, "averageNet": 19850, "minimumGross": 9200, "minimumNet": 6900 },
+    { "year": 2016, "averageGross": 27589, "averageNet": 20692, "minimumGross": 9900, "minimumNet": 7425 },
+    { "year": 2017, "averageGross": 29504, "averageNet": 22128, "minimumGross": 11000, "minimumNet": 8250 },
+    { "year": 2018, "averageGross": 31885, "averageNet": 23914, "minimumGross": 12200, "minimumNet": 9150 },
+    { "year": 2019, "averageGross": 34125, "averageNet": 25594, "minimumGross": 13350, "minimumNet": 10013 },
+    { "year": 2020, "averageGross": 35611, "averageNet": 26708, "minimumGross": 14600, "minimumNet": 10950 },
+    { "year": 2021, "averageGross": 37839, "averageNet": 28379, "minimumGross": 15200, "minimumNet": 11400 },
+    { "year": 2022, "averageGross": 40324, "averageNet": 30243, "minimumGross": 16200, "minimumNet": 12150 },
+    { "year": 2023, "averageGross": 43341, "averageNet": 32506, "minimumGross": 17300, "minimumNet": 12975 },
+    { "year": 2024, "averageGross": 45854, "averageNet": 34391, "minimumGross": 18900, "minimumNet": 14175 },
+    { "year": 2025, "averageGross": 48500, "averageNet": 36375, "minimumGross": 20800, "minimumNet": 15600 },
+    { "year": 2026, "averageGross": 51500, "averageNet": 38625, "minimumGross": 22400, "minimumNet": 16800 }
+  ]
+}
+

@@ -40,6 +40,8 @@
 │                                      │ - budget-plans.json               │   │
 │                                      │ - economic-data.json              │   │
 │                                      │ - demographic-data.json           │   │
+│                                      │ - wage-data.json                  │   │
+│                                      │ - price-data.json                 │   │
 │                                      └──────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -60,6 +62,7 @@
 │   │ DebtChart                                                           │   │
 │   │ - 6 graph variants (debt/deficit × absolute/inflation/GDP%)         │   │
 │   │ - 3 population modes (country/per capita/per working age)           │   │
+│   │ - Alternative metric units (highways, hospitals, petrol, salaries)  │   │
 │   │ - Interactive government timeline with party colors                 │   │
 │   │ - Event markers with precise date positioning                       │   │
 │   │ - 2026 budget predictions (Fiala vs Babiš plans)                    │   │
@@ -87,6 +90,32 @@
 | `per-capita` | Na obyvatele | Divided by total population |
 | `per-working` | Na prac. obyvatele | Divided by working age (15-64) |
 
+### Metric Units (Alternative value representations)
+Different metric units available per population mode:
+
+**Country mode:**
+| ID | Name | Description |
+|----|------|-------------|
+| `czk` | Kč | Czech Koruna (default) |
+| `highway-km` | km dálnic | Kilometres of highways built |
+| `hospitals` | Nemocnice | Regional hospitals (200-400 beds) |
+| `schools` | Školy | Primary schools (500 students) |
+
+**Per-capita mode:**
+| ID | Name | Description |
+|----|------|-------------|
+| `czk` | Kč | Czech Koruna (default) |
+| `petrol-litres` | Litry benzínu | Litres of petrol 95 |
+
+**Per-working mode:**
+| ID | Name | Description |
+|----|------|-------------|
+| `czk` | Kč | Czech Koruna (default) |
+| `avg-gross-months` | Hrubá prům. | Months of average gross salary |
+| `avg-net-months` | Čistá prům. | Months of average net salary |
+| `min-gross-months` | Hrubá min. | Months of minimum gross wage |
+| `min-net-months` | Čistá min. | Months of minimum net wage |
+
 ### Chart Annotations
 - **Government timeline**: Colored bars showing each government's term with party colors
 - **Event markers**: Red dots at exact dates (Lehman Brothers, Covid-19, Ukraine invasion)
@@ -109,7 +138,8 @@ sisyphus/
 │   │       └── index.ts
 │   ├── config/
 │   │   ├── graphVariants.ts    # Graph variant definitions
-│   │   └── populationModes.ts  # Population mode definitions
+│   │   ├── populationModes.ts  # Population mode definitions
+│   │   └── metricUnits.ts      # Metric unit definitions
 │   ├── hooks/
 │   │   ├── useDebtCounter.ts   # Counter logic hook
 │   │   └── useHistoricalDebt.ts # All data fetching hook
@@ -123,7 +153,9 @@ sisyphus/
 │   │   ├── chartHelpers.ts     # Chart utilities (TDD)
 │   │   ├── chartHelpers.test.ts
 │   │   ├── graphCalculations.ts # Inflation, GDP%, deficit (TDD)
-│   │   └── graphCalculations.test.ts
+│   │   ├── graphCalculations.test.ts
+│   │   ├── unitConversions.ts  # Metric unit conversions (TDD)
+│   │   └── unitConversions.test.ts
 │   ├── types/
 │   │   └── debt.ts             # TypeScript interfaces
 │   ├── App.tsx                 # Main app with data sources footer
@@ -138,7 +170,9 @@ sisyphus/
 │       ├── governments.json    # Government timeline + party colors
 │       ├── budget-plans.json   # 2026 budget predictions
 │       ├── economic-data.json  # Inflation rates + GDP 1993-2026
-│       └── demographic-data.json # Population data 1993-2026
+│       ├── demographic-data.json # Population data 1993-2026
+│       ├── wage-data.json      # Average/minimum wages 1993-2026
+│       └── price-data.json     # Petrol, highway, hospital, school costs
 ├── package.json
 ├── vite.config.ts
 ├── vitest.config.ts
@@ -160,6 +194,7 @@ sisyphus/
 | `historicalData.ts` | src/utils/ | Extract Q4 data for chart display |
 | `chartHelpers.ts` | src/utils/ | Year formatting, government lookup |
 | `graphCalculations.ts` | src/utils/ | Inflation adjustment, GDP %, yearly deficit |
+| `unitConversions.ts` | src/utils/ | Metric unit conversions (highways, petrol, salaries) |
 
 ## Data Models
 
@@ -208,6 +243,8 @@ interface DemographicYearData {
 | Rozpočtové plány | Ministerstvo financí ČR | [mfcr.cz](https://www.mfcr.cz/) |
 | Inflace a HDP | Český statistický úřad | [czso.cz](https://www.czso.cz/) |
 | Demografická data | Český statistický úřad | [csu.gov.cz](https://csu.gov.cz/produkty/obyvatelstvo_hu) |
+| Mzdová data | ČSÚ, MPSV | [czso.cz](https://www.czso.cz/csu/czso/prace_a_mzdy_prace) |
+| Cenová data | ČSÚ, ŘSD, MZ ČR, MŠMT | [czso.cz](https://www.czso.cz/) |
 
 ## Testing Strategy
 
@@ -219,24 +256,26 @@ interface DemographicYearData {
 - GDP percentage calculations
 - Yearly deficit calculations
 - Chart helper functions
+- Metric unit conversions
 
 **Test Coverage: 100%**
 ```
--------------------|---------|----------|---------|---------|
-File               | % Stmts | % Branch | % Funcs | % Lines |
--------------------|---------|----------|---------|---------|
-All files          |     100 |      100 |     100 |     100 |
- calculations.ts   |     100 |      100 |     100 |     100 |
- chartHelpers.ts   |     100 |      100 |     100 |     100 |
- formatters.ts     |     100 |      100 |     100 |     100 |
- graphCalculations |     100 |      100 |     100 |     100 |
- historicalData.ts |     100 |      100 |     100 |     100 |
--------------------|---------|----------|---------|---------|
+--------------------|---------|----------|---------|---------|
+File                | % Stmts | % Branch | % Funcs | % Lines |
+--------------------|---------|----------|---------|---------|
+All files           |     100 |      100 |     100 |     100 |
+ calculations.ts    |     100 |      100 |     100 |     100 |
+ chartHelpers.ts    |     100 |      100 |     100 |     100 |
+ formatters.ts      |     100 |      100 |     100 |     100 |
+ graphCalculations  |     100 |      100 |     100 |     100 |
+ historicalData.ts  |     100 |      100 |     100 |     100 |
+ unitConversions.ts |     100 |      100 |     100 |     100 |
+--------------------|---------|----------|---------|---------|
 ```
 
 **Test Summary:**
-- 59 tests across 5 test files
-- 122 statements, 52 branches, 14 functions covered
+- 87 tests across 6 test files
+- All utility functions fully covered
 
 ## Current State
 
@@ -248,6 +287,7 @@ All files          |     100 |      100 |     100 |     100 |
 - [x] Historical data JSON from MFCR (1993-2025, quarterly)
 - [x] D3.js bar chart with 6 graph variants
 - [x] 3 population modes (country/per capita/per working age)
+- [x] Alternative metric units (highways, hospitals, schools, petrol, salaries)
 - [x] Government timeline with party colors
 - [x] Event markers with precise date positioning
 - [x] 2026 budget plan predictions with toggle
@@ -259,7 +299,7 @@ All files          |     100 |      100 |     100 |     100 |
 - [x] Czech-compatible fonts
 - [x] Data sources footer with links
 - [x] Responsive design (up to 2400px width)
-- [x] TDD: 59 tests, 100% coverage
+- [x] TDD: 87 tests, 100% coverage
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates

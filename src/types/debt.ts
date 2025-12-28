@@ -195,3 +195,70 @@ export interface GraphVariantInfo {
   unit: string;
   description: string;
 }
+
+/**
+ * Wage data for a year
+ */
+export interface WageYearData {
+  year: number;
+  averageGross: number;  // CZK/month
+  averageNet: number;    // CZK/month
+  minimumGross: number;  // CZK/month
+  minimumNet: number;    // CZK/month
+}
+
+export interface WageData {
+  description: string;
+  sources: string[];
+  sourceUrls: string[];
+  data: WageYearData[];
+}
+
+/**
+ * Price data for a year
+ */
+export interface PriceYearData {
+  year: number;
+  petrol95: number;      // CZK/litre
+  highwayKm: number;     // million CZK/km
+  hospital: number;      // million CZK
+  school: number;        // million CZK
+}
+
+export interface PriceData {
+  description: string;
+  sources: string[];
+  sourceUrls: string[];
+  data: PriceYearData[];
+}
+
+/**
+ * Metric unit types - different for each population mode
+ */
+export type MetricUnitCountry = 
+  | 'czk'           // Czech Koruna (default)
+  | 'highway-km'    // Kilometres of highways
+  | 'hospitals'     // Regional hospitals
+  | 'schools';      // Primary schools
+
+export type MetricUnitPerCapita = 
+  | 'czk'           // Czech Koruna (default)
+  | 'petrol-litres'; // Litres of petrol 95
+
+export type MetricUnitPerWorking = 
+  | 'czk'              // Czech Koruna (default)
+  | 'avg-gross-months' // Months of average gross salary
+  | 'avg-net-months'   // Months of average net salary
+  | 'min-gross-months' // Months of minimum gross wage
+  | 'min-net-months';  // Months of minimum net wage
+
+export type MetricUnit = MetricUnitCountry | MetricUnitPerCapita | MetricUnitPerWorking;
+
+export interface MetricUnitInfo {
+  id: MetricUnit;
+  name: string;
+  shortName: string;
+  description: string;
+  formatSuffix: string;  // e.g., "Kč", "l", "měsíců"
+  populationMode: PopulationMode;
+}

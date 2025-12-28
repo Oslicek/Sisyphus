@@ -84,6 +84,41 @@
   color: white;
 }
 
+/* Metric unit selector */
+.metricSelector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+  padding: 0 1rem;
+}
+
+.metricButton {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #9d4edd;
+  border-radius: 3px;
+  background: transparent;
+  color: #9d4edd;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.metricButton:hover {
+  border-color: #7b2cbf;
+  color: #7b2cbf;
+  background: rgba(157, 78, 221, 0.1);
+}
+
+.metricButtonActive {
+  background: #9d4edd;
+  border-color: #9d4edd;
+  color: white;
+}
+
 .inflationNote {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.8rem;

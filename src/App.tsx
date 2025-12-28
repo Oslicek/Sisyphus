@@ -28,6 +28,16 @@ const DATA_SOURCES = [
     source: 'Český statistický úřad (ČSÚ)',
     url: 'https://csu.gov.cz/produkty/obyvatelstvo_hu',
   },
+  {
+    name: 'Mzdová data',
+    source: 'ČSÚ, MPSV',
+    url: 'https://www.czso.cz/csu/czso/prace_a_mzdy_prace',
+  },
+  {
+    name: 'Cenová data (dálnice, nemocnice, školy, benzín)',
+    source: 'ČSÚ, ŘSD, MZ ČR, MŠMT',
+    url: 'https://www.czso.cz/',
+  },
 ];
 
 function App() {
