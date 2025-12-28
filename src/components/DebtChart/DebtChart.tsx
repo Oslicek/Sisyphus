@@ -11,7 +11,18 @@ const CHART_CONFIG = {
   marginBottom: 40,
   marginLeft: 60,
   barPadding: 0.2,
+  minBarWidthForAllLabels: 28, // Show all labels if bar width >= this
 };
+
+/**
+ * Get tick values for X axis based on the rule:
+ * 1993, 1995, then every 5 years (2000, 2005, 2010, 2015, 2020, 2025)
+ */
+function getXAxisTickValues(data: ChartDataPoint[]): number[] {
+  const years = data.map((d) => d.year);
+  const tickYears = [1993, 1995, 2000, 2005, 2010, 2015, 2020, 2025];
+  return tickYears.filter((year) => years.includes(year));
+}
 
 export function DebtChart() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -49,7 +60,7 @@ export function DebtChart() {
     svg.selectAll('*').remove();
 
     const { width, height } = dimensions;
-    const { marginTop, marginRight, marginBottom, marginLeft, barPadding } = CHART_CONFIG;
+    const { marginTop, marginRight, marginBottom, marginLeft, barPadding, minBarWidthForAllLabels } = CHART_CONFIG;
     const innerWidth = width - marginLeft - marginRight;
     const innerHeight = height - marginTop - marginBottom;
 
@@ -98,7 +109,7 @@ export function DebtChart() {
           setTooltip({
             visible: true,
             x: rect.left - containerRect.left + rect.width / 2,
-            y: rect.top - containerRect.top - 10,
+            y: rect.top - containerRect.top + 40,
             data: d,
           });
         }
@@ -107,19 +118,33 @@ export function DebtChart() {
         setTooltip((prev) => ({ ...prev, visible: false }));
       });
 
-    // X Axis
-    const xAxis = d3.axisBottom(xScale).tickValues(
-      chartData
-        .filter((_, i) => i % 5 === 0 || i === chartData.length - 1)
-        .map((d) => d.year)
-    );
+    // Determine tick values based on bar width
+    const barWidth = xScale.bandwidth();
+    const showAllLabels = barWidth >= minBarWidthForAllLabels;
+    const tickValues = showAllLabels
+      ? chartData.map((d) => d.year)
+      : getXAxisTickValues(chartData);
 
-    g.append('g')
+    // X Axis
+    const xAxis = d3.axisBottom(xScale).tickValues(tickValues);
+
+    const xAxisGroup = g
+      .append('g')
       .attr('transform', `translate(0,${innerHeight})`)
-      .call(xAxis)
-      .attr('class', styles.axisLabel)
-      .selectAll('line')
-      .attr('class', styles.axisLine);
+      .call(xAxis);
+
+    // Style X axis
+    xAxisGroup.select('.domain')
+      .attr('stroke', '#1a1a2e')
+      .attr('stroke-width', 1.5)
+      .attr('stroke-linecap', 'round');
+
+    xAxisGroup.selectAll('.tick line')
+      .attr('stroke', '#1a1a2e')
+      .attr('stroke-linecap', 'round');
+
+    xAxisGroup.selectAll('.tick text')
+      .attr('class', styles.axisLabel);
 
     // Y Axis
     const yAxis = d3
@@ -127,11 +152,20 @@ export function DebtChart() {
       .ticks(5)
       .tickFormat((d) => `${d} mld`);
 
-    g.append('g')
-      .call(yAxis)
-      .attr('class', styles.axisLabel)
-      .selectAll('line')
-      .attr('class', styles.axisLine);
+    const yAxisGroup = g.append('g').call(yAxis);
+
+    // Style Y axis
+    yAxisGroup.select('.domain')
+      .attr('stroke', '#1a1a2e')
+      .attr('stroke-width', 1.5)
+      .attr('stroke-linecap', 'round');
+
+    yAxisGroup.selectAll('.tick line')
+      .attr('stroke', '#1a1a2e')
+      .attr('stroke-linecap', 'round');
+
+    yAxisGroup.selectAll('.tick text')
+      .attr('class', styles.axisLabel);
 
   }, [chartData, dimensions]);
 
@@ -167,7 +201,7 @@ export function DebtChart() {
         style={{
           left: tooltip.x,
           top: tooltip.y,
-          transform: 'translate(-50%, -100%)',
+          transform: 'translate(-50%, 0)',
         }}
       >
         {tooltip.data && (
@@ -182,4 +216,3 @@ export function DebtChart() {
     </section>
   );
 }
-
