@@ -1,0 +1,82 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  min-height: 60vh;
+  padding: 2rem;
+}
+
+.title {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  margin: 0;
+  text-align: center;
+}
+
+.subtitle {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin: -1rem 0 0 0;
+  text-align: center;
+}
+
+.debtDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.amount {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+  margin: 0;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.currency {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.perSecond {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  color: var(--color-text-muted);
+  margin-top: 1.5rem;
+}
+
+.perSecondValue {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-weight: 500;
+  color: var(--color-accent-secondary);
+}
+
+.loading {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+}
+
+.error {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1.2rem;
+  color: var(--color-error);
+}
+

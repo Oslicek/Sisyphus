@@ -1,11 +1,7 @@
-import styles from './App.module.css';
+import { DebtCounter } from './components/DebtCounter';
 
 function App() {
-  return (
-    <main className={styles.container}>
-      <h1 className={styles.title}>Sisyphus</h1>
-    </main>
-  );
+  return <DebtCounter />;
 }
 
 export default App;

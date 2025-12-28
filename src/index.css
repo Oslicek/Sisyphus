@@ -1,17 +1,24 @@
 :root {
-  --color-bg: #fafafa;
+  /* Light theme colors */
+  --color-bg: #f8f9fa;
+  --color-bg-subtle: #e9ecef;
   --color-text: #1a1a2e;
-  --color-text-muted: #64748b;
-  --color-accent: #0f766e;
+  --color-text-muted: #6c757d;
+  --color-accent: #c41e3a;
+  --color-accent-secondary: #dc3545;
+  --color-error: #dc3545;
   
-  font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+  /* Typography */
+  font-family: 'Source Sans 3', system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   font-weight: 400;
 
+  /* Always light theme */
   color-scheme: light;
   color: var(--color-text);
   background-color: var(--color-bg);
 
+  /* Rendering optimizations */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -29,6 +36,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: 
+    linear-gradient(135deg, rgba(196, 30, 58, 0.03) 0%, transparent 50%),
+    linear-gradient(225deg, rgba(17, 82, 147, 0.03) 0%, transparent 50%),
+    var(--color-bg);
 }
 
 #root {

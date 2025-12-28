@@ -4,25 +4,25 @@
 
 ## Overview
 
-**Sisyphus** is a state government debt visualization web application. It displays real-time debt counters and interactive charts, served as a static site with virtually unlimited scaling capacity. All data processing and visualization happens client-side.
+**Sisyphus** is a Czech Republic government debt visualization web application. It displays a real-time debt counter, served as a static site with virtually unlimited scaling capacity. All data processing and visualization happens client-side. The application is in Czech language.
 
 ## Technology Stack
 
 | Component | Version/Details |
 |-----------|-----------------|
-| Framework | React 18 |
-| Build Tool | Vite |
+| Framework | React 19 |
+| Build Tool | Vite 7 |
 | Language | TypeScript (strict mode) |
-| Visualization | D3.js |
+| Styling | CSS Modules |
+| Fonts | Bebas Neue, Source Sans 3, JetBrains Mono (OFL) |
 | Hosting | Cloudflare Pages |
 | Scheduled Tasks | Cloudflare Workers (TypeScript) |
-| Data Storage | Cloudflare R2 (static JSON files) |
-| Analytics | Cloudflare Web Analytics |
+| Data Storage | Static JSON files (public/data/) |
 | Testing | Vitest |
 
 ## Architecture
 
-**Pattern:** Static Site + Edge Workers
+**Pattern:** Static Site with Client-Side Computation
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -30,8 +30,8 @@
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │   ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────────┐ │
-│   │ Pages            │    │ Workers          │    │ R2 Storage           │ │
-│   │ (Static React)   │    │ (Cron Tasks)     │    │ (JSON Data Files)    │ │
+│   │ Pages            │    │ Workers          │    │ Static JSON          │ │
+│   │ (Static React)   │    │ (Cron Tasks)     │    │ (debt-anchor.json)   │ │
 │   └──────────────────┘    └──────────────────┘    └──────────────────────┘ │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -41,22 +41,19 @@
 │                              Client Browser                                  │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│   ┌────────────────┐   ┌────────────────┐   ┌────────────────────────┐     │
-│   │ Debt Counter   │   │ D3.js Charts   │   │ Filters/Selectors      │     │
-│   │ (Real-time)    │   │ (Visualization)│   │ (Client-side)          │     │
-│   └────────────────┘   └────────────────┘   └────────────────────────┘     │
+│   ┌────────────────────────────────────────────────────────────────────┐   │
+│   │ DebtCounter Component                                               │   │
+│   │ - Fetches anchor data once on load                                  │   │
+│   │ - Computes deficit per second from yearly planned deficit           │   │
+│   │ - Updates display every second (client-side, no further fetches)    │   │
+│   └────────────────────────────────────────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Layers:**
-- **Static Frontend** - React SPA, served from CDN edge
-- **Data Layer** - Static JSON files, fetched on load
-- **Update Layer** - Cloudflare Workers with cron triggers
-
 **Data Flow:**
 ```
-[External API] → [Worker (cron)] → [R2 JSON files] → [React App] → [User Browser]
+[Static JSON] → [React App fetches on load] → [Client computes & updates every second]
 ```
 
 ## Project Structure
@@ -65,127 +62,108 @@
 sisyphus/
 ├── src/                        # React application
 │   ├── components/
-│   │   ├── DebtCounter/        # Real-time debt counter
-│   │   └── Visualization/      # D3.js chart components
+│   │   └── DebtCounter/        # Real-time debt counter
+│   │       ├── DebtCounter.tsx
+│   │       ├── DebtCounter.module.css
+│   │       └── index.ts
 │   ├── hooks/
-│   │   ├── useDebtData.ts      # Data fetching hook
-│   │   └── useDebtCounter.ts   # Counter animation hook
+│   │   └── useDebtCounter.ts   # Counter logic hook
 │   ├── utils/
 │   │   ├── calculations.ts     # Debt calculations (TDD)
-│   │   └── formatters.ts       # Number formatting (TDD)
+│   │   ├── calculations.test.ts
+│   │   ├── formatters.ts       # Czech currency formatting (TDD)
+│   │   └── formatters.test.ts
 │   ├── types/
 │   │   └── debt.ts             # TypeScript interfaces
 │   ├── App.tsx
-│   └── main.tsx
+│   ├── main.tsx
+│   └── index.css               # Global styles, light theme
 ├── public/
 │   └── data/
-│       ├── debt-metadata.json  # Current debt + growth rate
-│       └── historical.json     # Time series data
-├── worker/                     # Cloudflare Worker
-│   ├── src/
-│   │   ├── index.ts            # Worker entry point
-│   │   └── importer.ts         # Data import logic (TDD)
-│   ├── wrangler.toml
-│   └── package.json
+│       └── debt-anchor.json    # Anchor data for debt calculation
 ├── package.json
 ├── vite.config.ts
 ├── vitest.config.ts
 ├── tsconfig.json
 ├── PROJECT_RULES.md
-├── PROJECT_CONTEXT.md
-└── README.md
+└── PROJECT_CONTEXT.md
 ```
 
 ## Key Components
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| `DebtCounter` | src/components/ | Real-time animated debt display |
-| `useDebtCounter` | src/hooks/ | requestAnimationFrame-based counter |
-| `useDebtData` | src/hooks/ | Fetch and cache JSON data |
-| `calculations.ts` | src/utils/ | Debt growth calculations (TDD) |
-| `formatters.ts` | src/utils/ | Currency/number formatting (TDD) |
-| `importer.ts` | worker/src/ | External API data import (TDD) |
+| `DebtCounter` | src/components/DebtCounter/ | Real-time debt display in Czech |
+| `useDebtCounter` | src/hooks/ | Fetches data, computes & updates debt every second |
+| `calculations.ts` | src/utils/ | Deficit per second, seconds since anchor, current debt |
+| `formatters.ts` | src/utils/ | Czech locale currency formatting |
+| `debt.ts` | src/types/ | DebtAnchor and DebtState interfaces |
 
 ## Data Models
 
-### Debt Metadata (debt-metadata.json)
+### Debt Anchor (debt-anchor.json)
 ```typescript
-interface DebtMetadata {
-  baseAmount: number;           // Debt at reference time (cents)
-  referenceTimestamp: number;   // Unix timestamp (ms)
-  growthRatePerSecond: number;  // Cents per second
-  lastUpdated: string;          // ISO 8601 date
-  currency: string;             // "USD"
+interface DebtAnchor {
+  baseAmount: number;           // Debt at anchor date in CZK
+  anchorDate: string;           // ISO 8601 date (YYYY-MM-DD)
+  plannedDeficit2025: number;   // Planned budget deficit for 2025 in CZK
+  currency: string;             // "CZK"
   source: string;               // Data source name
+  lastUpdated: string;          // ISO 8601 date
 }
 ```
 
-### Historical Data (historical.json)
-```typescript
-interface HistoricalData {
-  timeSeries: TimeSeriesPoint[];
-  categories: DebtCategory[];
-}
+**Current values:**
+- Base amount: 3,365,200,000,000 CZK (as of 2024-12-31)
+- Planned deficit 2025: 241,000,000,000 CZK
 
-interface TimeSeriesPoint {
-  date: string;                 // ISO 8601 date
-  total: number;                // Total debt (cents)
-  breakdown?: Record<string, number>;
-}
+## Calculation Logic
 
-interface DebtCategory {
-  id: string;
-  name: string;
-  color: string;
-}
-```
+1. **On page load:** Fetch `debt-anchor.json`
+2. **Compute deficit per second:** `plannedDeficit2025 / secondsInYear`
+3. **Compute seconds elapsed:** `now - anchorDate`
+4. **Current debt:** `baseAmount + (deficitPerSecond × secondsElapsed)`
+5. **Every second:** Increment display by `deficitPerSecond`
 
 ## Testing Strategy
 
 **TDD Focus Areas:**
-- Data import and transformation
 - Debt growth calculations
-- Number formatting
-- Data validation
+- Czech currency formatting
+- Leap year handling
 
-**Test Locations:**
+**Test Files:**
 ```
-src/utils/calculations.test.ts
-src/utils/formatters.test.ts
-worker/src/importer.test.ts
+src/utils/calculations.test.ts  (8 tests)
+src/utils/formatters.test.ts    (4 tests)
 ```
 
 ## Current State
 
-**Phase:** Initial Setup
+**Phase:** MVP - Debt Counter
 
 **Completed:**
-- [ ] Project scaffolding (Vite + React + TypeScript)
-- [ ] PROJECT_RULES.md and PROJECT_CONTEXT.md
-- [ ] Vitest configuration
-- [ ] Basic project structure
-
-**In Progress:**
-- [ ] Core data types
+- [x] Project scaffolding (Vite + React + TypeScript)
+- [x] PROJECT_RULES.md and PROJECT_CONTEXT.md
+- [x] Vitest configuration
+- [x] Core data types
+- [x] Debt calculation logic with TDD (12 tests passing)
+- [x] Czech currency formatting with TDD
+- [x] DebtCounter component with Czech UI
+- [x] Light theme with CSS Modules
+- [x] Czech-compatible fonts (Bebas Neue, Source Sans 3, JetBrains Mono)
 
 **Pending:**
-- [ ] Debt counter component
-- [ ] D3.js visualization
+- [ ] D3.js visualizations
 - [ ] Cloudflare Worker setup
 - [ ] Data import logic
 - [ ] Cloudflare Pages deployment
 
-## External APIs
-
-| API | Purpose | Update Frequency |
-|-----|---------|------------------|
-| TBD | Government debt data | Daily |
-
 ## Notes
 
-- All business logic must have tests (TDD)
-- Data files are static JSON, updated by Workers
+- All business logic has tests (TDD)
+- Application is in Czech language
+- Light theme only
+- Fonts chosen support Czech diacritics (háčky, čárky)
 - No server-side rendering - pure client-side React
 - Unlimited scaling via CDN edge caching
-
