@@ -60,3 +60,40 @@ export interface ChartDataPoint {
   year: number;
   amount: number; // in billion CZK
 }
+
+/**
+ * Event data for chart annotations
+ */
+export interface ChartEvent {
+  id: string;
+  name: string;
+  date: string;
+  year: number;
+}
+
+export interface EventsData {
+  description: string;
+  events: ChartEvent[];
+}
+
+/**
+ * Government data for chart annotations
+ */
+export interface Government {
+  name: string;
+  startDate: string;
+  endDate: string | null;
+  party: string;
+}
+
+export interface PartyInfo {
+  name: string;
+  color: string;
+}
+
+export interface GovernmentsData {
+  source: string;
+  sourceUrl: string;
+  parties: Record<string, PartyInfo>;
+  governments: Government[];
+}

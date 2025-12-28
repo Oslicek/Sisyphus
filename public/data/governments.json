@@ -1,0 +1,115 @@
+{
+  "source": "Wikipedia - Seznam vlád Česka",
+  "sourceUrl": "https://cs.wikipedia.org/wiki/Seznam_vlád_Česka",
+  "parties": {
+    "ODS": { "name": "ODS", "color": "#0033A0" },
+    "CSSD": { "name": "ČSSD", "color": "#EC1C24" },
+    "ANO": { "name": "ANO", "color": "#261160" },
+    "bezpart": { "name": "bezpart.", "color": "#A0A0A0" }
+  },
+  "governments": [
+    {
+      "name": "Klaus I",
+      "startDate": "1993-01-01",
+      "endDate": "1996-07-04",
+      "party": "ODS"
+    },
+    {
+      "name": "Klaus II",
+      "startDate": "1996-07-04",
+      "endDate": "1998-01-02",
+      "party": "ODS"
+    },
+    {
+      "name": "Tošovský",
+      "startDate": "1998-01-02",
+      "endDate": "1998-07-22",
+      "party": "bezpart"
+    },
+    {
+      "name": "Zeman",
+      "startDate": "1998-07-22",
+      "endDate": "2002-07-15",
+      "party": "CSSD"
+    },
+    {
+      "name": "Špidla",
+      "startDate": "2002-07-15",
+      "endDate": "2004-08-04",
+      "party": "CSSD"
+    },
+    {
+      "name": "Gross",
+      "startDate": "2004-08-04",
+      "endDate": "2005-04-25",
+      "party": "CSSD"
+    },
+    {
+      "name": "Paroubek",
+      "startDate": "2005-04-25",
+      "endDate": "2006-09-04",
+      "party": "CSSD"
+    },
+    {
+      "name": "Topolánek I",
+      "startDate": "2006-09-04",
+      "endDate": "2007-01-09",
+      "party": "ODS"
+    },
+    {
+      "name": "Topolánek II",
+      "startDate": "2007-01-09",
+      "endDate": "2009-05-08",
+      "party": "ODS"
+    },
+    {
+      "name": "Fischer",
+      "startDate": "2009-05-08",
+      "endDate": "2010-07-13",
+      "party": "bezpart"
+    },
+    {
+      "name": "Nečas",
+      "startDate": "2010-07-13",
+      "endDate": "2013-07-10",
+      "party": "ODS"
+    },
+    {
+      "name": "Rusnok",
+      "startDate": "2013-07-10",
+      "endDate": "2014-01-29",
+      "party": "bezpart"
+    },
+    {
+      "name": "Sobotka",
+      "startDate": "2014-01-29",
+      "endDate": "2017-12-13",
+      "party": "CSSD"
+    },
+    {
+      "name": "Babiš I",
+      "startDate": "2017-12-13",
+      "endDate": "2018-06-27",
+      "party": "ANO"
+    },
+    {
+      "name": "Babiš II",
+      "startDate": "2018-06-27",
+      "endDate": "2021-12-17",
+      "party": "ANO"
+    },
+    {
+      "name": "Fiala",
+      "startDate": "2021-12-17",
+      "endDate": "2025-01-29",
+      "party": "ODS"
+    },
+    {
+      "name": "Babiš III",
+      "startDate": "2025-01-29",
+      "endDate": null,
+      "party": "ANO"
+    }
+  ]
+}
+

@@ -1,6 +1,7 @@
 .container {
   width: 100%;
   padding: 1rem 0;
+  position: relative;
 }
 
 .chartTitle {
@@ -39,9 +40,23 @@
   fill: var(--color-text-muted);
 }
 
-.axisLine {
-  stroke: var(--color-text-muted);
-  stroke-opacity: 0.3;
+.yearLabel {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 9px;
+  fill: var(--color-text);
+}
+
+.eventLabel {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  fill: var(--color-accent);
+}
+
+.governmentLabel {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: 600;
 }
 
 .gridLine {
@@ -69,26 +84,27 @@
   position: absolute;
   background: var(--color-text);
   color: var(--color-bg);
-  padding: 0.5rem 0.75rem;
+  padding: 0.4rem 0.6rem;
   border-radius: 4px;
   font-family: 'Source Sans 3', system-ui, sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
   z-index: 100;
+  white-space: nowrap;
 }
 
 .tooltip.visible {
-  opacity: 1;
+  opacity: 0.95;
 }
 
 .tooltipYear {
   font-weight: 600;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.15rem;
 }
 
 .tooltipAmount {
   font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 0.75rem;
 }
-

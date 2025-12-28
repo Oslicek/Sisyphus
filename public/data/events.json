@@ -1,0 +1,18 @@
+{
+  "description": "Významné události ovlivňující státní dluh",
+  "events": [
+    {
+      "id": "lehman",
+      "name": "Bankrot Lehman Brothers",
+      "date": "2008-09-15",
+      "year": 2008
+    },
+    {
+      "id": "covid",
+      "name": "Covid-19",
+      "date": "2020-03-01",
+      "year": 2020
+    }
+  ]
+}
+

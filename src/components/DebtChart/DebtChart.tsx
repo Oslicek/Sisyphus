@@ -2,32 +2,22 @@ import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { useHistoricalDebt } from '../../hooks/useHistoricalDebt';
 import { formatCzechCurrency } from '../../utils/formatters';
+import { formatYearLabel, getGovernmentForYear } from '../../utils/chartHelpers';
 import type { ChartDataPoint } from '../../types/debt';
 import styles from './DebtChart.module.css';
 
 const CHART_CONFIG = {
   marginTop: 20,
   marginRight: 20,
-  marginBottom: 40,
+  marginBottom: 100, // Increased for 3-line axis
   marginLeft: 60,
   barPadding: 0.2,
-  minBarWidthForAllLabels: 28, // Show all labels if bar width >= this
 };
-
-/**
- * Get tick values for X axis based on the rule:
- * 1993, 1995, then every 5 years (2000, 2005, 2010, 2015, 2020, 2025)
- */
-function getXAxisTickValues(data: ChartDataPoint[]): number[] {
-  const years = data.map((d) => d.year);
-  const tickYears = [1993, 1995, 2000, 2005, 2010, 2015, 2020, 2025];
-  return tickYears.filter((year) => years.includes(year));
-}
 
 export function DebtChart() {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 800, height: 400 });
+  const [dimensions, setDimensions] = useState({ width: 800, height: 450 });
   const [tooltip, setTooltip] = useState<{
     visible: boolean;
     x: number;
@@ -35,14 +25,14 @@ export function DebtChart() {
     data: ChartDataPoint | null;
   }>({ visible: false, x: 0, y: 0, data: null });
 
-  const { chartData, isLoading, error } = useHistoricalDebt();
+  const { chartData, events, governments, parties, isLoading, error } = useHistoricalDebt();
 
   // Handle responsive sizing
   useEffect(() => {
     function updateDimensions() {
       if (containerRef.current) {
         const width = containerRef.current.clientWidth;
-        const height = Math.min(400, Math.max(300, width * 0.4));
+        const height = Math.min(450, Math.max(350, width * 0.45));
         setDimensions({ width, height });
       }
     }
@@ -60,7 +50,7 @@ export function DebtChart() {
     svg.selectAll('*').remove();
 
     const { width, height } = dimensions;
-    const { marginTop, marginRight, marginBottom, marginLeft, barPadding, minBarWidthForAllLabels } = CHART_CONFIG;
+    const { marginTop, marginRight, marginBottom, marginLeft, barPadding } = CHART_CONFIG;
     const innerWidth = width - marginLeft - marginRight;
     const innerHeight = height - marginTop - marginBottom;
 
@@ -109,7 +99,7 @@ export function DebtChart() {
           setTooltip({
             visible: true,
             x: rect.left - containerRect.left + rect.width / 2,
-            y: rect.top - containerRect.top + 40,
+            y: rect.top - containerRect.top + 10,
             data: d,
           });
         }
@@ -118,33 +108,102 @@ export function DebtChart() {
         setTooltip((prev) => ({ ...prev, visible: false }));
       });
 
-    // Determine tick values based on bar width
-    const barWidth = xScale.bandwidth();
-    const showAllLabels = barWidth >= minBarWidthForAllLabels;
-    const tickValues = showAllLabels
-      ? chartData.map((d) => d.year)
-      : getXAxisTickValues(chartData);
-
-    // X Axis
-    const xAxis = d3.axisBottom(xScale).tickValues(tickValues);
-
-    const xAxisGroup = g
+    // === LINE 1: Years ===
+    const yearsGroup = g
       .append('g')
-      .attr('transform', `translate(0,${innerHeight})`)
-      .call(xAxis);
+      .attr('transform', `translate(0,${innerHeight + 5})`);
 
-    // Style X axis
-    xAxisGroup.select('.domain')
+    chartData.forEach((d) => {
+      const x = (xScale(d.year) ?? 0) + xScale.bandwidth() / 2;
+      yearsGroup
+        .append('text')
+        .attr('x', x)
+        .attr('y', 12)
+        .attr('text-anchor', 'middle')
+        .attr('class', styles.yearLabel)
+        .text(formatYearLabel(d.year));
+    });
+
+    // X axis line
+    g.append('line')
+      .attr('x1', 0)
+      .attr('x2', innerWidth)
+      .attr('y1', innerHeight)
+      .attr('y2', innerHeight)
       .attr('stroke', '#1a1a2e')
       .attr('stroke-width', 1.5)
       .attr('stroke-linecap', 'round');
 
-    xAxisGroup.selectAll('.tick line')
-      .attr('stroke', '#1a1a2e')
-      .attr('stroke-linecap', 'round');
+    // === LINE 2: Events ===
+    const eventsGroup = g
+      .append('g')
+      .attr('transform', `translate(0,${innerHeight + 25})`);
 
-    xAxisGroup.selectAll('.tick text')
-      .attr('class', styles.axisLabel);
+    events.forEach((event) => {
+      const x = (xScale(event.year) ?? 0) + xScale.bandwidth() / 2;
+      if (xScale(event.year) !== undefined) {
+        eventsGroup
+          .append('text')
+          .attr('x', x)
+          .attr('y', 12)
+          .attr('text-anchor', 'middle')
+          .attr('class', styles.eventLabel)
+          .text(event.name);
+      }
+    });
+
+    // === LINE 3: Governments ===
+    const governmentsGroup = g
+      .append('g')
+      .attr('transform', `translate(0,${innerHeight + 45})`);
+
+    // Track which governments we've already labeled to avoid duplicates
+    const labeledGovernments = new Set<string>();
+
+    chartData.forEach((d) => {
+      const gov = getGovernmentForYear(d.year, governments);
+      if (gov && !labeledGovernments.has(gov.name)) {
+        // Find all years for this government
+        const govYears = chartData.filter(
+          (point) => getGovernmentForYear(point.year, governments)?.name === gov.name
+        );
+        
+        if (govYears.length > 0) {
+          const firstYear = govYears[0].year;
+          const lastYear = govYears[govYears.length - 1].year;
+          
+          const startX = xScale(firstYear) ?? 0;
+          const endX = (xScale(lastYear) ?? 0) + xScale.bandwidth();
+          const centerX = startX + (endX - startX) / 2;
+          
+          const partyInfo = parties[gov.party];
+          const color = partyInfo?.color || '#666';
+          
+          // Background bar for government
+          governmentsGroup
+            .append('rect')
+            .attr('x', startX)
+            .attr('y', 0)
+            .attr('width', endX - startX)
+            .attr('height', 18)
+            .attr('fill', color)
+            .attr('opacity', 0.15)
+            .attr('rx', 2);
+          
+          // Government name
+          governmentsGroup
+            .append('text')
+            .attr('x', centerX)
+            .attr('y', 13)
+            .attr('text-anchor', 'middle')
+            .attr('fill', color)
+            .attr('class', styles.governmentLabel)
+            .text(gov.name);
+          
+          labeledGovernments.add(gov.name);
+        }
+      }
+    });
 
     // Y Axis
     const yAxis = d3
@@ -154,7 +213,6 @@ export function DebtChart() {
 
     const yAxisGroup = g.append('g').call(yAxis);
 
-    // Style Y axis
     yAxisGroup.select('.domain')
       .attr('stroke', '#1a1a2e')
       .attr('stroke-width', 1.5)
@@ -167,7 +225,7 @@ export function DebtChart() {
     yAxisGroup.selectAll('.tick text')
       .attr('class', styles.axisLabel);
 
-  }, [chartData, dimensions]);
+  }, [chartData, events, governments, parties, dimensions]);
 
   if (isLoading) {
     return (
