@@ -13,3 +13,16 @@ export function formatCzechCurrency(amount: number): string {
   });
 }
 
+/**
+ * Format a number in billions as Czech text
+ * @param amountInBillions - The amount in billions of CZK
+ * @returns Formatted string like "3 365 miliard Kč"
+ */
+export function formatBillionsCzech(amountInBillions: number): string {
+  const rounded = Math.round(amountInBillions * 10) / 10; // 1 decimal place
+  const formatted = rounded.toLocaleString('cs-CZ', {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 0,
+  });
+  return `${formatted} miliard Kč`;
+}

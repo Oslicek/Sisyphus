@@ -6,7 +6,9 @@ import type {
   ChartEvent,
   GovernmentsData,
   Government,
-  PartyInfo 
+  PartyInfo,
+  BudgetPlansData,
+  BudgetPlan
 } from '../types/debt';
 import { extractQ4Data } from '../utils/historicalData';
 
@@ -15,28 +17,31 @@ interface UseHistoricalDebtResult {
   events: ChartEvent[];
   governments: Government[];
   parties: Record<string, PartyInfo>;
+  budgetPlans: BudgetPlan[];
   isLoading: boolean;
   error: string | null;
 }
 
 /**
- * Hook that fetches historical debt data, events, and governments
+ * Hook that fetches historical debt data, events, governments, and budget plans
  */
 export function useHistoricalDebt(): UseHistoricalDebtResult {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [events, setEvents] = useState<ChartEvent[]>([]);
   const [governments, setGovernments] = useState<Government[]>([]);
   const [parties, setParties] = useState<Record<string, PartyInfo>>({});
+  const [budgetPlans, setBudgetPlans] = useState<BudgetPlan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchAllData() {
       try {
-        const [debtResponse, eventsResponse, governmentsResponse] = await Promise.all([
+        const [debtResponse, eventsResponse, governmentsResponse, budgetResponse] = await Promise.all([
           fetch('/data/debt-historical.json'),
           fetch('/data/events.json'),
           fetch('/data/governments.json'),
+          fetch('/data/budget-plans.json'),
         ]);
 
         if (!debtResponse.ok) {
@@ -58,6 +63,11 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
           setParties(governmentsData.parties);
         }
 
+        if (budgetResponse.ok) {
+          const budgetData: BudgetPlansData = await budgetResponse.json();
+          setBudgetPlans(budgetData.plans);
+        }
+
         setIsLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Neznámá chyba');
@@ -68,5 +78,5 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
     fetchAllData();
   }, []);
 
-  return { chartData, events, governments, parties, isLoading, error };
+  return { chartData, events, governments, parties, budgetPlans, isLoading, error };
 }

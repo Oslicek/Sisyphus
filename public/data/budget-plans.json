@@ -1,0 +1,33 @@
+{
+  "description": "Rozpočtové plány pro predikci státního dluhu",
+  "source": "Ministerstvo financí ČR",
+  "plans": [
+    {
+      "id": "fiala",
+      "name": "Rozpočet Fialovy vlády",
+      "description": "Schválený rozpočet pro rok 2026",
+      "color": "#0033A0",
+      "predictions": [
+        {
+          "year": 2026,
+          "deficit": 230000000000,
+          "note": "Plánovaný schodek rozpočtu 2026"
+        }
+      ]
+    },
+    {
+      "id": "babis",
+      "name": "Rozpočet Babišovy vlády",
+      "description": "Alternativní rozpočtový plán",
+      "color": "#261160",
+      "predictions": [
+        {
+          "year": 2026,
+          "deficit": 0,
+          "note": "?"
+        }
+      ]
+    }
+  ]
+}
+

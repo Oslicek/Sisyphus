@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatCzechCurrency } from './formatters';
+import { formatCzechCurrency, formatBillionsCzech } from './formatters';
 
 describe('formatCzechCurrency', () => {
   it('should format number with Czech thousand separators (spaces)', () => {
@@ -37,3 +37,28 @@ describe('formatCzechCurrency', () => {
   });
 });
 
+describe('formatBillionsCzech', () => {
+  it('should format whole billions with "miliard Kč"', () => {
+    const result = formatBillionsCzech(3365);
+    expect(result).toContain('3');
+    expect(result).toContain('365');
+    expect(result).toContain('miliard Kč');
+  });
+
+  it('should format with one decimal when needed', () => {
+    const result = formatBillionsCzech(241.5);
+    expect(result).toContain('241');
+    expect(result).toContain('miliard Kč');
+  });
+
+  it('should handle zero', () => {
+    const result = formatBillionsCzech(0);
+    expect(result).toBe('0 miliard Kč');
+  });
+
+  it('should round to one decimal place', () => {
+    const result = formatBillionsCzech(123.456);
+    expect(result).toContain('123');
+    expect(result).toContain('miliard Kč');
+  });
+});

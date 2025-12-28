@@ -1,31 +1,26 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { useHistoricalDebt } from '../../hooks/useHistoricalDebt';
-import { formatCzechCurrency } from '../../utils/formatters';
+import { formatBillionsCzech } from '../../utils/formatters';
 import { formatYearLabel, getGovernmentForYear } from '../../utils/chartHelpers';
-import type { ChartDataPoint, Government, PartyInfo } from '../../types/debt';
+import type { ChartDataPoint, Government, BudgetPlan } from '../../types/debt';
 import styles from './DebtChart.module.css';
 
 const CHART_CONFIG = {
   marginTop: 20,
   marginRight: 20,
   marginBottom: 100,
-  marginLeft: 60,
+  marginLeft: 70,
   barPadding: 0.2,
-  minBarWidthForAllYears: 18, // Show all years if bar width >= this
-  minWidthForGovLabels: 30,   // Min government span width to show label
+  minBarWidthForAllYears: 18,
+  minWidthForGovLabels: 30,
 };
 
-/**
- * Get tick values for X axis based on bar width
- * Narrow: 1993, 1995, then every 5 years
- * Wide: all years
- */
 function getYearTickValues(data: ChartDataPoint[], showAll: boolean): number[] {
   if (showAll) {
     return data.map((d) => d.year);
   }
-  const tickYears = [1993, 1995, 2000, 2005, 2010, 2015, 2020, 2025];
+  const tickYears = [1993, 1995, 2000, 2005, 2010, 2015, 2020, 2025, 2026];
   const years = data.map((d) => d.year);
   return tickYears.filter((year) => years.includes(year));
 }
@@ -40,7 +35,12 @@ interface GovernmentSpan {
   yearsCount: number;
 }
 
-export function DebtChart() {
+interface DebtChartProps {
+  selectedPlanId?: string;
+  onPlanChange?: (planId: string) => void;
+}
+
+export function DebtChart({ selectedPlanId = 'fiala', onPlanChange }: DebtChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 450 });
@@ -50,8 +50,9 @@ export function DebtChart() {
     y: number;
     data: ChartDataPoint | null;
   }>({ visible: false, x: 0, y: 0, data: null });
+  const [activePlan, setActivePlan] = useState(selectedPlanId);
 
-  const { chartData, events, governments, parties, isLoading, error } = useHistoricalDebt();
+  const { chartData, events, governments, parties, budgetPlans, isLoading, error } = useHistoricalDebt();
 
   // Handle responsive sizing
   useEffect(() => {
@@ -68,9 +69,43 @@ export function DebtChart() {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
+  // Build chart data with prediction
+  const getChartDataWithPrediction = (): ChartDataPoint[] => {
+    if (chartData.length === 0 || budgetPlans.length === 0) return chartData;
+
+    const plan = budgetPlans.find((p) => p.id === activePlan);
+    if (!plan) return chartData;
+
+    const prediction2026 = plan.predictions.find((p) => p.year === 2026);
+    if (!prediction2026) return chartData;
+
+    // Get 2025 value as base
+    const debt2025 = chartData.find((d) => d.year === 2025);
+    if (!debt2025) return chartData;
+
+    // Calculate 2026 debt: 2025 debt + 2026 deficit (convert to billions)
+    const deficit2026InBillions = prediction2026.deficit / 1_000_000_000;
+    const debt2026 = debt2025.amount + deficit2026InBillions;
+
+    return [
+      ...chartData,
+      {
+        year: 2026,
+        amount: debt2026,
+        isPrediction: true,
+        planId: plan.id,
+        planName: plan.name,
+        planColor: plan.color,
+        note: prediction2026.note,
+      },
+    ];
+  };
+
+  const fullChartData = getChartDataWithPrediction();
+
   // Draw chart with D3
   useEffect(() => {
-    if (!svgRef.current || chartData.length === 0) return;
+    if (!svgRef.current || fullChartData.length === 0) return;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
@@ -83,13 +118,13 @@ export function DebtChart() {
     // Scales
     const xScale = d3
       .scaleBand<number>()
-      .domain(chartData.map((d) => d.year))
+      .domain(fullChartData.map((d) => d.year))
       .range([0, innerWidth])
       .padding(barPadding);
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(chartData, (d) => d.amount) ?? 0])
+      .domain([0, d3.max(fullChartData, (d) => d.amount) ?? 0])
       .nice()
       .range([innerHeight, 0]);
 
@@ -114,13 +149,14 @@ export function DebtChart() {
 
     // Bars
     g.selectAll('rect.bar')
-      .data(chartData)
+      .data(fullChartData)
       .join('rect')
-      .attr('class', styles.bar)
+      .attr('class', (d) => d.isPrediction ? styles.barPrediction : styles.bar)
       .attr('x', (d) => xScale(d.year) ?? 0)
       .attr('y', (d) => yScale(d.amount))
       .attr('width', xScale.bandwidth())
       .attr('height', (d) => innerHeight - yScale(d.amount))
+      .attr('fill', (d) => d.isPrediction ? (d.planColor || '#666') : '')
       .on('mouseenter', (event, d) => {
         const rect = event.target.getBoundingClientRect();
         const containerRect = containerRef.current?.getBoundingClientRect();
@@ -128,7 +164,7 @@ export function DebtChart() {
           setTooltip({
             visible: true,
             x: rect.left - containerRect.left + rect.width / 2,
-            y: rect.top - containerRect.top - 8, // Above the column
+            y: rect.top - containerRect.top - 8,
             data: d,
           });
         }
@@ -142,9 +178,9 @@ export function DebtChart() {
       .append('g')
       .attr('transform', `translate(0,${innerHeight + 5})`);
 
-    const yearsToShow = getYearTickValues(chartData, showAllYears);
+    const yearsToShow = getYearTickValues(fullChartData, showAllYears);
 
-    chartData.forEach((d) => {
+    fullChartData.forEach((d) => {
       if (yearsToShow.includes(d.year)) {
         const x = (xScale(d.year) ?? 0) + xScale.bandwidth() / 2;
         yearsGroup
@@ -167,38 +203,20 @@ export function DebtChart() {
       .attr('stroke-width', 1.5)
       .attr('stroke-linecap', 'round');
 
-    // === LINE 2: Events ===
-    const eventsGroup = g
-      .append('g')
-      .attr('transform', `translate(0,${innerHeight + 25})`);
-
-    events.forEach((event) => {
-      const x = (xScale(event.year) ?? 0) + xScale.bandwidth() / 2;
-      if (xScale(event.year) !== undefined) {
-        eventsGroup
-          .append('text')
-          .attr('x', x)
-          .attr('y', 12)
-          .attr('text-anchor', 'middle')
-          .attr('class', styles.eventLabel)
-          .text(event.name);
-      }
-    });
-
-    // === LINE 3: Governments ===
+    // === LINE 2: Governments ===
     const governmentsGroup = g
       .append('g')
-      .attr('transform', `translate(0,${innerHeight + 45})`);
+      .attr('transform', `translate(0,${innerHeight + 22})`);
 
-    // Calculate all government spans first
     const govSpans: GovernmentSpan[] = [];
     const processedGovs = new Set<string>();
 
-    chartData.forEach((d) => {
+    fullChartData.forEach((d) => {
+      if (d.isPrediction) return; // Skip prediction year for governments
       const gov = getGovernmentForYear(d.year, governments);
       if (gov && !processedGovs.has(gov.name)) {
-        const govYears = chartData.filter(
-          (point) => getGovernmentForYear(point.year, governments)?.name === gov.name
+        const govYears = fullChartData.filter(
+          (point) => !point.isPrediction && getGovernmentForYear(point.year, governments)?.name === gov.name
         );
         
         if (govYears.length > 0) {
@@ -227,47 +245,60 @@ export function DebtChart() {
       }
     });
 
-    // Render government bars and labels
     govSpans.forEach((span) => {
-      // Always show the colored background bar
       governmentsGroup
         .append('rect')
         .attr('x', span.startX)
         .attr('y', 0)
         .attr('width', span.width)
-        .attr('height', 20)
+        .attr('height', 18)
         .attr('fill', span.color)
         .attr('opacity', 0.2)
         .attr('rx', 2);
 
-      // Decide how to show the label based on available width
-      const labelWidth = span.gov.name.length * 6; // Approximate text width
+      const labelWidth = span.gov.name.length * 6;
       const shouldRotate = span.width < labelWidth + 4;
       const showLabel = span.width >= minWidthForGovLabels || span.yearsCount >= 2;
 
       if (showLabel) {
         if (shouldRotate) {
-          // Rotate text for narrow governments
           governmentsGroup
             .append('text')
             .attr('x', span.centerX)
-            .attr('y', 10)
+            .attr('y', 9)
             .attr('text-anchor', 'start')
-            .attr('transform', `rotate(-45, ${span.centerX}, 10)`)
+            .attr('transform', `rotate(-45, ${span.centerX}, 9)`)
             .attr('fill', span.color)
             .attr('class', styles.governmentLabelRotated)
             .text(span.gov.name);
         } else {
-          // Horizontal text for wide governments
           governmentsGroup
             .append('text')
             .attr('x', span.centerX)
-            .attr('y', 14)
+            .attr('y', 13)
             .attr('text-anchor', 'middle')
             .attr('fill', span.color)
             .attr('class', styles.governmentLabel)
             .text(span.gov.name);
         }
+      }
+    });
+
+    // === LINE 3: Events ===
+    const eventsGroup = g
+      .append('g')
+      .attr('transform', `translate(0,${innerHeight + 48})`);
+
+    events.forEach((event) => {
+      const x = (xScale(event.year) ?? 0) + xScale.bandwidth() / 2;
+      if (xScale(event.year) !== undefined) {
+        eventsGroup
+          .append('text')
+          .attr('x', x)
+          .attr('y', 12)
+          .attr('text-anchor', 'middle')
+          .attr('class', styles.eventLabel)
+          .text(event.name);
       }
     });
 
@@ -291,7 +322,12 @@ export function DebtChart() {
     yAxisGroup.selectAll('.tick text')
       .attr('class', styles.axisLabel);
 
-  }, [chartData, events, governments, parties, dimensions]);
+  }, [fullChartData, events, governments, parties, dimensions]);
+
+  const handlePlanChange = (planId: string) => {
+    setActivePlan(planId);
+    onPlanChange?.(planId);
+  };
 
   if (isLoading) {
     return (
@@ -309,9 +345,12 @@ export function DebtChart() {
     );
   }
 
+  // Find current plan for tooltip
+  const currentPlan = budgetPlans.find((p) => p.id === activePlan);
+
   return (
     <section className={styles.container} ref={containerRef}>
-      <h2 className={styles.chartTitle}>Vývoj státního dluhu (1993–2025)</h2>
+      <h2 className={styles.chartTitle}>Vývoj státního dluhu (1993–2026)</h2>
       <div className={styles.svgContainer}>
         <svg
           ref={svgRef}
@@ -320,6 +359,8 @@ export function DebtChart() {
           height={dimensions.height}
         />
       </div>
+      
+      {/* Tooltip */}
       <div
         className={`${styles.tooltip} ${tooltip.visible ? styles.visible : ''}`}
         style={{
@@ -330,12 +371,37 @@ export function DebtChart() {
       >
         {tooltip.data && (
           <>
-            <div className={styles.tooltipYear}>{tooltip.data.year}</div>
-            <div className={styles.tooltipAmount}>
-              {formatCzechCurrency(tooltip.data.amount * 1_000_000_000)} Kč
+            <div className={styles.tooltipYear}>
+              {tooltip.data.year}
+              {tooltip.data.isPrediction && ' (predikce)'}
             </div>
+            <div className={styles.tooltipAmount}>
+              {tooltip.data.note === '?' ? '?' : formatBillionsCzech(tooltip.data.amount)}
+            </div>
+            {tooltip.data.planName && (
+              <div className={styles.tooltipPlan}>{tooltip.data.planName}</div>
+            )}
           </>
         )}
+      </div>
+
+      {/* Budget plan switch */}
+      <div className={styles.planSwitch}>
+        <span className={styles.planSwitchLabel}>Rozpočet 2026:</span>
+        <div className={styles.planButtons}>
+          {budgetPlans.map((plan) => (
+            <button
+              key={plan.id}
+              className={`${styles.planButton} ${activePlan === plan.id ? styles.planButtonActive : ''}`}
+              style={{
+                '--plan-color': plan.color,
+              } as React.CSSProperties}
+              onClick={() => handlePlanChange(plan.id)}
+            >
+              {plan.name}
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );

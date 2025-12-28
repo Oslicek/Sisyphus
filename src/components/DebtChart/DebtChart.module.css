@@ -35,6 +35,16 @@
   fill: var(--color-accent-secondary);
 }
 
+.barPrediction {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  opacity: 0.7;
+}
+
+.barPrediction:hover {
+  opacity: 1;
+}
+
 .axisLabel {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 11px;
@@ -91,10 +101,10 @@
   position: absolute;
   background: var(--color-text);
   color: var(--color-bg);
-  padding: 0.4rem 0.6rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 4px;
   font-family: 'Source Sans 3', system-ui, sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
@@ -108,10 +118,63 @@
 
 .tooltipYear {
   font-weight: 600;
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.2rem;
 }
 
 .tooltipAmount {
   font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 0.8rem;
+}
+
+.tooltipPlan {
   font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 0.25rem;
+}
+
+/* Budget plan switch */
+.planSwitch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.planSwitchLabel {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.planButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.planButton {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--plan-color, #666);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--plan-color, #666);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.planButton:hover {
+  background: var(--plan-color, #666);
+  color: white;
+}
+
+.planButtonActive {
+  background: var(--plan-color, #666);
+  color: white;
 }

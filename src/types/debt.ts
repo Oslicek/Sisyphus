@@ -59,6 +59,11 @@ export interface HistoricalDebtData {
 export interface ChartDataPoint {
   year: number;
   amount: number; // in billion CZK
+  isPrediction?: boolean;
+  planId?: string;
+  planName?: string;
+  planColor?: string;
+  note?: string;
 }
 
 /**
@@ -96,4 +101,27 @@ export interface GovernmentsData {
   sourceUrl: string;
   parties: Record<string, PartyInfo>;
   governments: Government[];
+}
+
+/**
+ * Budget plan prediction
+ */
+export interface BudgetPrediction {
+  year: number;
+  deficit: number;
+  note: string;
+}
+
+export interface BudgetPlan {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  predictions: BudgetPrediction[];
+}
+
+export interface BudgetPlansData {
+  description: string;
+  source: string;
+  plans: BudgetPlan[];
 }
