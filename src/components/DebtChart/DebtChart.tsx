@@ -441,6 +441,13 @@ export function DebtChart() {
         ))}
       </div>
 
+      {/* Inflation base year note */}
+      {activeVariant.includes('inflation-adjusted') && (
+        <p className={styles.inflationNote}>
+          Hodnoty přepočteny na cenovou hladinu roku 2024
+        </p>
+      )}
+
       <div className={styles.svgContainer}>
         <svg
           ref={svgRef}

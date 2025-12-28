@@ -49,6 +49,15 @@
   color: white;
 }
 
+.inflationNote {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin: 0.25rem 0 0.5rem 0;
+  font-style: italic;
+}
+
 .svgContainer {
   width: 100%;
   overflow-x: auto;
