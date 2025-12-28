@@ -62,7 +62,7 @@
 │                                                                              │
 │   ┌────────────────────────────────────────────────────────────────────┐   │
 │   │ DebtChart                                                           │   │
-│   │ - 7 graph variants (debt/deficit/interest × absolute/inflation/GDP%)│   │
+│   │ - 8 graph variants (debt/deficit/interest variants)                 │   │
 │   │ - 3 population modes (country/per capita/per working age)           │   │
 │   │ - Alternative metric units (highways, hospitals, petrol, salaries)  │   │
 │   │ - Interactive government timeline with party colors                 │   │
@@ -75,7 +75,7 @@
 
 ## Features
 
-### Graph Variants (7 types)
+### Graph Variants (8 types)
 | ID | Name | Description |
 |----|------|-------------|
 | `debt-absolute` | Dluh | Cumulative debt in billions CZK |
@@ -85,6 +85,7 @@
 | `deficit-inflation-adjusted` | Schodek (reálný) | Inflation-adjusted deficit |
 | `deficit-gdp-percent` | Schodek/HDP | Deficit as % of GDP |
 | `interest-absolute` | Úroky | Yearly interest payments in billions CZK |
+| `interest-cumulative` | Σ Úroky | Cumulative interest since 1993 (inflation-adjusted) |
 
 ### Population Modes (3 types)
 | ID | Name | Description |
@@ -286,7 +287,7 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 99 tests across 6 test files
+- 105 tests across 6 test files
 - All utility functions fully covered
 
 ## Current State
@@ -297,7 +298,7 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Project scaffolding (Vite + React + TypeScript)
 - [x] Debt counter with real-time updates (Kč)
 - [x] Historical data JSON from MFCR (1993-2025, quarterly)
-- [x] D3.js bar chart with 7 graph variants (incl. interest payments)
+- [x] D3.js bar chart with 8 graph variants (incl. interest payments + cumulative)
 - [x] 3 population modes (country/per capita/per working age)
 - [x] Alternative metric units (highways, hospitals, schools, petrol, salaries, food)
 - [x] Government timeline with party colors
@@ -311,7 +312,7 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Czech-compatible fonts
 - [x] Data sources footer with links
 - [x] Responsive design (up to 2400px width)
-- [x] TDD: 99 tests, 100% coverage
+- [x] TDD: 105 tests, 100% coverage
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates

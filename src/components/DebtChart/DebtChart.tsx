@@ -7,6 +7,7 @@ import {
   adjustForInflation,
   calculateGdpPercentage,
   calculateYearlyDeficit,
+  calculateCumulativeInterest,
 } from '../../utils/graphCalculations';
 import { convertToMetricUnit } from '../../utils/unitConversions';
 import { GRAPH_VARIANTS, getGraphVariantInfo } from '../../config/graphVariants';
@@ -178,6 +179,12 @@ export function DebtChart() {
       case 'interest-absolute': {
         // Convert interest data to ChartDataPoint format
         result = interestData.map(d => ({ year: d.year, amount: d.interest }));
+        break;
+      }
+      
+      case 'interest-cumulative': {
+        // Calculate cumulative interest payments adjusted for inflation (2025 baseline)
+        result = calculateCumulativeInterest(interestData, economicData, targetYear);
         break;
       }
       

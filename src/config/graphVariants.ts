@@ -12,8 +12,8 @@ export const GRAPH_VARIANTS: GraphVariantInfo[] = [
     id: 'debt-inflation-adjusted',
     name: 'Kumulativní dluh (reálný)',
     shortName: 'Dluh (reálný)',
-    unit: 'miliard Kč (v cenách 2024)',
-    description: 'Celkový státní dluh přepočtený na ceny roku 2024',
+    unit: 'miliard Kč (v cenách 2025)',
+    description: 'Celkový státní dluh přepočtený na ceny roku 2025',
   },
   {
     id: 'debt-gdp-percent',
@@ -33,8 +33,8 @@ export const GRAPH_VARIANTS: GraphVariantInfo[] = [
     id: 'deficit-inflation-adjusted',
     name: 'Roční schodek (reálný)',
     shortName: 'Schodek (reálný)',
-    unit: 'miliard Kč (v cenách 2024)',
-    description: 'Roční přírůstek státního dluhu přepočtený na ceny roku 2024',
+    unit: 'miliard Kč (v cenách 2025)',
+    description: 'Roční přírůstek státního dluhu přepočtený na ceny roku 2025',
   },
   {
     id: 'deficit-gdp-percent',
@@ -49,6 +49,13 @@ export const GRAPH_VARIANTS: GraphVariantInfo[] = [
     shortName: 'Úroky',
     unit: 'miliard Kč',
     description: 'Roční náklady na dluhovou službu (úrokové náklady)',
+  },
+  {
+    id: 'interest-cumulative',
+    name: 'Kumulativní úroky (reálný)',
+    shortName: 'Σ Úroky',
+    unit: 'miliard Kč (v cenách 2025)',
+    description: 'Celkové úroky zaplacené od roku 1993, přepočtené na ceny roku 2025',
   },
 ];
 

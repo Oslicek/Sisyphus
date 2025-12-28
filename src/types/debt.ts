@@ -203,7 +203,8 @@ export type GraphVariant =
   | 'deficit-absolute'        // D. Yearly deficit in absolute value
   | 'deficit-inflation-adjusted' // E. Yearly deficit adjusted to inflation
   | 'deficit-gdp-percent'     // F. Yearly deficit as GDP percentage
-  | 'interest-absolute';      // G. Yearly interest payments in absolute value
+  | 'interest-absolute'       // G. Yearly interest payments in absolute value
+  | 'interest-cumulative';    // H. Cumulative interest payments (inflation-adjusted)
 
 export interface GraphVariantInfo {
   id: GraphVariant;

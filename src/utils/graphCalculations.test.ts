@@ -4,8 +4,9 @@ import {
   calculateGdpPercentage,
   calculateYearlyDeficit,
   getCumulativeInflationFactor,
+  calculateCumulativeInterest,
 } from './graphCalculations';
-import type { ChartDataPoint, EconomicYearData } from '../types/debt';
+import type { ChartDataPoint, EconomicYearData, InterestYearData } from '../types/debt';
 
 const mockEconomicData: EconomicYearData[] = [
   { year: 2020, inflationRate: 3.0, gdp: 5700 },
@@ -185,6 +186,81 @@ describe('calculateYearlyDeficit', () => {
     // 2024: 3365 - 3112 = 253
     const point2024 = result.find(d => d.year === 2024);
     expect(point2024?.amount).toBeCloseTo(253, 0);
+  });
+});
+
+const mockInterestData: InterestYearData[] = [
+  { year: 2020, interest: 46.8 },
+  { year: 2021, interest: 48.5 },
+  { year: 2022, interest: 58.2 },
+  { year: 2023, interest: 72.5 },
+  { year: 2024, interest: 85.8 },
+  { year: 2025, interest: 95.0 },
+];
+
+describe('calculateCumulativeInterest', () => {
+  it('should return cumulative sum of interest payments', () => {
+    const result = calculateCumulativeInterest(mockInterestData, mockEconomicData, 2025);
+    
+    // Each year's interest should be adjusted and added cumulatively
+    // First year: 46.8 * inflationFactor(2020->2025)
+    const point2020 = result.find(d => d.year === 2020);
+    expect(point2020?.amount).toBeGreaterThan(46.8); // Should be adjusted upward
+  });
+
+  it('should increase cumulatively for each year', () => {
+    const result = calculateCumulativeInterest(mockInterestData, mockEconomicData, 2025);
+    
+    // Each subsequent year should have higher cumulative amount
+    const sorted = [...result].sort((a, b) => a.year - b.year);
+    for (let i = 1; i < sorted.length; i++) {
+      expect(sorted[i].amount).toBeGreaterThan(sorted[i - 1].amount);
+    }
+  });
+
+  it('should adjust each year for inflation before summing', () => {
+    const result = calculateCumulativeInterest(mockInterestData, mockEconomicData, 2025);
+    
+    // Calculate expected first year value
+    // 2020 to 2025: factor = 1.3823 (from earlier tests)
+    const point2020 = result.find(d => d.year === 2020);
+    const expectedFirst = 46.8 * 1.3823;
+    expect(point2020?.amount).toBeCloseTo(expectedFirst, 0);
+  });
+
+  it('should not adjust the target year (2025)', () => {
+    const result = calculateCumulativeInterest(mockInterestData, mockEconomicData, 2025);
+    
+    // The 2025 contribution should be exactly 95.0 (no inflation adjustment)
+    // But cumulative, so it should be sum of all previous + 95.0
+    const point2024 = result.find(d => d.year === 2024);
+    const point2025 = result.find(d => d.year === 2025);
+    
+    // 2025 should be 2024 + 95.0 (unadjusted 2025 interest)
+    expect(point2025?.amount).toBeCloseTo(point2024!.amount + 95.0, 0);
+  });
+
+  it('should handle empty data', () => {
+    const result = calculateCumulativeInterest([], mockEconomicData, 2025);
+    expect(result).toHaveLength(0);
+  });
+
+  it('should sort data by year before calculating', () => {
+    const unsortedData: InterestYearData[] = [
+      { year: 2022, interest: 58.2 },
+      { year: 2020, interest: 46.8 },
+      { year: 2021, interest: 48.5 },
+    ];
+    const result = calculateCumulativeInterest(unsortedData, mockEconomicData, 2025);
+    
+    // Should still return in order
+    expect(result[0].year).toBe(2020);
+    expect(result[1].year).toBe(2021);
+    expect(result[2].year).toBe(2022);
+    
+    // And cumulative amounts should increase
+    expect(result[1].amount).toBeGreaterThan(result[0].amount);
+    expect(result[2].amount).toBeGreaterThan(result[1].amount);
   });
 });
 

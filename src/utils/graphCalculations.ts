@@ -1,4 +1,4 @@
-import type { ChartDataPoint, EconomicYearData } from '../types/debt';
+import type { ChartDataPoint, EconomicYearData, InterestYearData } from '../types/debt';
 
 /**
  * Get cumulative inflation factor from a source year to a target year
@@ -89,6 +89,40 @@ export function calculateYearlyDeficit(data: ChartDataPoint[]): ChartDataPoint[]
     return {
       ...point,
       amount: point.amount - previousPoint.amount,
+    };
+  });
+}
+
+/**
+ * Calculate cumulative interest payments adjusted for inflation
+ * Each year's interest payment is first adjusted to the target year's prices,
+ * then summed cumulatively.
+ * @param interestData - Interest payment data by year
+ * @param economicData - Economic data with inflation rates
+ * @param targetYear - Year to adjust values to (2025)
+ * @returns Chart data points with cumulative inflation-adjusted interest
+ */
+export function calculateCumulativeInterest(
+  interestData: InterestYearData[],
+  economicData: EconomicYearData[],
+  targetYear: number
+): ChartDataPoint[] {
+  // Sort by year to ensure correct order
+  const sorted = [...interestData].sort((a, b) => a.year - b.year);
+  
+  let cumulativeSum = 0;
+  
+  return sorted.map(point => {
+    // Adjust this year's interest payment for inflation
+    const inflationFactor = getCumulativeInflationFactor(point.year, targetYear, economicData);
+    const adjustedInterest = point.interest * inflationFactor;
+    
+    // Add to cumulative sum
+    cumulativeSum += adjustedInterest;
+    
+    return {
+      year: point.year,
+      amount: cumulativeSum,
     };
   });
 }
