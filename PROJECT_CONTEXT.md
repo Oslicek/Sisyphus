@@ -105,7 +105,12 @@ Different metric units available per population mode:
 | ID | Name | Description |
 |----|------|-------------|
 | `czk` | Kč | Czech Koruna (default) |
-| `petrol-litres` | Litry benzínu | Litres of petrol 95 |
+| `petrol-litres` | Benzín | Litres of petrol 95 |
+| `bread-kg` | Chléb | Kilograms of bread (2006+) |
+| `eggs-10` | Vejce | 10-packs of eggs (2006+) |
+| `butter-kg` | Máslo | Kilograms of butter (2006+) |
+| `potatoes-kg` | Brambory | Kilograms of potatoes (2006+) |
+| `beer-05l` | Pivo | 0.5l bottles of beer (2006+) |
 
 **Per-working mode:**
 | ID | Name | Description |
@@ -172,7 +177,8 @@ sisyphus/
 │       ├── economic-data.json  # Inflation rates + GDP 1993-2026
 │       ├── demographic-data.json # Population data 1993-2026
 │       ├── wage-data.json      # Average/minimum wages 1993-2026
-│       └── price-data.json     # Petrol, highway, hospital, school costs
+│       ├── price-data.json     # Petrol, highway, hospital, school costs
+│       └── food-prices.json    # Food prices 2006-2026 (bread, eggs, butter, potatoes, beer)
 ├── package.json
 ├── vite.config.ts
 ├── vitest.config.ts
@@ -245,6 +251,7 @@ interface DemographicYearData {
 | Demografická data | Český statistický úřad | [csu.gov.cz](https://csu.gov.cz/produkty/obyvatelstvo_hu) |
 | Mzdová data | ČSÚ, MPSV | [czso.cz](https://www.czso.cz/csu/czso/prace_a_mzdy_prace) |
 | Cenová data | ČSÚ, ŘSD, MZ ČR, MŠMT | [czso.cz](https://www.czso.cz/) |
+| Ceny potravin | Český statistický úřad | [csu.gov.cz](https://csu.gov.cz/vyvoj-prumernych-cen-vybranych-potravin-2024) |
 
 ## Testing Strategy
 
@@ -274,7 +281,7 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 87 tests across 6 test files
+- 99 tests across 6 test files
 - All utility functions fully covered
 
 ## Current State
@@ -287,7 +294,7 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Historical data JSON from MFCR (1993-2025, quarterly)
 - [x] D3.js bar chart with 6 graph variants
 - [x] 3 population modes (country/per capita/per working age)
-- [x] Alternative metric units (highways, hospitals, schools, petrol, salaries)
+- [x] Alternative metric units (highways, hospitals, schools, petrol, salaries, food)
 - [x] Government timeline with party colors
 - [x] Event markers with precise date positioning
 - [x] 2026 budget plan predictions with toggle
@@ -299,7 +306,7 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Czech-compatible fonts
 - [x] Data sources footer with links
 - [x] Responsive design (up to 2400px width)
-- [x] TDD: 87 tests, 100% coverage
+- [x] TDD: 99 tests, 100% coverage
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates

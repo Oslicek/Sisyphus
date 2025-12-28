@@ -1,4 +1,4 @@
-import type { ChartDataPoint, PriceYearData, WageYearData, MetricUnit, PopulationMode } from '../types/debt';
+import type { ChartDataPoint, PriceYearData, WageYearData, FoodPriceYearData, MetricUnit, PopulationMode } from '../types/debt';
 
 /**
  * Convert chart data from billions CZK to highway kilometers
@@ -115,12 +115,40 @@ export function convertToSalaryMonths(
 }
 
 /**
+ * Convert chart data from CZK to food units
+ * @param data - Chart data points with amounts in CZK (per capita)
+ * @param foodPriceData - Food price data
+ * @param foodType - Type of food to convert to
+ * @returns New array with amounts in food units
+ */
+export function convertToFoodUnits(
+  data: ChartDataPoint[],
+  foodPriceData: FoodPriceYearData[],
+  foodType: 'bread' | 'eggs' | 'butter' | 'potatoes' | 'beer'
+): ChartDataPoint[] {
+  return data.map((point) => {
+    const food = foodPriceData.find((f) => f.year === point.year);
+    if (!food) {
+      return { ...point, amount: 0 };
+    }
+    const price = food[foodType];
+    if (price === 0) {
+      return { ...point, amount: 0 };
+    }
+    // Amount is in CZK, food price is in CZK per unit
+    const units = point.amount / price;
+    return { ...point, amount: units };
+  });
+}
+
+/**
  * Convert chart data to a specific metric unit
  * @param data - Chart data points
  * @param unit - Target metric unit
  * @param mode - Population mode (determines how data is interpreted)
  * @param priceData - Price data for conversions
  * @param wageData - Wage data for salary conversions
+ * @param foodPriceData - Optional food price data for food conversions
  * @returns New array with converted amounts
  */
 export function convertToMetricUnit(
@@ -128,7 +156,8 @@ export function convertToMetricUnit(
   unit: MetricUnit,
   mode: PopulationMode,
   priceData: PriceYearData[],
-  wageData: WageYearData[]
+  wageData: WageYearData[],
+  foodPriceData?: FoodPriceYearData[]
 ): ChartDataPoint[] {
   // CZK is always the default - no conversion needed
   if (unit === 'czk') {
@@ -154,6 +183,16 @@ export function convertToMetricUnit(
     switch (unit) {
       case 'petrol-litres':
         return convertToPetrolLitres(data, priceData);
+      case 'bread-kg':
+        return foodPriceData ? convertToFoodUnits(data, foodPriceData, 'bread') : data;
+      case 'eggs-10':
+        return foodPriceData ? convertToFoodUnits(data, foodPriceData, 'eggs') : data;
+      case 'butter-kg':
+        return foodPriceData ? convertToFoodUnits(data, foodPriceData, 'butter') : data;
+      case 'potatoes-kg':
+        return foodPriceData ? convertToFoodUnits(data, foodPriceData, 'potatoes') : data;
+      case 'beer-05l':
+        return foodPriceData ? convertToFoodUnits(data, foodPriceData, 'beer') : data;
       default:
         return data;
     }

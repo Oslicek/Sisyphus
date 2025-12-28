@@ -6,8 +6,9 @@ import {
   convertToSchools,
   convertToPetrolLitres,
   convertToSalaryMonths,
+  convertToFoodUnits,
 } from './unitConversions';
-import type { ChartDataPoint, PriceYearData, WageYearData } from '../types/debt';
+import type { ChartDataPoint, PriceYearData, WageYearData, FoodPriceYearData } from '../types/debt';
 
 const mockPriceData: PriceYearData[] = [
   { year: 2024, petrol95: 38.2, highwayKm: 920, hospital: 5100, school: 460 },
@@ -221,6 +222,95 @@ describe('convertToMetricUnit', () => {
   it('should return original data for unknown mode', () => {
     const result = convertToMetricUnit(mockChartData, 'highway-km', 'unknown' as any, mockPriceData, mockWageData);
     expect(result).toEqual(mockChartData);
+  });
+});
+
+// Food price data for tests
+const mockFoodPriceData: FoodPriceYearData[] = [
+  { year: 2024, bread: 58.5, eggs: 52.0, butter: 268.0, potatoes: 24.5, beer: 20.5 },
+  { year: 2025, bread: 62.0, eggs: 54.0, butter: 265.0, potatoes: 22.0, beer: 21.0 },
+];
+
+describe('convertToFoodUnits', () => {
+  it('should convert CZK to kilograms of bread', () => {
+    // 309000 CZK / 58.5 per kg = 5282 kg
+    const result = convertToFoodUnits(mockPerCapitaData, mockFoodPriceData, 'bread');
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(5282, 0);
+  });
+
+  it('should convert CZK to 10-packs of eggs', () => {
+    // 309000 CZK / 52.0 per 10eggs = 5942 packs
+    const result = convertToFoodUnits(mockPerCapitaData, mockFoodPriceData, 'eggs');
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(5942, 0);
+  });
+
+  it('should convert CZK to kilograms of butter', () => {
+    // 309000 CZK / 268.0 per kg = 1153 kg
+    const result = convertToFoodUnits(mockPerCapitaData, mockFoodPriceData, 'butter');
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(1153, 0);
+  });
+
+  it('should convert CZK to kilograms of potatoes', () => {
+    // 309000 CZK / 24.5 per kg = 12612 kg
+    const result = convertToFoodUnits(mockPerCapitaData, mockFoodPriceData, 'potatoes');
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(12612, 0);
+  });
+
+  it('should convert CZK to 0.5l bottles of beer', () => {
+    // 309000 CZK / 20.5 per bottle = 15073 bottles
+    const result = convertToFoodUnits(mockPerCapitaData, mockFoodPriceData, 'beer');
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(15073, 0);
+  });
+
+  it('should return 0 for years without food price data', () => {
+    const dataWithMissingYear: ChartDataPoint[] = [{ year: 2000, amount: 100000 }];
+    const result = convertToFoodUnits(dataWithMissingYear, mockFoodPriceData, 'bread');
+    expect(result[0].amount).toBe(0);
+  });
+
+  it('should return 0 for zero food price', () => {
+    const foodWithZero: FoodPriceYearData[] = [
+      { year: 2024, bread: 0, eggs: 52.0, butter: 268.0, potatoes: 24.5, beer: 20.5 },
+    ];
+    const result = convertToFoodUnits([{ year: 2024, amount: 100000 }], foodWithZero, 'bread');
+    expect(result[0].amount).toBe(0);
+  });
+});
+
+describe('convertToMetricUnit with food items', () => {
+  it('should convert to bread-kg for per-capita mode', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'bread-kg', 'per-capita', mockPriceData, mockWageData, mockFoodPriceData);
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(5282, 0);
+  });
+
+  it('should convert to eggs-10 for per-capita mode', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'eggs-10', 'per-capita', mockPriceData, mockWageData, mockFoodPriceData);
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(5942, 0);
+  });
+
+  it('should convert to butter-kg for per-capita mode', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'butter-kg', 'per-capita', mockPriceData, mockWageData, mockFoodPriceData);
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(1153, 0);
+  });
+
+  it('should convert to potatoes-kg for per-capita mode', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'potatoes-kg', 'per-capita', mockPriceData, mockWageData, mockFoodPriceData);
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(12612, 0);
+  });
+
+  it('should convert to beer-05l for per-capita mode', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'beer-05l', 'per-capita', mockPriceData, mockWageData, mockFoodPriceData);
+    const point2024 = result.find(d => d.year === 2024);
+    expect(point2024?.amount).toBeCloseTo(15073, 0);
   });
 });
 

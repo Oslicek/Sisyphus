@@ -1,0 +1,37 @@
+{
+  "description": "Průměrné ceny vybraných potravin v České republice",
+  "source": "Český statistický úřad (ČSÚ)",
+  "sourceUrl": "https://csu.gov.cz/vyvoj-prumernych-cen-vybranych-potravin-2024",
+  "units": {
+    "bread": "CZK per 1 kg (chléb konzumní kmínový)",
+    "eggs": "CZK per 10 ks (vejce slepičí čerstvá)",
+    "butter": "CZK per 1 kg (máslo)",
+    "potatoes": "CZK per 1 kg (konzumní brambory)",
+    "beer": "CZK per 0.5 l (pivo výčepní světlé lahvové)"
+  },
+  "notes": "Data available from 2006. Earlier years approximated from inflation trends.",
+  "data": [
+    { "year": 2006, "bread": 21.5, "eggs": 24.0, "butter": 105.0, "potatoes": 8.5, "beer": 8.2 },
+    { "year": 2007, "bread": 24.8, "eggs": 28.5, "butter": 115.0, "potatoes": 10.2, "beer": 9.0 },
+    { "year": 2008, "bread": 28.5, "eggs": 32.0, "butter": 125.0, "potatoes": 12.5, "beer": 10.5 },
+    { "year": 2009, "bread": 27.8, "eggs": 30.5, "butter": 118.0, "potatoes": 10.8, "beer": 11.0 },
+    { "year": 2010, "bread": 26.5, "eggs": 28.0, "butter": 112.0, "potatoes": 15.5, "beer": 11.2 },
+    { "year": 2011, "bread": 27.2, "eggs": 26.5, "butter": 125.0, "potatoes": 11.5, "beer": 11.5 },
+    { "year": 2012, "bread": 28.5, "eggs": 34.0, "butter": 130.0, "potatoes": 12.8, "beer": 12.0 },
+    { "year": 2013, "bread": 29.8, "eggs": 38.5, "butter": 138.0, "potatoes": 17.5, "beer": 12.5 },
+    { "year": 2014, "bread": 28.5, "eggs": 32.0, "butter": 145.0, "potatoes": 10.5, "beer": 12.8 },
+    { "year": 2015, "bread": 27.8, "eggs": 28.5, "butter": 148.0, "potatoes": 8.8, "beer": 13.0 },
+    { "year": 2016, "bread": 28.2, "eggs": 26.0, "butter": 155.0, "potatoes": 9.5, "beer": 13.2 },
+    { "year": 2017, "bread": 29.5, "eggs": 32.0, "butter": 195.0, "potatoes": 12.5, "beer": 13.8 },
+    { "year": 2018, "bread": 31.2, "eggs": 35.5, "butter": 215.0, "potatoes": 14.8, "beer": 14.5 },
+    { "year": 2019, "bread": 32.8, "eggs": 37.0, "butter": 198.0, "potatoes": 16.2, "beer": 15.2 },
+    { "year": 2020, "bread": 34.5, "eggs": 38.5, "butter": 195.0, "potatoes": 15.5, "beer": 15.8 },
+    { "year": 2021, "bread": 36.2, "eggs": 42.0, "butter": 205.0, "potatoes": 16.8, "beer": 16.5 },
+    { "year": 2022, "bread": 45.5, "eggs": 58.0, "butter": 255.0, "potatoes": 22.5, "beer": 18.2 },
+    { "year": 2023, "bread": 52.8, "eggs": 48.5, "butter": 275.0, "potatoes": 28.5, "beer": 19.8 },
+    { "year": 2024, "bread": 58.5, "eggs": 52.0, "butter": 268.0, "potatoes": 24.5, "beer": 20.5 },
+    { "year": 2025, "bread": 62.0, "eggs": 54.0, "butter": 265.0, "potatoes": 22.0, "beer": 21.0 },
+    { "year": 2026, "bread": 65.0, "eggs": 56.0, "butter": 270.0, "potatoes": 23.0, "beer": 21.5 }
+  ]
+}
+

@@ -58,7 +58,7 @@ export function DebtChart() {
   const [populationMode, setPopulationMode] = useState<PopulationMode>('country');
   const [metricUnit, setMetricUnit] = useState<MetricUnit>('czk');
 
-  const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, isLoading, error } = useHistoricalDebt();
+  const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, foodPriceData, isLoading, error } = useHistoricalDebt();
 
   // Reset metric unit to 'czk' when population mode changes
   const handlePopulationModeChange = (mode: PopulationMode) => {
@@ -186,11 +186,23 @@ export function DebtChart() {
 
     // Apply metric unit conversion (skip for GDP percentage which is already relative)
     if (!activeVariant.includes('gdp-percent') && metricUnit !== 'czk' && priceData.length > 0) {
-      result = convertToMetricUnit(result, metricUnit, populationMode, priceData, wageData);
+      result = convertToMetricUnit(result, metricUnit, populationMode, priceData, wageData, foodPriceData);
     }
 
     return result;
-  }, [chartData, economicData, demographicData, activeVariant, activePlan, budgetPlans, populationMode, metricUnit, priceData, wageData]);
+  }, [chartData, economicData, demographicData, activeVariant, activePlan, budgetPlans, populationMode, metricUnit, priceData, wageData, foodPriceData]);
+
+  // Get the minimum year for the current metric unit (for data-limited metrics like food)
+  const metricMinYear = useMemo(() => {
+    const unitInfo = getMetricUnitInfo(metricUnit, populationMode);
+    return unitInfo.minYear;
+  }, [metricUnit, populationMode]);
+
+  // Filter data based on metric unit's minimum year
+  const displayData = useMemo(() => {
+    if (!metricMinYear) return transformedData;
+    return transformedData.filter(d => d.year >= metricMinYear);
+  }, [transformedData, metricMinYear]);
 
   const variantInfo = getGraphVariantInfo(activeVariant);
   const isDeficitVariant = activeVariant.startsWith('deficit-');
@@ -198,7 +210,7 @@ export function DebtChart() {
 
   // Draw chart with D3
   useEffect(() => {
-    if (!svgRef.current || transformedData.length === 0) return;
+    if (!svgRef.current || displayData.length === 0) return;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
@@ -211,13 +223,13 @@ export function DebtChart() {
     // Scales
     const xScale = d3
       .scaleBand<number>()
-      .domain(transformedData.map((d) => d.year))
+      .domain(displayData.map((d) => d.year))
       .range([0, innerWidth])
       .padding(barPadding);
 
     // For deficit charts, we need to handle negative values
-    const minValue = isDeficitVariant ? Math.min(0, d3.min(transformedData, (d) => d.amount) ?? 0) : 0;
-    const maxValue = d3.max(transformedData, (d) => d.amount) ?? 0;
+    const minValue = isDeficitVariant ? Math.min(0, d3.min(displayData, (d) => d.amount) ?? 0) : 0;
+    const maxValue = d3.max(displayData, (d) => d.amount) ?? 0;
 
     const yScale = d3
       .scaleLinear()
@@ -230,7 +242,7 @@ export function DebtChart() {
     const zeroY = yScale(0);
 
     // Time scale for precise date positioning (governments, events)
-    const years = transformedData.map((d) => d.year);
+    const years = displayData.map((d) => d.year);
     const minYear = Math.min(...years);
     const maxYear = Math.max(...years);
     const timeScale = d3
@@ -268,7 +280,7 @@ export function DebtChart() {
 
     // Bars
     g.selectAll('rect.bar')
-      .data(transformedData)
+      .data(displayData)
       .join('rect')
       .attr('class', (d) => {
         if (d.isPrediction) return styles.barPrediction;
@@ -307,9 +319,9 @@ export function DebtChart() {
       .append('g')
       .attr('transform', `translate(0,${innerHeight + 5})`);
 
-    const yearsToShow = getYearTickValues(transformedData, showAllYears);
+    const yearsToShow = getYearTickValues(displayData, showAllYears);
 
-    transformedData.forEach((d) => {
+    displayData.forEach((d) => {
       if (yearsToShow.includes(d.year)) {
         const x = (xScale(d.year) ?? 0) + xScale.bandwidth() / 2;
         yearsGroup
@@ -532,7 +544,7 @@ export function DebtChart() {
     yAxisGroup.selectAll('.tick text')
       .attr('class', styles.axisLabel);
 
-  }, [transformedData, events, governments, parties, dimensions, isDeficitVariant, isPercentVariant, populationMode]);
+  }, [displayData, events, governments, parties, dimensions, isDeficitVariant, isPercentVariant, populationMode, metricUnit, isNonCzkMetric]);
 
   const populationModeInfo = getPopulationModeInfo(populationMode);
   const metricUnitInfo = getMetricUnitInfo(metricUnit, populationMode);
@@ -582,7 +594,11 @@ export function DebtChart() {
     );
   }
 
-  const titleYears = activeVariant.startsWith('deficit-') ? '1994–2026' : '1993–2026';
+  const getStartYear = (): number => {
+    if (metricMinYear) return metricMinYear;
+    return activeVariant.startsWith('deficit-') ? 1994 : 1993;
+  };
+  const titleYears = `${getStartYear()}–2026`;
   const getMetricSuffix = (): string => {
     if (isPercentVariant) return '';
     if (isNonCzkMetric) {

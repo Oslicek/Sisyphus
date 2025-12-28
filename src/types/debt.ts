@@ -233,6 +233,25 @@ export interface PriceData {
 }
 
 /**
+ * Food price data for a year
+ */
+export interface FoodPriceYearData {
+  year: number;
+  bread: number;     // CZK per 1 kg (chléb kmínový)
+  eggs: number;      // CZK per 10 ks (vejce)
+  butter: number;    // CZK per 1 kg (máslo)
+  potatoes: number;  // CZK per 1 kg (brambory)
+  beer: number;      // CZK per 0.5 l (pivo)
+}
+
+export interface FoodPriceData {
+  description: string;
+  source: string;
+  sourceUrl: string;
+  data: FoodPriceYearData[];
+}
+
+/**
  * Metric unit types - different for each population mode
  */
 export type MetricUnitCountry = 
@@ -243,7 +262,12 @@ export type MetricUnitCountry =
 
 export type MetricUnitPerCapita = 
   | 'czk'           // Czech Koruna (default)
-  | 'petrol-litres'; // Litres of petrol 95
+  | 'petrol-litres' // Litres of petrol 95
+  | 'bread-kg'      // Kilograms of bread
+  | 'eggs-10'       // 10-packs of eggs
+  | 'butter-kg'     // Kilograms of butter
+  | 'potatoes-kg'   // Kilograms of potatoes
+  | 'beer-05l';     // 0.5l bottles of beer
 
 export type MetricUnitPerWorking = 
   | 'czk'              // Czech Koruna (default)
@@ -261,4 +285,5 @@ export interface MetricUnitInfo {
   description: string;
   formatSuffix: string;  // e.g., "Kč", "l", "měsíců"
   populationMode: PopulationMode;
+  minYear?: number;      // Minimum year for which data is available
 }

@@ -38,6 +38,11 @@ const DATA_SOURCES = [
     source: 'ČSÚ, ŘSD, MZ ČR, MŠMT',
     url: 'https://www.czso.cz/',
   },
+  {
+    name: 'Ceny potravin',
+    source: 'Český statistický úřad (ČSÚ)',
+    url: 'https://csu.gov.cz/vyvoj-prumernych-cen-vybranych-potravin-2024',
+  },
 ];
 
 function App() {
