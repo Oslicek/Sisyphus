@@ -12,7 +12,12 @@
       "name": "Covid-19",
       "date": "2020-03-01",
       "year": 2020
+    },
+    {
+      "id": "ukraine",
+      "name": "Ruská invaze na Ukrajinu",
+      "date": "2022-02-24",
+      "year": 2022
     }
   ]
 }
-

@@ -10,7 +10,9 @@ import type {
   BudgetPlansData,
   BudgetPlan,
   EconomicData,
-  EconomicYearData
+  EconomicYearData,
+  DemographicData,
+  DemographicYearData
 } from '../types/debt';
 import { extractQ4Data } from '../utils/historicalData';
 
@@ -21,6 +23,7 @@ interface UseHistoricalDebtResult {
   parties: Record<string, PartyInfo>;
   budgetPlans: BudgetPlan[];
   economicData: EconomicYearData[];
+  demographicData: DemographicYearData[];
   isLoading: boolean;
   error: string | null;
 }
@@ -35,18 +38,21 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
   const [parties, setParties] = useState<Record<string, PartyInfo>>({});
   const [budgetPlans, setBudgetPlans] = useState<BudgetPlan[]>([]);
   const [economicData, setEconomicData] = useState<EconomicYearData[]>([]);
+  const [demographicData, setDemographicData] = useState<DemographicYearData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchAllData() {
       try {
-        const [debtResponse, eventsResponse, governmentsResponse, budgetResponse, economicResponse] = await Promise.all([
-          fetch('/data/debt-historical.json'),
-          fetch('/data/events.json'),
-          fetch('/data/governments.json'),
-          fetch('/data/budget-plans.json'),
-          fetch('/data/economic-data.json'),
+        const fetchOptions = { cache: 'no-store' as RequestCache };
+        const [debtResponse, eventsResponse, governmentsResponse, budgetResponse, economicResponse, demographicResponse] = await Promise.all([
+          fetch('/data/debt-historical.json', fetchOptions),
+          fetch('/data/events.json', fetchOptions),
+          fetch('/data/governments.json', fetchOptions),
+          fetch('/data/budget-plans.json', fetchOptions),
+          fetch('/data/economic-data.json', fetchOptions),
+          fetch('/data/demographic-data.json', fetchOptions),
         ]);
 
         if (!debtResponse.ok) {
@@ -78,6 +84,11 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
           setEconomicData(economicDataJson.data);
         }
 
+        if (demographicResponse.ok) {
+          const demographicDataJson: DemographicData = await demographicResponse.json();
+          setDemographicData(demographicDataJson.data);
+        }
+
         setIsLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Neznámá chyba');
@@ -88,5 +99,5 @@ export function useHistoricalDebt(): UseHistoricalDebtResult {
     fetchAllData();
   }, []);
 
-  return { chartData, events, governments, parties, budgetPlans, economicData, isLoading, error };
+  return { chartData, events, governments, parties, budgetPlans, economicData, demographicData, isLoading, error };
 }

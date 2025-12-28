@@ -13,6 +13,7 @@ const mockEconomicData: EconomicYearData[] = [
   { year: 2022, inflationRate: 15.0, gdp: 6800 },
   { year: 2023, inflationRate: 10.0, gdp: 7300 },
   { year: 2024, inflationRate: 2.5, gdp: 7600 },
+  { year: 2025, inflationRate: 2.5, gdp: 7900 },
 ];
 
 const mockDebtData: ChartDataPoint[] = [
@@ -21,6 +22,7 @@ const mockDebtData: ChartDataPoint[] = [
   { year: 2022, amount: 2847 },
   { year: 2023, amount: 3112 },
   { year: 2024, amount: 3365 },
+  { year: 2025, amount: 3600 },
 ];
 
 describe('getCumulativeInflationFactor', () => {
@@ -48,6 +50,32 @@ describe('getCumulativeInflationFactor', () => {
     // (1 + 0.15) * (1 + 0.10) * (1 + 0.025) = 1.296625
     expect(factor).toBeCloseTo(1.2966, 3);
   });
+
+  // Tests for 2025 baseline
+  it('should return 1 for 2025 when target is 2025', () => {
+    const factor = getCumulativeInflationFactor(2025, 2025, mockEconomicData);
+    expect(factor).toBeCloseTo(1, 2);
+  });
+
+  it('should calculate factor from 2024 to 2025 correctly', () => {
+    // From 2024 to 2025: need to adjust by 2025 inflation (2.5%)
+    const factor = getCumulativeInflationFactor(2024, 2025, mockEconomicData);
+    expect(factor).toBeCloseTo(1.025, 3);
+  });
+
+  it('should calculate factor from 2023 to 2025 correctly', () => {
+    // From 2023 to 2025: 2024 (2.5%) + 2025 (2.5%)
+    const factor = getCumulativeInflationFactor(2023, 2025, mockEconomicData);
+    // (1 + 0.025) * (1 + 0.025) = 1.050625
+    expect(factor).toBeCloseTo(1.0506, 3);
+  });
+
+  it('should calculate factor from 2020 to 2025 correctly', () => {
+    // From 2020 to 2025: 2021 (4%) + 2022 (15%) + 2023 (10%) + 2024 (2.5%) + 2025 (2.5%)
+    const factor = getCumulativeInflationFactor(2020, 2025, mockEconomicData);
+    // (1.04) * (1.15) * (1.10) * (1.025) * (1.025) = 1.3823...
+    expect(factor).toBeCloseTo(1.3823, 3);
+  });
 });
 
 describe('adjustForInflation', () => {
@@ -69,6 +97,27 @@ describe('adjustForInflation', () => {
     const point2021 = result.find(d => d.year === 2021);
     // 2466 * 1.2966 = 3197.8
     expect(point2021?.amount).toBeGreaterThan(3000);
+  });
+
+  // Tests for 2025 baseline
+  it('should not adjust 2025 when target is 2025', () => {
+    const result = adjustForInflation(mockDebtData, mockEconomicData, 2025);
+    const point2025 = result.find(d => d.year === 2025);
+    expect(point2025?.amount).toBeCloseTo(3600, 0);
+  });
+
+  it('should adjust 2024 by 2.5% when target is 2025', () => {
+    const result = adjustForInflation(mockDebtData, mockEconomicData, 2025);
+    const point2024 = result.find(d => d.year === 2024);
+    // 3365 * 1.025 = 3449.125
+    expect(point2024?.amount).toBeCloseTo(3449, 0);
+  });
+
+  it('should adjust 2020 by cumulative inflation to 2025', () => {
+    const result = adjustForInflation(mockDebtData, mockEconomicData, 2025);
+    const point2020 = result.find(d => d.year === 2020);
+    // 2050 * 1.3823 = 2833.7
+    expect(point2020?.amount).toBeCloseTo(2834, 0);
   });
 });
 

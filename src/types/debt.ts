@@ -146,6 +146,38 @@ export interface EconomicData {
 }
 
 /**
+ * Demographic data for a year
+ */
+export interface DemographicYearData {
+  year: number;
+  population: number; // total population
+  workingAge: number; // working age population (15-64)
+}
+
+export interface DemographicData {
+  description: string;
+  source: string;
+  sourceUrl: string;
+  unit: string;
+  data: DemographicYearData[];
+}
+
+/**
+ * Population mode for per-capita calculations
+ */
+export type PopulationMode = 
+  | 'country'      // Whole country (absolute values)
+  | 'per-capita'   // Per person (divided by total population)
+  | 'per-working'; // Per working age person (divided by working age population)
+
+export interface PopulationModeInfo {
+  id: PopulationMode;
+  name: string;
+  shortName: string;
+  description: string;
+}
+
+/**
  * Graph variant types
  */
 export type GraphVariant = 

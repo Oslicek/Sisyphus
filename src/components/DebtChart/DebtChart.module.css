@@ -49,6 +49,41 @@
   color: white;
 }
 
+/* Population mode selector */
+.populationSelector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+  padding: 0 1rem;
+}
+
+.populationButton {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #2c7a7b;
+  border-radius: 3px;
+  background: transparent;
+  color: #2c7a7b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.populationButton:hover {
+  border-color: #285e61;
+  color: #285e61;
+  background: rgba(44, 122, 123, 0.1);
+}
+
+.populationButtonActive {
+  background: #2c7a7b;
+  border-color: #2c7a7b;
+  color: white;
+}
+
 .inflationNote {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.8rem;
@@ -114,7 +149,13 @@
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 8px;
   font-weight: 600;
-  fill: var(--color-accent);
+  fill: #dc143c;
+}
+
+.eventDot {
+  fill: #dc143c;
+  stroke: white;
+  stroke-width: 1.5;
 }
 
 .governmentLabel {

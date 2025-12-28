@@ -10,7 +10,7 @@
       "predictions": [
         {
           "year": 2026,
-          "deficit": 230000000000,
+          "deficit": 286000000000,
           "note": "Plánovaný schodek rozpočtu 2026"
         }
       ]
@@ -23,11 +23,10 @@
       "predictions": [
         {
           "year": 2026,
-          "deficit": 0,
+          "deficit": 286000000000,
           "note": "?"
         }
       ]
     }
   ]
 }
-

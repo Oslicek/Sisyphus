@@ -9,17 +9,17 @@ import {
   calculateYearlyDeficit,
 } from '../../utils/graphCalculations';
 import { GRAPH_VARIANTS, getGraphVariantInfo } from '../../config/graphVariants';
-import type { ChartDataPoint, Government, BudgetPlan, GraphVariant, EconomicYearData } from '../../types/debt';
+import { POPULATION_MODES, getPopulationModeInfo } from '../../config/populationModes';
+import type { ChartDataPoint, Government, GraphVariant, PopulationMode, DemographicYearData } from '../../types/debt';
 import styles from './DebtChart.module.css';
 
 const CHART_CONFIG = {
   marginTop: 20,
   marginRight: 20,
-  marginBottom: 100,
+  marginBottom: 130,
   marginLeft: 70,
   barPadding: 0.2,
   minBarWidthForAllYears: 18,
-  minWidthForGovLabels: 30,
 };
 
 function getYearTickValues(data: ChartDataPoint[], showAll: boolean): number[] {
@@ -53,8 +53,9 @@ export function DebtChart() {
   }>({ visible: false, x: 0, y: 0, data: null });
   const [activePlan, setActivePlan] = useState('fiala');
   const [activeVariant, setActiveVariant] = useState<GraphVariant>('debt-absolute');
+  const [populationMode, setPopulationMode] = useState<PopulationMode>('country');
 
-  const { chartData, events, governments, parties, budgetPlans, economicData, isLoading, error } = useHistoricalDebt();
+  const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, isLoading, error } = useHistoricalDebt();
 
   // Handle responsive sizing
   useEffect(() => {
@@ -101,49 +102,81 @@ export function DebtChart() {
     ];
   };
 
+  // Apply per-capita division based on population mode
+  const applyPopulationMode = (data: ChartDataPoint[], mode: PopulationMode, demographic: DemographicYearData[]): ChartDataPoint[] => {
+    if (mode === 'country') return data;
+    
+    return data.map((point) => {
+      const demo = demographic.find((d) => d.year === point.year);
+      if (!demo) return point;
+      
+      // Amount is in billions CZK, convert to per-capita in CZK
+      // Multiply by 1 billion, then divide by population
+      const divisor = mode === 'per-capita' ? demo.population : demo.workingAge;
+      const perCapitaAmount = (point.amount * 1_000_000_000) / divisor;
+      
+      return { ...point, amount: perCapitaAmount };
+    });
+  };
+
   // Transform data based on active variant
   const transformedData = useMemo(() => {
     if (chartData.length === 0 || economicData.length === 0) return [];
 
     let baseData = [...chartData];
-    const targetYear = 2024; // Base year for inflation adjustment
+    const targetYear = 2025; // Base year for inflation adjustment
 
     // Add prediction for debt variants
     if (activeVariant.startsWith('debt-')) {
       baseData = getChartDataWithPrediction(baseData);
     }
 
+    let result: ChartDataPoint[];
+
     switch (activeVariant) {
       case 'debt-absolute':
-        return baseData;
+        result = baseData;
+        break;
       
       case 'debt-inflation-adjusted':
-        return adjustForInflation(baseData, economicData, targetYear);
+        result = adjustForInflation(baseData, economicData, targetYear);
+        break;
       
       case 'debt-gdp-percent':
-        return calculateGdpPercentage(baseData, economicData);
+        result = calculateGdpPercentage(baseData, economicData);
+        break;
       
       case 'deficit-absolute': {
         const withPrediction = getChartDataWithPrediction(chartData);
-        return calculateYearlyDeficit(withPrediction);
+        result = calculateYearlyDeficit(withPrediction);
+        break;
       }
       
       case 'deficit-inflation-adjusted': {
         const withPrediction = getChartDataWithPrediction(chartData);
         const adjusted = adjustForInflation(withPrediction, economicData, targetYear);
-        return calculateYearlyDeficit(adjusted);
+        result = calculateYearlyDeficit(adjusted);
+        break;
       }
       
       case 'deficit-gdp-percent': {
         const withPrediction = getChartDataWithPrediction(chartData);
         const deficits = calculateYearlyDeficit(withPrediction);
-        return calculateGdpPercentage(deficits, economicData);
+        result = calculateGdpPercentage(deficits, economicData);
+        break;
       }
       
       default:
-        return baseData;
+        result = baseData;
     }
-  }, [chartData, economicData, activeVariant, activePlan, budgetPlans]);
+
+    // Apply per-capita calculation if not GDP percentage (already relative)
+    if (!activeVariant.includes('gdp-percent') && demographicData.length > 0) {
+      result = applyPopulationMode(result, populationMode, demographicData);
+    }
+
+    return result;
+  }, [chartData, economicData, demographicData, activeVariant, activePlan, budgetPlans, populationMode]);
 
   const variantInfo = getGraphVariantInfo(activeVariant);
   const isDeficitVariant = activeVariant.startsWith('deficit-');
@@ -157,7 +190,7 @@ export function DebtChart() {
     svg.selectAll('*').remove();
 
     const { width, height } = dimensions;
-    const { marginTop, marginRight, marginBottom, marginLeft, barPadding, minBarWidthForAllYears, minWidthForGovLabels } = CHART_CONFIG;
+    const { marginTop, marginRight, marginBottom, marginLeft, barPadding, minBarWidthForAllYears } = CHART_CONFIG;
     const innerWidth = width - marginLeft - marginRight;
     const innerHeight = height - marginTop - marginBottom;
 
@@ -181,6 +214,15 @@ export function DebtChart() {
     const barWidth = xScale.bandwidth();
     const showAllYears = barWidth >= minBarWidthForAllYears;
     const zeroY = yScale(0);
+
+    // Time scale for precise date positioning (governments, events)
+    const years = transformedData.map((d) => d.year);
+    const minYear = Math.min(...years);
+    const maxYear = Math.max(...years);
+    const timeScale = d3
+      .scaleTime()
+      .domain([new Date(minYear, 0, 1), new Date(maxYear, 11, 31)])
+      .range([0, innerWidth]);
 
     // Chart group
     const g = svg
@@ -281,42 +323,45 @@ export function DebtChart() {
       .append('g')
       .attr('transform', `translate(0,${innerHeight + 22})`);
 
-    const govSpans: GovernmentSpan[] = [];
-    const processedGovs = new Set<string>();
-
-    transformedData.forEach((d) => {
-      if (d.isPrediction) return;
-      const gov = getGovernmentForYear(d.year, governments);
-      if (gov && !processedGovs.has(gov.name)) {
-        const govYears = transformedData.filter(
-          (point) => !point.isPrediction && getGovernmentForYear(point.year, governments)?.name === gov.name
-        );
+    // Build government spans using precise dates
+    const chartStartDate = new Date(minYear, 0, 1);
+    const chartEndDate = new Date(maxYear, 11, 31);
+    
+    const govSpans: GovernmentSpan[] = governments
+      .filter((gov) => {
+        const govStart = new Date(gov.startDate);
+        const govEnd = gov.endDate ? new Date(gov.endDate) : chartEndDate;
+        // Include if government overlaps with chart range
+        return govStart <= chartEndDate && govEnd >= chartStartDate;
+      })
+      .map((gov) => {
+        const govStart = new Date(gov.startDate);
+        const govEnd = gov.endDate ? new Date(gov.endDate) : chartEndDate;
         
-        if (govYears.length > 0) {
-          const firstYear = govYears[0].year;
-          const lastYear = govYears[govYears.length - 1].year;
-          
-          const startX = xScale(firstYear) ?? 0;
-          const endX = (xScale(lastYear) ?? 0) + xScale.bandwidth();
-          const spanWidth = endX - startX;
-          
-          const partyInfo = parties[gov.party];
-          const color = partyInfo?.color || '#666';
-          
-          govSpans.push({
-            gov,
-            startX,
-            endX,
-            width: spanWidth,
-            centerX: startX + spanWidth / 2,
-            color,
-            yearsCount: govYears.length,
-          });
-          
-          processedGovs.add(gov.name);
-        }
-      }
-    });
+        // Clamp to chart bounds
+        const clampedStart = govStart < chartStartDate ? chartStartDate : govStart;
+        const clampedEnd = govEnd > chartEndDate ? chartEndDate : govEnd;
+        
+        const startX = timeScale(clampedStart);
+        const endX = timeScale(clampedEnd);
+        const spanWidth = Math.max(endX - startX, 2); // minimum 2px width
+        
+        const partyInfo = parties[gov.party];
+        const color = partyInfo?.color || '#666';
+        
+        // Calculate years count for reference
+        const yearsCount = Math.ceil((clampedEnd.getTime() - clampedStart.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+        
+        return {
+          gov,
+          startX,
+          endX,
+          width: spanWidth,
+          centerX: startX + spanWidth / 2,
+          color,
+          yearsCount,
+        };
+      });
 
     govSpans.forEach((span) => {
       governmentsGroup
@@ -329,57 +374,121 @@ export function DebtChart() {
         .attr('opacity', 0.2)
         .attr('rx', 2);
 
-      const labelWidth = span.gov.name.length * 6;
-      const shouldRotate = span.width < labelWidth + 4;
-      const showLabel = span.width >= minWidthForGovLabels || span.yearsCount >= 2;
-
-      if (showLabel) {
-        if (shouldRotate) {
-          governmentsGroup
-            .append('text')
-            .attr('x', span.centerX)
-            .attr('y', 9)
-            .attr('text-anchor', 'start')
-            .attr('transform', `rotate(-45, ${span.centerX}, 9)`)
-            .attr('fill', span.color)
-            .attr('class', styles.governmentLabelRotated)
-            .text(span.gov.name);
-        } else {
-          governmentsGroup
-            .append('text')
-            .attr('x', span.centerX)
-            .attr('y', 13)
-            .attr('text-anchor', 'middle')
-            .attr('fill', span.color)
-            .attr('class', styles.governmentLabel)
-            .text(span.gov.name);
-        }
-      }
+      // Always show rotated labels starting from left edge of bar
+      governmentsGroup
+        .append('text')
+        .attr('x', span.startX + 2)
+        .attr('y', 12)
+        .attr('text-anchor', 'start')
+        .attr('transform', `rotate(45, ${span.startX + 2}, 12)`)
+        .attr('fill', span.color)
+        .attr('class', styles.governmentLabelRotated)
+        .text(span.gov.name);
     });
 
     // === LINE 3: Events ===
     const eventsGroup = g
       .append('g')
-      .attr('transform', `translate(0,${innerHeight + 48})`);
+      .attr('transform', `translate(0,${innerHeight + 75})`);
 
-    events.forEach((event) => {
-      const x = (xScale(event.year) ?? 0) + xScale.bandwidth() / 2;
-      if (xScale(event.year) !== undefined) {
-        eventsGroup
-          .append('text')
-          .attr('x', x)
-          .attr('y', 12)
-          .attr('text-anchor', 'middle')
-          .attr('class', styles.eventLabel)
-          .text(event.name);
+    // Draw a horizontal line for events timeline
+    eventsGroup
+      .append('line')
+      .attr('x1', 0)
+      .attr('x2', innerWidth)
+      .attr('y1', 0)
+      .attr('y2', 0)
+      .attr('stroke', '#bbb')
+      .attr('stroke-width', 1)
+      .attr('stroke-dasharray', '2,4');
+
+    // Sort events by date and calculate positions with staggered heights
+    const sortedEvents = [...events]
+      .filter((event) => {
+        const eventDate = new Date(event.date);
+        return eventDate >= chartStartDate && eventDate <= chartEndDate;
+      })
+      .map((event) => ({
+        ...event,
+        x: timeScale(new Date(event.date)),
+      }))
+      .sort((a, b) => a.x - b.x);
+
+    // Assign staggered heights to avoid overlaps
+    const labelHeight = 14;
+    const minLabelSpacing = 100; // minimum pixels between labels on same line
+    const eventHeights: number[] = [];
+    
+    sortedEvents.forEach((event, index) => {
+      let assignedLine = 0;
+      
+      // Check previous events for overlap on each line
+      for (let line = 0; line < 3; line++) {
+        let hasOverlap = false;
+        for (let i = 0; i < index; i++) {
+          if (eventHeights[i] === line) {
+            const distance = event.x - sortedEvents[i].x;
+            if (distance < minLabelSpacing) {
+              hasOverlap = true;
+              break;
+            }
+          }
+        }
+        if (!hasOverlap) {
+          assignedLine = line;
+          break;
+        }
       }
+      eventHeights.push(assignedLine);
+    });
+
+    sortedEvents.forEach((event, index) => {
+      const x = event.x;
+      const lineOffset = eventHeights[index] * labelHeight;
+      const lineEndY = 15 + lineOffset;
+      
+      // Draw dot at exact event position
+      eventsGroup
+        .append('circle')
+        .attr('cx', x)
+        .attr('cy', 0)
+        .attr('r', 5)
+        .attr('class', styles.eventDot);
+
+      // Draw vertical line connecting dot to label
+      eventsGroup
+        .append('line')
+        .attr('x1', x)
+        .attr('x2', x)
+        .attr('y1', 5)
+        .attr('y2', lineEndY)
+        .attr('stroke', '#dc143c')
+        .attr('stroke-width', 1);
+
+      eventsGroup
+        .append('text')
+        .attr('x', x)
+        .attr('y', lineEndY + 11)
+        .attr('text-anchor', 'middle')
+        .attr('class', styles.eventLabel)
+        .text(event.name);
     });
 
     // Y Axis
     const yAxis = d3
       .axisLeft(yScale)
       .ticks(5)
-      .tickFormat((d) => isPercentVariant ? `${d}%` : `${d} mld`);
+      .tickFormat((d) => {
+        if (isPercentVariant) return `${d}%`;
+        if (populationMode !== 'country') {
+          // Format as thousands of CZK for per-capita
+          const val = Number(d);
+          if (val >= 1000000) return `${(val / 1000000).toFixed(1)} mil`;
+          if (val >= 1000) return `${(val / 1000).toFixed(0)} tis`;
+          return `${val}`;
+        }
+        return `${d} mld`;
+      });
 
     const yAxisGroup = g.append('g').call(yAxis);
 
@@ -395,12 +504,19 @@ export function DebtChart() {
     yAxisGroup.selectAll('.tick text')
       .attr('class', styles.axisLabel);
 
-  }, [transformedData, events, governments, parties, dimensions, isDeficitVariant, isPercentVariant]);
+  }, [transformedData, events, governments, parties, dimensions, isDeficitVariant, isPercentVariant, populationMode]);
+
+  const populationModeInfo = getPopulationModeInfo(populationMode);
+  const isPerCapita = populationMode !== 'country';
 
   const formatTooltipValue = (data: ChartDataPoint): string => {
     if (data.note === '?') return '?';
     if (isPercentVariant) {
       return `${data.amount.toFixed(1)} % HDP`;
+    }
+    if (isPerCapita) {
+      // Format as CZK per person
+      return `${Math.round(data.amount).toLocaleString('cs-CZ')} Kč`;
     }
     return formatBillionsCzech(data.amount);
   };
@@ -422,10 +538,11 @@ export function DebtChart() {
   }
 
   const titleYears = activeVariant.startsWith('deficit-') ? '1994–2026' : '1993–2026';
+  const titleSuffix = isPerCapita && !isPercentVariant ? ` – ${populationModeInfo.name}` : '';
 
   return (
     <section className={styles.container} ref={containerRef}>
-      <h2 className={styles.chartTitle}>{variantInfo.name} ({titleYears})</h2>
+      <h2 className={styles.chartTitle}>{variantInfo.name}{titleSuffix} ({titleYears})</h2>
       
       {/* Graph variant selector */}
       <div className={styles.variantSelector}>
@@ -441,10 +558,26 @@ export function DebtChart() {
         ))}
       </div>
 
+      {/* Population mode selector - only show for non-GDP-percent variants */}
+      {!isPercentVariant && (
+        <div className={styles.populationSelector}>
+          {POPULATION_MODES.map((mode) => (
+            <button
+              key={mode.id}
+              className={`${styles.populationButton} ${populationMode === mode.id ? styles.populationButtonActive : ''}`}
+              onClick={() => setPopulationMode(mode.id)}
+              title={mode.description}
+            >
+              {mode.shortName}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Inflation base year note */}
       {activeVariant.includes('inflation-adjusted') && (
         <p className={styles.inflationNote}>
-          Hodnoty přepočteny na cenovou hladinu roku 2024
+          Hodnoty přepočteny na cenovou hladinu roku 2025
         </p>
       )}
 
