@@ -3,16 +3,42 @@ import * as d3 from 'd3';
 import { useHistoricalDebt } from '../../hooks/useHistoricalDebt';
 import { formatCzechCurrency } from '../../utils/formatters';
 import { formatYearLabel, getGovernmentForYear } from '../../utils/chartHelpers';
-import type { ChartDataPoint } from '../../types/debt';
+import type { ChartDataPoint, Government, PartyInfo } from '../../types/debt';
 import styles from './DebtChart.module.css';
 
 const CHART_CONFIG = {
   marginTop: 20,
   marginRight: 20,
-  marginBottom: 100, // Increased for 3-line axis
+  marginBottom: 100,
   marginLeft: 60,
   barPadding: 0.2,
+  minBarWidthForAllYears: 18, // Show all years if bar width >= this
+  minWidthForGovLabels: 30,   // Min government span width to show label
 };
+
+/**
+ * Get tick values for X axis based on bar width
+ * Narrow: 1993, 1995, then every 5 years
+ * Wide: all years
+ */
+function getYearTickValues(data: ChartDataPoint[], showAll: boolean): number[] {
+  if (showAll) {
+    return data.map((d) => d.year);
+  }
+  const tickYears = [1993, 1995, 2000, 2005, 2010, 2015, 2020, 2025];
+  const years = data.map((d) => d.year);
+  return tickYears.filter((year) => years.includes(year));
+}
+
+interface GovernmentSpan {
+  gov: Government;
+  startX: number;
+  endX: number;
+  width: number;
+  centerX: number;
+  color: string;
+  yearsCount: number;
+}
 
 export function DebtChart() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -50,7 +76,7 @@ export function DebtChart() {
     svg.selectAll('*').remove();
 
     const { width, height } = dimensions;
-    const { marginTop, marginRight, marginBottom, marginLeft, barPadding } = CHART_CONFIG;
+    const { marginTop, marginRight, marginBottom, marginLeft, barPadding, minBarWidthForAllYears, minWidthForGovLabels } = CHART_CONFIG;
     const innerWidth = width - marginLeft - marginRight;
     const innerHeight = height - marginTop - marginBottom;
 
@@ -66,6 +92,9 @@ export function DebtChart() {
       .domain([0, d3.max(chartData, (d) => d.amount) ?? 0])
       .nice()
       .range([innerHeight, 0]);
+
+    const barWidth = xScale.bandwidth();
+    const showAllYears = barWidth >= minBarWidthForAllYears;
 
     // Chart group
     const g = svg
@@ -84,7 +113,7 @@ export function DebtChart() {
       .attr('y2', (d) => yScale(d));
 
     // Bars
-    g.selectAll('rect')
+    g.selectAll('rect.bar')
       .data(chartData)
       .join('rect')
       .attr('class', styles.bar)
@@ -99,7 +128,7 @@ export function DebtChart() {
           setTooltip({
             visible: true,
             x: rect.left - containerRect.left + rect.width / 2,
-            y: rect.top - containerRect.top + 10,
+            y: rect.top - containerRect.top - 8, // Above the column
             data: d,
           });
         }
@@ -113,15 +142,19 @@ export function DebtChart() {
       .append('g')
       .attr('transform', `translate(0,${innerHeight + 5})`);
 
+    const yearsToShow = getYearTickValues(chartData, showAllYears);
+
     chartData.forEach((d) => {
-      const x = (xScale(d.year) ?? 0) + xScale.bandwidth() / 2;
-      yearsGroup
-        .append('text')
-        .attr('x', x)
-        .attr('y', 12)
-        .attr('text-anchor', 'middle')
-        .attr('class', styles.yearLabel)
-        .text(formatYearLabel(d.year));
+      if (yearsToShow.includes(d.year)) {
+        const x = (xScale(d.year) ?? 0) + xScale.bandwidth() / 2;
+        yearsGroup
+          .append('text')
+          .attr('x', x)
+          .attr('y', 12)
+          .attr('text-anchor', 'middle')
+          .attr('class', styles.yearLabel)
+          .text(formatYearLabel(d.year));
+      }
     });
 
     // X axis line
@@ -157,13 +190,13 @@ export function DebtChart() {
       .append('g')
       .attr('transform', `translate(0,${innerHeight + 45})`);
 
-    // Track which governments we've already labeled to avoid duplicates
-    const labeledGovernments = new Set<string>();
+    // Calculate all government spans first
+    const govSpans: GovernmentSpan[] = [];
+    const processedGovs = new Set<string>();
 
     chartData.forEach((d) => {
       const gov = getGovernmentForYear(d.year, governments);
-      if (gov && !labeledGovernments.has(gov.name)) {
-        // Find all years for this government
+      if (gov && !processedGovs.has(gov.name)) {
         const govYears = chartData.filter(
           (point) => getGovernmentForYear(point.year, governments)?.name === gov.name
         );
@@ -174,33 +207,66 @@ export function DebtChart() {
           
           const startX = xScale(firstYear) ?? 0;
           const endX = (xScale(lastYear) ?? 0) + xScale.bandwidth();
-          const centerX = startX + (endX - startX) / 2;
+          const spanWidth = endX - startX;
           
           const partyInfo = parties[gov.party];
           const color = partyInfo?.color || '#666';
           
-          // Background bar for government
-          governmentsGroup
-            .append('rect')
-            .attr('x', startX)
-            .attr('y', 0)
-            .attr('width', endX - startX)
-            .attr('height', 18)
-            .attr('fill', color)
-            .attr('opacity', 0.15)
-            .attr('rx', 2);
+          govSpans.push({
+            gov,
+            startX,
+            endX,
+            width: spanWidth,
+            centerX: startX + spanWidth / 2,
+            color,
+            yearsCount: govYears.length,
+          });
           
-          // Government name
+          processedGovs.add(gov.name);
+        }
+      }
+    });
+
+    // Render government bars and labels
+    govSpans.forEach((span) => {
+      // Always show the colored background bar
+      governmentsGroup
+        .append('rect')
+        .attr('x', span.startX)
+        .attr('y', 0)
+        .attr('width', span.width)
+        .attr('height', 20)
+        .attr('fill', span.color)
+        .attr('opacity', 0.2)
+        .attr('rx', 2);
+
+      // Decide how to show the label based on available width
+      const labelWidth = span.gov.name.length * 6; // Approximate text width
+      const shouldRotate = span.width < labelWidth + 4;
+      const showLabel = span.width >= minWidthForGovLabels || span.yearsCount >= 2;
+
+      if (showLabel) {
+        if (shouldRotate) {
+          // Rotate text for narrow governments
           governmentsGroup
             .append('text')
-            .attr('x', centerX)
-            .attr('y', 13)
+            .attr('x', span.centerX)
+            .attr('y', 10)
+            .attr('text-anchor', 'start')
+            .attr('transform', `rotate(-45, ${span.centerX}, 10)`)
+            .attr('fill', span.color)
+            .attr('class', styles.governmentLabelRotated)
+            .text(span.gov.name);
+        } else {
+          // Horizontal text for wide governments
+          governmentsGroup
+            .append('text')
+            .attr('x', span.centerX)
+            .attr('y', 14)
             .attr('text-anchor', 'middle')
-            .attr('fill', color)
+            .attr('fill', span.color)
             .attr('class', styles.governmentLabel)
-            .text(gov.name);
-          
-          labeledGovernments.add(gov.name);
+            .text(span.gov.name);
         }
       }
     });
@@ -259,7 +325,7 @@ export function DebtChart() {
         style={{
           left: tooltip.x,
           top: tooltip.y,
-          transform: 'translate(-50%, 0)',
+          transform: 'translate(-50%, -100%)',
         }}
       >
         {tooltip.data && (
