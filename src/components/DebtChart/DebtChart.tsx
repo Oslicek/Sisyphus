@@ -19,7 +19,7 @@ import styles from './DebtChart.module.css';
 const CHART_CONFIG = {
   marginTop: 20,
   marginRight: 20,
-  marginBottom: 130,
+  marginBottom: 145,
   marginLeft: 70,
   barPadding: 0.2,
   minBarWidthForAllYears: 18,
@@ -403,6 +403,7 @@ export function DebtChart() {
         };
       });
 
+    // Draw government bars
     govSpans.forEach((span) => {
       governmentsGroup
         .append('rect')
@@ -413,23 +414,54 @@ export function DebtChart() {
         .attr('fill', span.color)
         .attr('opacity', 0.2)
         .attr('rx', 2);
+    });
 
-      // Always show rotated labels starting from left edge of bar
+    // Assign staggered heights to government labels to avoid overlaps
+    const govLabelHeight = 12;
+    const minGovLabelSpacing = 55; // minimum pixels between labels on same line
+    const govLabelHeights: number[] = [];
+    
+    govSpans.forEach((span, index) => {
+      let assignedLine = 0;
+      
+      // Check previous labels for overlap on each line
+      for (let line = 0; line < 4; line++) {
+        let hasOverlap = false;
+        for (let i = 0; i < index; i++) {
+          if (govLabelHeights[i] === line) {
+            const distance = span.centerX - govSpans[i].centerX;
+            if (Math.abs(distance) < minGovLabelSpacing) {
+              hasOverlap = true;
+              break;
+            }
+          }
+        }
+        if (!hasOverlap) {
+          assignedLine = line;
+          break;
+        }
+      }
+      govLabelHeights.push(assignedLine);
+    });
+
+    // Draw government labels with staggered heights
+    govSpans.forEach((span, index) => {
+      const lineOffset = govLabelHeights[index] * govLabelHeight;
+      
       governmentsGroup
         .append('text')
-        .attr('x', span.startX + 2)
-        .attr('y', 12)
-        .attr('text-anchor', 'start')
-        .attr('transform', `rotate(45, ${span.startX + 2}, 12)`)
+        .attr('x', span.centerX)
+        .attr('y', 12 + lineOffset)
+        .attr('text-anchor', 'middle')
         .attr('fill', span.color)
-        .attr('class', styles.governmentLabelRotated)
+        .attr('class', styles.governmentLabel)
         .text(span.gov.name);
     });
 
     // === LINE 3: Events ===
     const eventsGroup = g
       .append('g')
-      .attr('transform', `translate(0,${innerHeight + 75})`);
+      .attr('transform', `translate(0,${innerHeight + 85})`);
 
     // Draw a horizontal line for events timeline
     eventsGroup
