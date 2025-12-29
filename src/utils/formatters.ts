@@ -26,3 +26,15 @@ export function formatBillionsCzech(amountInBillions: number): string {
   });
   return `${formatted} miliard Kč`;
 }
+
+/**
+ * Format a number with Czech locale (spaces as thousand separators)
+ * @param num - The number to format
+ * @returns Formatted string with Czech locale formatting
+ */
+export function formatCzechNumber(num: number): string {
+  return Math.floor(num).toLocaleString('cs-CZ', {
+    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
+  });
+}

@@ -1,5 +1,6 @@
 import { DebtCounter } from './components/DebtCounter';
 import { DebtChart } from './components/DebtChart';
+import { BuyCalculator } from './components/BuyCalculator';
 import { ShareButtons } from './components/ShareButtons';
 import styles from './App.module.css';
 
@@ -63,6 +64,8 @@ function App() {
         <DebtCounter />
         <DebtChart />
       </main>
+
+      <BuyCalculator />
 
       <ShareButtons />
 
