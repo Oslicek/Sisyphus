@@ -24,7 +24,7 @@ interface ShareButtonsProps {
   url?: string;
   title?: string;
   description?: string;
-  /** CSS selector for the element to capture as screenshot (default: '#root') */
+  /** CSS selector for the element to capture as screenshot (default: 'main' - DebtCounter + DebtChart) */
   captureSelector?: string;
 }
 
@@ -34,7 +34,7 @@ export function ShareButtons({
   url = typeof window !== 'undefined' ? window.location.href : '',
   title = 'Sisyfos – Státní dluh ČR',
   description = 'Podívejte se, jak roste státní dluh České republiky v reálném čase. Interaktivní vizualizace od roku 1993.',
-  captureSelector = '#root',
+  captureSelector = 'main',
 }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [screenshotState, setScreenshotState] = useState<ScreenshotState>('idle');
