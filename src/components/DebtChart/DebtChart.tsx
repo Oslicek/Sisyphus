@@ -487,8 +487,9 @@ export function DebtChart() {
       .attr('x2', innerWidth)
       .attr('y1', 0)
       .attr('y2', 0)
-      .attr('stroke', '#bbb')
+      .attr('stroke', '#9d4edd')
       .attr('stroke-width', 1)
+      .attr('stroke-opacity', 0.5)
       .attr('stroke-dasharray', '2,4');
 
     // Sort events by date and calculate positions with staggered heights
