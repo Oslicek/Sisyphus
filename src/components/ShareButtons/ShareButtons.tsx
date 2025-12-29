@@ -68,18 +68,11 @@ export function ShareButtons({
       const computedStyle = getComputedStyle(document.documentElement);
       const bgColor = computedStyle.getPropertyValue('--color-bg').trim() || '#f8f9fa';
       
-      // Ensure minimum width for mobile screenshots
-      const elementWidth = (element as HTMLElement).offsetWidth;
-      const minWidth = 800;
-      const captureWidth = Math.max(elementWidth, minWidth);
-      
       const canvas = await html2canvas(element as HTMLElement, {
         backgroundColor: bgColor,
         scale: 2, // Higher quality
         logging: false,
         useCORS: true,
-        windowWidth: captureWidth,
-        width: captureWidth,
       });
 
       return new Promise((resolve) => {
