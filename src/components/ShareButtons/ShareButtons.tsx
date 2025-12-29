@@ -24,7 +24,7 @@ interface ShareButtonsProps {
   url?: string;
   title?: string;
   description?: string;
-  /** CSS selector for the element to capture as screenshot (default: '.app' or 'main') */
+  /** CSS selector for the element to capture as screenshot (default: '#root') */
   captureSelector?: string;
 }
 
@@ -34,7 +34,7 @@ export function ShareButtons({
   url = typeof window !== 'undefined' ? window.location.href : '',
   title = 'Sisyfos – Státní dluh ČR',
   description = 'Podívejte se, jak roste státní dluh České republiky v reálném čase. Interaktivní vizualizace od roku 1993.',
-  captureSelector = 'main',
+  captureSelector = '#root',
 }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [screenshotState, setScreenshotState] = useState<ScreenshotState>('idle');
@@ -68,11 +68,18 @@ export function ShareButtons({
       const computedStyle = getComputedStyle(document.documentElement);
       const bgColor = computedStyle.getPropertyValue('--color-bg').trim() || '#f8f9fa';
       
+      // Ensure minimum width for mobile screenshots
+      const elementWidth = (element as HTMLElement).offsetWidth;
+      const minWidth = 800;
+      const captureWidth = Math.max(elementWidth, minWidth);
+      
       const canvas = await html2canvas(element as HTMLElement, {
         backgroundColor: bgColor,
         scale: 2, // Higher quality
         logging: false,
         useCORS: true,
+        windowWidth: captureWidth,
+        width: captureWidth,
       });
 
       return new Promise((resolve) => {
