@@ -184,11 +184,11 @@
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 8px;
   font-weight: 600;
-  fill: #dc143c;
+  fill: #7b2cbf;
 }
 
 .eventDot {
-  fill: #dc143c;
+  fill: #9d4edd;
   stroke: white;
   stroke-width: 1.5;
 }

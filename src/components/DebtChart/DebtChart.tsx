@@ -551,7 +551,7 @@ export function DebtChart() {
         .attr('x2', x)
         .attr('y1', 5)
         .attr('y2', lineEndY)
-        .attr('stroke', '#dc143c')
+        .attr('stroke', '#9d4edd')
         .attr('stroke-width', 1);
 
       eventsGroup
