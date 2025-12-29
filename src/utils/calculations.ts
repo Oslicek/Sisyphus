@@ -43,3 +43,5 @@ export function calculateCurrentDebt(
   return baseAmount + deficitPerSecond * secondsElapsed;
 }
 
+
+

@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2025-12-28
+> **Last Updated:** 2025-12-29
 
 ## Overview
 
@@ -17,6 +17,7 @@
 | Language | TypeScript (strict mode) |
 | Styling | CSS Modules |
 | Charts | D3.js |
+| Sharing | react-share, html2canvas |
 | Fonts | Bebas Neue, Crimson Pro, Source Sans 3, JetBrains Mono (OFL) |
 | Hosting | Cloudflare Pages |
 | Data Storage | Static JSON files (public/data/) |
@@ -141,9 +142,13 @@ sisyphus/
 │   │   │   ├── DebtCounter.tsx
 │   │   │   ├── DebtCounter.module.css
 │   │   │   └── index.ts
-│   │   └── DebtChart/          # D3.js interactive chart (7 variants)
-│   │       ├── DebtChart.tsx
-│   │       ├── DebtChart.module.css
+│   │   ├── DebtChart/          # D3.js interactive chart (8 variants)
+│   │   │   ├── DebtChart.tsx
+│   │   │   ├── DebtChart.module.css
+│   │   │   └── index.ts
+│   │   └── ShareButtons/       # Social sharing + screenshot
+│   │       ├── ShareButtons.tsx
+│   │       ├── ShareButtons.module.css
 │   │       └── index.ts
 │   ├── config/
 │   │   ├── graphVariants.ts    # Graph variant definitions
@@ -198,6 +203,7 @@ sisyphus/
 |-----------|----------|---------|
 | `DebtCounter` | src/components/DebtCounter/ | Real-time debt display with Kč |
 | `DebtChart` | src/components/DebtChart/ | D3.js interactive chart with variants |
+| `ShareButtons` | src/components/ShareButtons/ | Social sharing + screenshot capture |
 | `useDebtCounter` | src/hooks/ | Fetches anchor, computes & updates every second |
 | `useHistoricalDebt` | src/hooks/ | Fetches all JSON data files |
 | `calculations.ts` | src/utils/ | Deficit per second, elapsed time, current debt |
@@ -312,6 +318,8 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Czech-compatible fonts
 - [x] Data sources footer with links
 - [x] Responsive design (up to 2400px width)
+- [x] Social sharing buttons (Facebook, X, LinkedIn, WhatsApp, Telegram, Viber, Reddit, Email)
+- [x] Screenshot capture and share (Web Share API) / download
 - [x] TDD: 105 tests, 100% coverage
 
 **Pending:**

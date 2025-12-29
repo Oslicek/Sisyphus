@@ -64,6 +64,7 @@
   font-family: 'JetBrains Mono', 'Consolas', monospace;
   font-weight: 500;
   color: var(--color-accent-secondary);
+  margin-left: 0.35em;
 }
 
 .loading {

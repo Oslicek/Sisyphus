@@ -28,7 +28,7 @@
 .variantButton {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.75rem;
-  padding: 0.35rem 0.6rem;
+  padding: 0.25rem 0.5rem;
   border: 1px solid var(--color-text-muted);
   border-radius: 3px;
   background: transparent;
@@ -62,7 +62,7 @@
 .populationButton {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.75rem;
-  padding: 0.35rem 0.6rem;
+  padding: 0.25rem 0.5rem;
   border: 1px solid #2c7a7b;
   border-radius: 3px;
   background: transparent;
@@ -97,7 +97,7 @@
 .metricButton {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.75rem;
-  padding: 0.35rem 0.6rem;
+  padding: 0.25rem 0.5rem;
   border: 1px solid #9d4edd;
   border-radius: 3px;
   background: transparent;
@@ -306,4 +306,20 @@
 .planButtonActive {
   background: var(--plan-color, #666);
   color: white;
+}
+
+/* Responsive: smaller buttons on narrow screens */
+@media (max-width: 480px) {
+  .variantButton,
+  .populationButton,
+  .metricButton {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .variantSelector,
+  .populationSelector,
+  .metricSelector {
+    gap: 0.25rem;
+  }
 }
