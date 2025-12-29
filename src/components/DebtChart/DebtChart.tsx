@@ -19,7 +19,7 @@ import styles from './DebtChart.module.css';
 const CHART_CONFIG = {
   marginTop: 20,
   marginRight: 20,
-  marginBottom: 145,
+  marginBottom: 160,
   marginLeft: 70,
   barPadding: 0.2,
   minBarWidthForAllYears: 18,
@@ -403,7 +403,7 @@ export function DebtChart() {
         };
       });
 
-    // Draw government bars
+    // Draw government bars with visible borders
     govSpans.forEach((span) => {
       governmentsGroup
         .append('rect')
@@ -412,12 +412,15 @@ export function DebtChart() {
         .attr('width', span.width)
         .attr('height', 18)
         .attr('fill', span.color)
-        .attr('opacity', 0.2)
+        .attr('opacity', 0.15)
+        .attr('stroke', span.color)
+        .attr('stroke-width', 1.5)
+        .attr('stroke-opacity', 0.6)
         .attr('rx', 2);
     });
 
     // Assign staggered heights to government labels to avoid overlaps
-    const govLabelHeight = 12;
+    const govLabelHeight = 14;
     const minGovLabelSpacing = 55; // minimum pixels between labels on same line
     const govLabelHeights: number[] = [];
     
@@ -444,14 +447,28 @@ export function DebtChart() {
       govLabelHeights.push(assignedLine);
     });
 
-    // Draw government labels with staggered heights
+    // Draw government labels with staggered heights and connecting lines
     govSpans.forEach((span, index) => {
       const lineOffset = govLabelHeights[index] * govLabelHeight;
+      const lineStartY = 18; // bottom of bar
+      const lineEndY = 24 + lineOffset; // just above text
       
+      // Draw vertical connecting line (like events)
+      governmentsGroup
+        .append('line')
+        .attr('x1', span.centerX)
+        .attr('x2', span.centerX)
+        .attr('y1', lineStartY)
+        .attr('y2', lineEndY)
+        .attr('stroke', span.color)
+        .attr('stroke-width', 1)
+        .attr('stroke-opacity', 0.5);
+      
+      // Draw label
       governmentsGroup
         .append('text')
         .attr('x', span.centerX)
-        .attr('y', 12 + lineOffset)
+        .attr('y', lineEndY + 10)
         .attr('text-anchor', 'middle')
         .attr('fill', span.color)
         .attr('class', styles.governmentLabel)
@@ -461,7 +478,7 @@ export function DebtChart() {
     // === LINE 3: Events ===
     const eventsGroup = g
       .append('g')
-      .attr('transform', `translate(0,${innerHeight + 85})`);
+      .attr('transform', `translate(0,${innerHeight + 100})`);
 
     // Draw a horizontal line for events timeline
     eventsGroup
