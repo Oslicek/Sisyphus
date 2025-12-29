@@ -78,3 +78,19 @@
   font-size: 1.2rem;
   color: var(--color-error);
 }
+
+/* Mobile: smaller title and reduced spacing */
+@media (max-width: 600px) {
+  .container {
+    gap: 0.5rem;
+    padding: 1rem 0.5rem;
+  }
+  
+  .title {
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+  }
+  
+  .subtitle {
+    font-size: 0.75rem;
+  }
+}

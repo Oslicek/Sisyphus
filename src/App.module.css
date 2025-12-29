@@ -77,3 +77,24 @@
   text-decoration: underline;
 }
 
+/* Mobile: reduce spacing between sections */
+@media (max-width: 600px) {
+  .app {
+    padding: 0.5rem;
+  }
+  
+  .motto {
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .main {
+    gap: 1rem;
+  }
+  
+  .footer {
+    margin-top: 1.5rem;
+    padding: 1rem;
+  }
+}
+
