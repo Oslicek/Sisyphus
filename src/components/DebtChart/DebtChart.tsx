@@ -177,8 +177,8 @@ export function DebtChart() {
       
       case 'deficit-inflation-adjusted': {
         const withPrediction = getChartDataWithPrediction(chartData);
-        const adjusted = adjustForInflation(withPrediction, economicData, targetYear);
-        result = calculateYearlyDeficit(adjusted);
+        const deficits = calculateYearlyDeficit(withPrediction);  // FIRST: Calculate deficit from nominal
+        result = adjustForInflation(deficits, economicData, targetYear);  // THEN: Adjust for inflation
         break;
       }
       
