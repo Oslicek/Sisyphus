@@ -185,7 +185,8 @@ sisyphus/
 │   │   ├── graphCalculations.ts # Inflation, GDP%, deficit (TDD)
 │   │   ├── graphCalculations.test.ts
 │   │   ├── unitConversions.ts  # Metric unit conversions (TDD)
-│   │   └── unitConversions.test.ts
+│   │   ├── unitConversions.test.ts
+│   │   └── chartIntegration.test.ts # Integration tests for chart computation chains
 │   ├── types/
 │   │   └── debt.ts             # TypeScript interfaces
 │   ├── assets/
@@ -298,6 +299,7 @@ interface DemographicYearData {
 - Yearly deficit calculations
 - Chart helper functions
 - Metric unit conversions
+- Integration tests for chart computation chains
 
 **Test Coverage: 100%**
 ```
@@ -315,8 +317,9 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 105 tests across 6 test files
+- 136 tests across 7 test files
 - All utility functions fully covered
+- Integration tests for chart computation chains (deficit-inflation-adjusted, deficit-gdp-percent, population modes, metric units)
 
 ## Current State
 
@@ -346,9 +349,10 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Multi-page app with react-router-dom
 - [x] About page (O projektu Sisyfos) with centered logo
 - [x] Data Sources page with data series tables, bar/line charts, grid lines, axes
-- [x] TDD: 105 tests, 100% coverage
+- [x] TDD: 136 tests, 100% coverage
 - [x] Project logo with tagline (responsive sizing)
 - [x] Logo links to About page
+- [x] Collapsible governments and events sections (collapsed by default)
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates
@@ -361,7 +365,7 @@ All files           |     100 |      100 |     100 |     100 |
 - Light theme only
 - Fonts support Czech diacritics (háčky, čárky)
 - Chart uses Q4 values (or latest available quarter)
-- Time scale positioning for governments and events (precise dates)
+- Governments and events sections are collapsible (collapsed by default, expandable by user)
 - Inflation baseline: 2025
 - Historical data updated from MFCR as of 2025-10-17
 - Data files contain only verified historical data (no projections except budget plans)

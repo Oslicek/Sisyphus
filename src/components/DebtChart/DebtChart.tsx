@@ -62,15 +62,9 @@ export function DebtChart() {
   const [metricUnit, setMetricUnit] = useState<MetricUnit>('czk');
   const [showBabisInfoModal, setShowBabisInfoModal] = useState(false);
   
-  // Initialize collapsed state based on screen width (mobile = collapsed)
-  const [showGovernments, setShowGovernments] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return window.innerWidth > 768;
-  });
-  const [showEvents, setShowEvents] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return window.innerWidth > 768;
-  });
+  // Governments and events are collapsed by default
+  const [showGovernments, setShowGovernments] = useState(false);
+  const [showEvents, setShowEvents] = useState(false);
 
   const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, foodPriceData, interestData, isLoading, error } = useHistoricalDebt();
 

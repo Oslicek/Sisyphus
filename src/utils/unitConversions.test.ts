@@ -314,3 +314,30 @@ describe('convertToMetricUnit with food items', () => {
   });
 });
 
+describe('convertToMetricUnit edge cases - missing food price data', () => {
+  it('should return original data for bread-kg when foodPriceData is undefined', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'bread-kg', 'per-capita', mockPriceData, mockWageData, undefined);
+    expect(result).toEqual(mockPerCapitaData);
+  });
+
+  it('should return original data for eggs-10 when foodPriceData is undefined', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'eggs-10', 'per-capita', mockPriceData, mockWageData, undefined);
+    expect(result).toEqual(mockPerCapitaData);
+  });
+
+  it('should return original data for butter-kg when foodPriceData is undefined', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'butter-kg', 'per-capita', mockPriceData, mockWageData, undefined);
+    expect(result).toEqual(mockPerCapitaData);
+  });
+
+  it('should return original data for potatoes-kg when foodPriceData is undefined', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'potatoes-kg', 'per-capita', mockPriceData, mockWageData, undefined);
+    expect(result).toEqual(mockPerCapitaData);
+  });
+
+  it('should return original data for beer-05l when foodPriceData is undefined', () => {
+    const result = convertToMetricUnit(mockPerCapitaData, 'beer-05l', 'per-capita', mockPriceData, mockWageData, undefined);
+    expect(result).toEqual(mockPerCapitaData);
+  });
+});
+

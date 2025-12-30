@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatCzechCurrency, formatBillionsCzech } from './formatters';
+import { formatCzechCurrency, formatBillionsCzech, formatCzechNumber } from './formatters';
 
 describe('formatCzechCurrency', () => {
   it('should format number with Czech thousand separators (spaces)', () => {
@@ -60,5 +60,33 @@ describe('formatBillionsCzech', () => {
     const result = formatBillionsCzech(123.456);
     expect(result).toContain('123');
     expect(result).toContain('miliard Kč');
+  });
+});
+
+describe('formatCzechNumber', () => {
+  it('should format number with Czech thousand separators (spaces)', () => {
+    const result = formatCzechNumber(1234567);
+    expect(result).toContain('1');
+    expect(result).toContain('234');
+    expect(result).toContain('567');
+  });
+
+  it('should round to whole numbers (floor)', () => {
+    const result = formatCzechNumber(1234.99);
+    // Should floor to 1234, not round to 1235
+    expect(result).toContain('234');
+    expect(result).not.toContain('235');
+  });
+
+  it('should handle zero', () => {
+    const result = formatCzechNumber(0);
+    expect(result).toBe('0');
+  });
+
+  it('should handle negative numbers', () => {
+    const result = formatCzechNumber(-1234567);
+    expect(result).toContain('-');
+    expect(result).toContain('1');
+    expect(result).toContain('234');
   });
 });
