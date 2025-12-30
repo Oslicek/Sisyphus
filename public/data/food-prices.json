@@ -29,9 +29,7 @@
     { "year": 2021, "bread": 36.2, "eggs": 42.0, "butter": 205.0, "potatoes": 16.8, "beer": 16.5 },
     { "year": 2022, "bread": 45.5, "eggs": 58.0, "butter": 255.0, "potatoes": 22.5, "beer": 18.2 },
     { "year": 2023, "bread": 52.8, "eggs": 48.5, "butter": 275.0, "potatoes": 28.5, "beer": 19.8 },
-    { "year": 2024, "bread": 58.5, "eggs": 52.0, "butter": 268.0, "potatoes": 24.5, "beer": 20.5 },
-    { "year": 2025, "bread": 62.0, "eggs": 54.0, "butter": 265.0, "potatoes": 22.0, "beer": 21.0 },
-    { "year": 2026, "bread": 65.0, "eggs": 56.0, "butter": 270.0, "potatoes": 23.0, "beer": 21.5 }
+    { "year": 2024, "bread": 58.5, "eggs": 52.0, "butter": 268.0, "potatoes": 24.5, "beer": 20.5 }
   ]
 }
 

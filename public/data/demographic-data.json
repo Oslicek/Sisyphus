@@ -35,9 +35,7 @@
     { "year": 2021, "population": 10505000, "workingAge": 6631000 },
     { "year": 2022, "population": 10827000, "workingAge": 6892000 },
     { "year": 2023, "population": 10900000, "workingAge": 6877000 },
-    { "year": 2024, "population": 10880000, "workingAge": 6850000 },
-    { "year": 2025, "population": 10900000, "workingAge": 6830000 },
-    { "year": 2026, "population": 10920000, "workingAge": 6810000 }
+    { "year": 2024, "population": 10880000, "workingAge": 6850000 }
   ]
 }
 

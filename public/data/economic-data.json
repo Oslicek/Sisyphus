@@ -36,9 +36,7 @@
     { "year": 2021, "inflationRate": 3.8, "gdp": 6109 },
     { "year": 2022, "inflationRate": 15.1, "gdp": 6790 },
     { "year": 2023, "inflationRate": 10.7, "gdp": 7344 },
-    { "year": 2024, "inflationRate": 2.4, "gdp": 7650 },
-    { "year": 2025, "inflationRate": 2.5, "gdp": 7900 },
-    { "year": 2026, "inflationRate": 2.0, "gdp": 8150 }
+    { "year": 2024, "inflationRate": 2.4, "gdp": 7650 }
   ],
   "units": {
     "inflationRate": "percent (year-over-year CPI)",

@@ -48,9 +48,7 @@
     { "year": 2021, "averageGross": 37839, "averageNet": 28379, "minimumGross": 15200, "minimumNet": 11400 },
     { "year": 2022, "averageGross": 40324, "averageNet": 30243, "minimumGross": 16200, "minimumNet": 12150 },
     { "year": 2023, "averageGross": 43341, "averageNet": 32506, "minimumGross": 17300, "minimumNet": 12975 },
-    { "year": 2024, "averageGross": 45854, "averageNet": 34391, "minimumGross": 18900, "minimumNet": 14175 },
-    { "year": 2025, "averageGross": 48500, "averageNet": 36375, "minimumGross": 20800, "minimumNet": 15600 },
-    { "year": 2026, "averageGross": 51500, "averageNet": 38625, "minimumGross": 22400, "minimumNet": 16800 }
+    { "year": 2024, "averageGross": 45854, "averageNet": 34391, "minimumGross": 18900, "minimumNet": 14175 }
   ]
 }
 

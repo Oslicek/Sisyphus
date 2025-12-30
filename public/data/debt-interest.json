@@ -36,9 +36,7 @@
     { "year": 2021, "interest": 48.5 },
     { "year": 2022, "interest": 58.2 },
     { "year": 2023, "interest": 72.5 },
-    { "year": 2024, "interest": 85.8 },
-    { "year": 2025, "interest": 95.0 },
-    { "year": 2026, "interest": 102.0 }
+    { "year": 2024, "interest": 85.8 }
   ]
 }
 

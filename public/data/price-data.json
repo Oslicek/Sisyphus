@@ -56,9 +56,7 @@
     { "year": 2021, "petrol95": 34.8, "highwayKm": 700, "hospital": 3900, "school": 345 },
     { "year": 2022, "petrol95": 45.2, "highwayKm": 820, "hospital": 4500, "school": 400 },
     { "year": 2023, "petrol95": 40.5, "highwayKm": 880, "hospital": 4850, "school": 435 },
-    { "year": 2024, "petrol95": 38.2, "highwayKm": 920, "hospital": 5100, "school": 460 },
-    { "year": 2025, "petrol95": 39.5, "highwayKm": 950, "hospital": 5300, "school": 480 },
-    { "year": 2026, "petrol95": 40.0, "highwayKm": 980, "hospital": 5500, "school": 500 }
+    { "year": 2024, "petrol95": 38.2, "highwayKm": 920, "hospital": 5100, "school": 460 }
   ]
 }
 
