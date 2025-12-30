@@ -69,6 +69,7 @@ interface DataSet {
   columns: { key: string; label: string }[];
   chartType: 'bar' | 'line';
   chartSeries: ChartSeries[];
+  yAxisMin?: number;
 }
 
 // Helper function to determine which years to show as labels
@@ -114,26 +115,36 @@ function formatAxisValue(value: number): string {
   return value.toFixed(0);
 }
 
-function SimpleBarChart({ data, series, unit }: { 
+function SimpleBarChart({ data, series, unit, yAxisMin = 0 }: { 
   data: DataPoint[]; 
   series: ChartSeries[];
   unit: string;
+  yAxisMin?: number;
 }) {
-  const valueKey = series[0].key;
-  const color = series[0].color;
-  const values = data.map(d => {
-    const val = d[valueKey];
-    return typeof val === 'number' ? val : 0;
+  const numSeries = series.length;
+  
+  // Find max value across all series
+  let maxValue = 0;
+  series.forEach(s => {
+    data.forEach(d => {
+      const val = d[s.key];
+      if (typeof val === 'number' && val > maxValue) {
+        maxValue = val;
+      }
+    });
   });
-  const maxValue = Math.max(...values);
+  
+  const minValue = yAxisMin;
+  const valueRange = maxValue - minValue;
   const chartHeight = 120;
   const topPadding = 8;
   const leftPadding = 45;
-  const barWidth = Math.max(4, Math.min(12, (600 - leftPadding) / data.length - 1));
-  const chartWidth = leftPadding + data.length * (barWidth + 1);
+  const groupWidth = Math.max(8, Math.min(20, (600 - leftPadding) / data.length - 2));
+  const barWidth = groupWidth / numSeries;
+  const chartWidth = leftPadding + data.length * (groupWidth + 2);
   
-  // Grid line values (0%, 25%, 50%, 75%, 100% of max)
-  const gridValues = [0, 0.25, 0.5, 0.75, 1].map(pct => maxValue * pct);
+  // Grid line values (min to max in 5 steps)
+  const gridValues = [0, 0.25, 0.5, 0.75, 1].map(pct => minValue + valueRange * pct);
 
   return (
     <div className={styles.chartContainer}>
@@ -144,7 +155,7 @@ function SimpleBarChart({ data, series, unit }: {
       >
         {/* Horizontal grid lines with value labels */}
         {gridValues.map((val, i) => {
-          const y = topPadding + chartHeight - (val / maxValue) * chartHeight;
+          const y = topPadding + chartHeight - ((val - minValue) / valueRange) * chartHeight;
           return (
             <g key={`grid-${i}`}>
               <line
@@ -189,22 +200,26 @@ function SimpleBarChart({ data, series, unit }: {
           strokeWidth={1}
         />
         
-        {/* Bars */}
-        {data.map((d, i) => {
-          const val = typeof d[valueKey] === 'number' ? d[valueKey] as number : 0;
-          const height = maxValue > 0 ? (val / maxValue) * chartHeight : 0;
-          return (
-            <rect
-              key={d.year}
-              x={leftPadding + i * (barWidth + 1)}
-              y={topPadding + chartHeight - height}
-              width={barWidth}
-              height={height}
-              fill={color}
-              opacity={0.8}
-            />
-          );
-        })}
+        {/* Bars - grouped by year */}
+        {data.map((d, i) => (
+          <g key={d.year}>
+            {series.map((s, sIdx) => {
+              const val = typeof d[s.key] === 'number' ? d[s.key] as number : 0;
+              const height = valueRange > 0 ? ((val - minValue) / valueRange) * chartHeight : 0;
+              return (
+                <rect
+                  key={s.key}
+                  x={leftPadding + i * (groupWidth + 2) + sIdx * barWidth}
+                  y={topPadding + chartHeight - height}
+                  width={barWidth - 0.5}
+                  height={height}
+                  fill={s.color}
+                  opacity={0.8}
+                />
+              );
+            })}
+          </g>
+        ))}
         
         {/* Year labels */}
         {(() => {
@@ -214,7 +229,7 @@ function SimpleBarChart({ data, series, unit }: {
             return (
               <text
                 key={d.year}
-                x={leftPadding + originalIndex * (barWidth + 1) + barWidth / 2}
+                x={leftPadding + originalIndex * (groupWidth + 2) + groupWidth / 2}
                 y={topPadding + chartHeight + 14}
                 textAnchor="middle"
                 fontSize="8"
@@ -226,6 +241,18 @@ function SimpleBarChart({ data, series, unit }: {
           });
         })()}
       </svg>
+      
+      {/* Legend for multi-series charts */}
+      {numSeries > 1 && (
+        <div className={styles.legend}>
+          {series.map(s => (
+            <div key={s.key} className={styles.legendItem}>
+              <span className={styles.legendColor} style={{ backgroundColor: s.color }} />
+              <span className={styles.legendLabel}>{s.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
       <p className={styles.chartUnit}>{unit}</p>
     </div>
   );
@@ -524,7 +551,11 @@ export function DataSources() {
               { key: 'workingAge', label: 'Produkt. věk (mil.)' },
             ],
             chartType: 'bar',
-            chartSeries: [{ key: 'population', label: 'Obyvatelstvo', color: '#3498db' }],
+            chartSeries: [
+              { key: 'population', label: 'Celkem', color: '#3498db' },
+              { key: 'workingAge', label: 'Produktivní věk (15-64)', color: '#e74c3c' },
+            ],
+            yAxisMin: 6,
           },
           {
             title: 'Průměrná a minimální mzda',
@@ -564,7 +595,7 @@ export function DataSources() {
               { key: 'year', label: 'Rok' },
               { key: 'value', label: 'Cena (Kč/l)' },
             ],
-            chartType: 'bar',
+            chartType: 'line',
             chartSeries: [{ key: 'value', label: 'Benzín', color: '#f39c12' }],
           },
           {
@@ -668,6 +699,7 @@ export function DataSources() {
                     data={dataSet.data} 
                     series={dataSet.chartSeries}
                     unit={dataSet.unit}
+                    yAxisMin={dataSet.yAxisMin}
                   />
                 )}
                 

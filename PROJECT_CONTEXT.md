@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2025-12-30
+> **Last Updated:** 2025-12-30 (updated)
 
 ## Overview
 
@@ -194,15 +194,15 @@ sisyphus/
 │   └── data/
 │       ├── debt-anchor.json    # Anchor for real-time counter
 │       ├── debt-historical.json # Historical debt 1993-2025
-│       ├── debt-interest.json  # Yearly interest payments 1993-2026
+│       ├── debt-interest.json  # Yearly interest payments 1993-2024
 │       ├── events.json         # Significant events with dates
 │       ├── governments.json    # Government timeline + party colors
 │       ├── budget-plans.json   # 2026 budget predictions
-│       ├── economic-data.json  # Inflation rates + GDP 1993-2026
-│       ├── demographic-data.json # Population data 1993-2026
-│       ├── wage-data.json      # Average/minimum wages 1993-2026
-│       ├── price-data.json     # Petrol, highway, hospital, school costs
-│       └── food-prices.json    # Food prices 2006-2026 (bread, eggs, butter, potatoes, beer)
+│       ├── economic-data.json  # Inflation rates + GDP 1993-2024
+│       ├── demographic-data.json # Population data 1993-2024
+│       ├── wage-data.json      # Average/minimum wages 1993-2024
+│       ├── price-data.json     # Petrol, highway, hospital, school 1993-2024
+│       └── food-prices.json    # Food prices 2006-2024 (bread, eggs, butter, potatoes, beer)
 ├── package.json
 ├── vite.config.ts
 ├── vitest.config.ts
@@ -326,7 +326,7 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Alternative metric units (highways, hospitals, schools, petrol, salaries, food)
 - [x] Government timeline with party colors
 - [x] Event markers with precise date positioning
-- [x] 2026 budget plan predictions with toggle
+- [x] 2026 budget plan predictions with toggle (Babiš plan shows info modal)
 - [x] Inflation adjustment (2025 baseline)
 - [x] GDP percentage calculations
 - [x] Yearly deficit calculations
@@ -340,7 +340,7 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] BuyCalculator wizard - "What can I buy with my debt share"
 - [x] Multi-page app with react-router-dom
 - [x] About page (O projektu Sisyfos)
-- [x] Data Sources page with all data series tables and charts
+- [x] Data Sources page with data series tables, bar/line charts, grid lines, axes
 - [x] TDD: 105 tests, 100% coverage
 
 **Pending:**
@@ -357,3 +357,5 @@ All files           |     100 |      100 |     100 |     100 |
 - Time scale positioning for governments and events (precise dates)
 - Inflation baseline: 2025
 - Historical data updated from MFCR as of 2025-10-17
+- Data files contain only verified historical data (no projections except budget plans)
+- Babiš government budget for 2026 is pending - currently shows info modal

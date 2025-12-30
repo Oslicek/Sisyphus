@@ -58,6 +58,7 @@ export function DebtChart() {
   const [activeVariant, setActiveVariant] = useState<GraphVariant>('debt-absolute');
   const [populationMode, setPopulationMode] = useState<PopulationMode>('country');
   const [metricUnit, setMetricUnit] = useState<MetricUnit>('czk');
+  const [showBabisInfoModal, setShowBabisInfoModal] = useState(false);
 
   const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, foodPriceData, interestData, isLoading, error } = useHistoricalDebt();
 
@@ -776,13 +777,43 @@ export function DebtChart() {
               style={{
                 '--plan-color': plan.color,
               } as React.CSSProperties}
-              onClick={() => setActivePlan(plan.id)}
+              onClick={() => {
+                if (plan.id === 'babis') {
+                  setShowBabisInfoModal(true);
+                } else {
+                  setActivePlan(plan.id);
+                }
+              }}
             >
               {plan.name}
             </button>
           ))}
         </div>
       </div>
+
+      {/* Babiš budget info modal */}
+      {showBabisInfoModal && (
+        <div className={styles.modalOverlay} onClick={() => {
+          setShowBabisInfoModal(false);
+          setActivePlan('babis');
+        }}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.modalText}>
+              Rozpočet Babišovy vlády a jeho plánovaný schodek zatím není znám. 
+              Až bude zveřejněn, doplníme jej.
+            </p>
+            <button 
+              className={styles.modalButton}
+              onClick={() => {
+                setShowBabisInfoModal(false);
+                setActivePlan('babis');
+              }}
+            >
+              Rozumím
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
