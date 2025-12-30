@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sisyfos icon: figure pushing coin. Designed to stay recognizable at 16–64px. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="Sisyfos icon">
+  <defs>
+    <style>
+      .stroke{fill:none;stroke:#0B1C3B;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    </style>
+    <clipPath id="coinClip">
+      <circle cx="16.6" cy="9.2" r="4.3"/>
+    </clipPath>
+  </defs>
+
+  <!-- Coin (outline) -->
+  <circle class="stroke" cx="16.6" cy="9.2" r="4.3"/>
+
+  <!-- Coin color hint: three big wedges for legibility -->
+  <g clip-path="url(#coinClip)">
+    <path d="M16.6 9.2 L16.6 4.9 A4.3 4.3 0 0 0 12.9 7.1 Z" fill="#11457E"/>
+    <path d="M16.6 9.2 L12.9 7.1 A4.3 4.3 0 0 0 16.6 13.5 Z" fill="#FFFFFF"/>
+    <path d="M16.6 9.2 L16.6 13.5 A4.3 4.3 0 0 0 20.9 9.2 Z" fill="#D7141A"/>
+  </g>
+
+  <!-- Figure (minimal, leaning forward) -->
+  <circle class="stroke" cx="8.2" cy="7.8" r="1.2"/>
+  <path class="stroke" d="M8.5 9.2 L9.4 13.0"/>
+  <path class="stroke" d="M9.4 13.0 L7.2 18.0"/>
+  <path class="stroke" d="M9.4 13.0 L11.4 17.6"/>
+  <path class="stroke" d="M9.0 10.6 L12.5 9.7 L13.0 9.5"/>
+</svg>
+

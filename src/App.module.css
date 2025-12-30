@@ -42,6 +42,26 @@
   white-space: nowrap;
 }
 
+/* Motto - centered visually in the space after the logo */
+.motto {
+  font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  color: var(--color-text-muted);
+  text-align: center;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  /* Padding creates space for logo on left, equal padding on right for visual centering */
+  padding-left: 240px;
+  padding-right: 20px;
+}
+
+.mottoAuthor {
+  font-style: normal;
+  font-weight: 400;
+  margin-left: 0.5em;
+}
+
 /* Medium screens: smaller logo */
 @media (max-width: 1200px) {
   .logoImage {
@@ -54,7 +74,8 @@
   }
 
   .motto {
-    margin-left: 140px;
+    padding-left: 150px;
+    padding-right: 10px;
   }
 }
 
@@ -69,27 +90,9 @@
   }
 
   .motto {
-    margin-left: 100px;
+    padding-left: 110px;
+    padding-right: 10px;
   }
-}
-
-.motto {
-  font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
-  font-style: italic;
-  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
-  color: var(--color-text-muted);
-  text-align: center;
-  line-height: 1.5;
-  /* Center in the space after the logo */
-  margin-left: 220px;
-  margin-right: 0;
-  margin-bottom: 1rem;
-}
-
-.mottoAuthor {
-  font-style: normal;
-  font-weight: 400;
-  margin-left: 0.5em;
 }
 
 .main {
@@ -153,7 +156,8 @@
   }
   
   .motto {
-    margin-left: 60px;
+    padding-left: 65px;
+    padding-right: 5px;
     margin-bottom: 0.5rem;
     font-size: 0.85rem;
   }
