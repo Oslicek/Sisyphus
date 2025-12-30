@@ -55,22 +55,29 @@ interface DataPoint {
   [key: string]: number | string | undefined;
 }
 
+interface ChartSeries {
+  key: string;
+  label: string;
+  color: string;
+}
+
 interface DataSet {
   title: string;
   description: string;
   unit: string;
   data: DataPoint[];
   columns: { key: string; label: string }[];
-  chartKey: string;
-  color: string;
+  chartType: 'bar' | 'line';
+  chartSeries: ChartSeries[];
 }
 
-function SimpleBarChart({ data, valueKey, color, unit }: { 
+function SimpleBarChart({ data, series, unit }: { 
   data: DataPoint[]; 
-  valueKey: string; 
-  color: string;
+  series: ChartSeries[];
   unit: string;
 }) {
+  const valueKey = series[0].key;
+  const color = series[0].color;
   const values = data.map(d => {
     const val = d[valueKey];
     return typeof val === 'number' ? val : 0;
@@ -102,7 +109,6 @@ function SimpleBarChart({ data, valueKey, color, unit }: {
             />
           );
         })}
-        {/* Year labels - show every 5 years */}
         {data.filter((_, i) => i % 5 === 0 || i === data.length - 1).map((d) => {
           const originalIndex = data.findIndex(x => x.year === d.year);
           return (
@@ -119,6 +125,105 @@ function SimpleBarChart({ data, valueKey, color, unit }: {
           );
         })}
       </svg>
+      <p className={styles.chartUnit}>{unit}</p>
+    </div>
+  );
+}
+
+function MultiLineChart({ data, series, unit }: { 
+  data: DataPoint[]; 
+  series: ChartSeries[];
+  unit: string;
+}) {
+  const chartHeight = 140;
+  const chartWidth = 600;
+  const padding = { top: 10, right: 20, bottom: 30, left: 10 };
+  const innerWidth = chartWidth - padding.left - padding.right;
+  const innerHeight = chartHeight - padding.top - padding.bottom;
+
+  // Find max value across all series
+  let maxValue = 0;
+  series.forEach(s => {
+    data.forEach(d => {
+      const val = d[s.key];
+      if (typeof val === 'number' && val > maxValue) {
+        maxValue = val;
+      }
+    });
+  });
+
+  // Generate points for each series
+  const generatePath = (seriesKey: string) => {
+    const points = data.map((d, i) => {
+      const val = typeof d[seriesKey] === 'number' ? d[seriesKey] as number : 0;
+      const x = padding.left + (i / (data.length - 1)) * innerWidth;
+      const y = padding.top + innerHeight - (maxValue > 0 ? (val / maxValue) * innerHeight : 0);
+      return `${x},${y}`;
+    });
+    return `M ${points.join(' L ')}`;
+  };
+
+  return (
+    <div className={styles.chartContainer}>
+      <svg 
+        viewBox={`0 0 ${chartWidth} ${chartHeight}`} 
+        className={styles.chart}
+        preserveAspectRatio="xMidYMid meet"
+      >
+        {/* Grid lines */}
+        {[0, 0.25, 0.5, 0.75, 1].map((pct, i) => (
+          <line
+            key={i}
+            x1={padding.left}
+            x2={chartWidth - padding.right}
+            y1={padding.top + innerHeight * (1 - pct)}
+            y2={padding.top + innerHeight * (1 - pct)}
+            stroke="#e9ecef"
+            strokeWidth={1}
+          />
+        ))}
+        
+        {/* Lines */}
+        {series.map(s => (
+          <path
+            key={s.key}
+            d={generatePath(s.key)}
+            fill="none"
+            stroke={s.color}
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        ))}
+        
+        {/* Year labels */}
+        {data.filter((_, i) => i % 5 === 0 || i === data.length - 1).map((d, idx) => {
+          const originalIndex = data.findIndex(x => x.year === d.year);
+          const x = padding.left + (originalIndex / (data.length - 1)) * innerWidth;
+          return (
+            <text
+              key={d.year}
+              x={x}
+              y={chartHeight - 5}
+              textAnchor="middle"
+              fontSize="8"
+              fill="#6c757d"
+            >
+              {d.year}
+            </text>
+          );
+        })}
+      </svg>
+      
+      {/* Legend */}
+      <div className={styles.legend}>
+        {series.map(s => (
+          <div key={s.key} className={styles.legendItem}>
+            <span className={styles.legendColor} style={{ backgroundColor: s.color }} />
+            <span className={styles.legendLabel}>{s.label}</span>
+          </div>
+        ))}
+      </div>
       <p className={styles.chartUnit}>{unit}</p>
     </div>
   );
@@ -197,8 +302,8 @@ export function DataSources() {
               { key: 'year', label: 'Rok' },
               { key: 'value', label: 'Dluh (mld Kč)' },
             ],
-            chartKey: 'value',
-            color: '#c41e3a',
+            chartType: 'bar',
+            chartSeries: [{ key: 'value', label: 'Státní dluh', color: '#c41e3a' }],
           },
           {
             title: 'HDP České republiky',
@@ -212,8 +317,8 @@ export function DataSources() {
               { key: 'year', label: 'Rok' },
               { key: 'value', label: 'HDP (mld Kč)' },
             ],
-            chartKey: 'value',
-            color: '#2c7a7b',
+            chartType: 'bar',
+            chartSeries: [{ key: 'value', label: 'HDP', color: '#2c7a7b' }],
           },
           {
             title: 'Míra inflace',
@@ -227,8 +332,8 @@ export function DataSources() {
               { key: 'year', label: 'Rok' },
               { key: 'value', label: 'Inflace (%)' },
             ],
-            chartKey: 'value',
-            color: '#e67e22',
+            chartType: 'bar',
+            chartSeries: [{ key: 'value', label: 'Inflace', color: '#e67e22' }],
           },
           {
             title: 'Úrokové náklady státního dluhu',
@@ -242,8 +347,8 @@ export function DataSources() {
               { key: 'year', label: 'Rok' },
               { key: 'value', label: 'Úroky (mld Kč)' },
             ],
-            chartKey: 'value',
-            color: '#9d4edd',
+            chartType: 'bar',
+            chartSeries: [{ key: 'value', label: 'Úroky', color: '#9d4edd' }],
           },
           {
             title: 'Počet obyvatel ČR',
@@ -259,8 +364,8 @@ export function DataSources() {
               { key: 'population', label: 'Celkem (mil.)' },
               { key: 'workingAge', label: 'Produkt. věk (mil.)' },
             ],
-            chartKey: 'population',
-            color: '#3498db',
+            chartType: 'bar',
+            chartSeries: [{ key: 'population', label: 'Obyvatelstvo', color: '#3498db' }],
           },
           {
             title: 'Průměrná a minimální mzda',
@@ -280,8 +385,13 @@ export function DataSources() {
               { key: 'minimumGross', label: 'Min. hrubá' },
               { key: 'minimumNet', label: 'Min. čistá' },
             ],
-            chartKey: 'averageGross',
-            color: '#27ae60',
+            chartType: 'line',
+            chartSeries: [
+              { key: 'averageGross', label: 'Průměrná hrubá', color: '#27ae60' },
+              { key: 'averageNet', label: 'Průměrná čistá', color: '#2ecc71' },
+              { key: 'minimumGross', label: 'Minimální hrubá', color: '#e74c3c' },
+              { key: 'minimumNet', label: 'Minimální čistá', color: '#f39c12' },
+            ],
           },
           {
             title: 'Cena benzínu Natural 95',
@@ -295,8 +405,8 @@ export function DataSources() {
               { key: 'year', label: 'Rok' },
               { key: 'value', label: 'Cena (Kč/l)' },
             ],
-            chartKey: 'value',
-            color: '#f39c12',
+            chartType: 'bar',
+            chartSeries: [{ key: 'value', label: 'Benzín', color: '#f39c12' }],
           },
           {
             title: 'Náklady na výstavbu infrastruktury',
@@ -314,8 +424,12 @@ export function DataSources() {
               { key: 'hospital', label: 'Nemocnice (mil.)' },
               { key: 'school', label: 'Škola (mil.)' },
             ],
-            chartKey: 'hospital',
-            color: '#8e44ad',
+            chartType: 'line',
+            chartSeries: [
+              { key: 'hospital', label: 'Nemocnice', color: '#9b59b6' },
+              { key: 'highwayKm', label: 'Dálnice (km)', color: '#3498db' },
+              { key: 'school', label: 'Škola', color: '#1abc9c' },
+            ],
           },
           {
             title: 'Ceny potravin',
@@ -337,8 +451,14 @@ export function DataSources() {
               { key: 'potatoes', label: 'Brambory (Kč/kg)' },
               { key: 'beer', label: 'Pivo (Kč/0.5l)' },
             ],
-            chartKey: 'bread',
-            color: '#d35400',
+            chartType: 'line',
+            chartSeries: [
+              { key: 'butter', label: 'Máslo (kg)', color: '#f1c40f' },
+              { key: 'bread', label: 'Chléb (kg)', color: '#d35400' },
+              { key: 'eggs', label: 'Vejce (10ks)', color: '#e74c3c' },
+              { key: 'potatoes', label: 'Brambory (kg)', color: '#27ae60' },
+              { key: 'beer', label: 'Pivo (0.5l)', color: '#3498db' },
+            ],
           },
         ];
 
@@ -378,12 +498,19 @@ export function DataSources() {
                 <h3 className={styles.dataSetTitle}>{dataSet.title}</h3>
                 <p className={styles.dataSetDescription}>{dataSet.description}</p>
                 
-                <SimpleBarChart 
-                  data={dataSet.data} 
-                  valueKey={dataSet.chartKey} 
-                  color={dataSet.color}
-                  unit={dataSet.unit}
-                />
+                {dataSet.chartType === 'line' ? (
+                  <MultiLineChart 
+                    data={dataSet.data} 
+                    series={dataSet.chartSeries}
+                    unit={dataSet.unit}
+                  />
+                ) : (
+                  <SimpleBarChart 
+                    data={dataSet.data} 
+                    series={dataSet.chartSeries}
+                    unit={dataSet.unit}
+                  />
+                )}
                 
                 <DataTable data={dataSet.data} columns={dataSet.columns} />
               </div>

@@ -150,6 +150,33 @@
   margin: 0.5rem 0 0 0;
 }
 
+/* Legend for multi-line charts */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.legendColor {
+  width: 12px;
+  height: 3px;
+  border-radius: 1px;
+}
+
+.legendLabel {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.7rem;
+  color: var(--color-text, #1a1a2e);
+}
+
 /* Table */
 .tableContainer {
   overflow-x: auto;
