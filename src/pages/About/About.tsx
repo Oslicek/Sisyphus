@@ -19,7 +19,7 @@ export function About() {
         
         <p className={styles.text}>
           Naším cílem je zpřístupnit objektivní data o státním dluhu v atraktivní 
-          formě a podpořit otevřenou a věcnou debatu o této společné výzvě.
+          formě a podpořit tak otevřenou a věcnou debatu o této společné výzvě.
         </p>
 
         <blockquote className={styles.quote}>

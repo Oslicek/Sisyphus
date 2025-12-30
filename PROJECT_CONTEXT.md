@@ -1,10 +1,12 @@
 # Project Context
 
-> **Last Updated:** 2025-12-30 (updated)
+> **Last Updated:** 2025-12-30
 
 ## Overview
 
 **Sisyphus** is a Czech Republic government debt visualization web application. It displays a real-time debt counter and interactive historical debt chart with multiple visualization modes. Served as a static site with unlimited scaling capacity. All data processing happens client-side. The application is in Czech language.
+
+**Tagline:** Státní dluh – náš společný balvan
 
 **Motto:** „Ať ho tlačíš, nebo ženeš, Sisyfe — balvan se vždy vrací." (Ovidius)
 
@@ -186,7 +188,10 @@ sisyphus/
 │   │   └── unitConversions.test.ts
 │   ├── types/
 │   │   └── debt.ts             # TypeScript interfaces
-│   ├── App.tsx                 # Main app with data sources footer
+│   ├── assets/
+│   │   ├── sisyfos-logo-200x200.png  # Logo for main page
+│   │   └── sisyfos-logo-400x400.png  # Logo for About page
+│   ├── App.tsx                 # Main app with logo, tagline, footer
 │   ├── App.module.css
 │   ├── main.tsx
 │   └── index.css               # Global styles, light theme
@@ -339,9 +344,11 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Screenshot capture and share (Web Share API) / download
 - [x] BuyCalculator wizard - "What can I buy with my debt share"
 - [x] Multi-page app with react-router-dom
-- [x] About page (O projektu Sisyfos)
+- [x] About page (O projektu Sisyfos) with centered logo
 - [x] Data Sources page with data series tables, bar/line charts, grid lines, axes
 - [x] TDD: 105 tests, 100% coverage
+- [x] Project logo with tagline (responsive sizing)
+- [x] Logo links to About page
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates
