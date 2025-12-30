@@ -1,30 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Sisyfos icon: figure pushing coin. Designed to stay recognizable at 16–64px. -->
+<!-- Sisyfos icon (bold): bigger, more symbolic, visible on light & dark backgrounds via halo stroke. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="Sisyfos icon">
   <defs>
     <style>
-      .stroke{fill:none;stroke:#0B1C3B;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+      .halo{fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+      .main{fill:none;stroke:#0B1C3B;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
     </style>
     <clipPath id="coinClip">
-      <circle cx="16.6" cy="9.2" r="4.3"/>
+      <circle cx="16.8" cy="8.2" r="5.4"/>
     </clipPath>
   </defs>
 
-  <!-- Coin (outline) -->
-  <circle class="stroke" cx="16.6" cy="9.2" r="4.3"/>
+  <!-- COIN -->
+  <circle class="halo" cx="16.8" cy="8.2" r="5.4"/>
+  <circle class="main" cx="16.8" cy="8.2" r="5.4"/>
 
-  <!-- Coin color hint: three big wedges for legibility -->
+  <!-- Tricolor wedges -->
   <g clip-path="url(#coinClip)">
-    <path d="M16.6 9.2 L16.6 4.9 A4.3 4.3 0 0 0 12.9 7.1 Z" fill="#11457E"/>
-    <path d="M16.6 9.2 L12.9 7.1 A4.3 4.3 0 0 0 16.6 13.5 Z" fill="#FFFFFF"/>
-    <path d="M16.6 9.2 L16.6 13.5 A4.3 4.3 0 0 0 20.9 9.2 Z" fill="#D7141A"/>
+    <path d="M16.8 8.2 L16.8 2.8 A5.4 5.4 0 0 0 12.2 5.4 Z" fill="#11457E"/>
+    <path d="M16.8 8.2 L12.2 5.4 A5.4 5.4 0 0 0 16.8 13.6 Z" fill="#FFFFFF"/>
+    <path d="M16.8 8.2 L16.8 13.6 A5.4 5.4 0 0 0 22.2 8.2 Z" fill="#D7141A"/>
   </g>
 
-  <!-- Figure (minimal, leaning forward) -->
-  <circle class="stroke" cx="8.2" cy="7.8" r="1.2"/>
-  <path class="stroke" d="M8.5 9.2 L9.4 13.0"/>
-  <path class="stroke" d="M9.4 13.0 L7.2 18.0"/>
-  <path class="stroke" d="M9.4 13.0 L11.4 17.6"/>
-  <path class="stroke" d="M9.0 10.6 L12.5 9.7 L13.0 9.5"/>
-</svg>
+  <!-- FIGURE -->
+  <circle class="halo" cx="7.4" cy="9.0" r="1.45"/>
+  <circle class="main" cx="7.4" cy="9.0" r="1.45"/>
 
+  <path class="halo" d="M8.0 10.6 L10.3 15.2"/>
+  <path class="main" d="M8.0 10.6 L10.3 15.2"/>
+
+  <path class="halo" d="M10.3 15.2 L7.6 20.6"/>
+  <path class="main" d="M10.3 15.2 L7.6 20.6"/>
+
+  <path class="halo" d="M10.3 15.2 L12.6 20.4"/>
+  <path class="main" d="M10.3 15.2 L12.6 20.4"/>
+
+  <path class="halo" d="M9.0 12.2 L12.8 10.3 L13.7 9.9"/>
+  <path class="main" d="M9.0 12.2 L12.8 10.3 L13.7 9.9"/>
+
+  <path class="halo" d="M13.7 9.9 L14.2 9.7"/>
+  <path class="main" d="M13.7 9.9 L14.2 9.7"/>
+</svg>
