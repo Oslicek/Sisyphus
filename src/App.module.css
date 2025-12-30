@@ -29,52 +29,37 @@
   gap: 2rem;
 }
 
-/* Footer with data sources */
+/* Footer with navigation links */
 .footer {
   margin-top: 3rem;
   padding: 1.5rem;
-  border-top: 1px solid var(--color-text-muted);
-  opacity: 0.8;
+  border-top: 1px solid var(--color-bg-subtle, #e9ecef);
 }
 
-.footerTitle {
-  font-family: 'Source Sans 3', system-ui, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0 0 0.75rem 0;
-}
-
-.sourcesList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.footerNav {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
 }
 
-.sourceItem {
+.footerLink {
   font-family: 'Source Sans 3', system-ui, sans-serif;
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-}
-
-.sourceName {
+  font-size: 0.95rem;
   font-weight: 500;
-}
-
-.sourceLink {
-  color: var(--color-accent);
+  color: var(--color-text-muted, #6c757d);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.sourceLink:hover {
-  color: var(--color-accent-secondary);
-  text-decoration: underline;
+.footerLink:hover {
+  color: var(--color-accent, #c41e3a);
+}
+
+.footerSeparator {
+  color: var(--color-text-muted, #6c757d);
+  opacity: 0.5;
 }
 
 /* Mobile: reduce spacing between sections */
@@ -96,5 +81,8 @@
     margin-top: 1.5rem;
     padding: 1rem;
   }
+  
+  .footerLink {
+    font-size: 0.85rem;
+  }
 }
-

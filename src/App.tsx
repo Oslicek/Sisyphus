@@ -1,58 +1,13 @@
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { DebtCounter } from './components/DebtCounter';
 import { DebtChart } from './components/DebtChart';
 import { BuyCalculator } from './components/BuyCalculator';
 import { ShareButtons } from './components/ShareButtons';
+import { About } from './pages/About';
+import { DataSources } from './pages/DataSources';
 import styles from './App.module.css';
 
-const DATA_SOURCES = [
-  {
-    name: 'Státní dluh ČR',
-    source: 'Ministerstvo financí ČR',
-    url: 'https://www.mfcr.cz/cs/rozpoctova-politika/makroekonomika/statistika-vladniho-sektoru/2025/ctvrtletni-prehledy-o-stavu-a-vyvoji-statniho-dluh-61526',
-  },
-  {
-    name: 'Seznam vlád Česka',
-    source: 'Wikipedia',
-    url: 'https://cs.wikipedia.org/wiki/Seznam_vlád_Česka',
-  },
-  {
-    name: 'Rozpočtové plány',
-    source: 'Ministerstvo financí ČR',
-    url: 'https://www.mfcr.cz/',
-  },
-  {
-    name: 'Inflace a HDP',
-    source: 'Český statistický úřad (ČSÚ)',
-    url: 'https://www.czso.cz/',
-  },
-  {
-    name: 'Demografická data',
-    source: 'Český statistický úřad (ČSÚ)',
-    url: 'https://csu.gov.cz/produkty/obyvatelstvo_hu',
-  },
-  {
-    name: 'Mzdová data',
-    source: 'ČSÚ, MPSV',
-    url: 'https://www.czso.cz/csu/czso/prace_a_mzdy_prace',
-  },
-  {
-    name: 'Cenová data (dálnice, nemocnice, školy, benzín)',
-    source: 'ČSÚ, ŘSD, MZ ČR, MŠMT',
-    url: 'https://www.czso.cz/',
-  },
-  {
-    name: 'Ceny potravin',
-    source: 'Český statistický úřad (ČSÚ)',
-    url: 'https://csu.gov.cz/vyvoj-prumernych-cen-vybranych-potravin-2024',
-  },
-  {
-    name: 'Náklady dluhové služby',
-    source: 'Ministerstvo financí ČR',
-    url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu',
-  },
-];
-
-function App() {
+function Home() {
   return (
     <div className={styles.app}>
       <p className={styles.motto}>
@@ -70,24 +25,29 @@ function App() {
       <ShareButtons />
 
       <footer className={styles.footer}>
-        <h3 className={styles.footerTitle}>Zdroje dat</h3>
-        <ul className={styles.sourcesList}>
-          {DATA_SOURCES.map((source, index) => (
-            <li key={index} className={styles.sourceItem}>
-              <span className={styles.sourceName}>{source.name}:</span>{' '}
-              <a 
-                href={source.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className={styles.sourceLink}
-              >
-                {source.source}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <nav className={styles.footerNav}>
+          <Link to="/o-projektu" className={styles.footerLink}>
+            O projektu Sisyfos
+          </Link>
+          <span className={styles.footerSeparator}>•</span>
+          <Link to="/zdroje-dat" className={styles.footerLink}>
+            Zdroje dat a datové řady
+          </Link>
+        </nav>
       </footer>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/o-projektu" element={<About />} />
+        <Route path="/zdroje-dat" element={<DataSources />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
