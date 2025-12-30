@@ -3,6 +3,66 @@
   flex-direction: column;
   min-height: 100vh;
   padding: 1rem;
+  position: relative;
+}
+
+/* Logo in top left corner */
+.logoContainer {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  display: block;
+}
+
+.logoImage {
+  width: 200px;
+  height: 200px;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.logoImage:hover {
+  opacity: 1;
+}
+
+.logoTagline {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a2a5e;
+  text-align: center;
+  margin: 0.5rem 0 0 0;
+  white-space: nowrap;
+}
+
+/* Medium screens: smaller logo */
+@media (max-width: 1200px) {
+  .logoImage {
+    width: 120px;
+    height: 120px;
+  }
+
+  .logoTagline {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .logoImage {
+    width: 80px;
+    height: 80px;
+  }
+
+  .logoTagline {
+    font-size: 0.65rem;
+  }
 }
 
 .motto {
@@ -66,6 +126,20 @@
 @media (max-width: 600px) {
   .app {
     padding: 0.5rem;
+  }
+
+  .logoContainer {
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+
+  .logoImage {
+    width: 50px;
+    height: 50px;
+  }
+
+  .logoTagline {
+    display: none;
   }
   
   .motto {

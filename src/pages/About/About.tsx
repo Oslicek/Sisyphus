@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import sisyfosLogo from '../../assets/sisyfos-logo-400x400.png';
 import styles from './About.module.css';
 
 export function About() {
@@ -8,13 +9,17 @@ export function About() {
         <Link to="/" className={styles.backLink}>← Zpět na hlavní stránku</Link>
       </header>
 
+      <div className={styles.logoSection}>
+        <img src={sisyfosLogo} alt="Projekt Sisyfos" className={styles.logo} />
+        <p className={styles.tagline}>Státní dluh – náš společný balvan</p>
+      </div>
+
       <main className={styles.main}>
         <h1 className={styles.title}>O projektu Sisyfos</h1>
         
         <p className={styles.text}>
-          Cílem projektu Sisyfos je prezentovat objektivní data o státním dluhu 
-          přístupnou a zábavnou formou a tak podpořit veřejnou debatu o tomto 
-          našem společném balvanu.
+          Naším cílem je zpřístupnit objektivní data o státním dluhu v atraktivní 
+          formě a podpořit otevřenou a věcnou debatu o této společné výzvě.
         </p>
 
         <blockquote className={styles.quote}>

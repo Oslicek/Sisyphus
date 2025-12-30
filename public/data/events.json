@@ -2,6 +2,18 @@
   "description": "Významné události ovlivňující státní dluh",
   "events": [
     {
+      "id": "floods1",
+      "name": "Povodně",
+      "date": "2002-08-01",
+      "year": 2008
+    },
+    {
+      "id": "eu",
+      "name": "Vstup do EU",
+      "date": "2004-05-01",
+      "year": 2008
+    },
+    {
       "id": "lehman",
       "name": "Bankrot Lehman Brothers",
       "date": "2008-09-15",

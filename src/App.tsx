@@ -5,11 +5,19 @@ import { BuyCalculator } from './components/BuyCalculator';
 import { ShareButtons } from './components/ShareButtons';
 import { About } from './pages/About';
 import { DataSources } from './pages/DataSources';
+import sisyfosLogo from './assets/sisyfos-logo-200x200.png';
 import styles from './App.module.css';
 
 function Home() {
   return (
     <div className={styles.app}>
+      <div className={styles.logoContainer}>
+        <Link to="/o-projektu" className={styles.logo}>
+          <img src={sisyfosLogo} alt="Sisyfos" className={styles.logoImage} />
+        </Link>
+        <p className={styles.logoTagline}>Státní dluh – náš společný balvan</p>
+      </div>
+
       <p className={styles.motto}>
         „Ať ho tlačíš, nebo ženeš, Sisyfe — balvan se vždy vrací."
         <span className={styles.mottoAuthor}>(Ovidius)</span>
