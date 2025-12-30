@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2025-12-29
+> **Last Updated:** 2025-12-30
 
 ## Overview
 
@@ -18,6 +18,7 @@
 | Styling | CSS Modules |
 | Charts | D3.js |
 | Sharing | react-share, html2canvas |
+| Routing | react-router-dom |
 | Fonts | Bebas Neue, Crimson Pro, Source Sans 3, JetBrains Mono (OFL) |
 | Hosting | Cloudflare Pages |
 | Data Storage | Static JSON files (public/data/) |
@@ -146,9 +147,22 @@ sisyphus/
 │   │   │   ├── DebtChart.tsx
 │   │   │   ├── DebtChart.module.css
 │   │   │   └── index.ts
-│   │   └── ShareButtons/       # Social sharing + screenshot
-│   │       ├── ShareButtons.tsx
-│   │       ├── ShareButtons.module.css
+│   │   ├── ShareButtons/       # Social sharing + screenshot
+│   │   │   ├── ShareButtons.tsx
+│   │   │   ├── ShareButtons.module.css
+│   │   │   └── index.ts
+│   │   └── BuyCalculator/      # "What can I buy" wizard
+│   │       ├── BuyCalculator.tsx
+│   │       ├── BuyCalculator.module.css
+│   │       └── index.ts
+│   ├── pages/
+│   │   ├── About/              # O projektu Sisyfos
+│   │   │   ├── About.tsx
+│   │   │   ├── About.module.css
+│   │   │   └── index.ts
+│   │   └── DataSources/        # Datové řady a zdroje dat
+│   │       ├── DataSources.tsx
+│   │       ├── DataSources.module.css
 │   │       └── index.ts
 │   ├── config/
 │   │   ├── graphVariants.ts    # Graph variant definitions
@@ -204,6 +218,9 @@ sisyphus/
 | `DebtCounter` | src/components/DebtCounter/ | Real-time debt display with Kč |
 | `DebtChart` | src/components/DebtChart/ | D3.js interactive chart with variants |
 | `ShareButtons` | src/components/ShareButtons/ | Social sharing + screenshot capture |
+| `BuyCalculator` | src/components/BuyCalculator/ | "What can I buy with my debt share" wizard |
+| `About` | src/pages/About/ | O projektu Sisyfos page |
+| `DataSources` | src/pages/DataSources/ | Datové řady a zdroje dat page |
 | `useDebtCounter` | src/hooks/ | Fetches anchor, computes & updates every second |
 | `useHistoricalDebt` | src/hooks/ | Fetches all JSON data files |
 | `calculations.ts` | src/utils/ | Deficit per second, elapsed time, current debt |
@@ -320,6 +337,10 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Responsive design (up to 2400px width)
 - [x] Social sharing buttons (Facebook, X, LinkedIn, WhatsApp, Telegram, Viber, Reddit, Email)
 - [x] Screenshot capture and share (Web Share API) / download
+- [x] BuyCalculator wizard - "What can I buy with my debt share"
+- [x] Multi-page app with react-router-dom
+- [x] About page (O projektu Sisyfos)
+- [x] Data Sources page with all data series tables and charts
 - [x] TDD: 105 tests, 100% coverage
 
 **Pending:**

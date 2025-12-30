@@ -39,6 +39,11 @@ const DATA_SOURCES_INFO = [
     url: 'https://www.czso.cz/',
   },
   {
+    name: 'Ceny potravin',
+    source: 'Český statistický úřad (ČSÚ)',
+    url: 'https://csu.gov.cz/vyvoj-prumernych-cen-vybranych-potravin-2024',
+  },
+  {
     name: 'Náklady dluhové služby',
     source: 'Ministerstvo financí ČR',
     url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu',
@@ -98,7 +103,7 @@ function SimpleBarChart({ data, valueKey, color, unit }: {
           );
         })}
         {/* Year labels - show every 5 years */}
-        {data.filter((_, i) => i % 5 === 0 || i === data.length - 1).map((d, idx, arr) => {
+        {data.filter((_, i) => i % 5 === 0 || i === data.length - 1).map((d) => {
           const originalIndex = data.findIndex(x => x.year === d.year);
           return (
             <text
@@ -159,18 +164,24 @@ export function DataSources() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [debtRes, economicRes, interestRes, demographicRes] = await Promise.all([
+        const [debtRes, economicRes, interestRes, demographicRes, priceRes, foodRes, wageRes] = await Promise.all([
           fetch('/data/debt-historical.json'),
           fetch('/data/economic-data.json'),
           fetch('/data/debt-interest.json'),
           fetch('/data/demographic-data.json'),
+          fetch('/data/price-data.json'),
+          fetch('/data/food-prices.json'),
+          fetch('/data/wage-data.json'),
         ]);
 
-        const [debtData, economicData, interestData, demographicData] = await Promise.all([
+        const [debtData, economicData, interestData, demographicData, priceData, foodData, wageData] = await Promise.all([
           debtRes.json(),
           economicRes.json(),
           interestRes.json(),
           demographicRes.json(),
+          priceRes.json(),
+          foodRes.json(),
+          wageRes.json(),
         ]);
 
         const sets: DataSet[] = [
@@ -251,6 +262,84 @@ export function DataSources() {
             chartKey: 'population',
             color: '#3498db',
           },
+          {
+            title: 'Průměrná a minimální mzda',
+            description: 'Průměrná a minimální měsíční mzda (hrubá a čistá)',
+            unit: 'Kč/měsíc',
+            data: wageData.data.map((d: { year: number; averageGross: number; averageNet: number; minimumGross: number; minimumNet: number }) => ({
+              year: d.year,
+              averageGross: d.averageGross,
+              averageNet: d.averageNet,
+              minimumGross: d.minimumGross,
+              minimumNet: d.minimumNet,
+            })),
+            columns: [
+              { key: 'year', label: 'Rok' },
+              { key: 'averageGross', label: 'Prům. hrubá' },
+              { key: 'averageNet', label: 'Prům. čistá' },
+              { key: 'minimumGross', label: 'Min. hrubá' },
+              { key: 'minimumNet', label: 'Min. čistá' },
+            ],
+            chartKey: 'averageGross',
+            color: '#27ae60',
+          },
+          {
+            title: 'Cena benzínu Natural 95',
+            description: 'Průměrná roční cena benzínu Natural 95',
+            unit: 'Kč/litr',
+            data: priceData.data.map((d: { year: number; petrol95: number }) => ({
+              year: d.year,
+              value: d.petrol95,
+            })),
+            columns: [
+              { key: 'year', label: 'Rok' },
+              { key: 'value', label: 'Cena (Kč/l)' },
+            ],
+            chartKey: 'value',
+            color: '#f39c12',
+          },
+          {
+            title: 'Náklady na výstavbu infrastruktury',
+            description: 'Průměrné náklady na výstavbu 1 km dálnice, regionální nemocnice a základní školy',
+            unit: 'mil. Kč',
+            data: priceData.data.map((d: { year: number; highwayKm: number; hospital: number; school: number }) => ({
+              year: d.year,
+              highwayKm: d.highwayKm,
+              hospital: d.hospital,
+              school: d.school,
+            })),
+            columns: [
+              { key: 'year', label: 'Rok' },
+              { key: 'highwayKm', label: 'Dálnice (mil./km)' },
+              { key: 'hospital', label: 'Nemocnice (mil.)' },
+              { key: 'school', label: 'Škola (mil.)' },
+            ],
+            chartKey: 'hospital',
+            color: '#8e44ad',
+          },
+          {
+            title: 'Ceny potravin',
+            description: 'Průměrné ceny vybraných potravin (data od roku 2006)',
+            unit: 'Kč',
+            data: foodData.data.map((d: { year: number; bread: number; eggs: number; butter: number; potatoes: number; beer: number }) => ({
+              year: d.year,
+              bread: d.bread,
+              eggs: d.eggs,
+              butter: d.butter,
+              potatoes: d.potatoes,
+              beer: d.beer,
+            })),
+            columns: [
+              { key: 'year', label: 'Rok' },
+              { key: 'bread', label: 'Chléb (Kč/kg)' },
+              { key: 'eggs', label: 'Vejce (Kč/10ks)' },
+              { key: 'butter', label: 'Máslo (Kč/kg)' },
+              { key: 'potatoes', label: 'Brambory (Kč/kg)' },
+              { key: 'beer', label: 'Pivo (Kč/0.5l)' },
+            ],
+            chartKey: 'bread',
+            color: '#d35400',
+          },
         ];
 
         setDataSets(sets);
@@ -271,31 +360,12 @@ export function DataSources() {
       </header>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Zdroje dat a datové řady</h1>
+        <h1 className={styles.title}>Datové řady a zdroje dat</h1>
         
         <p className={styles.intro}>
           Všechna data použitá v projektu Sisyfos pochází z veřejně dostupných 
           zdrojů státních institucí a statistických úřadů.
         </p>
-
-        <section className={styles.sourcesSection}>
-          <h2 className={styles.sectionTitle}>Zdroje dat</h2>
-          <ul className={styles.sourcesList}>
-            {DATA_SOURCES_INFO.map((source, index) => (
-              <li key={index} className={styles.sourceItem}>
-                <span className={styles.sourceName}>{source.name}</span>
-                <a 
-                  href={source.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className={styles.sourceLink}
-                >
-                  {source.source} →
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
 
         <section className={styles.dataSection}>
           <h2 className={styles.sectionTitle}>Datové řady</h2>
@@ -319,6 +389,25 @@ export function DataSources() {
               </div>
             ))
           )}
+        </section>
+
+        <section className={styles.sourcesSection}>
+          <h2 className={styles.sectionTitle}>Zdroje dat</h2>
+          <ul className={styles.sourcesList}>
+            {DATA_SOURCES_INFO.map((source, index) => (
+              <li key={index} className={styles.sourceItem}>
+                <span className={styles.sourceName}>{source.name}</span>
+                <a 
+                  href={source.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={styles.sourceLink}
+                >
+                  {source.source} →
+                </a>
+              </li>
+            ))}
+          </ul>
         </section>
       </main>
 

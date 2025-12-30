@@ -31,7 +31,7 @@ function Home() {
           </Link>
           <span className={styles.footerSeparator}>•</span>
           <Link to="/zdroje-dat" className={styles.footerLink}>
-            Zdroje dat a datové řady
+            Datové řady a zdroje dat
           </Link>
         </nav>
       </footer>
