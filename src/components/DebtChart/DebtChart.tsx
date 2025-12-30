@@ -793,18 +793,37 @@ export function DebtChart() {
 
       {/* Babiš budget info modal */}
       {showBabisInfoModal && (
-        <div className={styles.modalOverlay} onClick={() => {
-          setShowBabisInfoModal(false);
-          setActivePlan('babis');
-        }}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <div 
+          className={styles.modalOverlay} 
+          onClick={() => {
+            setShowBabisInfoModal(false);
+            setActivePlan('babis');
+          }}
+          onTouchEnd={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowBabisInfoModal(false);
+              setActivePlan('babis');
+            }
+          }}
+        >
+          <div 
+            className={styles.modalContent} 
+            onClick={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+          >
             <p className={styles.modalText}>
               Rozpočet Babišovy vlády a jeho plánovaný schodek zatím není znám. 
               Až bude zveřejněn, doplníme jej.
             </p>
             <button 
+              type="button"
               className={styles.modalButton}
               onClick={() => {
+                setShowBabisInfoModal(false);
+                setActivePlan('babis');
+              }}
+              onTouchEnd={(e) => {
+                e.preventDefault();
                 setShowBabisInfoModal(false);
                 setActivePlan('babis');
               }}
