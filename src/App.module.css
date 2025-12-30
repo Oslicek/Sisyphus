@@ -42,7 +42,7 @@
   white-space: nowrap;
 }
 
-/* Motto - centered on page (same approach as DebtCounter title) */
+/* Motto - centered on page with equal padding to clear logo */
 .motto {
   font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
   font-style: italic;
@@ -51,6 +51,9 @@
   text-align: center;
   line-height: 1.5;
   margin: 0 0 1rem 0;
+  /* Equal padding on both sides keeps text centered while clearing logo */
+  padding-left: 220px;
+  padding-right: 220px;
 }
 
 .mottoAuthor {
@@ -70,6 +73,11 @@
     font-size: 0.75rem;
   }
 
+  /* Add equal padding to clear logo and keep centered */
+  .motto {
+    padding-left: 140px;
+    padding-right: 140px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -80,6 +88,12 @@
 
   .logoTagline {
     font-size: 0.65rem;
+  }
+
+  /* Add equal padding to clear logo and keep centered */
+  .motto {
+    padding-left: 100px;
+    padding-right: 100px;
   }
 }
 
@@ -146,6 +160,9 @@
   .motto {
     margin-bottom: 0.5rem;
     font-size: 0.85rem;
+    /* Equal padding to clear logo and keep centered */
+    padding-left: 65px;
+    padding-right: 65px;
   }
   
   .main {
