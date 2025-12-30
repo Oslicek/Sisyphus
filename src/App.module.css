@@ -54,7 +54,7 @@
   }
 
   .motto {
-    padding-left: 140px;
+    margin-left: 140px;
   }
 }
 
@@ -69,7 +69,7 @@
   }
 
   .motto {
-    padding-left: 100px;
+    margin-left: 100px;
   }
 }
 
@@ -79,11 +79,11 @@
   font-size: clamp(0.9rem, 1.8vw, 1.1rem);
   color: var(--color-text-muted);
   text-align: center;
-  margin: 0 auto 1rem auto;
-  max-width: 600px;
   line-height: 1.5;
-  /* Leave space for the logo on the left */
-  padding-left: 220px;
+  /* Center in the space after the logo */
+  margin-left: 220px;
+  margin-right: 0;
+  margin-bottom: 1rem;
 }
 
 .mottoAuthor {
@@ -153,9 +153,9 @@
   }
   
   .motto {
+    margin-left: 60px;
     margin-bottom: 0.5rem;
     font-size: 0.85rem;
-    padding-left: 60px;
   }
   
   .main {

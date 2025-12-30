@@ -263,6 +263,43 @@
   padding-top: 0.25rem;
 }
 
+/* Section toggles for Governments and Events */
+.sectionToggles {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  padding: 0 1rem;
+}
+
+.sectionToggle {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.35rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sectionToggle:hover {
+  color: var(--color-text);
+}
+
+.sectionToggleActive {
+  color: var(--color-text);
+}
+
+.toggleIcon {
+  font-size: 0.6rem;
+  transition: transform 0.2s ease;
+}
+
 /* Budget plan switch */
 .planSwitch {
   display: flex;

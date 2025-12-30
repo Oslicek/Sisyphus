@@ -19,7 +19,9 @@ import styles from './DebtChart.module.css';
 const CHART_CONFIG = {
   marginTop: 20,
   marginRight: 20,
-  marginBottom: 160,
+  marginBottomBase: 25, // Just for years axis
+  marginBottomGovernments: 75, // Additional space for governments
+  marginBottomEvents: 60, // Additional space for events
   marginLeft: 70,
   barPadding: 0.2,
   minBarWidthForAllYears: 18,
@@ -59,6 +61,16 @@ export function DebtChart() {
   const [populationMode, setPopulationMode] = useState<PopulationMode>('country');
   const [metricUnit, setMetricUnit] = useState<MetricUnit>('czk');
   const [showBabisInfoModal, setShowBabisInfoModal] = useState(false);
+  
+  // Initialize collapsed state based on screen width (mobile = collapsed)
+  const [showGovernments, setShowGovernments] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return window.innerWidth > 768;
+  });
+  const [showEvents, setShowEvents] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return window.innerWidth > 768;
+  });
 
   const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, foodPriceData, interestData, isLoading, error } = useHistoricalDebt();
 
@@ -223,6 +235,14 @@ export function DebtChart() {
   const isPercentVariant = activeVariant.includes('gdp-percent');
   const isNonCzkMetric = metricUnit !== 'czk';
 
+  // Calculate dynamic margin bottom based on visible sections
+  const marginBottom = useMemo(() => {
+    let margin = CHART_CONFIG.marginBottomBase;
+    if (showGovernments) margin += CHART_CONFIG.marginBottomGovernments;
+    if (showEvents) margin += CHART_CONFIG.marginBottomEvents;
+    return margin;
+  }, [showGovernments, showEvents]);
+
   // Draw chart with D3
   useEffect(() => {
     if (!svgRef.current || displayData.length === 0) return;
@@ -231,7 +251,7 @@ export function DebtChart() {
     svg.selectAll('*').remove();
 
     const { width, height } = dimensions;
-    const { marginTop, marginRight, marginBottom, marginLeft, barPadding, minBarWidthForAllYears } = CHART_CONFIG;
+    const { marginTop, marginRight, marginLeft, barPadding, minBarWidthForAllYears } = CHART_CONFIG;
     const innerWidth = width - marginLeft - marginRight;
     const innerHeight = height - marginTop - marginBottom;
 
@@ -359,14 +379,17 @@ export function DebtChart() {
       .attr('stroke-width', 1.5)
       .attr('stroke-linecap', 'round');
 
-    // === LINE 2: Governments ===
+    // Date bounds for governments and events positioning
+    const chartStartDate = new Date(minYear, 0, 1);
+    const chartEndDate = new Date(maxYear, 11, 31);
+
+    // === LINE 2: Governments (collapsible) ===
+    if (showGovernments) {
     const governmentsGroup = g
       .append('g')
       .attr('transform', `translate(0,${innerHeight + 22})`);
 
     // Build government spans using precise dates
-    const chartStartDate = new Date(minYear, 0, 1);
-    const chartEndDate = new Date(maxYear, 11, 31);
     
     const govSpans: GovernmentSpan[] = governments
       .filter((gov) => {
@@ -475,11 +498,14 @@ export function DebtChart() {
         .attr('class', styles.governmentLabel)
         .text(span.gov.name);
     });
+    } // end showGovernments
 
-    // === LINE 3: Events ===
+    // === LINE 3: Events (collapsible) ===
+    if (showEvents) {
+    const eventsYOffset = innerHeight + 22 + (showGovernments ? CHART_CONFIG.marginBottomGovernments : 0);
     const eventsGroup = g
       .append('g')
-      .attr('transform', `translate(0,${innerHeight + 100})`);
+      .attr('transform', `translate(0,${eventsYOffset})`);
 
     // Draw a horizontal line for events timeline
     eventsGroup
@@ -564,6 +590,7 @@ export function DebtChart() {
         .attr('class', styles.eventLabel)
         .text(event.name);
     });
+    } // end showEvents
 
     // Y Axis
     const yAxis = d3
@@ -609,7 +636,7 @@ export function DebtChart() {
     yAxisGroup.selectAll('.tick text')
       .attr('class', styles.axisLabel);
 
-  }, [displayData, events, governments, parties, dimensions, isDeficitVariant, isPercentVariant, populationMode, metricUnit, isNonCzkMetric]);
+  }, [displayData, events, governments, parties, dimensions, isDeficitVariant, isPercentVariant, populationMode, metricUnit, isNonCzkMetric, showGovernments, showEvents, marginBottom]);
 
   const populationModeInfo = getPopulationModeInfo(populationMode);
   const metricUnitInfo = getMetricUnitInfo(metricUnit, populationMode);
@@ -739,6 +766,26 @@ export function DebtChart() {
           width={dimensions.width}
           height={dimensions.height}
         />
+      </div>
+
+      {/* Collapsible section toggles */}
+      <div className={styles.sectionToggles}>
+        <button
+          className={`${styles.sectionToggle} ${showGovernments ? styles.sectionToggleActive : ''}`}
+          onClick={() => setShowGovernments(!showGovernments)}
+          aria-expanded={showGovernments}
+        >
+          <span className={styles.toggleIcon}>{showGovernments ? '▼' : '▶'}</span>
+          Vlády
+        </button>
+        <button
+          className={`${styles.sectionToggle} ${showEvents ? styles.sectionToggleActive : ''}`}
+          onClick={() => setShowEvents(!showEvents)}
+          aria-expanded={showEvents}
+        >
+          <span className={styles.toggleIcon}>{showEvents ? '▼' : '▶'}</span>
+          Události
+        </button>
       </div>
       
       {/* Tooltip */}
