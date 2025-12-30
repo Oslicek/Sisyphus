@@ -71,6 +71,49 @@ interface DataSet {
   chartSeries: ChartSeries[];
 }
 
+// Helper function to determine which years to show as labels
+// Logic: show first year, 1995 (if in range), then every 5 years divisible by 5
+function getYearLabels(data: DataPoint[]): number[] {
+  if (data.length === 0) return [];
+  
+  const years = data.map(d => d.year);
+  const firstYear = years[0];
+  const lastYear = years[years.length - 1];
+  const labelYears: number[] = [];
+  
+  // Always include first year
+  labelYears.push(firstYear);
+  
+  // If data starts at 1993, include 1995
+  if (firstYear === 1993 && years.includes(1995)) {
+    labelYears.push(1995);
+  }
+  
+  // Add years divisible by 5
+  for (let year = Math.ceil(firstYear / 5) * 5; year <= lastYear; year += 5) {
+    if (years.includes(year) && !labelYears.includes(year)) {
+      labelYears.push(year);
+    }
+  }
+  
+  // Always include last year if not already included
+  if (!labelYears.includes(lastYear)) {
+    labelYears.push(lastYear);
+  }
+  
+  return labelYears.sort((a, b) => a - b);
+}
+
+// Format large numbers for axis labels
+function formatAxisValue(value: number): string {
+  if (value >= 1000000) {
+    return (value / 1000000).toFixed(1).replace('.0', '') + 'M';
+  } else if (value >= 1000) {
+    return (value / 1000).toFixed(1).replace('.0', '') + 'k';
+  }
+  return value.toFixed(0);
+}
+
 function SimpleBarChart({ data, series, unit }: { 
   data: DataPoint[]; 
   series: ChartSeries[];
@@ -84,24 +127,77 @@ function SimpleBarChart({ data, series, unit }: {
   });
   const maxValue = Math.max(...values);
   const chartHeight = 120;
-  const barWidth = Math.max(4, Math.min(12, 600 / data.length - 1));
-  const chartWidth = data.length * (barWidth + 1);
+  const topPadding = 8;
+  const leftPadding = 45;
+  const barWidth = Math.max(4, Math.min(12, (600 - leftPadding) / data.length - 1));
+  const chartWidth = leftPadding + data.length * (barWidth + 1);
+  
+  // Grid line values (0%, 25%, 50%, 75%, 100% of max)
+  const gridValues = [0, 0.25, 0.5, 0.75, 1].map(pct => maxValue * pct);
 
   return (
     <div className={styles.chartContainer}>
       <svg 
-        viewBox={`0 0 ${chartWidth} ${chartHeight + 20}`} 
+        viewBox={`0 0 ${chartWidth} ${chartHeight + topPadding + 20}`} 
         className={styles.chart}
         preserveAspectRatio="xMidYMid meet"
       >
+        {/* Horizontal grid lines with value labels */}
+        {gridValues.map((val, i) => {
+          const y = topPadding + chartHeight - (val / maxValue) * chartHeight;
+          return (
+            <g key={`grid-${i}`}>
+              <line
+                x1={leftPadding - 5}
+                x2={chartWidth}
+                y1={y}
+                y2={y}
+                stroke="#ced4da"
+                strokeWidth={1}
+                strokeDasharray="4 2"
+              />
+              <text
+                x={leftPadding - 8}
+                y={y + 3}
+                textAnchor="end"
+                fontSize="7"
+                fill="#6c757d"
+              >
+                {formatAxisValue(val)}
+              </text>
+            </g>
+          );
+        })}
+        
+        {/* X axis (solid) */}
+        <line
+          x1={leftPadding}
+          x2={chartWidth}
+          y1={topPadding + chartHeight}
+          y2={topPadding + chartHeight}
+          stroke="#495057"
+          strokeWidth={1}
+        />
+        
+        {/* Y axis (solid) */}
+        <line
+          x1={leftPadding}
+          x2={leftPadding}
+          y1={topPadding}
+          y2={topPadding + chartHeight}
+          stroke="#495057"
+          strokeWidth={1}
+        />
+        
+        {/* Bars */}
         {data.map((d, i) => {
           const val = typeof d[valueKey] === 'number' ? d[valueKey] as number : 0;
           const height = maxValue > 0 ? (val / maxValue) * chartHeight : 0;
           return (
             <rect
               key={d.year}
-              x={i * (barWidth + 1)}
-              y={chartHeight - height}
+              x={leftPadding + i * (barWidth + 1)}
+              y={topPadding + chartHeight - height}
               width={barWidth}
               height={height}
               fill={color}
@@ -109,21 +205,26 @@ function SimpleBarChart({ data, series, unit }: {
             />
           );
         })}
-        {data.filter((_, i) => i % 5 === 0 || i === data.length - 1).map((d) => {
-          const originalIndex = data.findIndex(x => x.year === d.year);
-          return (
-            <text
-              key={d.year}
-              x={originalIndex * (barWidth + 1) + barWidth / 2}
-              y={chartHeight + 14}
-              textAnchor="middle"
-              fontSize="8"
-              fill="#6c757d"
-            >
-              {d.year}
-            </text>
-          );
-        })}
+        
+        {/* Year labels */}
+        {(() => {
+          const labelYears = getYearLabels(data);
+          return data.filter(d => labelYears.includes(d.year)).map((d) => {
+            const originalIndex = data.findIndex(x => x.year === d.year);
+            return (
+              <text
+                key={d.year}
+                x={leftPadding + originalIndex * (barWidth + 1) + barWidth / 2}
+                y={topPadding + chartHeight + 14}
+                textAnchor="middle"
+                fontSize="8"
+                fill="#6c757d"
+              >
+                {d.year}
+              </text>
+            );
+          });
+        })()}
       </svg>
       <p className={styles.chartUnit}>{unit}</p>
     </div>
@@ -135,9 +236,9 @@ function MultiLineChart({ data, series, unit }: {
   series: ChartSeries[];
   unit: string;
 }) {
-  const chartHeight = 140;
+  const chartHeight = 145;
   const chartWidth = 600;
-  const padding = { top: 10, right: 20, bottom: 30, left: 10 };
+  const padding = { top: 15, right: 20, bottom: 30, left: 45 };
   const innerWidth = chartWidth - padding.left - padding.right;
   const innerHeight = chartHeight - padding.top - padding.bottom;
 
@@ -151,6 +252,9 @@ function MultiLineChart({ data, series, unit }: {
       }
     });
   });
+  
+  // Grid line values (0%, 25%, 50%, 75%, 100% of max)
+  const gridValues = [0, 0.25, 0.5, 0.75, 1].map(pct => maxValue * pct);
 
   // Generate points for each series
   const generatePath = (seriesKey: string) => {
@@ -170,18 +274,70 @@ function MultiLineChart({ data, series, unit }: {
         className={styles.chart}
         preserveAspectRatio="xMidYMid meet"
       >
-        {/* Grid lines */}
-        {[0, 0.25, 0.5, 0.75, 1].map((pct, i) => (
-          <line
-            key={i}
-            x1={padding.left}
-            x2={chartWidth - padding.right}
-            y1={padding.top + innerHeight * (1 - pct)}
-            y2={padding.top + innerHeight * (1 - pct)}
-            stroke="#e9ecef"
-            strokeWidth={1}
-          />
-        ))}
+        {/* Horizontal grid lines with value labels */}
+        {gridValues.map((val, i) => {
+          const y = padding.top + innerHeight - (val / maxValue) * innerHeight;
+          return (
+            <g key={`h-${i}`}>
+              <line
+                x1={padding.left - 5}
+                x2={chartWidth - padding.right}
+                y1={y}
+                y2={y}
+                stroke="#ced4da"
+                strokeWidth={1}
+                strokeDasharray="4 2"
+              />
+              <text
+                x={padding.left - 8}
+                y={y + 3}
+                textAnchor="end"
+                fontSize="7"
+                fill="#6c757d"
+              >
+                {formatAxisValue(val)}
+              </text>
+            </g>
+          );
+        })}
+        
+        {/* Vertical grid lines - every 5 years */}
+        {data.filter(d => d.year % 5 === 0).map((d) => {
+          const originalIndex = data.findIndex(x => x.year === d.year);
+          const x = padding.left + (originalIndex / (data.length - 1)) * innerWidth;
+          return (
+            <line
+              key={`v-${d.year}`}
+              x1={x}
+              x2={x}
+              y1={padding.top}
+              y2={padding.top + innerHeight}
+              stroke="#ced4da"
+              strokeWidth={1}
+              strokeDasharray="4 2"
+            />
+          );
+        })}
+        
+        {/* X axis (solid) */}
+        <line
+          x1={padding.left}
+          x2={chartWidth - padding.right}
+          y1={padding.top + innerHeight}
+          y2={padding.top + innerHeight}
+          stroke="#495057"
+          strokeWidth={1}
+        />
+        
+        {/* Y axis (solid) */}
+        <line
+          x1={padding.left}
+          x2={padding.left}
+          y1={padding.top}
+          y2={padding.top + innerHeight}
+          stroke="#495057"
+          strokeWidth={1}
+        />
         
         {/* Lines */}
         {series.map(s => (
@@ -197,22 +353,25 @@ function MultiLineChart({ data, series, unit }: {
         ))}
         
         {/* Year labels */}
-        {data.filter((_, i) => i % 5 === 0 || i === data.length - 1).map((d, idx) => {
-          const originalIndex = data.findIndex(x => x.year === d.year);
-          const x = padding.left + (originalIndex / (data.length - 1)) * innerWidth;
-          return (
-            <text
-              key={d.year}
-              x={x}
-              y={chartHeight - 5}
-              textAnchor="middle"
-              fontSize="8"
-              fill="#6c757d"
-            >
-              {d.year}
-            </text>
-          );
-        })}
+        {(() => {
+          const labelYears = getYearLabels(data);
+          return data.filter(d => labelYears.includes(d.year)).map((d) => {
+            const originalIndex = data.findIndex(x => x.year === d.year);
+            const x = padding.left + (originalIndex / (data.length - 1)) * innerWidth;
+            return (
+              <text
+                key={d.year}
+                x={x}
+                y={chartHeight - 5}
+                textAnchor="middle"
+                fontSize="8"
+                fill="#6c757d"
+              >
+                {d.year}
+              </text>
+            );
+          });
+        })()}
       </svg>
       
       {/* Legend */}
