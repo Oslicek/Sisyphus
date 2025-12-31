@@ -130,13 +130,14 @@
 
 .svgContainer {
   width: 100%;
-  overflow-x: hidden;
-  overflow-y: visible;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
 
 .chart {
   display: block;
-  max-width: 100%;
+  flex-shrink: 0;
 }
 
 .bar {
