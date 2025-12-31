@@ -6,7 +6,7 @@ const DATA_SOURCES_INFO = [
   {
     name: 'Státní dluh ČR',
     source: 'Ministerstvo financí ČR',
-    url: 'https://www.mfcr.cz/cs/rozpoctova-politika/makroekonomika/statistika-vladniho-sektoru/2025/ctvrtletni-prehledy-o-stavu-a-vyvoji-statniho-dluh-61526',
+    url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu/statistiky/struktura-a-vyvoj-statniho-dluhu',
   },
   {
     name: 'Seznam vlád Česka',
@@ -61,6 +61,11 @@ interface ChartSeries {
   color: string;
 }
 
+interface DataSource {
+  name: string;
+  url: string;
+}
+
 interface DataSet {
   title: string;
   description: string;
@@ -70,6 +75,7 @@ interface DataSet {
   chartType: 'bar' | 'line';
   chartSeries: ChartSeries[];
   yAxisMin?: number;
+  sources: DataSource[];
 }
 
 // Helper function to determine which years to show as labels
@@ -480,9 +486,9 @@ export function DataSources() {
             title: 'Státní dluh ČR',
             description: debtData.description,
             unit: 'mld Kč',
-            data: debtData.data.map((d: { year: number; q4?: number; q3?: number; q2?: number; q1?: number }) => ({
+            data: debtData.data.map((d: { year: number; amount: number }) => ({
               year: d.year,
-              value: d.q4 ?? d.q3 ?? d.q2 ?? d.q1,
+              value: d.amount,
             })),
             columns: [
               { key: 'year', label: 'Rok' },
@@ -490,6 +496,9 @@ export function DataSources() {
             ],
             chartType: 'bar',
             chartSeries: [{ key: 'value', label: 'Státní dluh', color: '#c41e3a' }],
+            sources: [
+              { name: 'Ministerstvo financí ČR', url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu/statistiky/struktura-a-vyvoj-statniho-dluhu' },
+            ],
           },
           {
             title: 'HDP České republiky',
@@ -505,6 +514,9 @@ export function DataSources() {
             ],
             chartType: 'bar',
             chartSeries: [{ key: 'value', label: 'HDP', color: '#2c7a7b' }],
+            sources: [
+              { name: 'Český statistický úřad', url: 'https://www.czso.cz/' },
+            ],
           },
           {
             title: 'Míra inflace',
@@ -520,6 +532,9 @@ export function DataSources() {
             ],
             chartType: 'bar',
             chartSeries: [{ key: 'value', label: 'Inflace', color: '#e67e22' }],
+            sources: [
+              { name: 'Český statistický úřad', url: 'https://www.czso.cz/' },
+            ],
           },
           {
             title: 'Úrokové náklady státního dluhu',
@@ -535,6 +550,9 @@ export function DataSources() {
             ],
             chartType: 'bar',
             chartSeries: [{ key: 'value', label: 'Úroky', color: '#9d4edd' }],
+            sources: [
+              { name: 'Ministerstvo financí ČR', url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu' },
+            ],
           },
           {
             title: 'Počet obyvatel ČR',
@@ -556,6 +574,9 @@ export function DataSources() {
               { key: 'workingAge', label: 'Produktivní věk (15-64)', color: '#e74c3c' },
             ],
             yAxisMin: 6,
+            sources: [
+              { name: 'Český statistický úřad', url: 'https://csu.gov.cz/produkty/obyvatelstvo_hu' },
+            ],
           },
           {
             title: 'Průměrná a minimální mzda',
@@ -582,6 +603,10 @@ export function DataSources() {
               { key: 'minimumGross', label: 'Minimální hrubá', color: '#e74c3c' },
               { key: 'minimumNet', label: 'Minimální čistá', color: '#f39c12' },
             ],
+            sources: [
+              { name: 'Český statistický úřad', url: 'https://www.czso.cz/csu/czso/prace_a_mzdy_prace' },
+              { name: 'Ministerstvo práce a sociálních věcí', url: 'https://www.mpsv.cz/' },
+            ],
           },
           {
             title: 'Cena benzínu Natural 95',
@@ -597,6 +622,9 @@ export function DataSources() {
             ],
             chartType: 'line',
             chartSeries: [{ key: 'value', label: 'Benzín', color: '#f39c12' }],
+            sources: [
+              { name: 'Český statistický úřad', url: 'https://www.czso.cz/' },
+            ],
           },
           {
             title: 'Náklady na výstavbu infrastruktury',
@@ -619,6 +647,11 @@ export function DataSources() {
               { key: 'hospital', label: 'Nemocnice', color: '#9b59b6' },
               { key: 'highwayKm', label: 'Dálnice (km)', color: '#3498db' },
               { key: 'school', label: 'Škola', color: '#1abc9c' },
+            ],
+            sources: [
+              { name: 'Ředitelství silnic a dálnic', url: 'https://www.rsd.cz/' },
+              { name: 'Ministerstvo zdravotnictví ČR', url: 'https://www.mzcr.cz/' },
+              { name: 'Ministerstvo školství, mládeže a tělovýchovy', url: 'https://www.msmt.cz/' },
             ],
           },
           {
@@ -648,6 +681,9 @@ export function DataSources() {
               { key: 'eggs', label: 'Vejce (10ks)', color: '#e74c3c' },
               { key: 'potatoes', label: 'Brambory (kg)', color: '#27ae60' },
               { key: 'beer', label: 'Pivo (0.5l)', color: '#3498db' },
+            ],
+            sources: [
+              { name: 'Český statistický úřad', url: 'https://csu.gov.cz/vyvoj-prumernych-cen-vybranych-potravin-2024' },
             ],
           },
         ];
@@ -704,6 +740,23 @@ export function DataSources() {
                 )}
                 
                 <DataTable data={dataSet.data} columns={dataSet.columns} />
+                
+                <div className={styles.dataSetSources}>
+                  <span className={styles.dataSetSourcesLabel}>Zdroj: </span>
+                  {dataSet.sources.map((source, sIdx) => (
+                    <span key={sIdx}>
+                      <a 
+                        href={source.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={styles.dataSetSourceLink}
+                      >
+                        {source.name}
+                      </a>
+                      {sIdx < dataSet.sources.length - 1 && ', '}
+                    </span>
+                  ))}
+                </div>
               </div>
             ))
           )}

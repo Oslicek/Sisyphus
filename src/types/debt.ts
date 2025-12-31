@@ -30,14 +30,11 @@ export interface DebtState {
 }
 
 /**
- * Historical debt data point with optional quarterly data
+ * Historical debt data point with yearly end-of-year value
  */
 export interface HistoricalDebtPoint {
   year: number;
-  q1?: number;
-  q2?: number;
-  q3?: number;
-  q4?: number;
+  amount: number;
 }
 
 /**

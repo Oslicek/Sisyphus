@@ -218,6 +218,31 @@
   background: rgba(0, 0, 0, 0.04);
 }
 
+/* Data set sources */
+.dataSetSources {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-bg-subtle, #e9ecef);
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: var(--color-text-muted, #6c757d);
+}
+
+.dataSetSourcesLabel {
+  font-weight: 600;
+}
+
+.dataSetSourceLink {
+  color: var(--color-accent, #c41e3a);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.dataSetSourceLink:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
 .loading {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 1rem;
