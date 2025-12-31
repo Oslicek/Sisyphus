@@ -89,34 +89,59 @@ export function DebtChart() {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // Build chart data with prediction
+  // Build chart data with predictions for 2025 and 2026
   const getChartDataWithPrediction = (baseData: ChartDataPoint[]): ChartDataPoint[] => {
     if (baseData.length === 0 || budgetPlans.length === 0) return baseData;
 
     const plan = budgetPlans.find((p) => p.id === activePlan);
     if (!plan) return baseData;
 
+    const result = [...baseData];
+
+    // Find 2024 debt (last actual data point)
+    const debt2024 = baseData.find((d) => d.year === 2024);
+    if (!debt2024) return baseData;
+
+    // Add 2025 prediction if not already in data
+    const existing2025 = baseData.find((d) => d.year === 2025);
+    const prediction2025 = plan.predictions.find((p) => p.year === 2025);
+    
+    let debt2025Amount: number;
+    if (existing2025) {
+      debt2025Amount = existing2025.amount;
+    } else if (prediction2025) {
+      const deficit2025InBillions = prediction2025.deficit / 1_000_000_000;
+      debt2025Amount = debt2024.amount + deficit2025InBillions;
+      result.push({
+        year: 2025,
+        amount: debt2025Amount,
+        isPrediction: true,
+        planId: plan.id,
+        planName: plan.name,
+        planColor: plan.color,
+        note: prediction2025.note,
+      });
+    } else {
+      return baseData;
+    }
+
+    // Add 2026 prediction
     const prediction2026 = plan.predictions.find((p) => p.year === 2026);
-    if (!prediction2026) return baseData;
-
-    const debt2025 = baseData.find((d) => d.year === 2025);
-    if (!debt2025) return baseData;
-
-    const deficit2026InBillions = prediction2026.deficit / 1_000_000_000;
-    const debt2026 = debt2025.amount + deficit2026InBillions;
-
-    return [
-      ...baseData,
-      {
+    if (prediction2026) {
+      const deficit2026InBillions = prediction2026.deficit / 1_000_000_000;
+      const debt2026Amount = debt2025Amount + deficit2026InBillions;
+      result.push({
         year: 2026,
-        amount: debt2026,
+        amount: debt2026Amount,
         isPrediction: true,
         planId: plan.id,
         planName: plan.name,
         planColor: plan.color,
         note: prediction2026.note,
-      },
-    ];
+      });
+    }
+
+    return result;
   };
 
   // Apply per-capita division based on population mode

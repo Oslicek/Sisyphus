@@ -5,9 +5,14 @@
     {
       "id": "fiala",
       "name": "Rozpočet Fialovy vlády",
-      "description": "Schválený rozpočet pro rok 2026",
+      "description": "Schválený rozpočet pro roky 2025 a 2026",
       "color": "#0033A0",
       "predictions": [
+        {
+          "year": 2025,
+          "deficit": 248400000000,
+          "note": "Plánovaný schodek rozpočtu 2025 (plánovaný dluh 3613,6 mld. Kč)"
+        },
         {
           "year": 2026,
           "deficit": 286000000000,
@@ -21,6 +26,11 @@
       "description": "Alternativní rozpočtový plán",
       "color": "#261160",
       "predictions": [
+        {
+          "year": 2025,
+          "deficit": 248400000000,
+          "note": "?"
+        },
         {
           "year": 2026,
           "deficit": 286000000000,
