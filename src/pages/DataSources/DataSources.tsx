@@ -576,7 +576,7 @@ export function DataSources() {
             chartType: 'bar',
             chartSeries: [{ key: 'value', label: 'Úroky', color: '#9d4edd' }],
             sources: [
-              { name: 'Ministerstvo financí ČR', url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu' },
+              { name: 'Ministerstvo financí ČR', url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu/statistiky/ciste-vydaje-na-obsluhu-statniho-dluhu' },
             ],
           },
           {
