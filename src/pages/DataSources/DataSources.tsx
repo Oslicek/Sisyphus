@@ -606,7 +606,9 @@ export function DataSources() {
             ],
             yAxisMin: 6,
             sources: [
-              { name: 'Český statistický úřad', url: 'https://csu.gov.cz/produkty/obyvatelstvo_hu' },
+              { name: 'ČSÚ - Veřejná databáze', url: 'https://vdb.czso.cz/vdbvo2/faces/index.jsf?page=vystup-objekt&z=T&f=TABULKA&skupId=4791&katalog=33157&pvo=DEMDCR1&pvo=DEMDCR1' },
+              { name: 'ČSÚ - Aktuální populační vývoj', url: 'https://csu.gov.cz/aktualni-populacni-vyvoj-v-kostce' },
+              { name: 'ČSÚ - Projekce obyvatelstva', url: 'https://csu.gov.cz/soubory/staticke/animgraf/projekce_2023_2101/index.html?lang=cz' },
             ],
           },
           {
