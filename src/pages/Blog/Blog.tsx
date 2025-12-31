@@ -6,6 +6,7 @@ interface BlogPost {
   id: string;
   date: string;
   title: string;
+  image?: string;
   content: string;
 }
 
@@ -62,6 +63,13 @@ export function Blog() {
               <article key={post.id} className={styles.post}>
                 <time className={styles.postDate}>{formatDate(post.date)}</time>
                 <h2 className={styles.postTitle}>{post.title}</h2>
+                {post.image && (
+                  <img 
+                    src={`/images/blog/${post.image}`} 
+                    alt={post.title}
+                    className={styles.postImage}
+                  />
+                )}
                 <div className={styles.postContent}>
                   {post.content.split('\n\n').map((paragraph, index) => (
                     <p key={index}>{paragraph}</p>
