@@ -31,6 +31,8 @@ export function About() {
       <footer className={styles.footer}>
         <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
         <span className={styles.separator}>•</span>
+        <Link to="/blog" className={styles.footerLink}>Blog</Link>
+        <span className={styles.separator}>•</span>
         <Link to="/zdroje-dat" className={styles.footerLink}>Datové řady</Link>
       </footer>
     </div>
