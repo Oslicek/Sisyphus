@@ -1,9 +1,6 @@
 {
   "description": "Ekonomická data České republiky pro přepočty",
-  "sources": {
-    "inflationRate": "Český statistický úřad (ČSÚ)",
-    "gdp": "https://csu.gov.cz/produkty/hmu_cr"
-  },
+  "source": "https://csu.gov.cz/produkty/hmu_cr",
   "data": [
     { "year": 1993, "inflationRate": 20.8, "gdp": 1202 },
     { "year": 1994, "inflationRate": 10.0, "gdp": 1376 },
