@@ -7,7 +7,6 @@ import {
   selectActiveAnchor,
   calculateGrowthRateForAnchor,
 } from './calculations';
-import type { DebtAnchorEntry } from '../types/debt';
 
 describe('calculateDeficitPerSecond', () => {
   it('should calculate deficit per second from yearly deficit', () => {
