@@ -39,9 +39,9 @@ const DATA_SOURCES_INFO = [
     url: 'https://www.czso.cz/',
   },
   {
-    name: 'Ceny potravin',
+    name: 'Ceny potravin a benzínu',
     source: 'Český statistický úřad (ČSÚ)',
-    url: 'https://csu.gov.cz/vyvoj-prumernych-cen-vybranych-potravin-2024',
+    url: 'https://csu.gov.cz/docs/107508/201e7d55-61b5-d801-e734-05010ab07b8d/32018124_0304.xlsx?version=1.0',
   },
   {
     name: 'Náklady dluhové služby',
@@ -657,7 +657,7 @@ export function DataSources() {
             chartType: 'line',
             chartSeries: [{ key: 'value', label: 'Benzín', color: '#f39c12' }],
             sources: [
-              { name: 'Český statistický úřad', url: 'https://www.czso.cz/' },
+              { name: 'ČSÚ - Spotřebitelské ceny (XLSX)', url: 'https://csu.gov.cz/docs/107508/201e7d55-61b5-d801-e734-05010ab07b8d/32018124_0304.xlsx?version=1.0' },
             ],
           },
           {
@@ -717,7 +717,7 @@ export function DataSources() {
               { key: 'beer', label: 'Pivo (0.5l)', color: '#3498db' },
             ],
             sources: [
-              { name: 'Český statistický úřad', url: 'https://csu.gov.cz/vyvoj-prumernych-cen-vybranych-potravin-2024' },
+              { name: 'ČSÚ - Spotřebitelské ceny (XLSX)', url: 'https://csu.gov.cz/docs/107508/201e7d55-61b5-d801-e734-05010ab07b8d/32018124_0304.xlsx?version=1.0' },
             ],
           },
         ];
