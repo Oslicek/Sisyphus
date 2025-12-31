@@ -540,7 +540,7 @@ export function DataSources() {
             chartType: 'bar',
             chartSeries: [{ key: 'value', label: 'HDP', color: '#2c7a7b' }],
             sources: [
-              { name: 'Český statistický úřad', url: 'https://www.czso.cz/' },
+              { name: 'Český statistický úřad', url: 'https://csu.gov.cz/produkty/hmu_cr' },
             ],
           },
           {
@@ -558,7 +558,7 @@ export function DataSources() {
             chartType: 'bar',
             chartSeries: [{ key: 'value', label: 'Inflace', color: '#e67e22' }],
             sources: [
-              { name: 'Český statistický úřad', url: 'https://www.czso.cz/' },
+              { name: 'Český statistický úřad', url: 'https://csu.gov.cz/produkty/hmu_cr' },
             ],
           },
           {
