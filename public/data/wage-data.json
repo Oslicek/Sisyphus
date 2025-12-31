@@ -6,7 +6,7 @@
   ],
   "sourceUrls": [
     "https://www.czso.cz/csu/czso/prace_a_mzdy_prace",
-    "https://www.mpsv.cz/minimalni-mzda"
+    "https://www.mpsv.cz/prehled-o-vyvoji-castek-minimalni-mzdy"
   ],
   "units": {
     "wages": "CZK/month"
@@ -14,7 +14,8 @@
   "notes": {
     "netWage": "Approximately 75% of gross after taxes and social contributions",
     "averageWage": "Průměrná hrubá měsíční mzda",
-    "minimumWage": "Minimální měsíční mzda"
+    "minimumWage": "Minimální měsíční mzda",
+    "estimates": "Roky 2025 a 2026: minimální mzda dle MPSV, průměrná mzda odhadnuta"
   },
   "data": [
     { "year": 1993, "averageGross": 5904, "averageNet": 4428, "minimumGross": 2200, "minimumNet": 1650 },
@@ -48,7 +49,9 @@
     { "year": 2021, "averageGross": 37839, "averageNet": 28379, "minimumGross": 15200, "minimumNet": 11400 },
     { "year": 2022, "averageGross": 40324, "averageNet": 30243, "minimumGross": 16200, "minimumNet": 12150 },
     { "year": 2023, "averageGross": 43341, "averageNet": 32506, "minimumGross": 17300, "minimumNet": 12975 },
-    { "year": 2024, "averageGross": 45854, "averageNet": 34391, "minimumGross": 18900, "minimumNet": 14175 }
+    { "year": 2024, "averageGross": 45854, "averageNet": 34391, "minimumGross": 18900, "minimumNet": 14175 },
+    { "year": 2025, "averageGross": 48500, "averageNet": 36375, "minimumGross": 20800, "minimumNet": 15600, "isEstimate": true },
+    { "year": 2026, "averageGross": 51300, "averageNet": 38475, "minimumGross": 22400, "minimumNet": 16800, "isEstimate": true }
   ]
 }
 

@@ -638,7 +638,7 @@ export function DataSources() {
             ],
             sources: [
               { name: 'Český statistický úřad', url: 'https://www.czso.cz/csu/czso/prace_a_mzdy_prace' },
-              { name: 'Ministerstvo práce a sociálních věcí', url: 'https://www.mpsv.cz/' },
+              { name: 'MPSV - Vývoj minimální mzdy', url: 'https://www.mpsv.cz/prehled-o-vyvoji-castek-minimalni-mzdy' },
             ],
           },
           {
