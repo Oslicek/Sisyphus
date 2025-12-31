@@ -1,0 +1,24 @@
+.banner {
+  background-color: #1a1a2e;
+  color: #f0f0f0;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.label {
+  font-weight: 700;
+  color: #ffd700;
+}
+
+@media (max-width: 600px) {
+  .banner {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.75rem;
+  }
+}
+

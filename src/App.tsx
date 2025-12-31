@@ -3,6 +3,7 @@ import { DebtCounter } from './components/DebtCounter';
 import { DebtChart } from './components/DebtChart';
 import { BuyCalculator } from './components/BuyCalculator';
 import { ShareButtons } from './components/ShareButtons';
+import { TestBanner } from './components/TestBanner';
 import { About } from './pages/About';
 import { DataSources } from './pages/DataSources';
 import sisyfosLogo from './assets/sisyfos-logo-200x200.png';
@@ -50,6 +51,7 @@ function Home() {
 function App() {
   return (
     <BrowserRouter>
+      <TestBanner />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/o-projektu" element={<About />} />
