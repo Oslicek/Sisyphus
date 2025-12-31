@@ -637,7 +637,7 @@ export function DataSources() {
               { key: 'minimumNet', label: 'Minimální čistá', color: '#f39c12' },
             ],
             sources: [
-              { name: 'Český statistický úřad', url: 'https://www.czso.cz/csu/czso/prace_a_mzdy_prace' },
+              { name: 'ČSÚ - Průměrná mzda', url: 'https://csu.gov.cz/produkty/pmz_cr' },
               { name: 'MPSV - Vývoj minimální mzdy', url: 'https://www.mpsv.cz/prehled-o-vyvoji-castek-minimalni-mzdy' },
             ],
           },
