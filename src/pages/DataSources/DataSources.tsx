@@ -639,6 +639,7 @@ export function DataSources() {
             sources: [
               { name: 'ČSÚ - Průměrná mzda', url: 'https://csu.gov.cz/produkty/pmz_cr' },
               { name: 'MPSV - Vývoj minimální mzdy', url: 'https://www.mpsv.cz/prehled-o-vyvoji-castek-minimalni-mzdy' },
+              { name: 'MFCR - Makroekonomická predikce (PDF)', url: 'https://www.mfcr.cz/assets/attachments/2025-11-06_Makroekonomicka-predikce-listopad-2025.pdf' },
             ],
           },
           {
