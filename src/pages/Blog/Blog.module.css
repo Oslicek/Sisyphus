@@ -1,0 +1,144 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 3rem; /* Space for fixed TestBanner */
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.backLink {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-accent, #c41e3a);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.backLink:hover {
+  opacity: 0.7;
+}
+
+.main {
+  flex: 1;
+}
+
+.title {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text, #1a1a2e);
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+
+.loading,
+.empty {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1rem;
+  color: var(--color-text-muted, #6c757d);
+  text-align: center;
+  padding: 2rem;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.post {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-bg-subtle, #e9ecef);
+}
+
+.postDate {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #6c757d);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.postTitle {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: var(--color-text, #1a1a2e);
+  margin: 0 0 1rem 0;
+}
+
+.postContent {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-text, #1a1a2e);
+}
+
+.postContent p {
+  margin: 0 0 1rem 0;
+}
+
+.postContent p:last-child {
+  margin-bottom: 0;
+}
+
+.footer {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-bg-subtle, #e9ecef);
+  text-align: center;
+}
+
+.footerLink {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #6c757d);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover {
+  color: var(--color-accent, #c41e3a);
+}
+
+.separator {
+  color: var(--color-text-muted, #6c757d);
+  margin: 0 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+    padding-top: 2.5rem;
+  }
+
+  .post {
+    padding: 1.5rem;
+  }
+
+  .postTitle {
+    font-size: 1.3rem;
+  }
+
+  .footer {
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+
+  .separator {
+    margin: 0 0.5rem;
+  }
+}
+

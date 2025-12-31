@@ -5,6 +5,7 @@ import { BuyCalculator } from './components/BuyCalculator';
 import { ShareButtons } from './components/ShareButtons';
 import { TestBanner } from './components/TestBanner';
 import { About } from './pages/About';
+import { Blog } from './pages/Blog';
 import { DataSources } from './pages/DataSources';
 import sisyfosLogo from './assets/sisyfos-logo-200x200.png';
 import styles from './App.module.css';
@@ -35,12 +36,16 @@ function Home() {
 
       <footer className={styles.footer}>
         <nav className={styles.footerNav}>
-          <Link to="/o-projektu" className={styles.footerLink}>
-            O projektu Sisyfos
+          <Link to="/blog" className={styles.footerLink}>
+            Blog
           </Link>
           <span className={styles.footerSeparator}>•</span>
           <Link to="/zdroje-dat" className={styles.footerLink}>
             Datové řady a zdroje dat
+          </Link>
+          <span className={styles.footerSeparator}>•</span>
+          <Link to="/o-projektu" className={styles.footerLink}>
+            O projektu Sisyfos
           </Link>
         </nav>
       </footer>
@@ -54,6 +59,7 @@ function App() {
       <TestBanner />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/blog" element={<Blog />} />
         <Route path="/o-projektu" element={<About />} />
         <Route path="/zdroje-dat" element={<DataSources />} />
       </Routes>
