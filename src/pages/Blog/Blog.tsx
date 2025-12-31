@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Blog.module.css';
 
@@ -47,7 +47,7 @@ export function Blog() {
   // Parse markdown-style links [text](url) in content
   const parseContent = (text: string) => {
     const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-    const parts: (string | JSX.Element)[] = [];
+    const parts: React.ReactNode[] = [];
     let lastIndex = 0;
     let match;
 
