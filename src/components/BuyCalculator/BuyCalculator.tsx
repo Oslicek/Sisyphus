@@ -274,9 +274,6 @@ export function BuyCalculator() {
                     (á {formatCzechNumber(parseFloat(itemPrice.replace(/\s/g, '').replace(',', '.')) || 0)} Kč)
                   </p>
 
-                  <p className={styles.resultFooter}>
-                    sisyphus-9u4.pages.dev
-                  </p>
                 </div>
 
                 <button

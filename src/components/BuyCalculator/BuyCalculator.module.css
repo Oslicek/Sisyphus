@@ -365,15 +365,6 @@
   margin: 0 0 1rem 0;
 }
 
-.resultFooter {
-  font-family: 'Source Sans 3', system-ui, sans-serif;
-  font-size: 0.75rem;
-  color: var(--color-text-muted, #6c757d);
-  margin: 0;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--color-bg-subtle, #e9ecef);
-}
-
 /* Share button */
 .shareButton {
   width: 100%;
