@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2025-12-30
+> **Last Updated:** 2025-12-31
 
 ## Overview
 
@@ -37,9 +37,10 @@
 │                                                                              │
 │   ┌──────────────────┐              ┌──────────────────────────────────┐   │
 │   │ Pages            │              │ Static JSON Data                  │   │
-│   │ (Static React)   │              │ - debt-anchor.json                │   │
+│   │ (Static React)   │              │ - debt-anchor.json (multi-anchor) │   │
 │   │                  │              │ - debt-historical.json            │   │
-│   └──────────────────┘              │ - debt-interest.json              │   │
+│   └──────────────────┘              │ - debt-monthly.json               │   │
+│                                      │ - debt-interest.json              │   │
 │                                      │ - events.json                     │   │
 │                                      │ - governments.json                │   │
 │                                      │ - budget-plans.json               │   │
@@ -59,8 +60,10 @@
 │                                                                              │
 │   ┌────────────────────────────────────────────────────────────────────┐   │
 │   │ DebtCounter                                                         │   │
-│   │ - Fetches anchor data once on load                                  │   │
-│   │ - Computes deficit per second from yearly deficit                   │   │
+│   │ - Fetches multi-anchor data once on load                            │   │
+│   │ - Selects active anchor based on current date                       │   │
+│   │ - Computes growth rate: EOY-target (2025) or deficit-based (2026+)  │   │
+│   │ - Auto-switches anchor at year boundary (2026-01-01 00:00:00)       │   │
 │   │ - Updates display every second (client-side)                        │   │
 │   └────────────────────────────────────────────────────────────────────┘   │
 │                                                                              │
@@ -238,17 +241,36 @@ sisyphus/
 
 ## Data Models
 
-### Debt Anchor (debt-anchor.json)
+### Debt Anchor (debt-anchor.json) - Multi-Anchor System
 ```typescript
-interface DebtAnchor {
+interface DebtAnchorEntry {
+  id: string;                   // Year identifier ("2025", "2026")
   baseAmount: number;           // Debt at anchor date in CZK
   anchorDate: string;           // ISO 8601 date (YYYY-MM-DD)
-  plannedDeficit2025: number;   // Planned deficit for 2025 in CZK
+  plannedEoyDebt?: number;      // For 'eoy-target' type
+  plannedDeficit?: number;      // For 'deficit-based' type
+  eoyDate: string;              // End of year (typically Jan 1 next year)
+  calculationType: 'eoy-target' | 'deficit-based';
+  source?: string;
+  sourceUrl?: string;
+}
+
+interface DebtAnchorData {
+  anchors: DebtAnchorEntry[];   // One anchor per year
   currency: string;             // "CZK"
-  source: string;
   lastUpdated: string;
 }
 ```
+
+**Calculation Types:**
+- `eoy-target`: Growth rate = (plannedEoyDebt - baseAmount) / seconds to EOY
+- `deficit-based`: Growth rate = plannedDeficit / seconds in year
+
+**Anchor Switching:**
+- Counter automatically selects the active anchor based on current date
+- At 2026-01-01 00:00:00, switches from 2025 to 2026 anchor
+- 2025: Starts at Oct 1 (3517.95B), targets 3613.6B at year end
+- 2026: Starts at Jan 1 (3613.6B), adds 286B deficit over the year
 
 ### Governments (governments.json)
 ```typescript
@@ -317,9 +339,10 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 136 tests across 7 test files
+- 148 tests across 7 test files
 - All utility functions fully covered
 - Integration tests for chart computation chains (deficit-inflation-adjusted, deficit-gdp-percent, population modes, metric units)
+- Multi-anchor debt counter tests (anchor selection, growth rate calculation, boundary transitions)
 
 ## Current State
 
@@ -349,7 +372,8 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Multi-page app with react-router-dom
 - [x] About page (O projektu Sisyfos) with centered logo
 - [x] Data Sources page with data series tables, bar/line charts, grid lines, axes
-- [x] TDD: 136 tests, 100% coverage
+- [x] TDD: 148 tests, 100% coverage
+- [x] Multi-anchor debt counter with auto-switching (2025→2026)
 - [x] Project logo with tagline (responsive sizing)
 - [x] Logo links to About page
 - [x] Collapsible governments and events sections (collapsed by default)
@@ -370,3 +394,7 @@ All files           |     100 |      100 |     100 |     100 |
 - Historical data updated from MFCR as of 2025-10-17
 - Data files contain only verified historical data (no projections except budget plans)
 - Babiš government budget for 2026 is pending - currently shows info modal
+- Multi-anchor debt counter:
+  - 2025: EOY-target mode (interpolates to 3613.6B on Jan 1, 2026)
+  - 2026: Deficit-based mode (adds 286B Fiala government budget deficit over the year)
+  - Auto-switches at 2026-01-01 00:00:00 UTC

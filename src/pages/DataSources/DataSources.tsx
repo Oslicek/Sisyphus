@@ -76,6 +76,8 @@ interface DataSet {
   chartSeries: ChartSeries[];
   yAxisMin?: number;
   sources: DataSource[];
+  note?: string;
+  noteSource?: DataSource;
 }
 
 // Helper function to determine which years to show as labels
@@ -461,8 +463,9 @@ export function DataSources() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [debtRes, economicRes, interestRes, demographicRes, priceRes, foodRes, wageRes] = await Promise.all([
+        const [debtRes, debtMonthlyRes, economicRes, interestRes, demographicRes, priceRes, foodRes, wageRes] = await Promise.all([
           fetch('/data/debt-historical.json'),
+          fetch('/data/debt-monthly.json'),
           fetch('/data/economic-data.json'),
           fetch('/data/debt-interest.json'),
           fetch('/data/demographic-data.json'),
@@ -471,8 +474,9 @@ export function DataSources() {
           fetch('/data/wage-data.json'),
         ]);
 
-        const [debtData, economicData, interestData, demographicData, priceData, foodData, wageData] = await Promise.all([
+        const [debtData, debtMonthlyData, economicData, interestData, demographicData, priceData, foodData, wageData] = await Promise.all([
           debtRes.json(),
+          debtMonthlyRes.json(),
           economicRes.json(),
           interestRes.json(),
           demographicRes.json(),
@@ -499,6 +503,27 @@ export function DataSources() {
             sources: [
               { name: 'Ministerstvo financí ČR', url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu/statistiky/struktura-a-vyvoj-statniho-dluhu' },
             ],
+          },
+          {
+            title: 'Státní dluh ČR – měsíční vývoj 2025',
+            description: debtMonthlyData.description,
+            unit: 'mld Kč',
+            data: debtMonthlyData.data.map((d: { year: number; month: number; amount: number }) => ({
+              year: d.month,
+              value: d.amount,
+            })),
+            columns: [
+              { key: 'year', label: 'Měsíc' },
+              { key: 'value', label: 'Dluh (mld Kč)' },
+            ],
+            chartType: 'bar',
+            chartSeries: [{ key: 'value', label: 'Státní dluh', color: '#c41e3a' }],
+            yAxisMin: 3300,
+            sources: [
+              { name: 'Ministerstvo financí ČR', url: 'https://www.mfcr.cz/cs/rozpoctova-politika/makroekonomika/statistika-vladniho-sektoru/2025/ctvrtletni-prehledy-o-stavu-a-vyvoji-statniho-dluh-61526' },
+            ],
+            note: 'Plánovaná výše státního dluhu na konci roku 2025: 3 613,6 mld. Kč (cca 42,9 % HDP)',
+            noteSource: { name: 'Státní rozpočet 2025 v kostce (PDF)', url: 'https://www.mfcr.cz/assets/attachments/2025-03-27_Statni-rozpocet-2025-v-kostce.pdf' },
           },
           {
             title: 'HDP České republiky',
@@ -740,6 +765,25 @@ export function DataSources() {
                 )}
                 
                 <DataTable data={dataSet.data} columns={dataSet.columns} />
+                
+                {dataSet.note && (
+                  <p className={styles.dataSetNote}>
+                    {dataSet.note}
+                    {dataSet.noteSource && (
+                      <>
+                        {' '}
+                        <a 
+                          href={dataSet.noteSource.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className={styles.dataSetSourceLink}
+                        >
+                          ({dataSet.noteSource.name})
+                        </a>
+                      </>
+                    )}
+                  </p>
+                )}
                 
                 <div className={styles.dataSetSources}>
                   <span className={styles.dataSetSourcesLabel}>Zdroj: </span>

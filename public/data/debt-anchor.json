@@ -1,13 +1,26 @@
 {
-  "baseAmount": 3365200000000,
-  "anchorDate": "2024-12-31",
-  "plannedDeficit2025": 241000000000,
+  "anchors": [
+    {
+      "id": "2025",
+      "baseAmount": 3517950000000,
+      "anchorDate": "2025-10-01",
+      "plannedEoyDebt": 3613600000000,
+      "eoyDate": "2026-01-01",
+      "calculationType": "eoy-target",
+      "source": "Ministerstvo financí ČR",
+      "sourceUrl": "https://www.mfcr.cz/assets/attachments/2025-03-27_Statni-rozpocet-2025-v-kostce.pdf"
+    },
+    {
+      "id": "2026",
+      "baseAmount": 3613600000000,
+      "anchorDate": "2026-01-01",
+      "plannedDeficit": 286000000000,
+      "eoyDate": "2027-01-01",
+      "calculationType": "deficit-based",
+      "source": "Ministerstvo financí ČR - Rozpočet Fialovy vlády",
+      "sourceUrl": "https://www.mfcr.cz/"
+    }
+  ],
   "currency": "CZK",
-  "source": "Ministerstvo financí ČR",
-  "lastUpdated": "2024-12-28"
+  "lastUpdated": "2025-12-31"
 }
-
-
-
-
-

@@ -1,0 +1,19 @@
+{
+  "source": "Ministerstvo financí ČR",
+  "sourceUrl": "https://www.mfcr.cz/cs/rozpoctova-politika/makroekonomika/statistika-vladniho-sektoru/2025/ctvrtletni-prehledy-o-stavu-a-vyvoji-statniho-dluh-61526",
+  "lastUpdated": "2025-12-31",
+  "currency": "CZK",
+  "unit": "billionCZK",
+  "description": "Státní dluh České republiky v roce 2025 v miliardách Kč (měsíční hodnoty)",
+  "data": [
+    { "year": 2025, "month": 1, "amount": 3412.83 },
+    { "year": 2025, "month": 2, "amount": 3388.96 },
+    { "year": 2025, "month": 3, "amount": 3410.22 },
+    { "year": 2025, "month": 4, "amount": 3466.38 },
+    { "year": 2025, "month": 5, "amount": 3472.58 },
+    { "year": 2025, "month": 6, "amount": 3504.16 },
+    { "year": 2025, "month": 7, "amount": 3535.79 },
+    { "year": 2025, "month": 8, "amount": 3570.01 },
+    { "year": 2025, "month": 9, "amount": 3517.95 }
+  ]
+}

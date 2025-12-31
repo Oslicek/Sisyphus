@@ -3,7 +3,7 @@ import { formatCzechCurrency } from '../../utils/formatters';
 import styles from './DebtCounter.module.css';
 
 export function DebtCounter() {
-  const { currentDebt, deficitPerSecond, isLoading, error } = useDebtCounter();
+  const { currentDebt, growthPerSecond, isLoading, error } = useDebtCounter();
 
   if (isLoading) {
     return (
@@ -35,7 +35,7 @@ export function DebtCounter() {
 
       <p className={styles.perSecond}>
         Přírůstek: <span className={styles.perSecondValue}>
-          +{formatCzechCurrency(deficitPerSecond)}
+          +{formatCzechCurrency(growthPerSecond)}
         </span> Kč/s
       </p>
     </section>

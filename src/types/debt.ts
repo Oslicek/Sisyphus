@@ -1,18 +1,60 @@
 /**
- * Debt anchor data structure
- * Contains the base amount and planned deficit for debt calculation
+ * Debt anchor entry for a specific year
+ * Supports two calculation types: EOY target or deficit-based
+ */
+export interface DebtAnchorEntry {
+  /** Unique identifier for the anchor (e.g., "2025", "2026") */
+  id: string;
+  /** Base debt amount in CZK at anchor date */
+  baseAmount: number;
+  /** Anchor date in ISO 8601 format (YYYY-MM-DD) */
+  anchorDate: string;
+  /** Planned end-of-year debt amount in CZK (for eoy-target type) */
+  plannedEoyDebt?: number;
+  /** Planned budget deficit in CZK (for deficit-based type) */
+  plannedDeficit?: number;
+  /** End of year date in ISO 8601 format (YYYY-MM-DD) - typically Jan 1 of next year */
+  eoyDate: string;
+  /** Calculation type: 'eoy-target' interpolates to EOY debt, 'deficit-based' uses yearly deficit */
+  calculationType: 'eoy-target' | 'deficit-based';
+  /** Data source name */
+  source?: string;
+  /** Source URL */
+  sourceUrl?: string;
+}
+
+/**
+ * Multi-anchor debt data structure
+ * Contains anchors for different years to enable seamless transitions
+ */
+export interface DebtAnchorData {
+  /** Array of anchor entries, typically one per year */
+  anchors: DebtAnchorEntry[];
+  /** Currency code */
+  currency: string;
+  /** Last update date in ISO 8601 format */
+  lastUpdated: string;
+}
+
+/**
+ * @deprecated Use DebtAnchorData instead
+ * Legacy debt anchor data structure for backwards compatibility
  */
 export interface DebtAnchor {
   /** Base debt amount in CZK at anchor date */
   baseAmount: number;
   /** Anchor date in ISO 8601 format (YYYY-MM-DD) */
   anchorDate: string;
-  /** Planned budget deficit for 2025 in CZK */
-  plannedDeficit2025: number;
+  /** Planned end-of-year debt amount in CZK */
+  plannedEoyDebt: number;
+  /** End of year date in ISO 8601 format (YYYY-MM-DD) - typically Jan 1 of next year */
+  eoyDate: string;
   /** Currency code */
   currency: string;
   /** Data source name */
   source: string;
+  /** Source URL */
+  sourceUrl?: string;
   /** Last update date in ISO 8601 format */
   lastUpdated: string;
 }
@@ -23,8 +65,8 @@ export interface DebtAnchor {
 export interface DebtState {
   /** Current computed debt amount in CZK */
   currentAmount: number;
-  /** Deficit increment per second in CZK */
-  deficitPerSecond: number;
+  /** Growth rate per second in CZK */
+  growthPerSecond: number;
   /** Timestamp when the calculation was made */
   calculatedAt: Date;
 }
