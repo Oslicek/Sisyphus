@@ -2,54 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './DataSources.module.css';
 
-const DATA_SOURCES_INFO = [
-  {
-    name: 'Státní dluh ČR',
-    source: 'Ministerstvo financí ČR',
-    url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu/statistiky/struktura-a-vyvoj-statniho-dluhu',
-  },
-  {
-    name: 'Seznam vlád Česka',
-    source: 'Wikipedia',
-    url: 'https://cs.wikipedia.org/wiki/Seznam_vlád_Česka',
-  },
-  {
-    name: 'Rozpočtové plány',
-    source: 'Ministerstvo financí ČR',
-    url: 'https://www.mfcr.cz/',
-  },
-  {
-    name: 'Inflace a HDP',
-    source: 'Český statistický úřad (ČSÚ)',
-    url: 'https://www.czso.cz/',
-  },
-  {
-    name: 'Demografická data',
-    source: 'Český statistický úřad (ČSÚ)',
-    url: 'https://csu.gov.cz/produkty/obyvatelstvo_hu',
-  },
-  {
-    name: 'Mzdová data',
-    source: 'ČSÚ, MPSV',
-    url: 'https://www.czso.cz/csu/czso/prace_a_mzdy_prace',
-  },
-  {
-    name: 'Cenová data',
-    source: 'ČSÚ, ŘSD, MZ ČR, MŠMT',
-    url: 'https://www.czso.cz/',
-  },
-  {
-    name: 'Ceny potravin a benzínu',
-    source: 'Český statistický úřad (ČSÚ)',
-    url: 'https://csu.gov.cz/docs/107508/201e7d55-61b5-d801-e734-05010ab07b8d/32018124_0304.xlsx?version=1.0',
-  },
-  {
-    name: 'Náklady dluhové služby',
-    source: 'Ministerstvo financí ČR',
-    url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu',
-  },
-];
-
 interface DataPoint {
   year: number;
   [key: string]: number | string | undefined;
@@ -815,24 +767,6 @@ export function DataSources() {
           )}
         </section>
 
-        <section className={styles.sourcesSection}>
-          <h2 className={styles.sectionTitle}>Zdroje dat</h2>
-          <ul className={styles.sourcesList}>
-            {DATA_SOURCES_INFO.map((source, index) => (
-              <li key={index} className={styles.sourceItem}>
-                <span className={styles.sourceName}>{source.name}</span>
-                <a 
-                  href={source.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className={styles.sourceLink}
-                >
-                  {source.source} →
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
       </main>
 
       <footer className={styles.footer}>

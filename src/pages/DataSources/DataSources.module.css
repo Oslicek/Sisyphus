@@ -47,7 +47,6 @@
 }
 
 /* Sections */
-.sourcesSection,
 .dataSection {
   margin-bottom: 3rem;
 }
@@ -64,44 +63,6 @@
   border-bottom: 2px solid var(--color-bg-subtle, #e9ecef);
 }
 
-/* Sources list */
-.sourcesList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sourceItem {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--color-bg-subtle, #e9ecef);
-}
-
-.sourceItem:last-child {
-  border-bottom: none;
-}
-
-.sourceName {
-  font-family: 'Source Sans 3', system-ui, sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-text, #1a1a2e);
-}
-
-.sourceLink {
-  font-family: 'Source Sans 3', system-ui, sans-serif;
-  font-size: 0.85rem;
-  color: var(--color-accent, #c41e3a);
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-}
-
-.sourceLink:hover {
-  opacity: 0.7;
-  text-decoration: underline;
-}
 
 /* Data set cards */
 .dataSetCard {
