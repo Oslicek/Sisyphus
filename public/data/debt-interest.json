@@ -3,7 +3,7 @@
   "source": "Ministerstvo financí ČR",
   "sourceUrl": "https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu/statistiky/ciste-vydaje-na-obsluhu-statniho-dluhu",
   "unit": "billion CZK",
-  "notes": "Úrokové výdaje na státní dluh za kalendářní rok",
+  "notes": "Úrokové výdaje na státní dluh za kalendářní rok. Roky 2025 a 2026 jsou odhady z kapitoly 396 státního rozpočtu.",
   "data": [
     { "year": 1993, "interest": 14.34 },
     { "year": 1994, "interest": 13.68 },
@@ -36,6 +36,8 @@
     { "year": 2021, "interest": 42.00 },
     { "year": 2022, "interest": 49.46 },
     { "year": 2023, "interest": 68.21 },
-    { "year": 2024, "interest": 88.31 }
+    { "year": 2024, "interest": 88.31 },
+    { "year": 2025, "interest": 99.97, "isEstimate": true },
+    { "year": 2026, "interest": 109.97, "isEstimate": true }
   ]
 }

@@ -565,18 +565,24 @@ export function DataSources() {
             title: 'Úrokové náklady státního dluhu',
             description: interestData.description,
             unit: 'mld Kč',
-            data: interestData.data.map((d: { year: number; interest: number }) => ({
+            data: interestData.data.map((d: { year: number; interest: number; isEstimate?: boolean }) => ({
               year: d.year,
-              value: d.interest,
+              value: d.isEstimate ? undefined : d.interest,
+              estimate: d.isEstimate ? d.interest : undefined,
             })),
             columns: [
               { key: 'year', label: 'Rok' },
               { key: 'value', label: 'Úroky (mld Kč)' },
             ],
             chartType: 'bar',
-            chartSeries: [{ key: 'value', label: 'Úroky', color: '#9d4edd' }],
+            chartSeries: [
+              { key: 'value', label: 'Úroky', color: '#9d4edd' },
+              { key: 'estimate', label: 'Odhad (rozpočet)', color: '#0033A0' },
+            ],
             sources: [
               { name: 'Ministerstvo financí ČR', url: 'https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu/statistiky/ciste-vydaje-na-obsluhu-statniho-dluhu' },
+              { name: 'Státní rozpočet 2025 v kostce (PDF)', url: 'https://www.mfcr.cz/assets/attachments/2025-03-27_Statni-rozpocet-2025-v-kostce.pdf' },
+              { name: 'Návrh státního rozpočtu 2026', url: 'https://www.mfcr.cz/cs/ministerstvo/media/tiskove-zpravy/2025/vlada-schvalila-navrh-statniho-rozpoctu-na-rok-202-61433' },
             ],
           },
           {
