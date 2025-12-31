@@ -17,7 +17,7 @@
     "netWage": "Approximately 75% of gross after taxes and social contributions",
     "averageWage": "Průměrná hrubá měsíční mzda",
     "minimumWage": "Minimální měsíční mzda",
-    "estimates": "Roky 2025 a 2026: průměrná mzda dle MFCR predikce, minimální mzda dle MPSV"
+    "estimates": "Roky 2025 a 2026: průměrná mzda odhadnuta z trendu, minimální mzda dle MPSV"
   },
   "data": [
     { "year": 1993, "averageGross": 5904, "averageNet": 4428, "minimumGross": 2200, "minimumNet": 1650 },
@@ -52,7 +52,7 @@
     { "year": 2022, "averageGross": 38088, "averageNet": 28566, "minimumGross": 16200, "minimumNet": 12150 },
     { "year": 2023, "averageGross": 40877, "averageNet": 30658, "minimumGross": 17300, "minimumNet": 12975 },
     { "year": 2024, "averageGross": 43541, "averageNet": 32656, "minimumGross": 18900, "minimumNet": 14175 },
-    { "year": 2025, "averageGross": 49053, "averageNet": 36790, "minimumGross": 20800, "minimumNet": 15600, "isEstimate": true },
-    { "year": 2026, "averageGross": 51909, "averageNet": 38932, "minimumGross": 22400, "minimumNet": 16800, "isEstimate": true }
+    { "year": 2025, "averageGross": 46471, "averageNet": 34853, "minimumGross": 20800, "minimumNet": 15600, "isEstimate": true },
+    { "year": 2026, "averageGross": 49668, "averageNet": 37251, "minimumGross": 22400, "minimumNet": 16800, "isEstimate": true }
   ]
 }
