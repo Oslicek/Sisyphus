@@ -215,7 +215,13 @@ export function DebtChart() {
       
       case 'interest-absolute': {
         // Convert interest data to ChartDataPoint format
-        result = interestData.map(d => ({ year: d.year, amount: d.interest }));
+        // Mark estimates (2025, 2026) as predictions with Fiala's blue color
+        result = interestData.map(d => ({
+          year: d.year,
+          amount: d.interest,
+          isPrediction: d.isEstimate,
+          planColor: d.isEstimate ? '#0033A0' : undefined,
+        }));
         break;
       }
       

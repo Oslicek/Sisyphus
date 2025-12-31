@@ -207,6 +207,7 @@ export interface DemographicData {
 export interface InterestYearData {
   year: number;
   interest: number; // billion CZK
+  isEstimate?: boolean; // true for budget estimates (2025, 2026)
 }
 
 export interface InterestData {

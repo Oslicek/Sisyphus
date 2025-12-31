@@ -123,6 +123,8 @@ export function calculateCumulativeInterest(
     return {
       year: point.year,
       amount: cumulativeSum,
+      isPrediction: point.isEstimate,
+      planColor: point.isEstimate ? '#0033A0' : undefined,
     };
   });
 }
