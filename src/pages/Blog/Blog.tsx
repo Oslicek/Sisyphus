@@ -44,6 +44,41 @@ export function Blog() {
     });
   };
 
+  // Parse markdown-style links [text](url) in content
+  const parseContent = (text: string) => {
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    const parts: (string | JSX.Element)[] = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = linkRegex.exec(text)) !== null) {
+      // Add text before the link
+      if (match.index > lastIndex) {
+        parts.push(text.slice(lastIndex, match.index));
+      }
+      // Add the link
+      parts.push(
+        <a 
+          key={match.index} 
+          href={match[2]} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className={styles.contentLink}
+        >
+          {match[1]}
+        </a>
+      );
+      lastIndex = match.index + match[0].length;
+    }
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(text.slice(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -72,7 +107,7 @@ export function Blog() {
                 )}
                 <div className={styles.postContent}>
                   {post.content.split('\n\n').map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
+                    <p key={index}>{parseContent(paragraph)}</p>
                   ))}
                 </div>
               </article>

@@ -104,6 +104,15 @@
   margin-bottom: 0;
 }
 
+.contentLink {
+  color: var(--color-accent, #c41e3a);
+  text-decoration: none;
+}
+
+.contentLink:hover {
+  text-decoration: underline;
+}
+
 .footer {
   margin-top: 3rem;
   padding: 1.5rem;

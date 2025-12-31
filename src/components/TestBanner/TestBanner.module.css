@@ -20,6 +20,15 @@
   margin-right: 0.75rem;
 }
 
+.link {
+  color: #7cb3ff;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 600px) {
   .banner {
     font-size: 0.7rem;

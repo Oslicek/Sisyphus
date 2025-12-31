@@ -47,6 +47,15 @@ function Home() {
           <Link to="/o-projektu" className={styles.footerLink}>
             O projektu Sisyfos
           </Link>
+          <span className={styles.footerSeparator}>•</span>
+          <a 
+            href="https://www.facebook.com/profile.php?id=61585770336155" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className={styles.footerLink}
+          >
+            Facebook
+          </a>
         </nav>
       </footer>
     </div>
