@@ -130,12 +130,13 @@
 
 .svgContainer {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .chart {
   display: block;
-  margin: 0 auto;
+  max-width: 100%;
 }
 
 .bar {

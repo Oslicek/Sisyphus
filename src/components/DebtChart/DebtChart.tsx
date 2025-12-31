@@ -78,9 +78,10 @@ export function DebtChart() {
   useEffect(() => {
     function updateDimensions() {
       if (containerRef.current) {
-        const width = containerRef.current.clientWidth;
+        // Subtract 2px to prevent potential overflow from rounding
+        const width = Math.floor(containerRef.current.clientWidth) - 2;
         const height = Math.min(450, Math.max(350, width * 0.45));
-        setDimensions({ width, height });
+        setDimensions({ width: Math.max(300, width), height });
       }
     }
 
