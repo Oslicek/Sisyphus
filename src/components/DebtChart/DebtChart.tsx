@@ -90,11 +90,16 @@ export function DebtChart() {
   }, []);
 
   // Build chart data with predictions for 2025 and 2026
+  // 2025 always uses Fiala's plan (approved budget), 2026 uses selected plan (toggle)
   const getChartDataWithPrediction = (baseData: ChartDataPoint[]): ChartDataPoint[] => {
     if (baseData.length === 0 || budgetPlans.length === 0) return baseData;
 
-    const plan = budgetPlans.find((p) => p.id === activePlan);
-    if (!plan) return baseData;
+    // 2025 always uses Fiala's approved budget
+    const fialaPlan = budgetPlans.find((p) => p.id === 'fiala');
+    // 2026 uses the selected plan (toggle)
+    const selectedPlan = budgetPlans.find((p) => p.id === activePlan);
+    
+    if (!fialaPlan || !selectedPlan) return baseData;
 
     const result = [...baseData];
 
@@ -102,9 +107,9 @@ export function DebtChart() {
     const debt2024 = baseData.find((d) => d.year === 2024);
     if (!debt2024) return baseData;
 
-    // Add 2025 prediction if not already in data
+    // Add 2025 prediction (always Fiala's plan)
     const existing2025 = baseData.find((d) => d.year === 2025);
-    const prediction2025 = plan.predictions.find((p) => p.year === 2025);
+    const prediction2025 = fialaPlan.predictions.find((p) => p.year === 2025);
     
     let debt2025Amount: number;
     if (existing2025) {
@@ -116,17 +121,17 @@ export function DebtChart() {
         year: 2025,
         amount: debt2025Amount,
         isPrediction: true,
-        planId: plan.id,
-        planName: plan.name,
-        planColor: plan.color,
+        planId: fialaPlan.id,
+        planName: fialaPlan.name,
+        planColor: fialaPlan.color,
         note: prediction2025.note,
       });
     } else {
       return baseData;
     }
 
-    // Add 2026 prediction
-    const prediction2026 = plan.predictions.find((p) => p.year === 2026);
+    // Add 2026 prediction (uses selected plan - toggle)
+    const prediction2026 = selectedPlan.predictions.find((p) => p.year === 2026);
     if (prediction2026) {
       const deficit2026InBillions = prediction2026.deficit / 1_000_000_000;
       const debt2026Amount = debt2025Amount + deficit2026InBillions;
@@ -134,9 +139,9 @@ export function DebtChart() {
         year: 2026,
         amount: debt2026Amount,
         isPrediction: true,
-        planId: plan.id,
-        planName: plan.name,
-        planColor: plan.color,
+        planId: selectedPlan.id,
+        planName: selectedPlan.name,
+        planColor: selectedPlan.color,
         note: prediction2026.note,
       });
     }
