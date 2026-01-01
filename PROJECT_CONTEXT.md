@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2025-12-31
+> **Last Updated:** 2026-01-01
 
 ## Overview
 
@@ -370,7 +370,7 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Screenshot capture and share (Web Share API) / download
 - [x] BuyCalculator wizard - "What can I buy with my debt share"
 - [x] Multi-page app with react-router-dom
-- [x] About page (O projektu Sisyfos) with centered logo
+- [x] About page (O projektu Sisyfos) with centered logo and contact section
 - [x] Data Sources page with data series tables, bar/line charts, grid lines, axes
 - [x] TDD: 148 tests, 100% coverage
 - [x] Multi-anchor debt counter with auto-switching (2025→2026)
@@ -398,3 +398,11 @@ All files           |     100 |      100 |     100 |     100 |
   - 2025: EOY-target mode (interpolates to 3613.6B on Jan 1, 2026)
   - 2026: Deficit-based mode (adds 286B Fiala government budget deficit over the year)
   - Auto-switches at 2026-01-01 00:00:00 UTC
+
+## Contact
+
+| Channel | Link |
+|---------|------|
+| E-mail | projektsisyfos@gmail.com |
+| X (Twitter) | [@ProjektSisyfos](https://x.com/ProjektSisyfos) |
+| Facebook | [Projekt Sisyfos](https://www.facebook.com/profile.php?id=61585770336155) |

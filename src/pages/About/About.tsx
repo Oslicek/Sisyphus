@@ -26,6 +26,30 @@ export function About() {
           „Ať ho tlačíš, nebo ženeš, Sisyfe — balvan se vždy vrací."
           <cite className={styles.quoteAuthor}>— Ovidius</cite>
         </blockquote>
+
+        <section className={styles.contactSection}>
+          <h2 className={styles.contactTitle}>Kontakt</h2>
+          <ul className={styles.contactList}>
+            <li className={styles.contactItem}>
+              <span className={styles.contactIcon}>✉</span>
+              <a href="mailto:projektsisyfos@gmail.com" className={styles.contactLink}>
+                projektsisyfos@gmail.com
+              </a>
+            </li>
+            <li className={styles.contactItem}>
+              <span className={styles.contactIcon}>𝕏</span>
+              <a href="https://x.com/ProjektSisyfos" target="_blank" rel="noopener noreferrer" className={styles.contactLink}>
+                @ProjektSisyfos
+              </a>
+            </li>
+            <li className={styles.contactItem}>
+              <span className={styles.contactIcon}>f</span>
+              <a href="https://www.facebook.com/profile.php?id=61585770336155" target="_blank" rel="noopener noreferrer" className={styles.contactLink}>
+                Projekt Sisyfos
+              </a>
+            </li>
+          </ul>
+        </section>
       </main>
 
       <footer className={styles.footer}>
