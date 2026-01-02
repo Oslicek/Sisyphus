@@ -1,0 +1,363 @@
+[
+  {
+    "code": "0",
+    "name": "PŘÍJMY STÁTNÍHO",
+    "children": [
+      {
+        "code": "1",
+        "name": "DAŇOVÉ PŘÍJMY",
+        "children": [
+          {
+            "code": "11",
+            "name": "Daně z příjmů,",
+            "children": [
+              {
+                "code": "111",
+                "name": "Příjem z daní",
+                "children": [
+                  {
+                    "code": "1111",
+                    "name": "Příjem z daně z příjmů",
+                    "children": []
+                  },
+                  {
+                    "code": "1112",
+                    "name": "Příjem z daně",
+                    "children": []
+                  },
+                  {
+                    "code": "1113",
+                    "name": "Příjem z daně",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "code": "112",
+                "name": "Příjem z daní z příjmů",
+                "children": []
+              },
+              {
+                "code": "113",
+                "name": "Příjem z některých",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "12",
+            "name": "Daně, poplatky a",
+            "children": [
+              {
+                "code": "121",
+                "name": "Příjem",
+                "children": [
+                  {
+                    "code": "1211",
+                    "name": "Příjem z daně",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "code": "122_123",
+                "name": "Příjem ze zvláštních",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "13",
+            "name": "Daně a poplatky",
+            "children": [
+              {
+                "code": "132",
+                "name": "Příjem z daní a",
+                "children": []
+              },
+              {
+                "code": "133",
+                "name": "Příjem z poplatků",
+                "children": []
+              },
+              {
+                "code": "135",
+                "name": "Příjem z ostatních",
+                "children": []
+              },
+              {
+                "code": "136",
+                "name": "Příjem ze",
+                "children": []
+              },
+              {
+                "code": "137",
+                "name": "Příjem z poplatků",
+                "children": []
+              },
+              {
+                "code": "138",
+                "name": "Příjem z daní,",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "14",
+            "name": "Příjem z daní a",
+            "children": [
+              {
+                "code": "140",
+                "name": "Příjem z daní a cel",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "16",
+            "name": "Příjem z",
+            "children": [
+              {
+                "code": "161",
+                "name": "Příjem z pojistného",
+                "children": []
+              },
+              {
+                "code": "162",
+                "name": "Příjem související s",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "17",
+            "name": "Ostatní daňové",
+            "children": [
+              {
+                "code": "170",
+                "name": "Ostatní daňové příjmy",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "2",
+        "name": "NEDAŇOVÉ",
+        "children": [
+          {
+            "code": "21",
+            "name": "Příjem z vlastní",
+            "children": [
+              {
+                "code": "211",
+                "name": "Příjem z vlastní",
+                "children": []
+              },
+              {
+                "code": "212",
+                "name": "Příjem z odvodů",
+                "children": []
+              },
+              {
+                "code": "213",
+                "name": "Příjem z pronájmu",
+                "children": []
+              },
+              {
+                "code": "214",
+                "name": "Přijaté výnosy z",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "22",
+            "name": "Přijaté sankční",
+            "children": [
+              {
+                "code": "221",
+                "name": "Přijaté sankční",
+                "children": []
+              },
+              {
+                "code": "222",
+                "name": "Přijaté vratky",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "23",
+            "name": "Příjem z prodeje",
+            "children": [
+              {
+                "code": "231",
+                "name": "Příjem z prodeje",
+                "children": []
+              },
+              {
+                "code": "232",
+                "name": "Ostatní nedaňové",
+                "children": []
+              },
+              {
+                "code": "235",
+                "name": "Příjmy za",
+                "children": []
+              },
+              {
+                "code": "236",
+                "name": "Příjmy z",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "24",
+            "name": "Přijaté splátky",
+            "children": [
+              {
+                "code": "241",
+                "name": "Splátky půjčených",
+                "children": []
+              },
+              {
+                "code": "242",
+                "name": "Splátky půjčených",
+                "children": []
+              },
+              {
+                "code": "244",
+                "name": "Splátky půjčených",
+                "children": []
+              },
+              {
+                "code": "245",
+                "name": "Splátky půjčených",
+                "children": []
+              },
+              {
+                "code": "247",
+                "name": "Splátky půjčených",
+                "children": []
+              },
+              {
+                "code": "248",
+                "name": "Splátky za úhradu",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "25",
+            "name": "Příjmy sdílené s",
+            "children": [
+              {
+                "code": "251",
+                "name": "Příjmy sdílené s",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "3",
+        "name": "KAPITÁLOVÉ",
+        "children": [
+          {
+            "code": "31",
+            "name": "Příjem z prodeje",
+            "children": [
+              {
+                "code": "311",
+                "name": "Příjem z prodeje",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "32",
+            "name": "Příjem z prodeje",
+            "children": [
+              {
+                "code": "320",
+                "name": "Příjem z prodeje",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "4",
+        "name": "PŘIJATÉ TRANSFERY",
+        "children": [
+          {
+            "code": "41",
+            "name": "Neinvestiční",
+            "children": [
+              {
+                "code": "411",
+                "name": "Neinvestiční přijaté",
+                "children": [
+                  {
+                    "code": "4118",
+                    "name": "Neinvestiční",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "code": "413",
+                "name": "Neinvestiční",
+                "children": []
+              },
+              {
+                "code": "415",
+                "name": "Neinvestiční přijaté",
+                "children": [
+                  {
+                    "code": "4153",
+                    "name": "Neinvestiční",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "code": "42",
+            "name": "Investiční přijaté transfery",
+            "children": [
+              {
+                "code": "421",
+                "name": "Investiční přijaté",
+                "children": [
+                  {
+                    "code": "4218",
+                    "name": "Investiční převody z",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "code": "423",
+                "name": "Investiční přijaté",
+                "children": [
+                  {
+                    "code": "4233",
+                    "name": "Investiční transfery přijaté od Evropské unie",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

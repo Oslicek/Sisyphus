@@ -1,0 +1,635 @@
+year,kind,system,page_number,chapter_code,chapter_name,class_code,amount_czk
+2026,rev,rev_druhove,3,315,Ministerstvo životního prostředí,133,114000000
+2026,rev,rev_druhove,3,349,Energetický regulační úřad,122_123,100000000
+2026,rev,rev_druhove,3,349,Energetický regulační úřad,12,100000000
+2026,rev,rev_druhove,3,397,Operace státních finančních aktiv,133,2647000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,111,194100000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,1111,153300000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,1112,14700000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,1113,26100000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,112,221500000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,113,1000000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,11,416600000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,121,415400000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,1211,415400000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,122_123,171200000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,12,586600000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,132,800000000
+2026,rev,rev_druhove,3,398,Všeobecná pokladní správa,133,500000000
+2026,rev,rev_druhove,4,306,Ministerstvo zahraničních věcí,136,942476000
+2026,rev,rev_druhove,4,306,Ministerstvo zahraničních věcí,13,942476000
+2026,rev,rev_druhove,4,307,Ministerstvo obrany,136,100000
+2026,rev,rev_druhove,4,307,Ministerstvo obrany,13,100000
+2026,rev,rev_druhove,4,307,Ministerstvo obrany,161,8082934041
+2026,rev,rev_druhove,4,308,Národní bezpečnostní úřad,136,300000
+2026,rev,rev_druhove,4,308,Národní bezpečnostní úřad,13,300000
+2026,rev,rev_druhove,4,312,Ministerstvo financí,135,31000000
+2026,rev,rev_druhove,4,312,Ministerstvo financí,136,35800000
+2026,rev,rev_druhove,4,312,Ministerstvo financí,13,66800000
+2026,rev,rev_druhove,4,312,Ministerstvo financí,161,962227689
+2026,rev,rev_druhove,4,313,Ministerstvo práce a sociálních věcí,136,1000000
+2026,rev,rev_druhove,4,313,Ministerstvo práce a sociálních věcí,13,1000000
+2026,rev,rev_druhove,4,313,Ministerstvo práce a sociálních věcí,161,852507452267
+2026,rev,rev_druhove,4,313,Ministerstvo práce a sociálních věcí,162,537512274
+2026,rev,rev_druhove,4,314,Ministerstvo vnitra,136,35000000
+2026,rev,rev_druhove,4,314,Ministerstvo vnitra,13,35000000
+2026,rev,rev_druhove,4,314,Ministerstvo vnitra,161,12893836885
+2026,rev,rev_druhove,4,315,Ministerstvo životního prostředí,135,51999999
+2026,rev,rev_druhove,4,315,Ministerstvo životního prostředí,136,4500000
+2026,rev,rev_druhove,4,315,Ministerstvo životního prostředí,13,170499999
+2026,rev,rev_druhove,4,317,Ministerstvo pro místní rozvoj,136,3000000
+2026,rev,rev_druhove,4,317,Ministerstvo pro místní rozvoj,13,3000000
+2026,rev,rev_druhove,4,322,Ministerstvo průmyslu a obchodu,135,123333333
+2026,rev,rev_druhove,4,322,Ministerstvo průmyslu a obchodu,136,78000000
+2026,rev,rev_druhove,4,322,Ministerstvo průmyslu a obchodu,13,201333333
+2026,rev,rev_druhove,4,327,Ministerstvo dopravy,136,225000000
+2026,rev,rev_druhove,4,327,Ministerstvo dopravy,13,225000000
+2026,rev,rev_druhove,4,328,Český telekomunikační úřad,136,22000000
+2026,rev,rev_druhove,4,328,Český telekomunikační úřad,13,22000000
+2026,rev,rev_druhove,4,329,Ministerstvo zemědělství,136,12000000
+2026,rev,rev_druhove,4,329,Ministerstvo zemědělství,13,12000000
+2026,rev,rev_druhove,4,333,"Ministerstvo školství, mládeže a tělovýchovy",136,1370000
+2026,rev,rev_druhove,4,333,"Ministerstvo školství, mládeže a tělovýchovy",13,1370000
+2026,rev,rev_druhove,4,334,Ministerstvo kultury,136,40000
+2026,rev,rev_druhove,4,334,Ministerstvo kultury,13,40000
+2026,rev,rev_druhove,4,335,Ministerstvo zdravotnictví,136,30000000
+2026,rev,rev_druhove,4,335,Ministerstvo zdravotnictví,13,30000000
+2026,rev,rev_druhove,4,336,Ministerstvo spravedlnosti,136,1234420000
+2026,rev,rev_druhove,4,336,Ministerstvo spravedlnosti,13,1234420000
+2026,rev,rev_druhove,4,336,Ministerstvo spravedlnosti,161,1649699928
+2026,rev,rev_druhove,4,344,Úřad průmyslového vlastnictví,136,78000000
+2026,rev,rev_druhove,4,344,Úřad průmyslového vlastnictví,13,78000000
+2026,rev,rev_druhove,4,346,Český úřad zeměměřický a katastrální,136,1350000000
+2026,rev,rev_druhove,4,346,Český úřad zeměměřický a katastrální,13,1350000000
+2026,rev,rev_druhove,4,348,Český báňský úřad,135,260000000
+2026,rev,rev_druhove,4,348,Český báňský úřad,136,150000
+2026,rev,rev_druhove,4,348,Český báňský úřad,13,260150000
+2026,rev,rev_druhove,4,349,Energetický regulační úřad,136,3111800
+2026,rev,rev_druhove,4,349,Energetický regulační úřad,137,463432000
+2026,rev,rev_druhove,4,349,Energetický regulační úřad,13,466543800
+2026,rev,rev_druhove,4,353,Úřad pro ochranu hospodářské soutěže,136,4100000
+2026,rev,rev_druhove,4,353,Úřad pro ochranu hospodářské soutěže,13,4100000
+2026,rev,rev_druhove,4,364,Digitální a informační agentura,136,200000
+2026,rev,rev_druhove,4,364,Digitální a informační agentura,13,200000
+2026,rev,rev_druhove,4,372,Rada pro rozhlasové a televizní vysílání,136,5000000
+2026,rev,rev_druhove,4,372,Rada pro rozhlasové a televizní vysílání,13,5000000
+2026,rev,rev_druhove,4,375,Státní úřad pro jadernou bezpečnost,137,234961000
+2026,rev,rev_druhove,4,375,Státní úřad pro jadernou bezpečnost,13,234961000
+2026,rev,rev_druhove,4,376,Generální inspekce bezpečnostních sborů,161,85606562
+2026,rev,rev_druhove,4,397,Operace státních finančních aktiv,13,2647000000
+2026,rev,rev_druhove,4,398,Všeobecná pokladní správa,138,18500000000
+2026,rev,rev_druhove,4,398,Všeobecná pokladní správa,13,19800000000
+2026,rev,rev_druhove,4,398,Všeobecná pokladní správa,140,400000
+2026,rev,rev_druhove,4,398,Všeobecná pokladní správa,14,400000
+2026,rev,rev_druhove,5,301,Kancelář prezidenta republiky,211,100000
+2026,rev,rev_druhove,5,301,Kancelář prezidenta republiky,21,100000
+2026,rev,rev_druhove,5,302,Poslanecká sněmovna Parlamentu,211,7000000
+2026,rev,rev_druhove,5,302,Poslanecká sněmovna Parlamentu,213,1300000
+2026,rev,rev_druhove,5,302,Poslanecká sněmovna Parlamentu,21,8300000
+2026,rev,rev_druhove,5,303,Senát Parlamentu,211,2500000
+2026,rev,rev_druhove,5,303,Senát Parlamentu,213,900000
+2026,rev,rev_druhove,5,303,Senát Parlamentu,21,3400000
+2026,rev,rev_druhove,5,304,Úřad vlády České republiky,211,400000
+2026,rev,rev_druhove,5,304,Úřad vlády České republiky,213,1100000
+2026,rev,rev_druhove,5,304,Úřad vlády České republiky,21,1500000
+2026,rev,rev_druhove,5,305,Bezpečnostní informační služba,211,305000000
+2026,rev,rev_druhove,5,305,Bezpečnostní informační služba,21,305000000
+2026,rev,rev_druhove,5,306,Ministerstvo zahraničních věcí,1,942476000
+2026,rev,rev_druhove,5,306,Ministerstvo zahraničních věcí,211,1059000
+2026,rev,rev_druhove,5,306,Ministerstvo zahraničních věcí,213,9600000
+2026,rev,rev_druhove,5,306,Ministerstvo zahraničních věcí,21,10659000
+2026,rev,rev_druhove,5,307,Ministerstvo obrany,16,8082934041
+2026,rev,rev_druhove,5,307,Ministerstvo obrany,1,8083034041
+2026,rev,rev_druhove,5,307,Ministerstvo obrany,211,61445429
+2026,rev,rev_druhove,5,307,Ministerstvo obrany,212,50000000
+2026,rev,rev_druhove,5,307,Ministerstvo obrany,213,47309400
+2026,rev,rev_druhove,5,307,Ministerstvo obrany,21,158754829
+2026,rev,rev_druhove,5,308,Národní bezpečnostní úřad,1,300000
+2026,rev,rev_druhove,5,308,Národní bezpečnostní úřad,211,500000
+2026,rev,rev_druhove,5,308,Národní bezpečnostní úřad,214,50000
+2026,rev,rev_druhove,5,308,Národní bezpečnostní úřad,21,550000
+2026,rev,rev_druhove,5,309,Kancelář veřejného ochránce práv a ochránce práv dětí,213,250000
+2026,rev,rev_druhove,5,309,Kancelář veřejného ochránce práv a ochránce práv dětí,21,250000
+2026,rev,rev_druhove,5,312,Ministerstvo financí,16,962227689
+2026,rev,rev_druhove,5,312,Ministerstvo financí,1,1029027689
+2026,rev,rev_druhove,5,312,Ministerstvo financí,211,63545000
+2026,rev,rev_druhove,5,312,Ministerstvo financí,212,1100000000
+2026,rev,rev_druhove,5,312,Ministerstvo financí,213,156259150
+2026,rev,rev_druhove,5,312,Ministerstvo financí,214,3936500
+2026,rev,rev_druhove,5,312,Ministerstvo financí,21,1323740650
+2026,rev,rev_druhove,5,312,Ministerstvo financí,221,1684742000
+2026,rev,rev_druhove,5,313,Ministerstvo práce a sociálních věcí,16,853044964541
+2026,rev,rev_druhove,5,313,Ministerstvo práce a sociálních věcí,170,1154000000
+2026,rev,rev_druhove,5,313,Ministerstvo práce a sociálních věcí,17,1154000000
+2026,rev,rev_druhove,5,313,Ministerstvo práce a sociálních věcí,1,854199964541
+2026,rev,rev_druhove,5,313,Ministerstvo práce a sociálních věcí,213,2237000
+2026,rev,rev_druhove,5,313,Ministerstvo práce a sociálních věcí,21,2237000
+2026,rev,rev_druhove,5,313,Ministerstvo práce a sociálních věcí,222,785000000
+2026,rev,rev_druhove,5,314,Ministerstvo vnitra,16,12893836885
+2026,rev,rev_druhove,5,314,Ministerstvo vnitra,1,12928836885
+2026,rev,rev_druhove,5,314,Ministerstvo vnitra,211,178326700
+2026,rev,rev_druhove,5,314,Ministerstvo vnitra,213,22438300
+2026,rev,rev_druhove,5,314,Ministerstvo vnitra,214,557000
+2026,rev,rev_druhove,5,314,Ministerstvo vnitra,21,201322000
+2026,rev,rev_druhove,5,314,Ministerstvo vnitra,221,2500000
+2026,rev,rev_druhove,5,314,Ministerstvo vnitra,222,32670000
+2026,rev,rev_druhove,5,315,Ministerstvo životního prostředí,1,170499999
+2026,rev,rev_druhove,5,315,Ministerstvo životního prostředí,211,700000
+2026,rev,rev_druhove,5,315,Ministerstvo životního prostředí,212,8000000
+2026,rev,rev_druhove,5,315,Ministerstvo životního prostředí,213,5700000
+2026,rev,rev_druhove,5,315,Ministerstvo životního prostředí,21,14400000
+2026,rev,rev_druhove,5,315,Ministerstvo životního prostředí,222,200000
+2026,rev,rev_druhove,5,317,Ministerstvo pro místní rozvoj,1,3000000
+2026,rev,rev_druhove,5,317,Ministerstvo pro místní rozvoj,213,120000000
+2026,rev,rev_druhove,5,317,Ministerstvo pro místní rozvoj,21,120000000
+2026,rev,rev_druhove,5,322,Ministerstvo průmyslu a obchodu,1,201333333
+2026,rev,rev_druhove,5,322,Ministerstvo průmyslu a obchodu,211,35560000
+2026,rev,rev_druhove,5,322,Ministerstvo průmyslu a obchodu,213,2990000
+2026,rev,rev_druhove,5,322,Ministerstvo průmyslu a obchodu,214,3000000000
+2026,rev,rev_druhove,5,322,Ministerstvo průmyslu a obchodu,21,3038550000
+2026,rev,rev_druhove,5,322,Ministerstvo průmyslu a obchodu,221,58550000
+2026,rev,rev_druhove,5,327,Ministerstvo dopravy,1,225000000
+2026,rev,rev_druhove,5,327,Ministerstvo dopravy,211,50800000
+2026,rev,rev_druhove,5,327,Ministerstvo dopravy,212,3132000000
+2026,rev,rev_druhove,5,327,Ministerstvo dopravy,213,32632000
+2026,rev,rev_druhove,5,327,Ministerstvo dopravy,21,3215432000
+2026,rev,rev_druhove,5,327,Ministerstvo dopravy,221,1068000
+2026,rev,rev_druhove,5,327,Ministerstvo dopravy,222,25000000
+2026,rev,rev_druhove,5,328,Český telekomunikační úřad,1,22000000
+2026,rev,rev_druhove,5,328,Český telekomunikační úřad,211,1070080000
+2026,rev,rev_druhove,5,328,Český telekomunikační úřad,213,70000
+2026,rev,rev_druhove,5,328,Český telekomunikační úřad,21,1070150000
+2026,rev,rev_druhove,5,328,Český telekomunikační úřad,221,17850000
+2026,rev,rev_druhove,5,329,Ministerstvo zemědělství,1,12000000
+2026,rev,rev_druhove,5,329,Ministerstvo zemědělství,211,204350000
+2026,rev,rev_druhove,5,329,Ministerstvo zemědělství,212,2500000000
+2026,rev,rev_druhove,5,329,Ministerstvo zemědělství,213,350108000
+2026,rev,rev_druhove,5,329,Ministerstvo zemědělství,214,8587000
+2026,rev,rev_druhove,5,329,Ministerstvo zemědělství,21,3063045000
+2026,rev,rev_druhove,5,329,Ministerstvo zemědělství,221,76742000
+2026,rev,rev_druhove,5,329,Ministerstvo zemědělství,222,20000000
+2026,rev,rev_druhove,5,333,"Ministerstvo školství, mládeže a tělovýchovy",1,1370000
+2026,rev,rev_druhove,5,333,"Ministerstvo školství, mládeže a tělovýchovy",213,5352100
+2026,rev,rev_druhove,5,333,"Ministerstvo školství, mládeže a tělovýchovy",21,5352100
+2026,rev,rev_druhove,5,333,"Ministerstvo školství, mládeže a tělovýchovy",222,50000000
+2026,rev,rev_druhove,5,334,Ministerstvo kultury,1,40000
+2026,rev,rev_druhove,5,334,Ministerstvo kultury,212,180014111
+2026,rev,rev_druhove,5,334,Ministerstvo kultury,213,350000
+2026,rev,rev_druhove,5,334,Ministerstvo kultury,21,180364111
+2026,rev,rev_druhove,5,334,Ministerstvo kultury,221,11000
+2026,rev,rev_druhove,5,335,Ministerstvo zdravotnictví,1,30000000
+2026,rev,rev_druhove,5,335,Ministerstvo zdravotnictví,211,52400000
+2026,rev,rev_druhove,5,335,Ministerstvo zdravotnictví,212,3500000
+2026,rev,rev_druhove,5,335,Ministerstvo zdravotnictví,213,2270000
+2026,rev,rev_druhove,5,335,Ministerstvo zdravotnictví,214,8000
+2026,rev,rev_druhove,5,335,Ministerstvo zdravotnictví,21,58178000
+2026,rev,rev_druhove,5,335,Ministerstvo zdravotnictví,221,34220000
+2026,rev,rev_druhove,5,335,Ministerstvo zdravotnictví,222,2000000
+2026,rev,rev_druhove,5,336,Ministerstvo spravedlnosti,16,1649699928
+2026,rev,rev_druhove,5,336,Ministerstvo spravedlnosti,1,2884119928
+2026,rev,rev_druhove,5,336,Ministerstvo spravedlnosti,211,36732000
+2026,rev,rev_druhove,5,336,Ministerstvo spravedlnosti,213,35749876
+2026,rev,rev_druhove,5,336,Ministerstvo spravedlnosti,214,11000
+2026,rev,rev_druhove,5,336,Ministerstvo spravedlnosti,21,72492876
+2026,rev,rev_druhove,5,336,Ministerstvo spravedlnosti,221,338418704
+2026,rev,rev_druhove,5,344,Úřad průmyslového vlastnictví,1,78000000
+2026,rev,rev_druhove,5,344,Úřad průmyslového vlastnictví,211,14800000
+2026,rev,rev_druhove,5,344,Úřad průmyslového vlastnictví,213,18000
+2026,rev,rev_druhove,5,344,Úřad průmyslového vlastnictví,21,14818000
+2026,rev,rev_druhove,5,345,Český statistický úřad,211,1000000
+2026,rev,rev_druhove,5,345,Český statistický úřad,213,100000
+2026,rev,rev_druhove,5,345,Český statistický úřad,21,1100000
+2026,rev,rev_druhove,5,346,Český úřad zeměměřický a katastrální,1,1350000000
+2026,rev,rev_druhove,5,346,Český úřad zeměměřický a katastrální,211,318197000
+2026,rev,rev_druhove,5,346,Český úřad zeměměřický a katastrální,213,1803000
+2026,rev,rev_druhove,5,346,Český úřad zeměměřický a katastrální,21,320000000
+2026,rev,rev_druhove,5,348,Český báňský úřad,1,260150000
+2026,rev,rev_druhove,5,348,Český báňský úřad,211,1000
+2026,rev,rev_druhove,5,348,Český báňský úřad,213,180000
+2026,rev,rev_druhove,5,348,Český báňský úřad,21,181000
+2026,rev,rev_druhove,5,348,Český báňský úřad,221,1820000
+2026,rev,rev_druhove,5,349,Energetický regulační úřad,1,566543800
+2026,rev,rev_druhove,5,349,Energetický regulační úřad,221,100000
+2026,rev,rev_druhove,5,353,Úřad pro ochranu hospodářské soutěže,1,4100000
+2026,rev,rev_druhove,5,362,Národní sportovní agentura,211,30000
+2026,rev,rev_druhove,5,362,Národní sportovní agentura,213,8005000
+2026,rev,rev_druhove,5,362,Národní sportovní agentura,21,8035000
+2026,rev,rev_druhove,5,362,Národní sportovní agentura,222,4850000
+2026,rev,rev_druhove,5,364,Digitální a informační agentura,1,200000
+2026,rev,rev_druhove,5,371,Úřad pro dohled nad hospodařením polit. stran a polit. hnutí,211,15000
+2026,rev,rev_druhove,5,371,Úřad pro dohled nad hospodařením polit. stran a polit. hnutí,21,15000
+2026,rev,rev_druhove,5,372,Rada pro rozhlasové a televizní vysílání,1,5000000
+2026,rev,rev_druhove,5,374,Správa státních hmotných rezerv,211,4000000
+2026,rev,rev_druhove,5,374,Správa státních hmotných rezerv,213,31000000
+2026,rev,rev_druhove,5,374,Správa státních hmotných rezerv,21,35000000
+2026,rev,rev_druhove,5,375,Státní úřad pro jadernou bezpečnost,1,234961000
+2026,rev,rev_druhove,5,375,Státní úřad pro jadernou bezpečnost,213,600000
+2026,rev,rev_druhove,5,375,Státní úřad pro jadernou bezpečnost,21,600000
+2026,rev,rev_druhove,5,375,Státní úřad pro jadernou bezpečnost,221,600000
+2026,rev,rev_druhove,5,376,Generální inspekce bezpečnostních sborů,16,85606562
+2026,rev,rev_druhove,5,376,Generální inspekce bezpečnostních sborů,1,85606562
+2026,rev,rev_druhove,5,376,Generální inspekce bezpečnostních sborů,211,87000
+2026,rev,rev_druhove,5,376,Generální inspekce bezpečnostních sborů,213,200000
+2026,rev,rev_druhove,5,376,Generální inspekce bezpečnostních sborů,21,287000
+2026,rev,rev_druhove,5,378,Národní úřad pro kybernetickou a informační bezpečnost,221,500000
+2026,rev,rev_druhove,5,381,Nejvyšší kontrolní úřad,211,404000
+2026,rev,rev_druhove,5,381,Nejvyšší kontrolní úřad,213,420000
+2026,rev,rev_druhove,5,381,Nejvyšší kontrolní úřad,21,824000
+2026,rev,rev_druhove,5,397,Operace státních finančních aktiv,1,2647000000
+2026,rev,rev_druhove,5,397,Operace státních finančních aktiv,212,10000000
+2026,rev,rev_druhove,5,397,Operace státních finančních aktiv,214,1950000000
+2026,rev,rev_druhove,5,397,Operace státních finančních aktiv,21,1960000000
+2026,rev,rev_druhove,5,397,Operace státních finančních aktiv,222,1500000
+2026,rev,rev_druhove,5,398,Všeobecná pokladní správa,170,200000000
+2026,rev,rev_druhove,5,398,Všeobecná pokladní správa,17,200000000
+2026,rev,rev_druhove,5,398,Všeobecná pokladní správa,1,1023200400000
+2026,rev,rev_druhove,5,398,Všeobecná pokladní správa,212,4700000000
+2026,rev,rev_druhove,5,398,Všeobecná pokladní správa,21,4700000000
+2026,rev,rev_druhove,5,398,Všeobecná pokladní správa,222,1060000000
+2026,rev,rev_druhove,6,302,Poslanecká sněmovna Parlamentu,232,700000
+2026,rev,rev_druhove,6,302,Poslanecká sněmovna Parlamentu,23,700000
+2026,rev,rev_druhove,6,304,Úřad vlády České republiky,232,1000000
+2026,rev,rev_druhove,6,304,Úřad vlády České republiky,23,1000000
+2026,rev,rev_druhove,6,306,Ministerstvo zahraničních věcí,232,40821000
+2026,rev,rev_druhove,6,306,Ministerstvo zahraničních věcí,23,40821000
+2026,rev,rev_druhove,6,307,Ministerstvo obrany,231,20371000
+2026,rev,rev_druhove,6,307,Ministerstvo obrany,232,324683171
+2026,rev,rev_druhove,6,307,Ministerstvo obrany,23,345054171
+2026,rev,rev_druhove,6,312,Ministerstvo financí,22,1684742000
+2026,rev,rev_druhove,6,312,Ministerstvo financí,231,3225000
+2026,rev,rev_druhove,6,312,Ministerstvo financí,232,357755500
+2026,rev,rev_druhove,6,312,Ministerstvo financí,23,360980500
+2026,rev,rev_druhove,6,312,Ministerstvo financí,241,78851000
+2026,rev,rev_druhove,6,313,Ministerstvo práce a sociálních věcí,22,785000000
+2026,rev,rev_druhove,6,313,Ministerstvo práce a sociálních věcí,232,190263000
+2026,rev,rev_druhove,6,313,Ministerstvo práce a sociálních věcí,236,910000000
+2026,rev,rev_druhove,6,313,Ministerstvo práce a sociálních věcí,23,1100263000
+2026,rev,rev_druhove,6,314,Ministerstvo vnitra,22,35170000
+2026,rev,rev_druhove,6,314,Ministerstvo vnitra,231,3626000
+2026,rev,rev_druhove,6,314,Ministerstvo vnitra,232,682427000
+2026,rev,rev_druhove,6,314,Ministerstvo vnitra,23,686053000
+2026,rev,rev_druhove,6,315,Ministerstvo životního prostředí,22,200000
+2026,rev,rev_druhove,6,315,Ministerstvo životního prostředí,231,250000
+2026,rev,rev_druhove,6,315,Ministerstvo životního prostředí,232,4800000
+2026,rev,rev_druhove,6,315,Ministerstvo životního prostředí,23,5050000
+2026,rev,rev_druhove,6,322,Ministerstvo průmyslu a obchodu,22,58550000
+2026,rev,rev_druhove,6,322,Ministerstvo průmyslu a obchodu,232,25586178
+2026,rev,rev_druhove,6,322,Ministerstvo průmyslu a obchodu,23,25586178
+2026,rev,rev_druhove,6,322,Ministerstvo průmyslu a obchodu,244,1961669
+2026,rev,rev_druhove,6,322,Ministerstvo průmyslu a obchodu,245,870338735
+2026,rev,rev_druhove,6,327,Ministerstvo dopravy,22,26068000
+2026,rev,rev_druhove,6,327,Ministerstvo dopravy,232,20500000
+2026,rev,rev_druhove,6,327,Ministerstvo dopravy,23,20500000
+2026,rev,rev_druhove,6,328,Český telekomunikační úřad,22,17850000
+2026,rev,rev_druhove,6,329,Ministerstvo zemědělství,22,96742000
+2026,rev,rev_druhove,6,329,Ministerstvo zemědělství,231,160000
+2026,rev,rev_druhove,6,329,Ministerstvo zemědělství,232,123953000
+2026,rev,rev_druhove,6,329,Ministerstvo zemědělství,23,124113000
+2026,rev,rev_druhove,6,329,Ministerstvo zemědělství,241,20100000
+2026,rev,rev_druhove,6,333,"Ministerstvo školství, mládeže a tělovýchovy",22,50000000
+2026,rev,rev_druhove,6,333,"Ministerstvo školství, mládeže a tělovýchovy",232,846500
+2026,rev,rev_druhove,6,333,"Ministerstvo školství, mládeže a tělovýchovy",23,846500
+2026,rev,rev_druhove,6,333,"Ministerstvo školství, mládeže a tělovýchovy",245,40000000
+2026,rev,rev_druhove,6,334,Ministerstvo kultury,22,11000
+2026,rev,rev_druhove,6,335,Ministerstvo zdravotnictví,22,36220000
+2026,rev,rev_druhove,6,335,Ministerstvo zdravotnictví,232,2110000
+2026,rev,rev_druhove,6,335,Ministerstvo zdravotnictví,23,2110000
+2026,rev,rev_druhove,6,336,Ministerstvo spravedlnosti,22,338418704
+2026,rev,rev_druhove,6,336,Ministerstvo spravedlnosti,231,11000
+2026,rev,rev_druhove,6,336,Ministerstvo spravedlnosti,232,460489420
+2026,rev,rev_druhove,6,336,Ministerstvo spravedlnosti,23,460500420
+2026,rev,rev_druhove,6,344,Úřad průmyslového vlastnictví,231,20000
+2026,rev,rev_druhove,6,344,Úřad průmyslového vlastnictví,232,350000
+2026,rev,rev_druhove,6,344,Úřad průmyslového vlastnictví,235,178910000
+2026,rev,rev_druhove,6,344,Úřad průmyslového vlastnictví,23,179280000
+2026,rev,rev_druhove,6,345,Český statistický úřad,232,300000
+2026,rev,rev_druhove,6,345,Český statistický úřad,23,300000
+2026,rev,rev_druhove,6,348,Český báňský úřad,22,1820000
+2026,rev,rev_druhove,6,348,Český báňský úřad,232,180000
+2026,rev,rev_druhove,6,348,Český báňský úřad,23,180000
+2026,rev,rev_druhove,6,349,Energetický regulační úřad,22,100000
+2026,rev,rev_druhove,6,353,Úřad pro ochranu hospodářské soutěže,232,10000000
+2026,rev,rev_druhove,6,353,Úřad pro ochranu hospodářské soutěže,23,10000000
+2026,rev,rev_druhove,6,362,Národní sportovní agentura,22,4850000
+2026,rev,rev_druhove,6,362,Národní sportovní agentura,232,115000
+2026,rev,rev_druhove,6,362,Národní sportovní agentura,23,115000
+2026,rev,rev_druhove,6,371,Úřad pro dohled nad hospodařením polit. stran a polit. hnutí,232,20000
+2026,rev,rev_druhove,6,371,Úřad pro dohled nad hospodařením polit. stran a polit. hnutí,23,20000
+2026,rev,rev_druhove,6,375,Státní úřad pro jadernou bezpečnost,22,600000
+2026,rev,rev_druhove,6,376,Generální inspekce bezpečnostních sborů,232,593000
+2026,rev,rev_druhove,6,376,Generální inspekce bezpečnostních sborů,23,593000
+2026,rev,rev_druhove,6,378,Národní úřad pro kybernetickou a informační bezpečnost,22,500000
+2026,rev,rev_druhove,6,381,Nejvyšší kontrolní úřad,232,140000
+2026,rev,rev_druhove,6,381,Nejvyšší kontrolní úřad,23,140000
+2026,rev,rev_druhove,6,397,Operace státních finančních aktiv,22,1500000
+2026,rev,rev_druhove,6,398,Všeobecná pokladní správa,22,1060000000
+2026,rev,rev_druhove,6,398,Všeobecná pokladní správa,232,600000000
+2026,rev,rev_druhove,6,398,Všeobecná pokladní správa,23,600000000
+2026,rev,rev_druhove,6,398,Všeobecná pokladní správa,242,94000000
+2026,rev,rev_druhove,6,398,Všeobecná pokladní správa,244,3520800
+2026,rev,rev_druhove,7,301,Kancelář prezidenta republiky,2,100000
+2026,rev,rev_druhove,7,302,Poslanecká sněmovna Parlamentu,2,9000000
+2026,rev,rev_druhove,7,303,Senát Parlamentu,2,3400000
+2026,rev,rev_druhove,7,304,Úřad vlády České republiky,2,2500000
+2026,rev,rev_druhove,7,304,Úřad vlády České republiky,411,13741480
+2026,rev,rev_druhove,7,304,Úřad vlády České republiky,4118,13741480
+2026,rev,rev_druhove,7,305,Bezpečnostní informační služba,2,305000000
+2026,rev,rev_druhove,7,306,Ministerstvo zahraničních věcí,2,51480000
+2026,rev,rev_druhove,7,306,Ministerstvo zahraničních věcí,311,3520000
+2026,rev,rev_druhove,7,306,Ministerstvo zahraničních věcí,31,3520000
+2026,rev,rev_druhove,7,306,Ministerstvo zahraničních věcí,3,3520000
+2026,rev,rev_druhove,7,307,Ministerstvo obrany,2,503809000
+2026,rev,rev_druhove,7,307,Ministerstvo obrany,311,48000000
+2026,rev,rev_druhove,7,307,Ministerstvo obrany,31,48000000
+2026,rev,rev_druhove,7,307,Ministerstvo obrany,3,48000000
+2026,rev,rev_druhove,7,308,Národní bezpečnostní úřad,2,550000
+2026,rev,rev_druhove,7,309,Kancelář veřejného ochránce práv a ochránce práv dětí,2,250000
+2026,rev,rev_druhove,7,312,Ministerstvo financí,24,78851000
+2026,rev,rev_druhove,7,312,Ministerstvo financí,251,3000000000
+2026,rev,rev_druhove,7,312,Ministerstvo financí,25,3000000000
+2026,rev,rev_druhove,7,312,Ministerstvo financí,2,6448314150
+2026,rev,rev_druhove,7,312,Ministerstvo financí,311,2802322000
+2026,rev,rev_druhove,7,312,Ministerstvo financí,31,2802322000
+2026,rev,rev_druhove,7,312,Ministerstvo financí,320,12000000
+2026,rev,rev_druhove,7,312,Ministerstvo financí,32,12000000
+2026,rev,rev_druhove,7,312,Ministerstvo financí,3,2814322000
+2026,rev,rev_druhove,7,312,Ministerstvo financí,411,211382263
+2026,rev,rev_druhove,7,312,Ministerstvo financí,4118,211382263
+2026,rev,rev_druhove,7,313,Ministerstvo práce a sociálních věcí,2,1887500000
+2026,rev,rev_druhove,7,313,Ministerstvo práce a sociálních věcí,411,7331575539
+2026,rev,rev_druhove,7,313,Ministerstvo práce a sociálních věcí,4118,7331575539
+2026,rev,rev_druhove,7,314,Ministerstvo vnitra,2,922545000
+2026,rev,rev_druhove,7,314,Ministerstvo vnitra,311,11955000
+2026,rev,rev_druhove,7,314,Ministerstvo vnitra,31,11955000
+2026,rev,rev_druhove,7,314,Ministerstvo vnitra,3,11955000
+2026,rev,rev_druhove,7,314,Ministerstvo vnitra,411,43576963
+2026,rev,rev_druhove,7,314,Ministerstvo vnitra,4118,43576963
+2026,rev,rev_druhove,7,315,Ministerstvo životního prostředí,2,19650000
+2026,rev,rev_druhove,7,315,Ministerstvo životního prostředí,311,385850000
+2026,rev,rev_druhove,7,315,Ministerstvo životního prostředí,31,385850000
+2026,rev,rev_druhove,7,315,Ministerstvo životního prostředí,3,385850000
+2026,rev,rev_druhove,7,315,Ministerstvo životního prostředí,411,1182560503
+2026,rev,rev_druhove,7,315,Ministerstvo životního prostředí,4118,232560503
+2026,rev,rev_druhove,7,317,Ministerstvo pro místní rozvoj,2,120000000
+2026,rev,rev_druhove,7,317,Ministerstvo pro místní rozvoj,411,655283090
+2026,rev,rev_druhove,7,317,Ministerstvo pro místní rozvoj,4118,655283090
+2026,rev,rev_druhove,7,322,Ministerstvo průmyslu a obchodu,24,872300404
+2026,rev,rev_druhove,7,322,Ministerstvo průmyslu a obchodu,2,3994986582
+2026,rev,rev_druhove,7,322,Ministerstvo průmyslu a obchodu,311,2800000000
+2026,rev,rev_druhove,7,322,Ministerstvo průmyslu a obchodu,31,2800000000
+2026,rev,rev_druhove,7,322,Ministerstvo průmyslu a obchodu,3,2800000000
+2026,rev,rev_druhove,7,322,Ministerstvo průmyslu a obchodu,411,4629493247
+2026,rev,rev_druhove,7,322,Ministerstvo průmyslu a obchodu,4118,3329493247
+2026,rev,rev_druhove,7,327,Ministerstvo dopravy,2,3262000000
+2026,rev,rev_druhove,7,327,Ministerstvo dopravy,411,131159018
+2026,rev,rev_druhove,7,327,Ministerstvo dopravy,4118,131159018
+2026,rev,rev_druhove,7,328,Český telekomunikační úřad,2,1088000000
+2026,rev,rev_druhove,7,329,Ministerstvo zemědělství,248,5000000
+2026,rev,rev_druhove,7,329,Ministerstvo zemědělství,24,25100000
+2026,rev,rev_druhove,7,329,Ministerstvo zemědělství,2,3309000000
+2026,rev,rev_druhove,7,329,Ministerstvo zemědělství,311,1311300000
+2026,rev,rev_druhove,7,329,Ministerstvo zemědělství,31,1311300000
+2026,rev,rev_druhove,7,329,Ministerstvo zemědělství,3,1311300000
+2026,rev,rev_druhove,7,329,Ministerstvo zemědělství,411,1511585246
+2026,rev,rev_druhove,7,329,Ministerstvo zemědělství,4118,36585246
+2026,rev,rev_druhove,7,333,"Ministerstvo školství, mládeže a tělovýchovy",24,40000000
+2026,rev,rev_druhove,7,333,"Ministerstvo školství, mládeže a tělovýchovy",2,96198600
+2026,rev,rev_druhove,7,333,"Ministerstvo školství, mládeže a tělovýchovy",411,13878427302
+2026,rev,rev_druhove,7,333,"Ministerstvo školství, mládeže a tělovýchovy",4118,13878427302
+2026,rev,rev_druhove,7,334,Ministerstvo kultury,2,180375111
+2026,rev,rev_druhove,7,334,Ministerstvo kultury,411,13633579
+2026,rev,rev_druhove,7,334,Ministerstvo kultury,4118,13633579
+2026,rev,rev_druhove,7,335,Ministerstvo zdravotnictví,2,96508000
+2026,rev,rev_druhove,7,335,Ministerstvo zdravotnictví,411,193932939
+2026,rev,rev_druhove,7,335,Ministerstvo zdravotnictví,4118,163150000
+2026,rev,rev_druhove,7,336,Ministerstvo spravedlnosti,2,871412000
+2026,rev,rev_druhove,7,336,Ministerstvo spravedlnosti,411,35474640
+2026,rev,rev_druhove,7,336,Ministerstvo spravedlnosti,4118,35471640
+2026,rev,rev_druhove,7,344,Úřad průmyslového vlastnictví,2,194098000
+2026,rev,rev_druhove,7,344,Úřad průmyslového vlastnictví,311,2000
+2026,rev,rev_druhove,7,344,Úřad průmyslového vlastnictví,31,2000
+2026,rev,rev_druhove,7,344,Úřad průmyslového vlastnictví,3,2000
+2026,rev,rev_druhove,7,345,Český statistický úřad,2,1400000
+2026,rev,rev_druhove,7,346,Český úřad zeměměřický a katastrální,2,320000000
+2026,rev,rev_druhove,7,348,Český báňský úřad,2,2181000
+2026,rev,rev_druhove,7,348,Český báňský úřad,311,50000
+2026,rev,rev_druhove,7,348,Český báňský úřad,31,50000
+2026,rev,rev_druhove,7,348,Český báňský úřad,3,50000
+2026,rev,rev_druhove,7,349,Energetický regulační úřad,2,100000
+2026,rev,rev_druhove,7,353,Úřad pro ochranu hospodářské soutěže,2,10000000
+2026,rev,rev_druhove,7,362,Národní sportovní agentura,2,13000000
+2026,rev,rev_druhove,7,371,Úřad pro dohled nad hospodařením polit. stran a polit. hnutí,2,35000
+2026,rev,rev_druhove,7,374,Správa státních hmotných rezerv,2,35000000
+2026,rev,rev_druhove,7,374,Správa státních hmotných rezerv,311,5000000
+2026,rev,rev_druhove,7,374,Správa státních hmotných rezerv,31,5000000
+2026,rev,rev_druhove,7,374,Správa státních hmotných rezerv,3,5000000
+2026,rev,rev_druhove,7,375,Státní úřad pro jadernou bezpečnost,2,1200000
+2026,rev,rev_druhove,7,376,Generální inspekce bezpečnostních sborů,2,880000
+2026,rev,rev_druhove,7,377,Technologická agentura České republiky,411,12313177
+2026,rev,rev_druhove,7,377,Technologická agentura České republiky,4118,12313177
+2026,rev,rev_druhove,7,378,Národní úřad pro kybernetickou a informační bezpečnost,2,500000
+2026,rev,rev_druhove,7,381,Nejvyšší kontrolní úřad,2,964000
+2026,rev,rev_druhove,7,397,Operace státních finančních aktiv,2,1961500000
+2026,rev,rev_druhove,7,398,Všeobecná pokladní správa,247,173000000
+2026,rev,rev_druhove,7,398,Všeobecná pokladní správa,24,270520800
+2026,rev,rev_druhove,7,398,Všeobecná pokladní správa,2,6630520800
+2026,rev,rev_druhove,7,398,Všeobecná pokladní správa,320,7855000
+2026,rev,rev_druhove,7,398,Všeobecná pokladní správa,32,7855000
+2026,rev,rev_druhove,7,398,Všeobecná pokladní správa,3,7855000
+2026,rev,rev_druhove,7,398,Všeobecná pokladní správa,411,27000000000
+2026,rev,rev_druhove,8,304,Úřad vlády České republiky,415,14107740
+2026,rev,rev_druhove,8,304,Úřad vlády České republiky,4153,14107740
+2026,rev,rev_druhove,8,304,Úřad vlády České republiky,41,27849220
+2026,rev,rev_druhove,8,304,Úřad vlády České republiky,421,93281867
+2026,rev,rev_druhove,8,306,Ministerstvo zahraničních věcí,415,163267754
+2026,rev,rev_druhove,8,306,Ministerstvo zahraničních věcí,4153,128997754
+2026,rev,rev_druhove,8,306,Ministerstvo zahraničních věcí,41,163267754
+2026,rev,rev_druhove,8,306,Ministerstvo zahraničních věcí,421,31856791
+2026,rev,rev_druhove,8,306,Ministerstvo zahraničních věcí,4218,31856791
+2026,rev,rev_druhove,8,312,Ministerstvo financí,415,92441498
+2026,rev,rev_druhove,8,312,Ministerstvo financí,4153,27941498
+2026,rev,rev_druhove,8,312,Ministerstvo financí,41,303823761
+2026,rev,rev_druhove,8,312,Ministerstvo financí,421,15730179
+2026,rev,rev_druhove,8,312,Ministerstvo financí,4218,7730179
+2026,rev,rev_druhove,8,312,Ministerstvo financí,423,18188430
+2026,rev,rev_druhove,8,313,Ministerstvo práce a sociálních věcí,415,300081252
+2026,rev,rev_druhove,8,313,Ministerstvo práce a sociálních věcí,4153,300081252
+2026,rev,rev_druhove,8,313,Ministerstvo práce a sociálních věcí,41,7631656791
+2026,rev,rev_druhove,8,313,Ministerstvo práce a sociálních věcí,421,37681139
+2026,rev,rev_druhove,8,313,Ministerstvo práce a sociálních věcí,4218,4658679
+2026,rev,rev_druhove,8,313,Ministerstvo práce a sociálních věcí,423,7777982211
+2026,rev,rev_druhove,8,314,Ministerstvo vnitra,415,1086159141
+2026,rev,rev_druhove,8,314,Ministerstvo vnitra,4153,1086159141
+2026,rev,rev_druhove,8,314,Ministerstvo vnitra,41,1129736104
+2026,rev,rev_druhove,8,314,Ministerstvo vnitra,421,1710984830
+2026,rev,rev_druhove,8,314,Ministerstvo vnitra,4218,1710984830
+2026,rev,rev_druhove,8,314,Ministerstvo vnitra,423,4363088607
+2026,rev,rev_druhove,8,315,Ministerstvo životního prostředí,415,218796813
+2026,rev,rev_druhove,8,315,Ministerstvo životního prostředí,4153,156594338
+2026,rev,rev_druhove,8,315,Ministerstvo životního prostředí,41,1401357316
+2026,rev,rev_druhove,8,315,Ministerstvo životního prostředí,421,14709486909
+2026,rev,rev_druhove,8,315,Ministerstvo životního prostředí,4218,14625991062
+2026,rev,rev_druhove,8,315,Ministerstvo životního prostředí,423,341787488
+2026,rev,rev_druhove,8,317,Ministerstvo pro místní rozvoj,415,152479902
+2026,rev,rev_druhove,8,317,Ministerstvo pro místní rozvoj,4153,148693662
+2026,rev,rev_druhove,8,317,Ministerstvo pro místní rozvoj,41,807762992
+2026,rev,rev_druhove,8,317,Ministerstvo pro místní rozvoj,421,17901595743
+2026,rev,rev_druhove,8,317,Ministerstvo pro místní rozvoj,4218,15701595743
+2026,rev,rev_druhove,8,322,Ministerstvo průmyslu a obchodu,415,143846881
+2026,rev,rev_druhove,8,322,Ministerstvo průmyslu a obchodu,4153,138521160
+2026,rev,rev_druhove,8,322,Ministerstvo průmyslu a obchodu,41,4773340128
+2026,rev,rev_druhove,8,322,Ministerstvo průmyslu a obchodu,421,8687000000
+2026,rev,rev_druhove,8,322,Ministerstvo průmyslu a obchodu,4218,8687000000
+2026,rev,rev_druhove,8,322,Ministerstvo průmyslu a obchodu,423,80000000
+2026,rev,rev_druhove,8,327,Ministerstvo dopravy,415,55947393
+2026,rev,rev_druhove,8,327,Ministerstvo dopravy,4153,55947393
+2026,rev,rev_druhove,8,327,Ministerstvo dopravy,41,187106411
+2026,rev,rev_druhove,8,327,Ministerstvo dopravy,421,22423593000
+2026,rev,rev_druhove,8,327,Ministerstvo dopravy,4218,22423593000
+2026,rev,rev_druhove,8,327,Ministerstvo dopravy,423,2471479077
+2026,rev,rev_druhove,8,328,Český telekomunikační úřad,415,1860240
+2026,rev,rev_druhove,8,328,Český telekomunikační úřad,4153,1860240
+2026,rev,rev_druhove,8,328,Český telekomunikační úřad,41,1860240
+2026,rev,rev_druhove,8,329,Ministerstvo zemědělství,413,2000000
+2026,rev,rev_druhove,8,329,Ministerstvo zemědělství,415,24492560051
+2026,rev,rev_druhove,8,329,Ministerstvo zemědělství,4153,24492560051
+2026,rev,rev_druhove,8,329,Ministerstvo zemědělství,41,26006145297
+2026,rev,rev_druhove,8,329,Ministerstvo zemědělství,421,1578669330
+2026,rev,rev_druhove,8,329,Ministerstvo zemědělství,4218,103669330
+2026,rev,rev_druhove,8,329,Ministerstvo zemědělství,423,3130668683
+2026,rev,rev_druhove,8,333,"Ministerstvo školství, mládeže a tělovýchovy",415,68043899
+2026,rev,rev_druhove,8,333,"Ministerstvo školství, mládeže a tělovýchovy",4153,68043899
+2026,rev,rev_druhove,8,333,"Ministerstvo školství, mládeže a tělovýchovy",41,13946471201
+2026,rev,rev_druhove,8,333,"Ministerstvo školství, mládeže a tělovýchovy",421,7189135
+2026,rev,rev_druhove,8,333,"Ministerstvo školství, mládeže a tělovýchovy",4218,7189135
+2026,rev,rev_druhove,8,333,"Ministerstvo školství, mládeže a tělovýchovy",423,1380600000
+2026,rev,rev_druhove,8,334,Ministerstvo kultury,415,27184501
+2026,rev,rev_druhove,8,334,Ministerstvo kultury,4153,27184501
+2026,rev,rev_druhove,8,334,Ministerstvo kultury,41,40818080
+2026,rev,rev_druhove,8,334,Ministerstvo kultury,421,334439000
+2026,rev,rev_druhove,8,334,Ministerstvo kultury,4218,334439000
+2026,rev,rev_druhove,8,335,Ministerstvo zdravotnictví,415,86618939
+2026,rev,rev_druhove,8,335,Ministerstvo zdravotnictví,4153,86618939
+2026,rev,rev_druhove,8,335,Ministerstvo zdravotnictví,41,280551878
+2026,rev,rev_druhove,8,335,Ministerstvo zdravotnictví,421,440500000
+2026,rev,rev_druhove,8,335,Ministerstvo zdravotnictví,4218,440500000
+2026,rev,rev_druhove,8,335,Ministerstvo zdravotnictví,423,1210216996
+2026,rev,rev_druhove,8,336,Ministerstvo spravedlnosti,413,350000000
+2026,rev,rev_druhove,8,336,Ministerstvo spravedlnosti,415,6876644
+2026,rev,rev_druhove,8,336,Ministerstvo spravedlnosti,4153,6876644
+2026,rev,rev_druhove,8,336,Ministerstvo spravedlnosti,41,392351284
+2026,rev,rev_druhove,8,336,Ministerstvo spravedlnosti,421,105227670
+2026,rev,rev_druhove,8,336,Ministerstvo spravedlnosti,4218,54666169
+2026,rev,rev_druhove,8,336,Ministerstvo spravedlnosti,423,5369008
+2026,rev,rev_druhove,8,344,Úřad průmyslového vlastnictví,415,20122051
+2026,rev,rev_druhove,8,344,Úřad průmyslového vlastnictví,4153,20122051
+2026,rev,rev_druhove,8,344,Úřad průmyslového vlastnictví,41,20122051
+2026,rev,rev_druhove,8,345,Český statistický úřad,415,25787135
+2026,rev,rev_druhove,8,345,Český statistický úřad,4153,25787135
+2026,rev,rev_druhove,8,345,Český statistický úřad,41,25787135
+2026,rev,rev_druhove,8,345,Český statistický úřad,423,9363523
+2026,rev,rev_druhove,8,361,Akademie věd České republiky,415,97610
+2026,rev,rev_druhove,8,361,Akademie věd České republiky,41,97610
+2026,rev,rev_druhove,8,364,Digitální a informační agentura,415,91416883
+2026,rev,rev_druhove,8,364,Digitální a informační agentura,4153,91416883
+2026,rev,rev_druhove,8,364,Digitální a informační agentura,41,91416883
+2026,rev,rev_druhove,8,377,Technologická agentura České republiky,415,603943954
+2026,rev,rev_druhove,8,377,Technologická agentura České republiky,4153,585322816
+2026,rev,rev_druhove,8,377,Technologická agentura České republiky,41,616257131
+2026,rev,rev_druhove,8,378,Národní úřad pro kybernetickou a informační bezpečnost,415,2104403
+2026,rev,rev_druhove,8,378,Národní úřad pro kybernetickou a informační bezpečnost,4153,2104403
+2026,rev,rev_druhove,8,378,Národní úřad pro kybernetickou a informační bezpečnost,41,2104403
+2026,rev,rev_druhove,8,378,Národní úřad pro kybernetickou a informační bezpečnost,421,60000000
+2026,rev,rev_druhove,8,378,Národní úřad pro kybernetickou a informační bezpečnost,4218,60000000
+2026,rev,rev_druhove,8,398,Všeobecná pokladní správa,41,27000000000
+2026,rev,rev_druhove,9,301,Kancelář prezidenta republiky,0,100000
+2026,rev,rev_druhove,9,302,Poslanecká sněmovna Parlamentu,0,9000000
+2026,rev,rev_druhove,9,303,Senát Parlamentu,0,3400000
+2026,rev,rev_druhove,9,304,Úřad vlády České republiky,42,93281867
+2026,rev,rev_druhove,9,304,Úřad vlády České republiky,4,121131087
+2026,rev,rev_druhove,9,304,Úřad vlády České republiky,0,123631087
+2026,rev,rev_druhove,9,305,Bezpečnostní informační služba,0,305000000
+2026,rev,rev_druhove,9,306,Ministerstvo zahraničních věcí,42,31856791
+2026,rev,rev_druhove,9,306,Ministerstvo zahraničních věcí,4,195124545
+2026,rev,rev_druhove,9,306,Ministerstvo zahraničních věcí,0,1192600545
+2026,rev,rev_druhove,9,307,Ministerstvo obrany,0,8634843041
+2026,rev,rev_druhove,9,308,Národní bezpečnostní úřad,0,850000
+2026,rev,rev_druhove,9,309,Kancelář veřejného ochránce práv a ochránce práv dětí,0,250000
+2026,rev,rev_druhove,9,312,Ministerstvo financí,4233,18188430
+2026,rev,rev_druhove,9,312,Ministerstvo financí,42,33918609
+2026,rev,rev_druhove,9,312,Ministerstvo financí,4,337742370
+2026,rev,rev_druhove,9,312,Ministerstvo financí,0,10629406209
+2026,rev,rev_druhove,9,313,Ministerstvo práce a sociálních věcí,4233,7777982211
+2026,rev,rev_druhove,9,313,Ministerstvo práce a sociálních věcí,42,7815663350
+2026,rev,rev_druhove,9,313,Ministerstvo práce a sociálních věcí,4,15447320141
+2026,rev,rev_druhove,9,313,Ministerstvo práce a sociálních věcí,0,871534784682
+2026,rev,rev_druhove,9,314,Ministerstvo vnitra,4233,4363088607
+2026,rev,rev_druhove,9,314,Ministerstvo vnitra,42,6074073437
+2026,rev,rev_druhove,9,314,Ministerstvo vnitra,4,7203809541
+2026,rev,rev_druhove,9,314,Ministerstvo vnitra,0,21067146426
+2026,rev,rev_druhove,9,315,Ministerstvo životního prostředí,4233,341787488
+2026,rev,rev_druhove,9,315,Ministerstvo životního prostředí,42,15051274397
+2026,rev,rev_druhove,9,315,Ministerstvo životního prostředí,4,16452631713
+2026,rev,rev_druhove,9,315,Ministerstvo životního prostředí,0,17028631712
+2026,rev,rev_druhove,9,317,Ministerstvo pro místní rozvoj,42,17901595743
+2026,rev,rev_druhove,9,317,Ministerstvo pro místní rozvoj,4,18709358735
+2026,rev,rev_druhove,9,317,Ministerstvo pro místní rozvoj,0,18832358735
+2026,rev,rev_druhove,9,322,Ministerstvo průmyslu a obchodu,4233,80000000
+2026,rev,rev_druhove,9,322,Ministerstvo průmyslu a obchodu,42,8767000000
+2026,rev,rev_druhove,9,322,Ministerstvo průmyslu a obchodu,4,13540340128
+2026,rev,rev_druhove,9,322,Ministerstvo průmyslu a obchodu,0,20536660043
+2026,rev,rev_druhove,9,327,Ministerstvo dopravy,4233,2471479077
+2026,rev,rev_druhove,9,327,Ministerstvo dopravy,42,24895072077
+2026,rev,rev_druhove,9,327,Ministerstvo dopravy,4,25082178488
+2026,rev,rev_druhove,9,327,Ministerstvo dopravy,0,28569178488
+2026,rev,rev_druhove,9,328,Český telekomunikační úřad,4,1860240
+2026,rev,rev_druhove,9,328,Český telekomunikační úřad,0,1111860240
+2026,rev,rev_druhove,9,329,Ministerstvo zemědělství,4233,3130668683
+2026,rev,rev_druhove,9,329,Ministerstvo zemědělství,42,4709338013
+2026,rev,rev_druhove,9,329,Ministerstvo zemědělství,4,30715483310
+2026,rev,rev_druhove,9,329,Ministerstvo zemědělství,0,35347783310
+2026,rev,rev_druhove,9,333,"Ministerstvo školství, mládeže a tělovýchovy",4233,1380600000
+2026,rev,rev_druhove,9,333,"Ministerstvo školství, mládeže a tělovýchovy",42,1387789135
+2026,rev,rev_druhove,9,333,"Ministerstvo školství, mládeže a tělovýchovy",4,15334260336
+2026,rev,rev_druhove,9,333,"Ministerstvo školství, mládeže a tělovýchovy",0,15431828936
+2026,rev,rev_druhove,9,334,Ministerstvo kultury,42,334439000
+2026,rev,rev_druhove,9,334,Ministerstvo kultury,4,375257080
+2026,rev,rev_druhove,9,334,Ministerstvo kultury,0,555672191
+2026,rev,rev_druhove,9,335,Ministerstvo zdravotnictví,4233,1210216996
+2026,rev,rev_druhove,9,335,Ministerstvo zdravotnictví,42,1650716996
+2026,rev,rev_druhove,9,335,Ministerstvo zdravotnictví,4,1931268874
+2026,rev,rev_druhove,9,335,Ministerstvo zdravotnictví,0,2057776874
+2026,rev,rev_druhove,9,336,Ministerstvo spravedlnosti,4233,5369008
+2026,rev,rev_druhove,9,336,Ministerstvo spravedlnosti,42,110596678
+2026,rev,rev_druhove,9,336,Ministerstvo spravedlnosti,4,502947962
+2026,rev,rev_druhove,9,336,Ministerstvo spravedlnosti,0,4258479890
+2026,rev,rev_druhove,9,343,Úřad pro ochranu osobních údajů,0,0
+2026,rev,rev_druhove,9,344,Úřad průmyslového vlastnictví,4,20122051
+2026,rev,rev_druhove,9,344,Úřad průmyslového vlastnictví,0,292222051
+2026,rev,rev_druhove,9,345,Český statistický úřad,4233,9363523
+2026,rev,rev_druhove,9,345,Český statistický úřad,42,9363523
+2026,rev,rev_druhove,9,345,Český statistický úřad,4,35150658
+2026,rev,rev_druhove,9,345,Český statistický úřad,0,36550658
+2026,rev,rev_druhove,9,346,Český úřad zeměměřický a katastrální,0,1670000000
+2026,rev,rev_druhove,9,348,Český báňský úřad,0,262381000
+2026,rev,rev_druhove,9,349,Energetický regulační úřad,0,566643800
+2026,rev,rev_druhove,9,353,Úřad pro ochranu hospodářské soutěže,0,14100000
+2026,rev,rev_druhove,9,361,Akademie věd České republiky,4,97610
+2026,rev,rev_druhove,9,361,Akademie věd České republiky,0,97610
+2026,rev,rev_druhove,9,362,Národní sportovní agentura,0,13000000
+2026,rev,rev_druhove,9,364,Digitální a informační agentura,4,91416883
+2026,rev,rev_druhove,9,364,Digitální a informační agentura,0,91616883
+2026,rev,rev_druhove,9,371,Úřad pro dohled nad hospodařením polit. stran a polit. hnutí,0,35000
+2026,rev,rev_druhove,9,372,Rada pro rozhlasové a televizní vysílání,0,5000000
+2026,rev,rev_druhove,9,374,Správa státních hmotných rezerv,0,40000000
+2026,rev,rev_druhove,9,375,Státní úřad pro jadernou bezpečnost,0,236161000
+2026,rev,rev_druhove,9,376,Generální inspekce bezpečnostních sborů,0,86486562
+2026,rev,rev_druhove,9,377,Technologická agentura České republiky,4,616257131
+2026,rev,rev_druhove,9,377,Technologická agentura České republiky,0,616257131
+2026,rev,rev_druhove,9,378,Národní úřad pro kybernetickou a informační bezpečnost,42,60000000
+2026,rev,rev_druhove,9,378,Národní úřad pro kybernetickou a informační bezpečnost,4,62104403
+2026,rev,rev_druhove,9,378,Národní úřad pro kybernetickou a informační bezpečnost,0,62604403
+2026,rev,rev_druhove,9,381,Nejvyšší kontrolní úřad,0,964000
+2026,rev,rev_druhove,9,397,Operace státních finančních aktiv,0,4608500000
+2026,rev,rev_druhove,9,398,Všeobecná pokladní správa,4,27000000000
+2026,rev,rev_druhove,9,398,Všeobecná pokladní správa,0,1056838775800

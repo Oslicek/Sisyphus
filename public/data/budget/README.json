@@ -1,0 +1,13 @@
+{
+  "notes": [
+    "Fact table contains hierarchical codes (including subtotals) exactly as in D08 tables.",
+    "For non-overlapping sums, use fact_leaf_only.csv (leaf codes only) OR filter dim_classification.is_leaf==true and is_total==false.",
+    "For totals, use class_code == '0' (total SR for that chapter) and sum across chapters."
+  ],
+  "validation": {
+    "P01_totals_revenues": 2122672638307,
+    "P01_totals_expenditures": 2408672638307,
+    "derived_revenues_from_fact_total_code0": 2122672638307,
+    "derived_expenditures_from_fact_total_code0": 2408672638307
+  }
+}

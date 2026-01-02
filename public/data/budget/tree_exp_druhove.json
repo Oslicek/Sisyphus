@@ -1,0 +1,609 @@
+{
+  "id": "root",
+  "name": "exp_druhove",
+  "children": [
+    {
+      "id": "50",
+      "name": "Výdaje na platy a obdobné a související výdaje",
+      "children": [
+        {
+          "id": "501",
+          "name": "Platy",
+          "children": [
+            {
+              "id": "5011",
+              "name": "Platy zaměstnanců v pracovním poměru vyjma zaměstnanců na služebních místech",
+              "children": []
+            },
+            {
+              "id": "5012",
+              "name": "Platy zaměstnanců bezpečnostních sborů a ozbrojených sil ve služebním poměru",
+              "children": []
+            },
+            {
+              "id": "5013",
+              "name": "Platy zaměstnanců na služebních místech podle zákona o státní službě",
+              "children": []
+            },
+            {
+              "id": "5014",
+              "name": "Platy zaměstnanců v pracovním poměru odvozované od platů ústavních činitelů",
+              "children": []
+            },
+            {
+              "id": "5019",
+              "name": "Ostatní platy",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "502",
+          "name": "Výdaje na ostatní platby za provedenou práci",
+          "children": [
+            {
+              "id": "5021",
+              "name": "Ostatní osobní výdaje",
+              "children": []
+            },
+            {
+              "id": "5022",
+              "name": "Platy představitelů státní moci a některých orgánů",
+              "children": []
+            },
+            {
+              "id": "5023",
+              "name": "Odměny členů zastupitelstev obcí a krajů",
+              "children": []
+            },
+            {
+              "id": "5024",
+              "name": "Odstupné",
+              "children": []
+            },
+            {
+              "id": "5025",
+              "name": "Odbytné vyplácené státním zaměstnancům ve správních úřadech",
+              "children": []
+            },
+            {
+              "id": "5026",
+              "name": "Odchodné",
+              "children": []
+            },
+            {
+              "id": "5027",
+              "name": "Peněžní náležitosti vojáků v záloze ve službě",
+              "children": []
+            },
+            {
+              "id": "5028",
+              "name": "Kázeňské odměny poskytnuté formou peněžitých darů příslušníkům bezpečnostních sborů a vojákům z povolání",
+              "children": []
+            },
+            {
+              "id": "5029",
+              "name": "Ostatní platby za provedenou práci jinde nezařazené",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "503",
+          "name": "Povinné a zákonné pojistné placené zaměstnavatelem",
+          "children": []
+        },
+        {
+          "id": "504",
+          "name": "Výdaje na odměny za užití duševního vlastnictví",
+          "children": []
+        },
+        {
+          "id": "505",
+          "name": "Výdaje na platové a mzdové náhrady",
+          "children": []
+        },
+        {
+          "id": "506",
+          "name": "Mzdy podle cizího práva",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "51",
+      "name": "Výdaje na neinvestiční nákupy a související výdaje",
+      "children": [
+        {
+          "id": "511",
+          "name": "Vojenská obrana",
+          "children": []
+        },
+        {
+          "id": "512",
+          "name": "Výdaje na některé úpravy hmotných věcí a pořízení některých práv k hmotným věcem",
+          "children": []
+        },
+        {
+          "id": "513",
+          "name": "Výdaje na nákup materiálu",
+          "children": []
+        },
+        {
+          "id": "514",
+          "name": "Úroky a ostatní finanční výdaje",
+          "children": []
+        },
+        {
+          "id": "515",
+          "name": "Výdaje na nákup vody, paliv a energie",
+          "children": []
+        },
+        {
+          "id": "516",
+          "name": "Výdaje na nákup služeb",
+          "children": []
+        },
+        {
+          "id": "517",
+          "name": "Výdaje na ostatní nákupy",
+          "children": []
+        },
+        {
+          "id": "518",
+          "name": "Výdaje na netransferové převody uvnitř rozpočtové jednotky, na převzaté povinnosti a na jistoty",
+          "children": []
+        },
+        {
+          "id": "519",
+          "name": "Výdaje související s neinvestičními nákupy, příspěvky, náhrady a výdaje na věcné dary",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "52",
+      "name": "Neinvestiční transfery soukromoprávní m osobám",
+      "children": [
+        {
+          "id": "521",
+          "name": "Neinvestiční transfery podnikatelům",
+          "children": []
+        },
+        {
+          "id": "522",
+          "name": "Neinvestiční transfery neziskovým a podobným osobám",
+          "children": []
+        },
+        {
+          "id": "526",
+          "name": "Státní správa v oblasti hospodářských opatření",
+          "children": []
+        },
+        {
+          "id": "527",
+          "name": "Krizové řízení",
+          "children": []
+        },
+        {
+          "id": "528",
+          "name": "Výzkum a vývoj v oblasti civilní připravenosti na krizové stavy",
+          "children": []
+        },
+        {
+          "id": "529",
+          "name": "Ostatní záležitosti civilní připravenosti pro krizové stavy",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "53",
+      "name": "Neinvestiční transfery veřejnoprávním osobám a mezi peněžními fondy téže osoby a platby daní",
+      "children": [
+        {
+          "id": "531",
+          "name": "Neinvestiční transfery rozpočtům ústřední úrovně",
+          "children": []
+        },
+        {
+          "id": "532",
+          "name": "Neinvestiční transfery rozpočtům územní úrovně",
+          "children": []
+        },
+        {
+          "id": "533",
+          "name": "Neinvestiční transfery příspěvkovým apod. organizacím",
+          "children": []
+        },
+        {
+          "id": "534",
+          "name": "Neinvestiční převody vlastním fondům a ve vztahu k útvarům bez právní osobnosti",
+          "children": []
+        },
+        {
+          "id": "535",
+          "name": "Převody do vlastních fondů přes rok",
+          "children": []
+        },
+        {
+          "id": "536",
+          "name": "Ostatní neinvestiční transfery jiným rozpočtům a platby daní",
+          "children": []
+        },
+        {
+          "id": "538",
+          "name": "Výzkum týkající se bezpečnosti a veřejného pořádku",
+          "children": []
+        },
+        {
+          "id": "539",
+          "name": "Ostatní záležitosti bezpečnosti a veřejného pořádku",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "54",
+      "name": "Neinvestiční transfery a některé náhrady fyzickým osobám",
+      "children": [
+        {
+          "id": "541",
+          "name": "Sociální dávky",
+          "children": []
+        },
+        {
+          "id": "542",
+          "name": "Náhrady placené fyzickým osobám",
+          "children": []
+        },
+        {
+          "id": "543",
+          "name": "Státní zastupitelství",
+          "children": []
+        },
+        {
+          "id": "544",
+          "name": "Vězeňství",
+          "children": []
+        },
+        {
+          "id": "545",
+          "name": "Probační a mediační služba",
+          "children": []
+        },
+        {
+          "id": "546",
+          "name": "Správa v oblasti právní ochrany",
+          "children": []
+        },
+        {
+          "id": "547",
+          "name": "Veřejná ochrana",
+          "children": []
+        },
+        {
+          "id": "548",
+          "name": "Výzkum v oblasti právní ochrany",
+          "children": []
+        },
+        {
+          "id": "549",
+          "name": "Ostatní neinvestiční transfery fyzickým osobám",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "55",
+      "name": "Neinvestiční transfery a související platby do zahraničí",
+      "children": [
+        {
+          "id": "551",
+          "name": "Neinvestiční transfery mezinárodním vládním organizacím a nadnárodním orgánům",
+          "children": []
+        },
+        {
+          "id": "552",
+          "name": "Neinvestiční transfery cizím státům",
+          "children": []
+        },
+        {
+          "id": "553",
+          "name": "Ostatní neinvestiční transfery do zahraničí",
+          "children": []
+        },
+        {
+          "id": "554",
+          "name": "Členské příspěvky mezinárodním organizacím",
+          "children": []
+        },
+        {
+          "id": "556",
+          "name": "Státní správa v požární ochraně a in te grovaném zá chranném systému",
+          "children": []
+        },
+        {
+          "id": "558",
+          "name": "Výzkum a vývoj v požární ochraně a in te grovaném zá chranném systému",
+          "children": []
+        },
+        {
+          "id": "559",
+          "name": "Ostatní záležitosti požární ochrany a in te grovaného zá chranného systému",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "56",
+      "name": "Neinvestiční půjčené prostředky",
+      "children": [
+        {
+          "id": "561",
+          "name": "Neinvestiční půjčené prostředky podnikatelům",
+          "children": []
+        },
+        {
+          "id": "562",
+          "name": "Neinvestiční půjčené prostředky neziskovým a podobným osobám",
+          "children": []
+        },
+        {
+          "id": "563",
+          "name": "Neinvestiční půjčené prostředky rozpočtům ústřední úrovně",
+          "children": []
+        },
+        {
+          "id": "564",
+          "name": "Neinvestiční půjčené prostředky rozpočtům územní úrovně",
+          "children": []
+        },
+        {
+          "id": "565",
+          "name": "Neinvestiční půjčené prostředky příspěvkovým apod. organizacím",
+          "children": []
+        },
+        {
+          "id": "566",
+          "name": "Neinvestiční půjčené prostředky fyzickým osobám",
+          "children": []
+        },
+        {
+          "id": "567",
+          "name": "Neinvestiční půjčené prostředky do zahraničí",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "57",
+      "name": "Neinvestiční převody Národnímu fondu",
+      "children": [
+        {
+          "id": "571",
+          "name": "Neinvestiční převody Národnímu fondu",
+          "children": []
+        },
+        {
+          "id": "579",
+          "name": "Ostatní převody do Národního fondu",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "58",
+      "name": "Výdaje na náhrady za nezpůsobenou újmu",
+      "children": [
+        {
+          "id": "581",
+          "name": "Výdaje na náhrady za nezpůsobenou újmu a výdaje na náhrady škod způsobených nezákonným rozhodnutím nebo nesprávným úředním postupem při výkonu veřejné moci",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "59",
+      "name": "Ostatní neinvestiční výdaje",
+      "children": [
+        {
+          "id": "590",
+          "name": "Ostatní neinvestiční výdaje",
+          "children": []
+        },
+        {
+          "id": "599",
+          "name": "Dočasné zatřídění výdajů",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "61",
+      "name": "Investiční nákupy a související výdaje",
+      "children": [
+        {
+          "id": "611",
+          "name": "Pořízení dlouhodobého nehmotného majetku",
+          "children": []
+        },
+        {
+          "id": "612",
+          "name": "Pořízení dlouhodobého hmotného majetku",
+          "children": []
+        },
+        {
+          "id": "613",
+          "name": "Pozemky",
+          "children": []
+        },
+        {
+          "id": "614",
+          "name": "Nadlimitní věcná břemena a právo stavby",
+          "children": []
+        },
+        {
+          "id": "615",
+          "name": "Zahraniční služba a záležitosti nezařa zenév jiných fu nkcích",
+          "children": []
+        },
+        {
+          "id": "617",
+          "name": "Regionální a místní správa",
+          "children": []
+        },
+        {
+          "id": "618",
+          "name": "Výzkum ve státní správě a samosprávě",
+          "children": []
+        },
+        {
+          "id": "619",
+          "name": "Politické strany a hnutí",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "62",
+      "name": "Nákup majetkových podílů a nároků a vklady do fundací a ústavů",
+      "children": [
+        {
+          "id": "620",
+          "name": "Nákup majetkových podílů a nároků",
+          "children": []
+        },
+        {
+          "id": "621",
+          "name": "Vklady do fundací a ústavů",
+          "children": []
+        },
+        {
+          "id": "622",
+          "name": "Zahraniční pomoc a mezinárodní spo lupráce jin de nezařazená",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "63",
+      "name": "Investiční transfery",
+      "children": [
+        {
+          "id": "631",
+          "name": "Investiční transfery podnikatelům",
+          "children": []
+        },
+        {
+          "id": "632",
+          "name": "Investiční transfery neziskovým a podobným osobám",
+          "children": []
+        },
+        {
+          "id": "633",
+          "name": "Investiční transfery rozpočtům ústřední úrovně",
+          "children": []
+        },
+        {
+          "id": "634",
+          "name": "Investiční transfery rozpočtům územní úrovně",
+          "children": []
+        },
+        {
+          "id": "635",
+          "name": "Investiční transfery příspěvkovým a podobným organizacím",
+          "children": []
+        },
+        {
+          "id": "636",
+          "name": "Investiční převody vlastním fondům a ve vztahu k útvarům bez právní osobnosti",
+          "children": []
+        },
+        {
+          "id": "637",
+          "name": "Investiční transfery fyzickým osobám",
+          "children": []
+        },
+        {
+          "id": "638",
+          "name": "Investiční transfery do zahraničí",
+          "children": []
+        },
+        {
+          "id": "639",
+          "name": "Ostatní finanční operace",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "64",
+      "name": "Investiční půjčené prostředky",
+      "children": [
+        {
+          "id": "640",
+          "name": "Ostatní činnosti",
+          "children": []
+        },
+        {
+          "id": "641",
+          "name": "Investiční půjčené prostředky podnikatelům",
+          "children": []
+        },
+        {
+          "id": "642",
+          "name": "Investiční půjčené prostředky neziskovým a podobným osobám",
+          "children": []
+        },
+        {
+          "id": "643",
+          "name": "Investiční půjčené prostředky rozpočtům ústřední úrovně",
+          "children": []
+        },
+        {
+          "id": "644",
+          "name": "Investiční půjčené prostředky rozpočtům územní úrovně",
+          "children": []
+        },
+        {
+          "id": "645",
+          "name": "Investiční půjčené prostředky příspěvkovým apod. organizacím",
+          "children": []
+        },
+        {
+          "id": "646",
+          "name": "Investiční půjčené prostředky fyzickým osobám",
+          "children": []
+        },
+        {
+          "id": "647",
+          "name": "Investiční půjčené prostředky do zahraničí",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "67",
+      "name": "Investiční převody Národnímu fondu",
+      "children": [
+        {
+          "id": "671",
+          "name": "Investiční převody Národnímu fondu",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "69",
+      "name": "Ostatní investiční výdaje",
+      "children": [
+        {
+          "id": "690",
+          "name": "Ostatní investiční výdaje",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

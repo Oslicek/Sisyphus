@@ -7,6 +7,8 @@ import { TestBanner } from './components/TestBanner';
 import { About } from './pages/About';
 import { Blog } from './pages/Blog';
 import { DataSources } from './pages/DataSources';
+import { BudgetTables } from './pages/BudgetTables';
+import { BudgetTreemap } from './pages/BudgetTreemap';
 import sisyfosLogo from './assets/sisyfos-logo-200x200.png';
 import styles from './App.module.css';
 
@@ -36,6 +38,10 @@ function Home() {
 
       <footer className={styles.footer}>
         <nav className={styles.footerNav}>
+          <Link to="/rozpocet-vizualizace" className={styles.footerLink}>
+            Rozpočet 2026
+          </Link>
+          <span className={styles.footerSeparator}>•</span>
           <Link to="/blog" className={styles.footerLink}>
             Blog
           </Link>
@@ -71,6 +77,8 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/o-projektu" element={<About />} />
         <Route path="/zdroje-dat" element={<DataSources />} />
+        <Route path="/rozpocet" element={<BudgetTables />} />
+        <Route path="/rozpocet-vizualizace" element={<BudgetTreemap />} />
       </Routes>
     </BrowserRouter>
   );

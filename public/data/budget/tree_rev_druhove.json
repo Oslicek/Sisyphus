@@ -1,0 +1,431 @@
+{
+  "id": "root",
+  "name": "rev_druhove",
+  "children": [
+    {
+      "id": "1",
+      "name": "DAŇOVÉ PŘÍJMY CELKEM",
+      "children": [
+        {
+          "id": "11",
+          "name": "Daně z příjmů, zisku a kapitálových výnosů a některé další přímé daně",
+          "children": [
+            {
+              "id": "111",
+              "name": "Příjem z daní z příjmů fyzických osob",
+              "children": [
+                {
+                  "id": "1111",
+                  "name": "Příjem z daně z příjmů fyzických osob placené plátci",
+                  "children": []
+                },
+                {
+                  "id": "1113",
+                  "name": "Příjem z daně z příjmů fyzických osob vybírané srážkou podle zvláštní sazby daně",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "112",
+              "name": "Příjem z daní z příjmů právnických osob",
+              "children": []
+            },
+            {
+              "id": "113",
+              "name": "Příjem z některých dalších přímých daní",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "12",
+          "name": "Daně, poplatky a jiná obdobná peněžitá plnění ze zboží a služeb v tuzemsku",
+          "children": [
+            {
+              "id": "121",
+              "name": "Příjem ze všeobecných daní ze zboží a služeb v tuzemsku",
+              "children": [
+                {
+                  "id": "1211",
+                  "name": "Příjem z daně z přidané hodnoty",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "122",
+              "name": "Příjem ze daní, jiných peněžitých zboží a tuzemsku",
+              "children": []
+            },
+            {
+              "id": "123",
+              "name": "zvláštních poplatků a obdobných plnění ze služeb v",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "13",
+          "name": "Daně a poplatky z vybraných činností a služeb",
+          "children": [
+            {
+              "id": "132",
+              "name": "Příjem z daní a poplatků z provozu motorových vozidel",
+              "children": []
+            },
+            {
+              "id": "133",
+              "name": "Příjem z poplatků a odvodů v oblasti životního prostředí",
+              "children": []
+            },
+            {
+              "id": "134",
+              "name": "Příjem z místních poplatků z vybraných činností a služeb",
+              "children": []
+            },
+            {
+              "id": "135",
+              "name": "Příjem z ostatních odvodů z vybraných činností a služeb",
+              "children": []
+            },
+            {
+              "id": "136",
+              "name": "Příjem ze správních a soudních poplatků",
+              "children": []
+            },
+            {
+              "id": "137",
+              "name": "Příjem z poplatků na činnost správních úřadů",
+              "children": []
+            },
+            {
+              "id": "138",
+              "name": "Příjem z daní, poplatků a jiných obdobných peněžitých plnění v oblasti hazardních her",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "14",
+          "name": "Příjem z daní a cel za zboží a služby ze zahraničí",
+          "children": [
+            {
+              "id": "140",
+              "name": "Příjem z daní a cel za zboží a služby ze zahraničí",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "15",
+          "name": "Příjem z majetkových daní",
+          "children": [
+            {
+              "id": "151",
+              "name": "Příjem z daní z majetku",
+              "children": []
+            },
+            {
+              "id": "152",
+              "name": "Příjem ze zrušených daní z majetkových a kapitálových převodů",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "16",
+          "name": "Příjem z povinného pojistného",
+          "children": [
+            {
+              "id": "161",
+              "name": "Příjem z pojistného na sociální zabezpečení a z příspěvku na státní politiku zaměstnanosti",
+              "children": []
+            },
+            {
+              "id": "162",
+              "name": "Příjem související s pojistným na sociální zabezpečení",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "17",
+          "name": "Ostatní daňové příjmy",
+          "children": [
+            {
+              "id": "170",
+              "name": "Ostatní daňové příjmy",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "NEDAŇOVÉ PŘÍJMY CELKEM",
+      "children": [
+        {
+          "id": "21",
+          "name": "Příjem z vlastní činnosti a odvody přebytků organizací s přímým vztahem",
+          "children": [
+            {
+              "id": "211",
+              "name": "daňových Příjem z vlastní činnosti celkem: z daní a poplatků",
+              "children": []
+            },
+            {
+              "id": "212",
+              "name": "Příjem z odvodů organizací s přímým vztahem",
+              "children": []
+            },
+            {
+              "id": "213",
+              "name": "Příjem z pronájmu nebo pachtu majetku",
+              "children": []
+            },
+            {
+              "id": "214",
+              "name": "Přijaté výnosy z finančního majetku",
+              "children": []
+            },
+            {
+              "id": "215",
+              "name": "Soudní poplatky",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "22",
+          "name": "Přijaté sankční platby a vratky transferů",
+          "children": [
+            {
+              "id": "221",
+              "name": "Přijaté sankční platby",
+              "children": []
+            },
+            {
+              "id": "222",
+              "name": "Přijaté vratky transferů a ostatní podobné příjmy",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "23",
+          "name": "Příjem z prodeje neinvestičního majetku a ostatní nedaňové příjmy",
+          "children": [
+            {
+              "id": "231",
+              "name": "Příjem z prodeje krátkodobého a drobného dlouhodobého majetku",
+              "children": []
+            },
+            {
+              "id": "232",
+              "name": "Ostatní nedaňové příjmy",
+              "children": []
+            },
+            {
+              "id": "234",
+              "name": "Příjmy z plateb za využívání výhradních práv k přírodním zdrojům",
+              "children": []
+            },
+            {
+              "id": "235",
+              "name": "Příjmy za využívání dalších majetkových práv",
+              "children": []
+            },
+            {
+              "id": "236",
+              "name": "Příjmy z dobrovolného pojistného",
+              "children": []
+            },
+            {
+              "id": "239",
+              "name": "Dočasné zatřídění příjmů",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "24",
+          "name": "Přijaté splátky půjčených prostředků",
+          "children": [
+            {
+              "id": "241",
+              "name": "Splátky půjčených prostředků od podnikatelů",
+              "children": []
+            },
+            {
+              "id": "242",
+              "name": "Splátky půjčených prostředků od obecně prospěšných společností a obdobných osob",
+              "children": []
+            },
+            {
+              "id": "243",
+              "name": "Splátky půjčených prostředků od rozpočtů ústřední úrovně",
+              "children": []
+            },
+            {
+              "id": "244",
+              "name": "Splátky půjčených prostředků od rozpočtů územní úrovně",
+              "children": []
+            },
+            {
+              "id": "245",
+              "name": "Splátky půjčených prostředků od zřízených a obdobných osob",
+              "children": []
+            },
+            {
+              "id": "246",
+              "name": "Splátky půjčených prostředků od fyzických osob",
+              "children": []
+            },
+            {
+              "id": "247",
+              "name": "Splátky půjčených prostředků ze zahraničí",
+              "children": []
+            },
+            {
+              "id": "248",
+              "name": "Splátky za úhradu dluhů nebo dodávek",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "25",
+          "name": "Příjmy sdílené s Evropskou unií nebo s jejím členským státem",
+          "children": [
+            {
+              "id": "251",
+              "name": "Příjmy sdílené s Evropskou unií nebo s jejím členským státem",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "KAPITÁLOVÉ PŘÍJMY CELKEM",
+      "children": [
+        {
+          "id": "31",
+          "name": "Příjem z prodeje dlouhodobého majetku a ostatní kapitálové příjmy",
+          "children": [
+            {
+              "id": "311",
+              "name": "Příjem z prodeje dlouhodobého majetku (kromě drobného)",
+              "children": []
+            },
+            {
+              "id": "312",
+              "name": "Ostatní kapitálové příjmy",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "32",
+          "name": "Příjem z prodeje dlouhodobého finančního majetku",
+          "children": [
+            {
+              "id": "320",
+              "name": "Příjem z prodeje dlouhodobého finančního majetku",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "PŘIJATÉ TRANSFERY CELKEM",
+      "children": [
+        {
+          "id": "41",
+          "name": "Neinvestiční přijaté transfery",
+          "children": [
+            {
+              "id": "411",
+              "name": "Neinvestiční přijaté transfery od rozpočtů ústřední úrovně",
+              "children": [
+                {
+                  "id": "4118",
+                  "name": "Neinvestiční převody z Národního fondu",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "412",
+              "name": "Neinvestiční přijaté transfery od rozpočtů územní úrovně",
+              "children": []
+            },
+            {
+              "id": "413",
+              "name": "Neinvestiční převody z vlastních fondů a ve vztahu k útvarům bez právní osobnosti",
+              "children": []
+            },
+            {
+              "id": "414",
+              "name": "Převody z vlastních fondů přes rok",
+              "children": []
+            },
+            {
+              "id": "415",
+              "name": "Neinvestiční přijaté transfery ze zahraničí",
+              "children": [
+                {
+                  "id": "4153",
+                  "name": "Neinvestiční transfery přijaté od Evropské unie",
+                  "children": []
+                },
+                {
+                  "id": "4155",
+                  "name": "Neinvestiční transfery z finančních mechanismů",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "416",
+              "name": "Neinvestiční přijaté transfery ze státních finančních aktiv",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "42",
+          "name": "Investiční přijaté transfery",
+          "children": [
+            {
+              "id": "421",
+              "name": "Investiční přijaté transfery od rozpočtů ústřední úrovně",
+              "children": [
+                {
+                  "id": "4218",
+                  "name": "Investiční převody z Národního fondu",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "422",
+              "name": "Investiční přijaté transfery od rozpočtů územní úrovně",
+              "children": []
+            },
+            {
+              "id": "423",
+              "name": "Investiční přijaté transfery ze zahraničí",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

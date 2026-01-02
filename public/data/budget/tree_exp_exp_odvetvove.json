@@ -1,0 +1,916 @@
+[
+  {
+    "code": "0",
+    "name": "VÝDAJE",
+    "children": [
+      {
+        "code": "1",
+        "name": "Zemědělství,",
+        "children": [
+          {
+            "code": "10",
+            "name": "Zemědělství,",
+            "children": [
+              {
+                "code": "101",
+                "name": "Zemědělská a",
+                "children": []
+              },
+              {
+                "code": "102",
+                "name": "Regulace",
+                "children": []
+              },
+              {
+                "code": "103",
+                "name": "Lesní hospodářství",
+                "children": []
+              },
+              {
+                "code": "106",
+                "name": "Správa v",
+                "children": []
+              },
+              {
+                "code": "108",
+                "name": "Zemědělský a",
+                "children": []
+              },
+              {
+                "code": "109",
+                "name": "Ostatní činnost a",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "2",
+        "name": "Průmyslová a",
+        "children": [
+          {
+            "code": "21",
+            "name": null,
+            "children": [
+              {
+                "code": "211",
+                "name": "Záležitosti",
+                "children": []
+              },
+              {
+                "code": "212",
+                "name": "Ostatní odvětvové a",
+                "children": []
+              },
+              {
+                "code": "213",
+                "name": "Zahraniční obchod",
+                "children": []
+              },
+              {
+                "code": "214",
+                "name": "Vnitřní obchod,",
+                "children": []
+              },
+              {
+                "code": "216",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "218",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "219",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "22",
+            "name": null,
+            "children": [
+              {
+                "code": "221",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "222",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "223",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "224",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "225",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "226",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "227",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "228",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "229",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "23",
+            "name": null,
+            "children": [
+              {
+                "code": "231",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "232",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "233",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "234",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "239",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "24",
+            "name": null,
+            "children": [
+              {
+                "code": "241",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "246",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "249",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "25",
+            "name": "Všeobecné",
+            "children": [
+              {
+                "code": "251",
+                "name": "Podpora podnikání",
+                "children": []
+              },
+              {
+                "code": "253",
+                "name": "Všeobecné",
+                "children": []
+              },
+              {
+                "code": "254",
+                "name": "Všeobecné",
+                "children": []
+              },
+              {
+                "code": "256",
+                "name": "Všeobecná",
+                "children": []
+              },
+              {
+                "code": "258",
+                "name": "Výzkum a vývoj v",
+                "children": []
+              },
+              {
+                "code": "259",
+                "name": "Ostatní činnosti a",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "3",
+        "name": "Služby pro",
+        "children": [
+          {
+            "code": "31",
+            "name": null,
+            "children": [
+              {
+                "code": "311",
+                "name": "Předškolní a",
+                "children": []
+              },
+              {
+                "code": "312",
+                "name": "Střední vzdělávání",
+                "children": []
+              },
+              {
+                "code": "313",
+                "name": "Školská zařízení",
+                "children": []
+              },
+              {
+                "code": "314",
+                "name": "Ostatní zařízení",
+                "children": []
+              },
+              {
+                "code": "315",
+                "name": "Vyšší odborné",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "31_32",
+            "name": null,
+            "children": []
+          },
+          {
+            "code": "32",
+            "name": null,
+            "children": [
+              {
+                "code": "321",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "322",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "323",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "326",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "329",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "33",
+            "name": null,
+            "children": [
+              {
+                "code": "331",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "332",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "333",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "334",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "336",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "338",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "339",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "34",
+            "name": null,
+            "children": [
+              {
+                "code": "341",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "342",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "346",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "348",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "35",
+            "name": null,
+            "children": [
+              {
+                "code": "351",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "352",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "353",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "354",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "356",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "358",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "359",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "36",
+            "name": null,
+            "children": [
+              {
+                "code": "361",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "363",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "366",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "369",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "37",
+            "name": "Ochrana",
+            "children": [
+              {
+                "code": "371",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "372",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "373",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "374",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "376",
+                "name": "Správa v ochraně",
+                "children": []
+              },
+              {
+                "code": "377",
+                "name": "Ochrana proti",
+                "children": []
+              },
+              {
+                "code": "378",
+                "name": "Výzkum životního",
+                "children": []
+              },
+              {
+                "code": "379",
+                "name": "Ostatní činnosti v",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "38",
+            "name": "Ostatní výzkum",
+            "children": [
+              {
+                "code": "380",
+                "name": "Ostatní výzkum a",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "39",
+            "name": "Ostatní činnosti",
+            "children": [
+              {
+                "code": "390",
+                "name": "Ostatní činnosti",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "4",
+        "name": "Sociální věci a",
+        "children": [
+          {
+            "code": "41",
+            "name": null,
+            "children": [
+              {
+                "code": "411",
+                "name": "Dávky důchodového",
+                "children": []
+              },
+              {
+                "code": "412",
+                "name": "Dávky",
+                "children": []
+              },
+              {
+                "code": "413",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "414",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "415",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "417",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "418",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "419",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "42",
+            "name": "Politika",
+            "children": [
+              {
+                "code": "421",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "422",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "423",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "424",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "425",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "43",
+            "name": "Sociální služby a",
+            "children": [
+              {
+                "code": "431",
+                "name": "Sociální",
+                "children": []
+              },
+              {
+                "code": "432",
+                "name": "Sociální péče a",
+                "children": []
+              },
+              {
+                "code": "433",
+                "name": "Sociální péče a",
+                "children": []
+              },
+              {
+                "code": "434",
+                "name": "Sociální",
+                "children": []
+              },
+              {
+                "code": "435",
+                "name": "Sociální služby v",
+                "children": []
+              },
+              {
+                "code": "436",
+                "name": "Správa v sociálním",
+                "children": []
+              },
+              {
+                "code": "437",
+                "name": "Služby sociální",
+                "children": []
+              },
+              {
+                "code": "438",
+                "name": "Výzkum v",
+                "children": []
+              },
+              {
+                "code": "439",
+                "name": "Ostatní činnost a",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "5",
+        "name": "Bezpečnost",
+        "children": [
+          {
+            "code": "51",
+            "name": null,
+            "children": [
+              {
+                "code": "511",
+                "name": "Vojenská obrana",
+                "children": []
+              },
+              {
+                "code": "516",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "517",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "518",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "519",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "52",
+            "name": null,
+            "children": [
+              {
+                "code": "521",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "522",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "526",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "527",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "528",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "529",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "53",
+            "name": null,
+            "children": [
+              {
+                "code": "531",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "538",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "539",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "54",
+            "name": null,
+            "children": [
+              {
+                "code": "541",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "542",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "543",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "544",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "545",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "546",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "547",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "548",
+                "name": null,
+                "children": []
+              },
+              {
+                "code": "549",
+                "name": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "55",
+            "name": "Požární ochrana",
+            "children": [
+              {
+                "code": "551",
+                "name": "Požární ochrana",
+                "children": []
+              },
+              {
+                "code": "552",
+                "name": "Ostatní složky a",
+                "children": []
+              },
+              {
+                "code": "556",
+                "name": "Státní správa v",
+                "children": []
+              },
+              {
+                "code": "558",
+                "name": "Výzkum a vývoj v",
+                "children": []
+              },
+              {
+                "code": "559",
+                "name": "Ostatní záležitosti",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "6",
+        "name": "Všeobecná",
+        "children": [
+          {
+            "code": "61",
+            "name": "Státní moc, státní",
+            "children": [
+              {
+                "code": "611",
+                "name": "Zastupitelské orgány",
+                "children": []
+              },
+              {
+                "code": "612",
+                "name": "Kancelář",
+                "children": []
+              },
+              {
+                "code": "613",
+                "name": "Nejvyšší kontrolní",
+                "children": []
+              },
+              {
+                "code": "614",
+                "name": "Všeobecná vnitřní",
+                "children": []
+              },
+              {
+                "code": "615",
+                "name": "Zahraniční služba a",
+                "children": []
+              },
+              {
+                "code": "618",
+                "name": "Výzkum ve státní",
+                "children": []
+              },
+              {
+                "code": "619",
+                "name": "Politické strany a",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "62",
+            "name": "Jiné veřejné",
+            "children": [
+              {
+                "code": "621",
+                "name": "Ostatní veřejné",
+                "children": []
+              },
+              {
+                "code": "622",
+                "name": "Zahraniční pomoc",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "63",
+            "name": "Finanční operace",
+            "children": [
+              {
+                "code": "631",
+                "name": "Obecné příjmy a",
+                "children": []
+              },
+              {
+                "code": "632",
+                "name": "Pojištění funkčně",
+                "children": []
+              },
+              {
+                "code": "639",
+                "name": "Ostatní finanční",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "64",
+            "name": "Ostatní činnosti",
+            "children": [
+              {
+                "code": "640",
+                "name": "Ostatní činnosti",
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
