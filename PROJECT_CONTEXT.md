@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-01
+> **Last Updated:** 2026-01-02
 
 ## Overview
 
@@ -165,9 +165,17 @@ sisyphus/
 │   │   │   ├── About.tsx
 │   │   │   ├── About.module.css
 │   │   │   └── index.ts
-│   │   └── DataSources/        # Datové řady a zdroje dat
-│   │       ├── DataSources.tsx
-│   │       ├── DataSources.module.css
+│   │   ├── DataSources/        # Datové řady a zdroje dat
+│   │   │   ├── DataSources.tsx
+│   │   │   ├── DataSources.module.css
+│   │   │   └── index.ts
+│   │   ├── BudgetTables/       # Tabulky státního rozpočtu 2026
+│   │   │   ├── BudgetTables.tsx
+│   │   │   ├── BudgetTables.module.css
+│   │   │   └── index.ts
+│   │   └── BudgetTreemap/      # Vizualizace rozpočtu (zoomable icicle)
+│   │       ├── BudgetTreemap.tsx
+│   │       ├── BudgetTreemap.module.css
 │   │       └── index.ts
 │   ├── config/
 │   │   ├── graphVariants.ts    # Graph variant definitions
@@ -207,6 +215,14 @@ sisyphus/
 │       ├── events.json         # Significant events with dates
 │       ├── governments.json    # Government timeline + party colors
 │       ├── budget-plans.json   # 2026 budget predictions
+│       ├── budget/             # Státní rozpočet 2026 (Fiala)
+│       │   ├── dim_chapter.csv
+│       │   ├── dim_classification.csv
+│       │   ├── fact_revenues_by_chapter.csv
+│       │   ├── fact_expenditures_by_chapter.csv
+│       │   ├── tree_rev_druhove.json
+│       │   ├── tree_exp_druhove.json
+│       │   └── tree_exp_odvetvove.json
 │       ├── economic-data.json  # Inflation rates + GDP 1993-2024
 │       ├── demographic-data.json # Population data 1993-2024
 │       ├── wage-data.json      # Average/minimum wages 1993-2024
@@ -230,6 +246,8 @@ sisyphus/
 | `BuyCalculator` | src/components/BuyCalculator/ | "What can I buy with my debt share" wizard |
 | `About` | src/pages/About/ | O projektu Sisyfos page |
 | `DataSources` | src/pages/DataSources/ | Datové řady a zdroje dat page |
+| `BudgetTables` | src/pages/BudgetTables/ | Tabulky rozpočtu 2026 (kapitoly, příjmy, výdaje) |
+| `BudgetTreemap` | src/pages/BudgetTreemap/ | Vizualizace rozpočtu vlády Petra Fialy (zoomable icicle) |
 | `useDebtCounter` | src/hooks/ | Fetches anchor, computes & updates every second |
 | `useHistoricalDebt` | src/hooks/ | Fetches all JSON data files |
 | `calculations.ts` | src/utils/ | Deficit per second, elapsed time, current debt |
@@ -377,6 +395,8 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Project logo with tagline (responsive sizing)
 - [x] Logo links to About page
 - [x] Collapsible governments and events sections (collapsed by default)
+- [x] Budget 2026 tables page (chapters, revenues, expenditures overview)
+- [x] Budget 2026 visualization page (zoomable icicle chart with D3.js)
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates

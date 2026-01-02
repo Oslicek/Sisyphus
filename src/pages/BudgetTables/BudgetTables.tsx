@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   parseCSV, 
@@ -13,24 +13,44 @@ import {
 import type { BudgetRow, Chapter, Classification } from '../../utils/budgetData';
 import styles from './BudgetTables.module.css';
 
-type TabType = 'chapters' | 'revenues' | 'expenditures';
+interface TreeNode {
+  id: string;
+  name: string;
+  children?: TreeNode[];
+}
+
+// Extract names from tree into a map
+function extractNamesFromTree(node: TreeNode, nameMap: Map<string, string>): void {
+  if (node.name && node.id !== 'root') {
+    nameMap.set(node.id, node.name);
+  }
+  if (node.children) {
+    node.children.forEach(child => extractNamesFromTree(child, nameMap));
+  }
+}
+
+type TabType = 'overview' | 'revenues' | 'expenditures' | 'chapters';
 
 export function BudgetTables() {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [classifications, setClassifications] = useState<Classification[]>([]);
   const [revenueRows, setRevenueRows] = useState<BudgetRow[]>([]);
   const [expenditureRows, setExpenditureRows] = useState<BudgetRow[]>([]);
+  const [expOdvNames, setExpOdvNames] = useState<Map<string, string>>(new Map());
+  const [revNames, setRevNames] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabType>('chapters');
+  const [activeTab, setActiveTab] = useState<TabType>('overview');
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [chaptersRes, classRes, revenuesRes, expendituresRes] = await Promise.all([
+        const [chaptersRes, classRes, revenuesRes, expendituresRes, treeOdvRes, treeRevRes] = await Promise.all([
           fetch('/data/budget/dim_chapter.csv'),
           fetch('/data/budget/dim_classification.csv'),
           fetch('/data/budget/fact_revenues_by_chapter.csv'),
-          fetch('/data/budget/fact_expenditures_by_chapter.csv')
+          fetch('/data/budget/fact_expenditures_by_chapter.csv'),
+          fetch('/data/budget/tree_exp_odvetvove.json'),
+          fetch('/data/budget/tree_rev_druhove.json')
         ]);
 
         const [chaptersText, classText, revenuesText, expendituresText] = await Promise.all([
@@ -39,6 +59,18 @@ export function BudgetTables() {
           revenuesRes.text(),
           expendituresRes.text()
         ]);
+
+        // Load tree files for full names
+        const treeOdv = await treeOdvRes.json() as TreeNode;
+        const treeRev = await treeRevRes.json() as TreeNode;
+        
+        const odvNames = new Map<string, string>();
+        extractNamesFromTree(treeOdv, odvNames);
+        setExpOdvNames(odvNames);
+        
+        const revNamesMap = new Map<string, string>();
+        extractNamesFromTree(treeRev, revNamesMap);
+        setRevNames(revNamesMap);
 
         setChapters(parseChaptersCSV(chaptersText));
         setClassifications(parseClassificationCSV(classText));
@@ -59,12 +91,40 @@ export function BudgetTables() {
   const totalExpenditures = calculateTotalExpenditures(expenditureRows);
   const deficit = totalExpenditures - totalRevenues;
 
-  // Get per-chapter totals
-  const revenuesByChapter = getRevenuesByChapter(revenueRows);
-  const expendituresByChapter = getExpendituresByChapter(expenditureRows);
+  // Get per-chapter totals (memoized to avoid new Map on each render)
+  const revenuesByChapter = useMemo(() => getRevenuesByChapter(revenueRows), [revenueRows]);
+  const expendituresByChapter = useMemo(() => getExpendituresByChapter(expenditureRows), [expenditureRows]);
+
+  // Build the list of chapters to display (with calculated values)
+  const chaptersWithData = useMemo(() => {
+    return chapters
+      .map(chapter => {
+        const revenues = revenuesByChapter.get(chapter.chapter_code) || 0;
+        const expenditures = expendituresByChapter.get(chapter.chapter_code) || 0;
+        return {
+          ...chapter,
+          revenues,
+          expenditures,
+          saldo: revenues - expenditures
+        };
+      })
+      .filter(ch => ch.revenues !== 0 || ch.expenditures !== 0);
+  }, [chapters, revenuesByChapter, expendituresByChapter]);
+
+  // Calculate totals from displayed chapters (sum each column individually)
+  const displayedChaptersTotals = useMemo(() => {
+    return chaptersWithData.reduce(
+      (acc, ch) => ({
+        revenues: acc.revenues + ch.revenues,
+        expenditures: acc.expenditures + ch.expenditures,
+        saldo: acc.saldo + ch.saldo
+      }),
+      { revenues: 0, expenditures: 0, saldo: 0 }
+    );
+  }, [chaptersWithData]);
 
   // Get revenue breakdown by top-level classification
-  const getRevenueBreakdown = () => {
+  const getRevenueBreakdown = useCallback(() => {
     const topLevelCodes = classifications
       .filter(c => c.system === 'rev_druhove' && c.level === 1 && !c.is_total)
       .map(c => c.code);
@@ -72,27 +132,29 @@ export function BudgetTables() {
     const breakdown: { code: string; name: string; amount: number }[] = [];
     
     topLevelCodes.forEach(code => {
-      const classification = classifications.find(c => c.code === code && c.system === 'rev_druhove');
-      if (!classification) return;
-      
       const amount = revenueRows
         .filter(row => row.year === 2026 && row.class_code === code)
         .reduce((sum, row) => sum + row.amount_czk, 0);
       
       if (amount > 0) {
+        // Use tree name if available, fallback to classification
+        const treeName = revNames.get(code);
+        const classification = classifications.find(c => c.code === code && c.system === 'rev_druhove');
+        const name = treeName || classification?.name || `[${code}]`;
+        
         breakdown.push({
           code,
-          name: classification.name,
+          name,
           amount
         });
       }
     });
     
     return breakdown.sort((a, b) => b.amount - a.amount);
-  };
+  }, [classifications, revenueRows, revNames]);
 
   // Get expenditure breakdown by top-level classification (odvětvové)
-  const getExpenditureBreakdown = () => {
+  const getExpenditureBreakdown = useCallback(() => {
     const topLevelCodes = classifications
       .filter(c => c.system === 'exp_odvetvove' && c.level === 1 && !c.is_total)
       .map(c => c.code);
@@ -100,24 +162,26 @@ export function BudgetTables() {
     const breakdown: { code: string; name: string; amount: number }[] = [];
     
     topLevelCodes.forEach(code => {
-      const classification = classifications.find(c => c.code === code && c.system === 'exp_odvetvove');
-      if (!classification) return;
-      
       const amount = expenditureRows
         .filter(row => row.year === 2026 && row.system === 'exp_odvetvove' && row.class_code === code)
         .reduce((sum, row) => sum + row.amount_czk, 0);
       
       if (amount > 0) {
+        // Use tree name if available, fallback to classification
+        const treeName = expOdvNames.get(code);
+        const classification = classifications.find(c => c.code === code && c.system === 'exp_odvetvove');
+        const name = treeName || classification?.name || `[${code}]`;
+        
         breakdown.push({
           code,
-          name: classification.name,
+          name,
           amount
         });
       }
     });
     
     return breakdown.sort((a, b) => b.amount - a.amount);
-  };
+  }, [classifications, expenditureRows, expOdvNames]);
 
   if (loading) {
     return (
@@ -177,10 +241,10 @@ export function BudgetTables() {
 
         <div className={styles.tabs}>
           <button 
-            className={`${styles.tab} ${activeTab === 'chapters' ? styles.tabActive : ''}`}
-            onClick={() => setActiveTab('chapters')}
+            className={`${styles.tab} ${activeTab === 'overview' ? styles.tabActive : ''}`}
+            onClick={() => setActiveTab('overview')}
           >
-            Kapitoly
+            Přehled
           </button>
           <button 
             className={`${styles.tab} ${activeTab === 'revenues' ? styles.tabActive : ''}`}
@@ -194,7 +258,43 @@ export function BudgetTables() {
           >
             Výdaje
           </button>
+          <button 
+            className={`${styles.tab} ${activeTab === 'chapters' ? styles.tabActive : ''}`}
+            onClick={() => setActiveTab('chapters')}
+          >
+            Kapitoly
+          </button>
         </div>
+
+        {activeTab === 'overview' && (
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>Přehled státního rozpočtu 2026</h2>
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Položka</th>
+                    <th className={styles.numericCell}>Částka</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Příjmy celkem</td>
+                    <td className={`${styles.numericCell} ${styles.positive}`}>{formatCurrency(totalRevenues)}</td>
+                  </tr>
+                  <tr>
+                    <td>Výdaje celkem</td>
+                    <td className={`${styles.numericCell} ${styles.negative}`}>{formatCurrency(totalExpenditures)}</td>
+                  </tr>
+                  <tr className={styles.totalRow}>
+                    <td>Schodek rozpočtu</td>
+                    <td className={`${styles.numericCell} ${styles.negative}`}>{formatCurrency(-deficit)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
 
         {activeTab === 'chapters' && (
           <section className={styles.section}>
@@ -211,31 +311,24 @@ export function BudgetTables() {
                   </tr>
                 </thead>
                 <tbody>
-                  {chapters.map(chapter => {
-                    const rev = revenuesByChapter.get(chapter.chapter_code) || 0;
-                    const exp = expendituresByChapter.get(chapter.chapter_code) || 0;
-                    // Show all chapters that have expenditures (all should have expenditures)
-                    if (exp === 0 && rev === 0) return null;
-                    const saldo = rev - exp;
-                    return (
-                      <tr key={chapter.chapter_code}>
-                        <td className={styles.codeCell}>{chapter.chapter_code}</td>
-                        <td>{chapter.chapter_name}</td>
-                        <td className={styles.numericCell}>{formatCurrency(rev)}</td>
-                        <td className={styles.numericCell}>{formatCurrency(exp)}</td>
-                        <td className={`${styles.numericCell} ${saldo >= 0 ? styles.positive : styles.negative}`}>
-                          {formatCurrency(saldo)}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {chaptersWithData.map(chapter => (
+                    <tr key={chapter.chapter_code}>
+                      <td className={styles.codeCell}>{chapter.chapter_code}</td>
+                      <td>{chapter.chapter_name}</td>
+                      <td className={styles.numericCell}>{formatCurrency(chapter.revenues)}</td>
+                      <td className={styles.numericCell}>{formatCurrency(chapter.expenditures)}</td>
+                      <td className={`${styles.numericCell} ${chapter.saldo >= 0 ? styles.positive : styles.negative}`}>
+                        {formatCurrency(chapter.saldo)}
+                      </td>
+                    </tr>
+                  ))}
                   <tr className={styles.totalRow}>
                     <td className={styles.codeCell}></td>
                     <td>Celkem</td>
-                    <td className={styles.numericCell}>{formatCurrency(totalRevenues)}</td>
-                    <td className={styles.numericCell}>{formatCurrency(totalExpenditures)}</td>
-                    <td className={`${styles.numericCell} ${-deficit >= 0 ? styles.positive : styles.negative}`}>
-                      {formatCurrency(-deficit)}
+                    <td className={styles.numericCell}>{formatCurrency(displayedChaptersTotals.revenues)}</td>
+                    <td className={styles.numericCell}>{formatCurrency(displayedChaptersTotals.expenditures)}</td>
+                    <td className={`${styles.numericCell} ${displayedChaptersTotals.saldo >= 0 ? styles.positive : styles.negative}`}>
+                      {formatCurrency(displayedChaptersTotals.saldo)}
                     </td>
                   </tr>
                 </tbody>
