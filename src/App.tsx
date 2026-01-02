@@ -9,6 +9,7 @@ import { Blog } from './pages/Blog';
 import { DataSources } from './pages/DataSources';
 import { BudgetTables } from './pages/BudgetTables';
 import { BudgetTreemap } from './pages/BudgetTreemap';
+import { DeficitGame } from './pages/DeficitGame';
 import sisyfosLogo from './assets/sisyfos-logo-200x200.png';
 import styles from './App.module.css';
 
@@ -79,6 +80,7 @@ function App() {
         <Route path="/zdroje-dat" element={<DataSources />} />
         <Route path="/rozpocet" element={<BudgetTables />} />
         <Route path="/rozpocet-vizualizace" element={<BudgetTreemap />} />
+        <Route path="/zrusim-schodek" element={<DeficitGame />} />
       </Routes>
     </BrowserRouter>
   );

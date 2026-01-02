@@ -239,6 +239,13 @@ export function BudgetTables() {
           </Link>
         </div>
 
+        {/* Deficit Game Button */}
+        <div className={styles.gameButtonContainer}>
+          <Link to="/zrusim-schodek" className={styles.gameButton}>
+            Zruším schodek!
+          </Link>
+        </div>
+
         <div className={styles.tabs}>
           <button 
             className={`${styles.tab} ${activeTab === 'overview' ? styles.tabActive : ''}`}
