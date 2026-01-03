@@ -78,7 +78,17 @@ export function DeficitGame() {
   // Share state
   const [shareState, setShareState] = useState<'idle' | 'capturing' | 'success' | 'error'>('idle');
   const [copyState, setCopyState] = useState<'idle' | 'success'>('idle');
-  
+
+  // Calculate current deficit
+  const currentDeficit = useMemo(() => {
+    const raw = calculateAdjustedDeficit(ORIGINAL_DEFICIT, adjustments);
+    // Treat values within 1 billion of zero as zero (accounts for rounding)
+    if (Math.abs(raw) < 1_000_000_000) {
+      return 0;
+    }
+    return raw;
+  }, [adjustments]);
+
   // Share URL and text
   const shareUrl = 'https://rozpoctovka.cz';
   const shareTitle = 'Zrušil/a jsem schodek! - Rozpočtovka';
@@ -91,16 +101,6 @@ export function DeficitGame() {
       return 'Zkuste vyrovnat státní rozpočet 2026. Podaří se vám to?';
     }
   }, [currentDeficit]);
-
-  // Calculate current deficit
-  const currentDeficit = useMemo(() => {
-    const raw = calculateAdjustedDeficit(ORIGINAL_DEFICIT, adjustments);
-    // Treat values within 1 billion of zero as zero (accounts for rounding)
-    if (Math.abs(raw) < 1_000_000_000) {
-      return 0;
-    }
-    return raw;
-  }, [adjustments]);
 
   // Load data
   useEffect(() => {
