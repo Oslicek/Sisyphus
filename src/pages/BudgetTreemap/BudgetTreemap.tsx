@@ -279,13 +279,18 @@ export function BudgetTreemap() {
         return null;
       }
       
-      // Check if there's an "_other" value for this node (calculated by buildEffectiveLeafValueMap)
-      const otherValue = valueMap.get(`${node.id}_other`);
-      if (otherValue && otherValue > 0) {
+      // Check for additional values that should be added as "Ostatní" node:
+      // 1. Direct value (node.id) - when this node is a leaf in some chapters but has children in classification
+      // 2. Other value (node.id + "_other") - calculated remainder from buildEffectiveLeafValueMap
+      const directValue = valueMap.get(node.id) || 0;
+      const otherValue = valueMap.get(`${node.id}_other`) || 0;
+      const totalOtherValue = directValue + otherValue;
+      
+      if (totalOtherValue > 0) {
         const otherNode: TreeNode = {
           id: `${node.id}_other`,
           name: `Ostatní (${node.name})`,
-          value: otherValue,
+          value: totalOtherValue,
           children: undefined
         };
         return { ...node, children: [...validChildren, otherNode] };
