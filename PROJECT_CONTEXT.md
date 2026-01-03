@@ -21,7 +21,7 @@
 | Charts | D3.js |
 | Sharing | react-share, html2canvas |
 | Routing | react-router-dom |
-| Fonts | Bebas Neue, Crimson Pro, Source Sans 3, JetBrains Mono, Fredoka, Nunito (OFL) |
+| Fonts | Bebas Neue, Crimson Pro, Source Sans 3, JetBrains Mono, Baloo 2, Nunito (OFL) |
 | Hosting | Cloudflare Pages |
 | Data Storage | Static JSON files (public/data/) |
 | Testing | Vitest + @vitest/coverage-v8 |
@@ -440,7 +440,7 @@ All files           |     100 |      100 |     100 |     100 |
   - Open Graph meta tags for social media previews
   - Tooltips showing full item names and values
   - Instructions explaining 50% adjustment limit
-  - Unique playful design with Fredoka and Nunito fonts
+  - Unique playful design with Baloo 2 and Nunito fonts
 - [x] Hamburger menu navigation with tree structure:
   - Státní dluh → Datové řady a zdroje dat
   - Státní rozpočet → Vizualizace
