@@ -221,11 +221,13 @@ export function DeficitGame() {
     try {
       const blob = await captureScreenshot();
       const shareText = formatGameResultForShare(ORIGINAL_DEFICIT, adjustments);
-      
+
       if (blob && navigator.share && navigator.canShare) {
         const file = new File([blob], 'rozpoctovka-vysledek.png', { type: 'image/png' });
         
-        if (navigator.canShare({ files: [file] })) {
+        const canShareFiles = navigator.canShare({ files: [file] });
+        
+        if (canShareFiles) {
           await navigator.share({
             title: 'Zrušil/a jsem schodek!',
             text: shareText,
@@ -252,16 +254,32 @@ export function DeficitGame() {
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
         
-        // Also copy text to clipboard
-        await navigator.clipboard.writeText(shareText);
+        // Try to copy text to clipboard (optional, don't fail if not available)
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(shareText);
+          }
+        } catch (clipErr) {
+          // Ignore clipboard errors - download was successful
+        }
         setShareState('success');
       } else {
         // Fallback: just copy text
-        await navigator.clipboard.writeText(shareText);
-        setShareState('success');
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(shareText);
+            setShareState('success');
+          } else {
+            setShareState('error');
+          }
+        } catch (clipErr) {
+          setShareState('error');
+        }
       }
     } catch (e) {
-      if ((e as Error).name !== 'AbortError') {
+      const error = e as Error;
+      
+      if (error.name !== 'AbortError') {
         console.error('Share failed:', e);
         setShareState('error');
       } else {
@@ -270,7 +288,9 @@ export function DeficitGame() {
       }
     }
     
-    setTimeout(() => setShareState('idle'), 2000);
+    setTimeout(() => {
+      setShareState('idle');
+    }, 2000);
   }, [adjustments, captureScreenshot]);
 
   // Copy image to clipboard

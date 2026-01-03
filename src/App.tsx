@@ -43,22 +43,9 @@ function Home() {
   );
 }
 
-function RouteLogger() {
-  const location = useLocation();
-  
-  useEffect(() => {
-    // #region agent log
-    debugLog({location:'App.tsx:49',message:'Route changed',data:{pathname:location.pathname,search:location.search,hash:location.hash},hypothesisId:'B'});
-    // #endregion
-  }, [location]);
-  
-  return null;
-}
-
 function App() {
   return (
     <BrowserRouter>
-      <RouteLogger />
       <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -69,7 +56,6 @@ function App() {
         <Route path="/rozpocet-vizualizace" element={<BudgetTreemap />} />
         <Route path="/rozpoctovka" element={<DeficitGame />} />
       </Routes>
-      <DebugPanel />
     </BrowserRouter>
   );
 }
