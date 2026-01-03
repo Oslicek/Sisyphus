@@ -48,7 +48,7 @@ interface GovernmentSpan {
 
 export function DebtChart() {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
+  const [containerElement, setContainerElement] = useState<HTMLElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 450 });
   const [tooltip, setTooltip] = useState<{
     visible: boolean;

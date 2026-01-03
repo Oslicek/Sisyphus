@@ -114,9 +114,9 @@ export function Blog() {
                 </div>
                 <div className={styles.shareButtons}>
                   <ShareButtons 
-                    shareUrl={`${window.location.origin}/blog#${post.id}`}
-                    shareTitle={post.title}
-                    shareText={post.title}
+                    url={`${window.location.origin}/blog#${post.id}`}
+                    title={post.title}
+                    description={post.title}
                   />
                 </div>
               </article>

@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-03 (v6)
+> **Last Updated:** 2026-01-03 (v7)
 
 ## Overview
 
@@ -457,7 +457,11 @@ All files           |     100 |      100 |     100 |     100 |
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates
-- [ ] Cloudflare Pages deployment
+
+**Deployment:**
+- Production: https://sisyphus-9u4.pages.dev/
+- Deploy via Wrangler CLI: `npm run build && wrangler pages deploy dist --project-name sisyphus`
+- Auto-deploy on push to main (Cloudflare Pages integration)
 
 ## Notes
 
