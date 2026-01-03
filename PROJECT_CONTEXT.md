@@ -156,9 +156,13 @@ sisyphus/
 │   │   │   ├── ShareButtons.tsx
 │   │   │   ├── ShareButtons.module.css
 │   │   │   └── index.ts
-│   │   └── BuyCalculator/      # "What can I buy" wizard
-│   │       ├── BuyCalculator.tsx
-│   │       ├── BuyCalculator.module.css
+│   │   ├── BuyCalculator/      # "What can I buy" wizard
+│   │   │   ├── BuyCalculator.tsx
+│   │   │   ├── BuyCalculator.module.css
+│   │   │   └── index.ts
+│   │   └── Navigation/         # Hamburger menu navigation
+│   │       ├── Navigation.tsx
+│   │       ├── Navigation.module.css
 │   │       └── index.ts
 │   ├── pages/
 │   │   ├── About/              # O projektu Sisyfos
@@ -252,6 +256,7 @@ sisyphus/
 | `DebtChart` | src/components/DebtChart/ | D3.js interactive chart with variants |
 | `ShareButtons` | src/components/ShareButtons/ | Social sharing + screenshot capture |
 | `BuyCalculator` | src/components/BuyCalculator/ | "What can I buy with my debt share" wizard |
+| `Navigation` | src/components/Navigation/ | Hamburger menu with tree navigation |
 | `About` | src/pages/About/ | O projektu Sisyfos page |
 | `DataSources` | src/pages/DataSources/ | Datové řady a zdroje dat page |
 | `BudgetTables` | src/pages/BudgetTables/ | Tabulky rozpočtu 2026 (kapitoly, příjmy, výdaje) |
@@ -416,6 +421,13 @@ All files           |     100 |      100 |     100 |     100 |
   - Progress bar with real-time deficit tracking
   - Share functionality for game results
   - Tooltips showing full item names and values
+- [x] Hamburger menu navigation with tree structure:
+  - Státní dluh → Datové řady a zdroje dat
+  - Státní rozpočet → Vizualizace
+  - Hra Rozpočtovka
+  - Blog
+  - O Projektu Sisyfos
+- [x] Test banner moved to footer on all pages
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates

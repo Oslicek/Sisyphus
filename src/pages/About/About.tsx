@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { TestBanner } from '../../components/TestBanner';
 import sisyfosLogo from '../../assets/sisyfos-logo-400x400.png';
 import styles from './About.module.css';
 
@@ -53,11 +54,14 @@ export function About() {
       </main>
 
       <footer className={styles.footer}>
-        <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
-        <span className={styles.separator}>•</span>
-        <Link to="/blog" className={styles.footerLink}>Blog</Link>
-        <span className={styles.separator}>•</span>
-        <Link to="/zdroje-dat" className={styles.footerLink}>Datové řady</Link>
+        <div className={styles.footerLinks}>
+          <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
+          <span className={styles.separator}>•</span>
+          <Link to="/blog" className={styles.footerLink}>Blog</Link>
+          <span className={styles.separator}>•</span>
+          <Link to="/zdroje-dat" className={styles.footerLink}>Datové řady</Link>
+        </div>
+        <TestBanner />
       </footer>
     </div>
   );

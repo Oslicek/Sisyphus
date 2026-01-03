@@ -1,0 +1,233 @@
+/* Hamburger Button */
+.hamburger {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1001;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  background: white;
+  border: 2px solid var(--color-accent, #c41e3a);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hamburger:hover {
+  background: var(--color-accent, #c41e3a);
+}
+
+.hamburger:hover .hamburgerLine {
+  background: white;
+}
+
+.hamburgerLine {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-accent, #c41e3a);
+  border-radius: 1px;
+  transition: transform 0.3s ease, opacity 0.3s ease, background 0.2s ease;
+}
+
+.hamburgerOpen .hamburgerLine:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburgerOpen .hamburgerLine:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburgerOpen .hamburgerLine:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Slide-out Menu */
+.menu {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  max-width: 85vw;
+  height: 100vh;
+  background: var(--color-bg, #f8f9fa);
+  z-index: 1000;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  transition: right 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.menuOpen {
+  right: 0;
+}
+
+.menuHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border, #dee2e6);
+  background: white;
+}
+
+.menuTitle {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text, #1a1a2e);
+}
+
+.closeButton {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 1.75rem;
+  color: var(--color-text-muted, #6c757d);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.closeButton:hover {
+  background: var(--color-bg-subtle, #e9ecef);
+  color: var(--color-accent, #c41e3a);
+}
+
+/* Navigation List */
+.navList {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  flex: 1;
+}
+
+.navItem {
+  border-bottom: 1px solid var(--color-border, #dee2e6);
+}
+
+.navItem:last-child {
+  border-bottom: none;
+}
+
+.navItemRow {
+  display: flex;
+  align-items: stretch;
+}
+
+.navLink,
+.navLabel {
+  flex: 1;
+  display: block;
+  padding: 1rem;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-text, #1a1a2e);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.navLink:hover {
+  background: var(--color-bg-subtle, #e9ecef);
+  color: var(--color-accent, #c41e3a);
+}
+
+.navLinkActive {
+  color: var(--color-accent, #c41e3a);
+  background: rgba(196, 30, 58, 0.08);
+  border-left: 3px solid var(--color-accent, #c41e3a);
+}
+
+.navLabel {
+  color: var(--color-text-muted, #6c757d);
+  cursor: default;
+}
+
+.expandButton {
+  width: 48px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted, #6c757d);
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.expandButton:hover {
+  color: var(--color-accent, #c41e3a);
+}
+
+.expandButtonOpen {
+  transform: rotate(180deg);
+}
+
+/* Sub-navigation */
+.subNav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.subNav .navLink {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--color-text-muted, #6c757d);
+}
+
+.subNav .navLink:hover {
+  color: var(--color-accent, #c41e3a);
+}
+
+.subNav .navLinkActive {
+  color: var(--color-accent, #c41e3a);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .menu {
+    width: 100vw;
+    max-width: 100vw;
+    right: -100vw;
+  }
+  
+  .menuOpen {
+    right: 0;
+  }
+}
+

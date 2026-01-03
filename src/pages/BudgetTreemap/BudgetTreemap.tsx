@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
+import { TestBanner } from '../../components/TestBanner';
 import { parseCSV, formatCurrency } from '../../utils/budgetData';
 import type { BudgetRow } from '../../utils/budgetData';
 import styles from './BudgetTreemap.module.css';
@@ -715,13 +716,16 @@ export function BudgetTreemap() {
       </main>
 
       <footer className={styles.footer}>
-        <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
-        <span className={styles.separator}>•</span>
-        <Link to="/rozpocet" className={styles.footerLink}>Tabulky rozpočtu</Link>
-        <span className={styles.separator}>•</span>
-        <Link to="/zdroje-dat" className={styles.footerLink}>Datové řady</Link>
-        <span className={styles.separator}>•</span>
-        <Link to="/o-projektu" className={styles.footerLink}>O projektu</Link>
+        <div className={styles.footerLinks}>
+          <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
+          <span className={styles.separator}>•</span>
+          <Link to="/rozpocet" className={styles.footerLink}>Tabulky rozpočtu</Link>
+          <span className={styles.separator}>•</span>
+          <Link to="/zdroje-dat" className={styles.footerLink}>Datové řady</Link>
+          <span className={styles.separator}>•</span>
+          <Link to="/o-projektu" className={styles.footerLink}>O projektu</Link>
+        </div>
+        <TestBanner />
       </footer>
     </div>
   );

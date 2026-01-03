@@ -4,6 +4,7 @@ import { DebtChart } from './components/DebtChart';
 import { BuyCalculator } from './components/BuyCalculator';
 import { ShareButtons } from './components/ShareButtons';
 import { TestBanner } from './components/TestBanner';
+import { Navigation } from './components/Navigation';
 import { About } from './pages/About';
 import { Blog } from './pages/Blog';
 import { DataSources } from './pages/DataSources';
@@ -64,6 +65,7 @@ function Home() {
             Facebook
           </a>
         </nav>
+        <TestBanner />
       </footer>
     </div>
   );
@@ -72,7 +74,7 @@ function Home() {
 function App() {
   return (
     <BrowserRouter>
-      <TestBanner />
+      <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blog" element={<Blog />} />

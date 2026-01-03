@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { TestBanner } from '../../components/TestBanner';
 import styles from './Blog.module.css';
 
 interface BlogPost {
@@ -117,11 +118,14 @@ export function Blog() {
       </main>
 
       <footer className={styles.footer}>
-        <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
-        <span className={styles.separator}>•</span>
-        <Link to="/zdroje-dat" className={styles.footerLink}>Datové řady a zdroje dat</Link>
-        <span className={styles.separator}>•</span>
-        <Link to="/o-projektu" className={styles.footerLink}>O projektu</Link>
+        <div className={styles.footerLinks}>
+          <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
+          <span className={styles.separator}>•</span>
+          <Link to="/zdroje-dat" className={styles.footerLink}>Datové řady a zdroje dat</Link>
+          <span className={styles.separator}>•</span>
+          <Link to="/o-projektu" className={styles.footerLink}>O projektu</Link>
+        </div>
+        <TestBanner />
       </footer>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { TestBanner } from '../../components/TestBanner';
 import styles from './DataSources.module.css';
 
 interface DataPoint {
@@ -770,11 +771,14 @@ export function DataSources() {
       </main>
 
       <footer className={styles.footer}>
-        <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
-        <span className={styles.separator}>•</span>
-        <Link to="/blog" className={styles.footerLink}>Blog</Link>
-        <span className={styles.separator}>•</span>
-        <Link to="/o-projektu" className={styles.footerLink}>O projektu</Link>
+        <div className={styles.footerLinks}>
+          <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
+          <span className={styles.separator}>•</span>
+          <Link to="/blog" className={styles.footerLink}>Blog</Link>
+          <span className={styles.separator}>•</span>
+          <Link to="/o-projektu" className={styles.footerLink}>O projektu</Link>
+        </div>
+        <TestBanner />
       </footer>
     </div>
   );
