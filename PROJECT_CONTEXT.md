@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-03 (v3)
+> **Last Updated:** 2026-01-03 (v4)
 
 ## Overview
 
@@ -432,8 +432,12 @@ All files           |     100 |      100 |     100 |     100 |
   - Progress bar with real-time deficit tracking
   - Non-blocking success banner when deficit reaches zero or surplus
   - Image sharing (screenshot with logo, deficit indicator, and adjustments)
+  - Copy image to clipboard functionality
+  - Social share buttons (Facebook, X, LinkedIn, WhatsApp, Telegram)
+  - Open Graph meta tags for social media previews
   - Tooltips showing full item names and values
   - Instructions explaining 50% adjustment limit
+  - Unique playful design with Lilita One and Nunito fonts
 - [x] Hamburger menu navigation with tree structure:
   - Státní dluh → Datové řady a zdroje dat
   - Státní rozpočet → Vizualizace

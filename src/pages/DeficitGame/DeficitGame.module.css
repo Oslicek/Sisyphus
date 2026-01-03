@@ -568,6 +568,97 @@
   box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3);
 }
 
+/* Share Section */
+.shareSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px dashed #d1dde2;
+  text-align: center;
+}
+
+.shareLabel {
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-right: 0.75rem;
+}
+
+.shareButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.shareIconButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #E8F6F8, #D1EEF2);
+  border: 2px solid #1E8A9A;
+  color: #1E8A9A;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.shareIconButton:hover {
+  background: #1E8A9A;
+  color: white;
+  transform: scale(1.1);
+}
+
+.shareIconButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.shareDivider {
+  color: #d1dde2;
+  font-size: 1.2rem;
+  margin: 0 0.25rem;
+}
+
+.socialButton {
+  transition: transform 0.2s, opacity 0.2s;
+  cursor: pointer;
+}
+
+.socialButton:hover {
+  transform: scale(1.1);
+}
+
+.shareHint {
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 0.75rem;
+  font-style: italic;
+}
+
+/* Success Banner Buttons */
+.successBannerButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.successBannerSocial {
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.successBannerSocial:hover {
+  transform: scale(1.1);
+}
+
 /* Instructions */
 .instructions {
   font-family: 'Nunito', system-ui, sans-serif;

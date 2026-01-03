@@ -2,6 +2,18 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 import html2canvas from 'html2canvas';
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  LinkedinShareButton,
+  WhatsappShareButton,
+  TelegramShareButton,
+  FacebookIcon,
+  XIcon,
+  LinkedinIcon,
+  WhatsappIcon,
+  TelegramIcon,
+} from 'react-share';
 import { Footer } from '../../components/Footer';
 import { 
   parseCSV, 
@@ -66,6 +78,20 @@ export function DeficitGame() {
   
   // Share state
   const [shareState, setShareState] = useState<'idle' | 'capturing' | 'success' | 'error'>('idle');
+  const [copyState, setCopyState] = useState<'idle' | 'success'>('idle');
+  
+  // Share URL and text
+  const shareUrl = 'https://rozpoctovka.cz';
+  const shareTitle = 'Zrušil/a jsem schodek! - Rozpočtovka';
+  const shareDescription = useMemo(() => {
+    if (currentDeficit === 0) {
+      return 'Podařilo se mi vyrovnat státní rozpočet 2026! Zkuste to také.';
+    } else if (currentDeficit > 0) {
+      return `Dosáhl/a jsem přebytku ${formatCurrency(currentDeficit)}! Zkuste to také.`;
+    } else {
+      return 'Zkuste vyrovnat státní rozpočet 2026. Podaří se vám to?';
+    }
+  }, [currentDeficit]);
 
   // Calculate current deficit
   const currentDeficit = useMemo(() => {
@@ -369,6 +395,70 @@ export function DeficitGame() {
     setTimeout(() => setShareState('idle'), 2000);
   }, [adjustments, captureScreenshot]);
 
+  // Copy image to clipboard
+  const handleCopyImage = useCallback(async () => {
+    setShareState('capturing');
+    
+    try {
+      const blob = await captureScreenshot();
+      
+      if (blob && navigator.clipboard && 'write' in navigator.clipboard) {
+        const clipboardItem = new ClipboardItem({
+          'image/png': blob
+        });
+        await navigator.clipboard.write([clipboardItem]);
+        setCopyState('success');
+        setShareState('success');
+      } else if (blob) {
+        // Fallback: download the image
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'rozpoctovka-vysledek.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        setCopyState('success');
+        setShareState('success');
+      }
+    } catch (e) {
+      console.error('Copy image failed:', e);
+      setShareState('error');
+    }
+    
+    setTimeout(() => {
+      setShareState('idle');
+      setCopyState('idle');
+    }, 2000);
+  }, [captureScreenshot]);
+
+  // Download image
+  const handleDownloadImage = useCallback(async () => {
+    setShareState('capturing');
+    
+    try {
+      const blob = await captureScreenshot();
+      
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'rozpoctovka-vysledek.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        setShareState('success');
+      }
+    } catch (e) {
+      console.error('Download image failed:', e);
+      setShareState('error');
+    }
+    
+    setTimeout(() => setShareState('idle'), 2000);
+  }, [captureScreenshot]);
+
   // Render icicle chart with navigation
   const renderIcicleChart = useCallback((
     svgRef: React.RefObject<SVGSVGElement | null>,
@@ -636,16 +726,33 @@ export function DeficitGame() {
                 ? 'Vyrovnaný rozpočet! Podařilo se vám eliminovat schodek.'
                 : `Přebytek ${formatCurrency(currentDeficit)}! Už máte více než vyrovnaný rozpočet.`}
             </span>
-            <button 
-              className={styles.successBannerShare} 
-              onClick={handleShare}
-              disabled={shareState === 'capturing'}
-            >
-              {shareState === 'capturing' ? '⏳ Vytvářím...' : 
-               shareState === 'success' ? '✓ Hotovo!' :
-               shareState === 'error' ? '⚠ Chyba' :
-               '📤 Sdílet'}
-            </button>
+            <div className={styles.successBannerButtons}>
+              <button 
+                className={styles.successBannerShare} 
+                onClick={handleShare}
+                disabled={shareState === 'capturing'}
+                title="Sdílet s obrázkem"
+              >
+                {shareState === 'capturing' ? '⏳' : 
+                 shareState === 'success' ? '✓' :
+                 shareState === 'error' ? '⚠' :
+                 '📤'}
+              </button>
+              <button 
+                className={styles.successBannerShare} 
+                onClick={handleCopyImage}
+                disabled={shareState === 'capturing'}
+                title="Kopírovat obrázek"
+              >
+                📋
+              </button>
+              <FacebookShareButton url={shareUrl} title={shareTitle} className={styles.successBannerSocial}>
+                <FacebookIcon size={24} borderRadius={4} />
+              </FacebookShareButton>
+              <TwitterShareButton url={shareUrl} title={shareDescription} className={styles.successBannerSocial}>
+                <XIcon size={24} borderRadius={4} />
+              </TwitterShareButton>
+            </div>
           </div>
         )}
 
@@ -728,10 +835,12 @@ export function DeficitGame() {
                 })}
               </div>
               <div className={styles.actionsInline}>
+                {/* Primary share button - uses Web Share API with image */}
                 <button 
                   className={`${styles.shareButton} ${styles.shareButtonPrimary}`} 
                   onClick={handleShare}
                   disabled={shareState === 'capturing'}
+                  title="Sdílet s obrázkem (Web Share API)"
                 >
                   {shareState === 'capturing' ? '⏳ Vytvářím obrázek...' : 
                    shareState === 'success' ? '✓ Hotovo!' :
@@ -741,6 +850,56 @@ export function DeficitGame() {
                 <button className={styles.resetButton} onClick={handleReset}>
                   🔄 Začít znovu
                 </button>
+              </div>
+              
+              {/* Extended sharing options */}
+              <div className={styles.shareSection}>
+                <span className={styles.shareLabel}>Nebo sdílejte na:</span>
+                <div className={styles.shareButtons}>
+                  {/* Image actions */}
+                  <button 
+                    className={styles.shareIconButton}
+                    onClick={handleCopyImage}
+                    title={copyState === 'success' ? 'Zkopírováno!' : 'Kopírovat obrázek do schránky'}
+                    disabled={shareState === 'capturing'}
+                  >
+                    {copyState === 'success' ? '✓' : '📋'}
+                  </button>
+                  <button 
+                    className={styles.shareIconButton}
+                    onClick={handleDownloadImage}
+                    title="Stáhnout obrázek"
+                    disabled={shareState === 'capturing'}
+                  >
+                    💾
+                  </button>
+                  
+                  <span className={styles.shareDivider}>|</span>
+                  
+                  {/* Social share buttons */}
+                  <FacebookShareButton url={shareUrl} title={shareTitle} className={styles.socialButton}>
+                    <FacebookIcon size={28} borderRadius={6} />
+                  </FacebookShareButton>
+                  
+                  <TwitterShareButton url={shareUrl} title={shareDescription} className={styles.socialButton}>
+                    <XIcon size={28} borderRadius={6} />
+                  </TwitterShareButton>
+                  
+                  <LinkedinShareButton url={shareUrl} title={shareTitle} summary={shareDescription} className={styles.socialButton}>
+                    <LinkedinIcon size={28} borderRadius={6} />
+                  </LinkedinShareButton>
+                  
+                  <WhatsappShareButton url={shareUrl} title={shareDescription} className={styles.socialButton}>
+                    <WhatsappIcon size={28} borderRadius={6} />
+                  </WhatsappShareButton>
+                  
+                  <TelegramShareButton url={shareUrl} title={shareDescription} className={styles.socialButton}>
+                    <TelegramIcon size={28} borderRadius={6} />
+                  </TelegramShareButton>
+                </div>
+                <p className={styles.shareHint}>
+                  💡 Tip: Nejprve zkopírujte obrázek (📋), pak ho vložte do příspěvku na sociální síti.
+                </p>
               </div>
             </>
           )}
