@@ -10,7 +10,8 @@ import {
   getRevenuesByChapter,
   getExpendituresByChapter,
   formatCurrency,
-  enrichTreeWithValues
+  enrichTreeWithValues,
+  buildEffectiveLeafValueMap
 } from './budgetData';
 import type { BudgetRow, TreeNode } from './budgetData';
 
@@ -322,5 +323,120 @@ describe('enrichTreeWithValues', () => {
     const result = enrichTreeWithValues(tree, rows, 'rev_druhove', 2026);
     
     expect(result.value).toBe(1000);
+  });
+});
+
+describe('buildEffectiveLeafValueMap', () => {
+  it('should aggregate values for simple leaf codes', () => {
+    const rows: BudgetRow[] = [
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 1000 },
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '302', chapter_name: 'B', class_code: '111', amount_czk: 2000 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    expect(result.get('111')).toBe(3000);
+  });
+
+  it('should skip parent codes when children exist in same chapter', () => {
+    const rows: BudgetRow[] = [
+      // Chapter 301 has both 41 and 411 - only 411 should count
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '41', amount_czk: 5000 },
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '411', amount_czk: 5000 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    // 41 should be skipped because 411 exists in same chapter
+    expect(result.get('41')).toBeUndefined();
+    expect(result.get('411')).toBe(5000);
+  });
+
+  it('should include parent codes when children do NOT exist in same chapter', () => {
+    const rows: BudgetRow[] = [
+      // Chapter 301 has 411 with child 4118
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '411', amount_czk: 1000 },
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '4118', amount_czk: 1000 },
+      // Chapter 398 has only 411, no 4118
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '398', chapter_name: 'B', class_code: '411', amount_czk: 27000 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    // 411 should include value from chapter 398 (where it has no children)
+    // but NOT from chapter 301 (where 4118 exists)
+    expect(result.get('411')).toBe(27000);
+    // 4118 should include value from chapter 301
+    expect(result.get('4118')).toBe(1000);
+  });
+
+  it('should skip combined codes when all parts exist', () => {
+    const rows: BudgetRow[] = [
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '31', amount_czk: 100 },
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '32', amount_czk: 200 },
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '31_32', amount_czk: 300 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    // 31_32 should be skipped because both 31 and 32 exist
+    expect(result.get('31_32')).toBeUndefined();
+    expect(result.get('31')).toBe(100);
+    expect(result.get('32')).toBe(200);
+  });
+
+  it('should include combined codes when NOT all parts exist', () => {
+    const rows: BudgetRow[] = [
+      // Only 122_123 exists, without separate 122 and 123
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '122_123', amount_czk: 500 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    expect(result.get('122_123')).toBe(500);
+  });
+
+  it('should exclude class_code 0 (totals)', () => {
+    const rows: BudgetRow[] = [
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '0', amount_czk: 99999 },
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 1000 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    expect(result.get('0')).toBeUndefined();
+    expect(result.get('111')).toBe(1000);
+  });
+
+  it('should filter by year correctly', () => {
+    const rows: BudgetRow[] = [
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 1000 },
+      { year: 2025, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 9999 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    expect(result.get('111')).toBe(1000);
+  });
+
+  it('should filter by system correctly', () => {
+    const rows: BudgetRow[] = [
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 1000 },
+      { year: 2026, kind: 'exp', system: 'exp_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 9999 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    expect(result.get('111')).toBe(1000);
+  });
+
+  it('should use absolute values for negative amounts', () => {
+    const rows: BudgetRow[] = [
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: -1000 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    expect(result.get('111')).toBe(1000);
   });
 });

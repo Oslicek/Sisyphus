@@ -17,7 +17,8 @@ import { Footer } from '../../components/Footer';
 import { 
   parseCSV, 
   parseClassificationCSV,
-  formatCurrency 
+  formatCurrency,
+  buildEffectiveLeafValueMap
 } from '../../utils/budgetData';
 import {
   calculateAdjustedDeficit,
@@ -172,29 +173,10 @@ export function DeficitGame() {
     return root;
   }, [classifications]);
 
-  // Build value map for a system
+  // Build value map for a system using effective leaves per chapter
   const buildValueMap = useCallback((system: string): Map<string, number> => {
-    const valueMap = new Map<string, number>();
-    
-    // Get leaf classifications for this system
-    const leafClass = classifications.filter(c => 
-      c.system === system && c.is_leaf && !c.is_total
-    );
-    const leafCodes = new Set(leafClass.map(c => c.code));
-    
-    // Sum values for each code from budget rows
-    budgetRows
-      .filter(r => r.year === 2026 && r.system === system)
-      .forEach(r => {
-        // Only use leaf values or direct class values
-        if (leafCodes.has(r.class_code) || r.class_code.length >= 3) {
-          const current = valueMap.get(r.class_code) || 0;
-          valueMap.set(r.class_code, current + Math.abs(r.amount_czk));
-        }
-      });
-    
-    return valueMap;
-  }, [budgetRows, classifications]);
+    return buildEffectiveLeafValueMap(budgetRows, system, 2026);
+  }, [budgetRows]);
 
   // Assign values to tree nodes (only to leaves)
   const assignValues = useCallback((tree: TreeNode, valueMap: Map<string, number>): TreeNode | null => {

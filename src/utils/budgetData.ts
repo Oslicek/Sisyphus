@@ -262,5 +262,78 @@ export function enrichTreeWithValues(
   };
 }
 
-
+/**
+ * Build a value map for budget data using effective leaves per chapter.
+ * This avoids counting hierarchical sums as separate values.
+ * 
+ * Algorithm:
+ * 1. Group all codes per chapter
+ * 2. Filter out combined codes (like "31_32") if all parts exist separately
+ * 3. For each chapter, find effective leaves (codes without children in that chapter)
+ * 4. Aggregate effective leaf values across all chapters
+ */
+export function buildEffectiveLeafValueMap(
+  budgetRows: BudgetRow[],
+  system: string,
+  year: number = 2026
+): Map<string, number> {
+  // First pass: collect all codes per chapter
+  const byChapterAll = new Map<string, Map<string, number>>();
+  
+  budgetRows
+    .filter(row => row.year === year && row.system === system && row.class_code !== '0')
+    .forEach(row => {
+      if (!byChapterAll.has(row.chapter_code)) {
+        byChapterAll.set(row.chapter_code, new Map());
+      }
+      const chapterMap = byChapterAll.get(row.chapter_code)!;
+      const existing = chapterMap.get(row.class_code) || 0;
+      chapterMap.set(row.class_code, existing + Math.abs(row.amount_czk));
+    });
+  
+  // Second pass: filter combined codes that have all parts present
+  const byChapter = new Map<string, Map<string, number>>();
+  
+  byChapterAll.forEach((chapterCodes, chapterCode) => {
+    const filtered = new Map<string, number>();
+    
+    chapterCodes.forEach((amount, code) => {
+      if (code.includes('_')) {
+        // Combined code like "31_32" or "122_123"
+        const parts = code.split('_');
+        // Only skip if ALL parts exist as separate entries
+        const allPartsExist = parts.every(part => chapterCodes.has(part));
+        if (allPartsExist) {
+          // This is a sum of existing parts - skip it
+          return;
+        }
+      }
+      filtered.set(code, amount);
+    });
+    
+    byChapter.set(chapterCode, filtered);
+  });
+  
+  // Third pass: for each chapter, find effective leaves (codes with no children in that chapter)
+  const aggregated = new Map<string, number>();
+  
+  byChapter.forEach((chapterCodes) => {
+    const allCodesInChapter = Array.from(chapterCodes.keys());
+    
+    chapterCodes.forEach((amount, code) => {
+      // Check if this code has any children with values in THIS chapter
+      const hasChildWithValue = allCodesInChapter.some(
+        other => other !== code && other.startsWith(code)
+      );
+      
+      if (!hasChildWithValue) {
+        // This is an effective leaf for this chapter - add to aggregate
+        const existing = aggregated.get(code) || 0;
+        aggregated.set(code, existing + amount);
+      }
+    });
+  });
+  
+  return aggregated;
+}
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 import { Footer } from '../../components/Footer';
-import { parseCSV, formatCurrency } from '../../utils/budgetData';
+import { parseCSV, formatCurrency, buildEffectiveLeafValueMap } from '../../utils/budgetData';
 import type { BudgetRow } from '../../utils/budgetData';
 import styles from './BudgetTreemap.module.css';
 
@@ -173,65 +173,7 @@ export function BudgetTreemap() {
   // Build value map from budget data - find effective leaves PER CHAPTER then aggregate
   const valueMap = useMemo((): Map<string, number> => {
     const config = VIEW_CONFIG[activeView];
-    
-    // First pass: collect all codes per chapter (including combined codes)
-    const byChapterAll = new Map<string, Map<string, number>>();
-    
-    budgetRows
-      .filter(row => row.year === 2026 && row.system === config.system && row.class_code !== '0')
-      .forEach(row => {
-        if (!byChapterAll.has(row.chapter_code)) {
-          byChapterAll.set(row.chapter_code, new Map());
-        }
-        const chapterMap = byChapterAll.get(row.chapter_code)!;
-        const existing = chapterMap.get(row.class_code) || 0;
-        chapterMap.set(row.class_code, existing + Math.abs(row.amount_czk));
-      });
-    
-    // Second pass: filter combined codes that have all parts present
-    const byChapter = new Map<string, Map<string, number>>();
-    
-    byChapterAll.forEach((chapterCodes, chapterCode) => {
-      const filtered = new Map<string, number>();
-      
-      chapterCodes.forEach((amount, code) => {
-        if (code.includes('_')) {
-          // Combined code like "31_32" or "122_123"
-          const parts = code.split('_');
-          // Only skip if ALL parts exist as separate entries
-          const allPartsExist = parts.every(part => chapterCodes.has(part));
-          if (allPartsExist) {
-            // This is a sum of existing parts - skip it
-            return;
-          }
-        }
-        filtered.set(code, amount);
-      });
-      
-      byChapter.set(chapterCode, filtered);
-    });
-    
-    // For each chapter, find effective leaves (codes with no children in that chapter)
-    const aggregated = new Map<string, number>();
-    
-    byChapter.forEach((chapterCodes) => {
-      const allCodesInChapter = Array.from(chapterCodes.keys());
-      
-      chapterCodes.forEach((amount, code) => {
-        // Check if this code has any children with values in THIS chapter
-        const hasChildWithValue = allCodesInChapter.some(
-          other => other !== code && other.startsWith(code)
-        );
-        
-        if (!hasChildWithValue) {
-          // This is an effective leaf for this chapter - add to aggregate
-          const existing = aggregated.get(code) || 0;
-          aggregated.set(code, existing + amount);
-        }
-      });
-    });
-    
-    return aggregated;
+    return buildEffectiveLeafValueMap(budgetRows, config.system, 2026);
   }, [budgetRows, activeView]);
 
   // Get the best name for a code
