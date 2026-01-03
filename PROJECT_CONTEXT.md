@@ -223,7 +223,7 @@ sisyphus/
 │   ├── assets/
 │   │   ├── sisyfos-logo-200x200.png  # Logo for main page
 │   │   ├── sisyfos-logo-400x400.png  # Logo for About page
-│   │   └── rozpoctovka-logo-250x204.png  # Logo for deficit game
+│   │   └── rozpoctovka-logo-250x204-pruhledne.png  # Logo for deficit game
 │   ├── App.tsx                 # Main app with logo, tagline, footer
 │   ├── App.module.css
 │   ├── main.tsx
