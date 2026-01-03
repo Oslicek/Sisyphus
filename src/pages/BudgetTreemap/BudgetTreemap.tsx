@@ -3,18 +3,13 @@ import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 import { Footer } from '../../components/Footer';
 import { 
-  parseBudgetItemsCSV, 
+  parseBudgetItemsCSV,
+  buildTreeFromItems,
   formatCurrency,
-  type BudgetItem
+  type BudgetItem,
+  type TreeNode
 } from '../../utils/budgetData';
 import styles from './BudgetTreemap.module.css';
-
-interface TreeNode {
-  id: string;
-  name: string;
-  children?: TreeNode[];
-  value?: number;
-}
 
 type ViewType = 'revenues' | 'exp_druhove' | 'exp_odvetvove';
 
@@ -98,102 +93,9 @@ export function BudgetTreemap() {
   // Build tree from budget items
   const buildTree = useCallback((): TreeNode | null => {
     if (budgetItems.length === 0) return null;
+    return buildTreeFromItems(budgetItems);
+  }, [budgetItems]);
 
-    // Filter items with values (non-zero)
-    const validItems = budgetItems.filter(item => item.sum > 0 && item.id !== '0');
-    
-    // Sort by code length (parents first)
-    validItems.sort((a, b) => {
-      if (a.id.length !== b.id.length) return a.id.length - b.id.length;
-      return a.id.localeCompare(b.id);
-    });
-
-    // Build node map
-    const nodeMap = new Map<string, TreeNode>();
-    validItems.forEach(item => {
-      nodeMap.set(item.id, {
-        id: item.id,
-        name: item.name,
-        value: item.sum,
-        children: []
-      });
-    });
-
-    // Build hierarchy - find parent for each node
-    validItems.forEach(item => {
-      const node = nodeMap.get(item.id)!;
-      
-      // Find parent - the longest code that is a prefix of this code
-      let parentCode: string | null = null;
-      for (let len = item.id.length - 1; len >= 1; len--) {
-        const potentialParent = item.id.substring(0, len);
-        if (nodeMap.has(potentialParent)) {
-          parentCode = potentialParent;
-          break;
-        }
-      }
-      
-      if (parentCode) {
-        nodeMap.get(parentCode)!.children!.push(node);
-      }
-    });
-
-    // Find top-level nodes (no parent in nodeMap)
-    const topLevel: TreeNode[] = [];
-    validItems.forEach(item => {
-      let hasParent = false;
-      for (let len = item.id.length - 1; len >= 1; len--) {
-        if (nodeMap.has(item.id.substring(0, len))) {
-          hasParent = true;
-          break;
-        }
-      }
-      if (!hasParent) {
-        topLevel.push(nodeMap.get(item.id)!);
-      }
-    });
-
-    // Get total
-    const totalItem = budgetItems.find(i => i.id === '0');
-
-    return {
-      id: 'root',
-      name: totalItem?.name || VIEW_CONFIG[activeView].label,
-      value: totalItem?.sum,
-      children: topLevel
-    };
-  }, [budgetItems, activeView]);
-
-  // Assign values to leaf nodes only
-  // Clean up tree - remove empty children arrays
-  const cleanupTree = useCallback((tree: TreeNode): TreeNode | null => {
-    function cleanRecursive(node: TreeNode): TreeNode | null {
-      const hasChildren = node.children && node.children.length > 0;
-      
-      if (!hasChildren) {
-        // Leaf node - keep if has value
-        if (!node.value || node.value === 0) return null;
-        return { ...node, children: undefined };
-      }
-      
-      // Non-leaf: process children
-      const validChildren = node.children!
-        .map(child => cleanRecursive(child))
-        .filter((child): child is TreeNode => child !== null);
-      
-      if (validChildren.length === 0) {
-        // No valid children - check if this node has a value
-        if (node.value && node.value > 0) {
-          return { ...node, children: undefined };
-        }
-        return null;
-      }
-      
-      return { ...node, children: validChildren };
-    }
-    
-    return cleanRecursive(tree);
-  }, []);
 
   // Get color for a node
   const getNodeColor = useCallback((d: RectNode): string => {
@@ -234,18 +136,15 @@ export function BudgetTreemap() {
   useEffect(() => {
     if (!svgRef.current || !containerRef.current || budgetItems.length === 0) return;
 
-    const rawTree = buildTree();
-    if (!rawTree) return;
-
-    const enrichedTree = cleanupTree(rawTree);
-    if (!enrichedTree || !enrichedTree.children || enrichedTree.children.length === 0) return;
+    const tree = buildTree();
+    if (!tree || !tree.children || tree.children.length === 0) return;
 
     const container = containerRef.current;
     const width = container.clientWidth;
     const height = 600;
 
     // Create hierarchy and sort by value (descending)
-    const root = d3.hierarchy(enrichedTree)
+    const root = d3.hierarchy(tree)
       .sum(d => d.value || 0)
       .sort((a, b) => (b.value || 0) - (a.value || 0)) as RectNode;
 
@@ -452,7 +351,7 @@ export function BudgetTreemap() {
       }, 750);
     }
 
-  }, [budgetItems, activeView, buildTree, cleanupTree, getNodeColor]);
+  }, [budgetItems, activeView, buildTree, getNodeColor]);
 
   const handleBreadcrumbClick = (index: number) => {
     if (index === -1) {

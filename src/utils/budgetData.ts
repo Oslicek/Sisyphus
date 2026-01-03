@@ -47,7 +47,7 @@ export interface BudgetItem {
 }
 
 export interface TreeNode {
-  code: string;
+  id: string;
   name: string;
   children?: TreeNode[];
   value?: number;
@@ -120,6 +120,7 @@ export function buildNameMapFromItems(items: BudgetItem[]): Map<string, string> 
 /**
  * Build a hierarchical tree from flat budget items.
  * Items are assumed to have hierarchical codes (e.g., "11", "111", "1111").
+ * Automatically creates "_other" nodes for parent values not fully broken down into children.
  */
 export function buildTreeFromItems(items: BudgetItem[]): TreeNode {
   // Filter out zero values and the total (id='0')
@@ -145,31 +146,59 @@ export function buildTreeFromItems(items: BudgetItem[]): TreeNode {
   function buildNode(code: string, name: string): TreeNode {
     const children: TreeNode[] = [];
     
-    // Find direct children
-    validItems.forEach(item => {
-      if (item.id !== code && item.id.startsWith(code)) {
-        // Check if this is a direct child (no intermediate codes)
-        const isDirectChild = !validItems.some(other => 
-          other.id !== code && 
-          other.id !== item.id && 
-          item.id.startsWith(other.id) && 
-          other.id.startsWith(code)
-        );
-        
-        if (isDirectChild) {
-          children.push(buildNode(item.id, item.name));
-        }
-      }
+    // Find direct children in the original data
+    const directChildren = validItems.filter(item => {
+      if (item.id === code || !item.id.startsWith(code)) return false;
+      
+      // Check if this is a direct child (no intermediate codes)
+      const isDirectChild = !validItems.some(other => 
+        other.id !== code && 
+        other.id !== item.id && 
+        item.id.startsWith(other.id) && 
+        other.id.startsWith(code)
+      );
+      
+      return isDirectChild;
+    });
+    
+    // Build child nodes
+    directChildren.forEach(item => {
+      children.push(buildNode(item.id, item.name));
     });
     
     const item = validItems.find(i => i.id === code);
-    const value = item?.sum;
+    const parentValue = item?.sum;
     
+    // If this node has children, check if we need an "_other" node for remainder
+    if (children.length > 0 && parentValue) {
+      // Recursively sum children values (since parent nodes have value=undefined)
+      function sumTreeValues(node: TreeNode): number {
+        if (!node.children || node.children.length === 0) {
+          return node.value || 0;
+        }
+        return node.children.reduce((sum, child) => sum + sumTreeValues(child), 0);
+      }
+      
+      const childrenSum = children.reduce((sum, child) => sum + sumTreeValues(child), 0);
+      const remainder = parentValue - childrenSum;
+      
+      // Create an "_other" node for any remainder
+      if (remainder > 0) {
+        children.push({
+          id: `${code}_other`,
+          name: 'Ostatní',
+          value: remainder
+        });
+      }
+    }
+    
+    // FIX: Only leaf nodes should have value. Parent nodes get their value from D3's .sum()
+    const isLeaf = !children || children.length === 0;
     return {
-      code,
+      id: code,
       name,
       children: children.length > 0 ? children : undefined,
-      value
+      value: isLeaf ? parentValue : undefined
     };
   }
   
@@ -185,11 +214,12 @@ export function buildTreeFromItems(items: BudgetItem[]): TreeNode {
   // Get total from original items
   const totalItem = items.find(i => i.id === '0');
   
+  // FIX: Root node should not have value - D3's .sum() will calculate it from children
   return {
-    code: '0',
+    id: '0',
     name: totalItem?.name || 'Celkem',
     children: rootChildren,
-    value: totalItem?.sum
+    value: undefined
   };
 }
 

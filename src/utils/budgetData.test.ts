@@ -14,7 +14,7 @@ import {
   getExpendituresByChapter,
   formatCurrency
 } from './budgetData';
-import type { BudgetRow, BudgetItem } from './budgetData';
+import type { BudgetRow, BudgetItem, TreeNode } from './budgetData';
 
 // Expected totals from P01 (official budget document)
 const EXPECTED_TOTAL_REVENUES = 2_122_672_638_307;
@@ -176,11 +176,11 @@ describe('buildTreeFromItems', () => {
     const tree = buildTreeFromItems(items);
     
     expect(tree).not.toBeNull();
-    expect(tree.code).toBe('0');
+    expect(tree.id).toBe('0');
     expect(tree.name).toBe('Celkem');
-    expect(tree.value).toBe(3000);
+    expect(tree.value).toBeUndefined(); // Root has children, so no value in raw tree
     expect(tree.children).toHaveLength(1);
-    expect(tree.children![0].code).toBe('1');
+    expect(tree.children![0].id).toBe('1');
     expect(tree.children![0].children).toHaveLength(2);
   });
 
@@ -194,7 +194,7 @@ describe('buildTreeFromItems', () => {
     const tree = buildTreeFromItems(items);
     
     expect(tree.children).toHaveLength(1);
-    expect(tree.children![0].code).toBe('1');
+    expect(tree.children![0].id).toBe('1');
   });
 });
 
@@ -345,9 +345,43 @@ describe('New aggregated data files validation', () => {
       return !hasChild;
     });
     
-    const leafSum = effectiveLeaves.reduce((sum, item) => sum + item.sum, 0);
+    let leafSum = effectiveLeaves.reduce((sum, item) => sum + item.sum, 0);
     
-    // The sum of leaf values should match the total
+    // Add remainders from parent nodes (values not fully broken down into children)
+    const parentNodes = nonTotalItems.filter(item => {
+      const hasChild = nonTotalItems.some(other => 
+        other.id !== item.id && 
+        other.id.startsWith(item.id)
+      );
+      return hasChild;
+    });
+    
+    parentNodes.forEach(parent => {
+      // Find direct children
+      const children = nonTotalItems.filter(child => {
+        if (child.id === parent.id || !child.id.startsWith(parent.id)) return false;
+        
+        // Check if this is a direct child (no intermediate codes)
+        const isDirectChild = !nonTotalItems.some(other => 
+          other.id !== parent.id && 
+          other.id !== child.id && 
+          child.id.startsWith(other.id) && 
+          other.id.startsWith(parent.id)
+        );
+        
+        return isDirectChild;
+      });
+      
+      const childrenSum = children.reduce((sum, child) => sum + child.sum, 0);
+      const remainder = parent.sum - childrenSum;
+      
+      // Add the remainder to our leaf sum (represents "_other" values)
+      if (remainder > 0) {
+        leafSum += remainder;
+      }
+    });
+    
+    // The sum of leaf values (including remainders) should match the total
     expect(leafSum).toBe(EXPECTED_TOTAL_REVENUES);
   });
 
@@ -368,9 +402,43 @@ describe('New aggregated data files validation', () => {
       return !hasChild;
     });
     
-    const leafSum = effectiveLeaves.reduce((sum, item) => sum + item.sum, 0);
+    let leafSum = effectiveLeaves.reduce((sum, item) => sum + item.sum, 0);
     
-    // The sum of leaf values should match the total
+    // Add remainders from parent nodes (values not fully broken down into children)
+    const parentNodes = nonTotalItems.filter(item => {
+      const hasChild = nonTotalItems.some(other => 
+        other.id !== item.id && 
+        other.id.startsWith(item.id)
+      );
+      return hasChild;
+    });
+    
+    parentNodes.forEach(parent => {
+      // Find direct children
+      const children = nonTotalItems.filter(child => {
+        if (child.id === parent.id || !child.id.startsWith(parent.id)) return false;
+        
+        // Check if this is a direct child (no intermediate codes)
+        const isDirectChild = !nonTotalItems.some(other => 
+          other.id !== parent.id && 
+          other.id !== child.id && 
+          child.id.startsWith(other.id) && 
+          other.id.startsWith(parent.id)
+        );
+        
+        return isDirectChild;
+      });
+      
+      const childrenSum = children.reduce((sum, child) => sum + child.sum, 0);
+      const remainder = parent.sum - childrenSum;
+      
+      // Add the remainder to our leaf sum (represents "_other" values)
+      if (remainder > 0) {
+        leafSum += remainder;
+      }
+    });
+    
+    // The sum of leaf values (including remainders) should match the total
     expect(leafSum).toBe(EXPECTED_TOTAL_EXPENDITURES);
   });
 
@@ -391,9 +459,140 @@ describe('New aggregated data files validation', () => {
       return !hasChild;
     });
     
-    const leafSum = effectiveLeaves.reduce((sum, item) => sum + item.sum, 0);
+    let leafSum = effectiveLeaves.reduce((sum, item) => sum + item.sum, 0);
+    
+    // Add remainders from parent nodes (values not fully broken down into children)
+    const parentNodes = nonTotalItems.filter(item => {
+      const hasChild = nonTotalItems.some(other => 
+        other.id !== item.id && 
+        other.id.startsWith(item.id)
+      );
+      return hasChild;
+    });
+    
+    parentNodes.forEach(parent => {
+      // Find direct children
+      const children = nonTotalItems.filter(child => {
+        if (child.id === parent.id || !child.id.startsWith(parent.id)) return false;
+        
+        // Check if this is a direct child (no intermediate codes)
+        const isDirectChild = !nonTotalItems.some(other => 
+          other.id !== parent.id && 
+          other.id !== child.id && 
+          child.id.startsWith(other.id) && 
+          other.id.startsWith(parent.id)
+        );
+        
+        return isDirectChild;
+      });
+      
+      const childrenSum = children.reduce((sum, child) => sum + child.sum, 0);
+      const remainder = parent.sum - childrenSum;
+      
+      // Add the remainder to our leaf sum (represents "_other" values)
+      if (remainder > 0) {
+        leafSum += remainder;
+      }
+    });
+    
+    // The sum of leaf values (including remainders) should match the total
+    expect(leafSum).toBe(EXPECTED_TOTAL_EXPENDITURES);
+  });
+});
+
+describe('Tree structure validation', () => {
+  it('should not double-count values in tree hierarchy for revenues', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/prijmy_druhove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
+    const tree = buildTreeFromItems(items);
+    
+    // Calculate sum by traversing tree and only counting leaf nodes
+    function sumLeafValues(node: TreeNode): number {
+      if (!node.children || node.children.length === 0) {
+        // Leaf node - count its value
+        return node.value || 0;
+      }
+      // Parent node - sum children only (don't count parent's own value)
+      return node.children.reduce((sum, child) => sum + sumLeafValues(child), 0);
+    }
+    
+    const leafSum = sumLeafValues(tree);
     
     // The sum of leaf values should match the total
+    expect(leafSum).toBe(EXPECTED_TOTAL_REVENUES);
+  });
+
+  it('should not double-count values in tree hierarchy for expenditures (druhové)', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/vydaje_druhove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
+    const tree = buildTreeFromItems(items);
+    
+    function sumLeafValues(node: TreeNode): number {
+      if (!node.children || node.children.length === 0) {
+        return node.value || 0;
+      }
+      return node.children.reduce((sum, child) => sum + sumLeafValues(child), 0);
+    }
+    
+    const leafSum = sumLeafValues(tree);
     expect(leafSum).toBe(EXPECTED_TOTAL_EXPENDITURES);
+  });
+
+  it('should not double-count values in tree hierarchy for expenditures (odvětvové)', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/vydaje_odvetvove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
+    const tree = buildTreeFromItems(items);
+    
+    function sumLeafValues(node: TreeNode): number {
+      if (!node.children || node.children.length === 0) {
+        return node.value || 0;
+      }
+      return node.children.reduce((sum, child) => sum + sumLeafValues(child), 0);
+    }
+    
+    const leafSum = sumLeafValues(tree);
+    expect(leafSum).toBe(EXPECTED_TOTAL_EXPENDITURES);
+  });
+
+  it('should have parent nodes WITHOUT value (only leaves have value)', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/prijmy_druhove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
+    const tree = buildTreeFromItems(items);
+    
+    // Check that parent nodes don't have value, only leaf nodes do
+    function validateNode(node: TreeNode): void {
+      if (node.children && node.children.length > 0) {
+        // Parent node should NOT have value (undefined)
+        expect(node.value).toBeUndefined();
+        
+        // Recursively validate children
+        node.children.forEach((child) => validateNode(child));
+      } else {
+        // Leaf node SHOULD have value
+        expect(node.value).toBeGreaterThan(0);
+      }
+    }
+    
+    validateNode(tree);
+  });
+
+  it('should validate D3 computed values match expected totals for expenditures', () => {
+    // After D3's .sum(), parent values should equal the sum of their children
+    // This test uses d3.hierarchy to verify the fix works end-to-end
+    const csvPath = join(__dirname, '../../public/data/budget/vydaje_druhove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
+    const tree = buildTreeFromItems(items);
+    
+    // Use D3 hierarchy to compute values (same as production code)
+    const d3 = require('d3-hierarchy');
+    const root = d3.hierarchy(tree).sum((d: TreeNode) => d.value || 0);
+    
+    // Root value should match expected total
+    expect(root.value).toBe(EXPECTED_TOTAL_EXPENDITURES);
   });
 });

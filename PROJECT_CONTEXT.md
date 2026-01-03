@@ -474,6 +474,11 @@ All files           |     100 |      100 |     100 |     100 |
   - 2026-fiala: Deficit-based mode (adds 286B Fiala government budget deficit over the year) - for when budget is approved
   - Auto-switches at 2026-01-01 00:00:00 UTC
 - Budget provisorium mode displays "ROZPOČTOVÉ PROVIZORIUM" in the counter subtitle
+- Budget data architecture:
+  - Aggregated CSV files (prijmy_druhove_2026.csv, vydaje_druhove_2026.csv, vydaje_odvetvove_2026.csv) for treemap/game
+  - Per-chapter CSV files (fact_revenues_by_chapter.csv, fact_expenditures_by_chapter.csv) for tables
+  - `buildTreeFromItems()` ensures only leaf nodes have values; parent nodes calculated by D3's `.sum()`
+  - Automatic "_other" nodes for parent values not fully broken down into children
 
 ## Contact
 

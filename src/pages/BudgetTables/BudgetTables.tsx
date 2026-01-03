@@ -170,7 +170,7 @@ export function BudgetTables() {
       </header>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Návrh státního rozpočtu 2026</h1>
+        <h1 className={styles.title}>Návrh státního rozpočtu vlády Petra Fialy na rok 2026</h1>
         <p className={styles.subtitle}>
           Data z{' '}
           <a 

@@ -16,8 +16,10 @@ import {
 import { Footer } from '../../components/Footer';
 import { 
   parseBudgetItemsCSV,
+  buildTreeFromItems,
   formatCurrency,
-  type BudgetItem
+  type BudgetItem,
+  type TreeNode
 } from '../../utils/budgetData';
 import {
   calculateAdjustedDeficit,
@@ -32,13 +34,6 @@ import rozpoctovkaLogo from '../../assets/rozpoctovka-logo-250x204-pruhledne.png
 
 // Original deficit from 2026 budget
 const ORIGINAL_DEFICIT = -286_000_000_000;
-
-interface TreeNode {
-  id: string;
-  name: string;
-  value?: number;
-  children?: TreeNode[];
-}
 
 interface HierarchyRectNode extends d3.HierarchyRectangularNode<TreeNode> {
   target?: { x0: number; x1: number; y0: number; y1: number };
@@ -131,102 +126,9 @@ export function DeficitGame() {
   const buildTree = useCallback((type: 'revenue' | 'expenditure'): TreeNode | null => {
     const items = type === 'revenue' ? revenueItems : expenditureItems;
     if (items.length === 0) return null;
-
-    // Filter items with values (non-zero)
-    const validItems = items.filter(item => item.sum > 0 && item.id !== '0');
-    
-    // Sort by code length (parents first)
-    validItems.sort((a, b) => {
-      if (a.id.length !== b.id.length) return a.id.length - b.id.length;
-      return a.id.localeCompare(b.id);
-    });
-
-    // Build node map
-    const nodeMap = new Map<string, TreeNode>();
-    validItems.forEach(item => {
-      nodeMap.set(item.id, {
-        id: item.id,
-        name: item.name,
-        value: item.sum,
-        children: []
-      });
-    });
-
-    // Build hierarchy - find parent for each node
-    validItems.forEach(item => {
-      const node = nodeMap.get(item.id)!;
-      
-      // Find parent - the longest code that is a prefix of this code
-      let parentCode: string | null = null;
-      for (let len = item.id.length - 1; len >= 1; len--) {
-        const potentialParent = item.id.substring(0, len);
-        if (nodeMap.has(potentialParent)) {
-          parentCode = potentialParent;
-          break;
-        }
-      }
-      
-      if (parentCode) {
-        nodeMap.get(parentCode)!.children!.push(node);
-      }
-    });
-
-    // Find top-level nodes (no parent in nodeMap)
-    const topLevel: TreeNode[] = [];
-    validItems.forEach(item => {
-      let hasParent = false;
-      for (let len = item.id.length - 1; len >= 1; len--) {
-        if (nodeMap.has(item.id.substring(0, len))) {
-          hasParent = true;
-          break;
-        }
-      }
-      if (!hasParent) {
-        topLevel.push(nodeMap.get(item.id)!);
-      }
-    });
-
-    // Get total
-    const totalItem = items.find(i => i.id === '0');
-    const rootLabel = type === 'revenue' ? 'Příjmy' : 'Výdaje';
-
-    return {
-      id: 'root',
-      name: totalItem?.name || rootLabel,
-      value: totalItem?.sum,
-      children: topLevel
-    };
+    return buildTreeFromItems(items);
   }, [revenueItems, expenditureItems]);
 
-  // Clean up tree - remove empty children arrays and nodes without value
-  const cleanupTree = useCallback((tree: TreeNode): TreeNode | null => {
-    function cleanRecursive(node: TreeNode): TreeNode | null {
-      const hasChildren = node.children && node.children.length > 0;
-      
-      if (!hasChildren) {
-        // Leaf node - keep if has value
-        if (!node.value || node.value === 0) return null;
-        return { ...node, children: undefined };
-      }
-      
-      // Non-leaf: process children
-      const validChildren = node.children!
-        .map(child => cleanRecursive(child))
-        .filter((child): child is TreeNode => child !== null);
-      
-      if (validChildren.length === 0) {
-        // No valid children - check if this node has a value
-        if (node.value && node.value > 0) {
-          return { ...node, children: undefined };
-        }
-        return null;
-      }
-      
-      return { ...node, children: validChildren };
-    }
-
-    return cleanRecursive(tree);
-  }, []);
 
   // Get color for node
   const getNodeColor = useCallback((depth: number, index: number, type: 'revenue' | 'expenditure') => {
@@ -610,17 +512,13 @@ export function DeficitGame() {
   // Build trees from loaded data
   const revenueTree = useMemo(() => {
     if (loading || revenueItems.length === 0) return null;
-    const tree = buildTree('revenue');
-    if (!tree) return null;
-    return cleanupTree(tree);
-  }, [loading, revenueItems, buildTree, cleanupTree]);
+    return buildTree('revenue');
+  }, [loading, revenueItems, buildTree]);
 
   const expenditureTree = useMemo(() => {
     if (loading || expenditureItems.length === 0) return null;
-    const tree = buildTree('expenditure');
-    if (!tree) return null;
-    return cleanupTree(tree);
-  }, [loading, expenditureItems, buildTree, cleanupTree]);
+    return buildTree('expenditure');
+  }, [loading, expenditureItems, buildTree]);
 
   // Render revenue chart
   useEffect(() => {
