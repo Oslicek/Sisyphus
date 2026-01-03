@@ -10,7 +10,7 @@ interface FooterLink {
 const footerLinks: FooterLink[] = [
   { label: 'Dluh', path: '/' },
   { label: 'Rozpočet', path: '/rozpocet' },
-  { label: 'Rozpočtovka', path: '/zrusim-schodek' },
+  { label: 'Rozpočtovka', path: '/rozpoctovka' },
   { label: 'Blog', path: '/blog' },
   { label: 'O projektu Sisyfos', path: '/o-projektu' },
 ];

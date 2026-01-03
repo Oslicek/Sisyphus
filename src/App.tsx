@@ -54,7 +54,7 @@ function App() {
         <Route path="/zdroje-dat" element={<DataSources />} />
         <Route path="/rozpocet" element={<BudgetTables />} />
         <Route path="/rozpocet-vizualizace" element={<BudgetTreemap />} />
-        <Route path="/zrusim-schodek" element={<DeficitGame />} />
+        <Route path="/rozpoctovka" element={<DeficitGame />} />
       </Routes>
     </BrowserRouter>
   );

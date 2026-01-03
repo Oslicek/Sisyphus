@@ -242,7 +242,7 @@ export function BudgetTables() {
 
         {/* Deficit Game Button */}
         <div className={styles.gameButtonContainer}>
-          <Link to="/zrusim-schodek" className={styles.gameButton}>
+          <Link to="/rozpoctovka" className={styles.gameButton}>
             Zruším schodek!
           </Link>
         </div>

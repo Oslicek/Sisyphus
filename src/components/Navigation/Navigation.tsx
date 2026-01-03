@@ -23,7 +23,7 @@ const navItems: NavItem[] = [
       { label: 'Vizualizace', path: '/rozpocet-vizualizace' }
     ]
   },
-  { label: 'Hra Rozpočtovka', path: '/zrusim-schodek' },
+  { label: 'Hra Rozpočtovka', path: '/rozpoctovka' },
   { label: 'Blog', path: '/blog' },
   { label: 'O Projektu Sisyfos', path: '/o-projektu' }
 ];
