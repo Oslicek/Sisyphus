@@ -56,7 +56,6 @@ interface HoverButton {
 export function DeficitGame() {
   const [budgetRows, setBudgetRows] = useState<BudgetRow[]>([]);
   const [classifications, setClassifications] = useState<Classification[]>([]);
-  const [treeNames, setTreeNames] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
   const [adjustments, setAdjustments] = useState<BudgetAdjustment[]>([]);
   
@@ -106,12 +105,10 @@ export function DeficitGame() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [revenuesRes, expendituresRes, classRes, treeRevRes, treeExpRes] = await Promise.all([
+        const [revenuesRes, expendituresRes, classRes] = await Promise.all([
           fetch('/data/budget/fact_revenues_by_chapter.csv'),
           fetch('/data/budget/fact_expenditures_by_chapter.csv'),
-          fetch('/data/budget/dim_classification.csv'),
-          fetch('/data/budget/tree_rev_druhove.json'),
-          fetch('/data/budget/tree_exp_odvetvove.json')
+          fetch('/data/budget/dim_classification.csv')
         ]);
 
         const [revenuesText, expendituresText, classText] = await Promise.all([
@@ -120,30 +117,10 @@ export function DeficitGame() {
           classRes.text()
         ]);
 
-        const [treeRev, treeExp] = await Promise.all([
-          treeRevRes.json(),
-          treeExpRes.json()
-        ]);
-
         const revenues = parseCSV(revenuesText);
         const expenditures = parseCSV(expendituresText);
         setBudgetRows([...revenues, ...expenditures]);
         setClassifications(parseClassificationCSV(classText));
-
-        // Extract names from trees
-        const names = new Map<string, string>();
-        function extractNames(node: TreeNode, prefix: string = '') {
-          const key = prefix ? `${prefix}_${node.id}` : node.id;
-          if (node.name && node.id !== 'root') {
-            names.set(key, node.name);
-          }
-          if (node.children) {
-            node.children.forEach(child => extractNames(child, prefix));
-          }
-        }
-        extractNames(treeRev, 'rev');
-        extractNames(treeExp, 'exp');
-        setTreeNames(names);
 
         setLoading(false);
       } catch (error) {
@@ -167,7 +144,7 @@ export function DeficitGame() {
     
     // Create all nodes
     relevantClass.forEach(c => {
-      const fullName = treeNames.get(`${kind}_${c.code}`) || c.name || c.code;
+      const fullName = c.name || c.code;
       nodeMap.set(c.code, { id: c.code, name: fullName, children: [] });
     });
 
@@ -193,7 +170,7 @@ export function DeficitGame() {
     if (root.children!.length === 0) return null;
 
     return root;
-  }, [classifications, treeNames]);
+  }, [classifications]);
 
   // Build value map for a system
   const buildValueMap = useCallback((system: string): Map<string, number> => {

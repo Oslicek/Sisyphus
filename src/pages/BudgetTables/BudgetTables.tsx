@@ -14,22 +14,6 @@ import {
 import type { BudgetRow, Chapter, Classification } from '../../utils/budgetData';
 import styles from './BudgetTables.module.css';
 
-interface TreeNode {
-  id: string;
-  name: string;
-  children?: TreeNode[];
-}
-
-// Extract names from tree into a map
-function extractNamesFromTree(node: TreeNode, nameMap: Map<string, string>): void {
-  if (node.name && node.id !== 'root') {
-    nameMap.set(node.id, node.name);
-  }
-  if (node.children) {
-    node.children.forEach(child => extractNamesFromTree(child, nameMap));
-  }
-}
-
 type TabType = 'overview' | 'revenues' | 'expenditures' | 'chapters';
 
 export function BudgetTables() {
@@ -37,21 +21,17 @@ export function BudgetTables() {
   const [classifications, setClassifications] = useState<Classification[]>([]);
   const [revenueRows, setRevenueRows] = useState<BudgetRow[]>([]);
   const [expenditureRows, setExpenditureRows] = useState<BudgetRow[]>([]);
-  const [expOdvNames, setExpOdvNames] = useState<Map<string, string>>(new Map());
-  const [revNames, setRevNames] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('overview');
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [chaptersRes, classRes, revenuesRes, expendituresRes, treeOdvRes, treeRevRes] = await Promise.all([
+        const [chaptersRes, classRes, revenuesRes, expendituresRes] = await Promise.all([
           fetch('/data/budget/dim_chapter.csv'),
           fetch('/data/budget/dim_classification.csv'),
           fetch('/data/budget/fact_revenues_by_chapter.csv'),
-          fetch('/data/budget/fact_expenditures_by_chapter.csv'),
-          fetch('/data/budget/tree_exp_odvetvove.json'),
-          fetch('/data/budget/tree_rev_druhove.json')
+          fetch('/data/budget/fact_expenditures_by_chapter.csv')
         ]);
 
         const [chaptersText, classText, revenuesText, expendituresText] = await Promise.all([
@@ -60,18 +40,6 @@ export function BudgetTables() {
           revenuesRes.text(),
           expendituresRes.text()
         ]);
-
-        // Load tree files for full names
-        const treeOdv = await treeOdvRes.json() as TreeNode;
-        const treeRev = await treeRevRes.json() as TreeNode;
-        
-        const odvNames = new Map<string, string>();
-        extractNamesFromTree(treeOdv, odvNames);
-        setExpOdvNames(odvNames);
-        
-        const revNamesMap = new Map<string, string>();
-        extractNamesFromTree(treeRev, revNamesMap);
-        setRevNames(revNamesMap);
 
         setChapters(parseChaptersCSV(chaptersText));
         setClassifications(parseClassificationCSV(classText));
@@ -138,10 +106,9 @@ export function BudgetTables() {
         .reduce((sum, row) => sum + row.amount_czk, 0);
       
       if (amount > 0) {
-        // Use tree name if available, fallback to classification
-        const treeName = revNames.get(code);
+        // Use classification name (now contains full names)
         const classification = classifications.find(c => c.code === code && c.system === 'rev_druhove');
-        const name = treeName || classification?.name || `[${code}]`;
+        const name = classification?.name || `[${code}]`;
         
         breakdown.push({
           code,
@@ -152,7 +119,7 @@ export function BudgetTables() {
     });
     
     return breakdown.sort((a, b) => b.amount - a.amount);
-  }, [classifications, revenueRows, revNames]);
+  }, [classifications, revenueRows]);
 
   // Get expenditure breakdown by top-level classification (odvětvové)
   const getExpenditureBreakdown = useCallback(() => {
@@ -168,10 +135,9 @@ export function BudgetTables() {
         .reduce((sum, row) => sum + row.amount_czk, 0);
       
       if (amount > 0) {
-        // Use tree name if available, fallback to classification
-        const treeName = expOdvNames.get(code);
+        // Use classification name (now contains full names)
         const classification = classifications.find(c => c.code === code && c.system === 'exp_odvetvove');
-        const name = treeName || classification?.name || `[${code}]`;
+        const name = classification?.name || `[${code}]`;
         
         breakdown.push({
           code,
@@ -182,7 +148,7 @@ export function BudgetTables() {
     });
     
     return breakdown.sort((a, b) => b.amount - a.amount);
-  }, [classifications, expenditureRows, expOdvNames]);
+  }, [classifications, expenditureRows]);
 
   if (loading) {
     return (

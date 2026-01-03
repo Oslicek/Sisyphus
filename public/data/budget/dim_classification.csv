@@ -1,321 +1,321 @@
 kind,system,code,name,parent_code,level,is_leaf,is_total
 exp,exp_druhove,0,VÝDAJE,,0,False,True
 exp,exp_druhove,5,BĚŽNÉ VÝDAJE,0,1,False,False
-exp,exp_druhove,6,KAPITÁLOVÉ,0,1,False,False
-exp,exp_druhove,50,Výdaje na platy a,5,2,False,False
-exp,exp_druhove,51,Výdaje na,5,2,False,False
-exp,exp_druhove,52,Neinvestiční,5,2,False,False
-exp,exp_druhove,53,Neinvestiční,5,2,False,False
-exp,exp_druhove,54,Neinvestiční,5,2,False,False
-exp,exp_druhove,55,Neinvestiční,5,2,False,False
-exp,exp_druhove,57,Neinvestiční,5,2,False,False
-exp,exp_druhove,58,Výdaje na,5,2,False,False
-exp,exp_druhove,59,Ostatní,5,2,False,False
-exp,exp_druhove,61,Investiční,6,2,False,False
-exp,exp_druhove,62,Nákup,6,2,False,False
-exp,exp_druhove,63,Investiční,6,2,False,False
-exp,exp_druhove,64,Investiční,6,2,False,False
-exp,exp_druhove,69,Ostatní,6,2,False,False
+exp,exp_druhove,6,KAPITÁLOVÉ VÝDAJE,0,1,False,False
+exp,exp_druhove,50,Výdaje na platy a obdobné a související výdaje,5,2,False,False
+exp,exp_druhove,51,Výdaje na neinvestiční nákupy a související výdaje,5,2,False,False
+exp,exp_druhove,52,Neinvestiční transfery soukromoprávním osobám,5,2,False,False
+exp,exp_druhove,53,Neinvestiční transfery veřejnoprávním osobám a mezi peněžními fondy téže osoby a platby daní,5,2,False,False
+exp,exp_druhove,54,Neinvestiční transfery a některé náhrady fyzickým osobám,5,2,False,False
+exp,exp_druhove,55,Neinvestiční transfery a související platby do zahraničí,5,2,False,False
+exp,exp_druhove,57,Neinvestiční převody Národnímu fondu,5,2,False,False
+exp,exp_druhove,58,Výdaje na náhrady za nezpůsobenou újmu,5,2,False,False
+exp,exp_druhove,59,Ostatní neinvestiční výdaje,5,2,False,False
+exp,exp_druhove,61,Investiční nákupy a související výdaje,6,2,False,False
+exp,exp_druhove,62,Nákup majetkových podílů a nároků a vklady do fundací a ústavů,6,2,False,False
+exp,exp_druhove,63,Investiční transfery,6,2,False,False
+exp,exp_druhove,64,Investiční půjčené prostředky,6,2,False,False
+exp,exp_druhove,69,Ostatní investiční výdaje,6,2,False,False
 exp,exp_druhove,501,Platy,50,3,False,False
-exp,exp_druhove,502,Výdaje na ostatní,50,3,False,False
-exp,exp_druhove,503,Povinné a zákonné,50,3,True,False
-exp,exp_druhove,504,Výdaje na odměny,50,3,True,False
-exp,exp_druhove,505,Výdaje na platové a,50,3,True,False
-exp,exp_druhove,506,Mzdy podle cizího,50,3,True,False
-exp,exp_druhove,512,Výdaje na některé,51,3,True,False
-exp,exp_druhove,513,Výdaje na nákup,51,3,True,False
-exp,exp_druhove,514,Úroky a ostatní,51,3,True,False
-exp,exp_druhove,515,Výdaje na nákup,51,3,True,False
-exp,exp_druhove,516,Výdaje na nákup,51,3,True,False
-exp,exp_druhove,517,Výdaje na ostatní,51,3,True,False
-exp,exp_druhove,518,Výdaje na,51,3,True,False
-exp,exp_druhove,519,Výdaje související s,51,3,True,False
-exp,exp_druhove,521,Neinvestiční,52,3,True,False
-exp,exp_druhove,522,Neinvestiční,52,3,True,False
-exp,exp_druhove,531,Neinvestiční transfery,53,3,True,False
-exp,exp_druhove,532,Neinvestiční transfery,53,3,True,False
-exp,exp_druhove,533,Neinvestiční transfery,53,3,True,False
-exp,exp_druhove,534,Neinvestiční,53,3,True,False
-exp,exp_druhove,536,Ostatní,53,3,True,False
+exp,exp_druhove,502,Výdaje na ostatní platby za provedenou práci,50,3,False,False
+exp,exp_druhove,503,Povinné a zákonné pojistné placené zaměstnavatelem,50,3,True,False
+exp,exp_druhove,504,Výdaje na odměny za užití duševního vlastnictví,50,3,True,False
+exp,exp_druhove,505,Výdaje na platové a mzdové náhrady,50,3,True,False
+exp,exp_druhove,506,Mzdy podle cizího práva,50,3,True,False
+exp,exp_druhove,512,Výdaje na některé úpravy hmotných věcí a pořízení některých práv k hmotným věcem,51,3,True,False
+exp,exp_druhove,513,Výdaje na nákup materiálu,51,3,True,False
+exp,exp_druhove,514,Úroky a ostatní finanční výdaje,51,3,True,False
+exp,exp_druhove,515,Výdaje na nákup vody paliv a energie,51,3,True,False
+exp,exp_druhove,516,Výdaje na nákup služeb,51,3,True,False
+exp,exp_druhove,517,Výdaje na ostatní nákupy,51,3,True,False
+exp,exp_druhove,518,Výdaje na netransferové převody uvnitř rozpočtové jednotky na převzaté povinnosti a na jistoty,51,3,True,False
+exp,exp_druhove,519,Výdaje související s neinvestičními nákupy příspěvky náhrady a výdaje na věcné dary,51,3,True,False
+exp,exp_druhove,521,Neinvestiční transfery podnikatelům,52,3,True,False
+exp,exp_druhove,522,Neinvestiční transfery neziskovým a podobným osobám,52,3,True,False
+exp,exp_druhove,531,Neinvestiční transfery rozpočtům ústřední úrovně,53,3,True,False
+exp,exp_druhove,532,Neinvestiční transfery rozpočtům územní úrovně,53,3,True,False
+exp,exp_druhove,533,Neinvestiční transfery příspěvkovým apod. organizacím,53,3,True,False
+exp,exp_druhove,534,Neinvestiční převody vlastním fondům a ve vztahu k útvarům bez právní osobnosti,53,3,True,False
+exp,exp_druhove,536,Ostatní neinvestiční transfery jiným rozpočtům a platby daní,53,3,True,False
 exp,exp_druhove,541,Sociální dávky,54,3,True,False
-exp,exp_druhove,542,Náhrady placené,54,3,True,False
-exp,exp_druhove,549,Ostatní neinvestiční,54,3,True,False
-exp,exp_druhove,551,Neinvestiční,55,3,True,False
-exp,exp_druhove,552,Neinvestiční,55,3,True,False
-exp,exp_druhove,553,Ostatní,55,3,True,False
-exp,exp_druhove,554,Členské příspěvky,55,3,True,False
-exp,exp_druhove,571,Neinvestiční,57,3,True,False
-exp,exp_druhove,581,Výdaje na náhrady,58,3,True,False
-exp,exp_druhove,590,Ostatní neinvestiční,59,3,True,False
-exp,exp_druhove,611,Pořízení,61,3,True,False
-exp,exp_druhove,612,Pořízení,61,3,True,False
+exp,exp_druhove,542,Náhrady placené fyzickým osobám,54,3,True,False
+exp,exp_druhove,549,Ostatní neinvestiční transfery fyzickým osobám,54,3,True,False
+exp,exp_druhove,551,Neinvestiční transfery mezinárodním vládním organizacím a nadnárodním orgánům,55,3,True,False
+exp,exp_druhove,552,Neinvestiční transfery cizím státům,55,3,True,False
+exp,exp_druhove,553,Ostatní neinvestiční transfery do zahraničí,55,3,True,False
+exp,exp_druhove,554,Členské příspěvky mezinárodním organizacím,55,3,True,False
+exp,exp_druhove,571,Neinvestiční převody Národnímu fondu,57,3,True,False
+exp,exp_druhove,581,Výdaje na náhrady za nezpůsobenou újmu a výdaje na náhrady škod způsobených nezákonným rozhodnutím nebo nesprávným úředním postupem při výkonu veřejné moci,58,3,True,False
+exp,exp_druhove,590,Ostatní neinvestiční výdaje,59,3,True,False
+exp,exp_druhove,611,Pořízení dlouhodobého nehmotného majetku,61,3,True,False
+exp,exp_druhove,612,Pořízení dlouhodobého hmotného majetku,61,3,True,False
 exp,exp_druhove,613,Pozemky,61,3,True,False
-exp,exp_druhove,614,Nadlimitní věcná,61,3,True,False
-exp,exp_druhove,620,Nákup,62,3,True,False
-exp,exp_druhove,631,Investiční transfery,63,3,True,False
-exp,exp_druhove,632,Investiční,63,3,True,False
-exp,exp_druhove,633,Investiční transfery,63,3,True,False
-exp,exp_druhove,634,Investiční transfery,63,3,True,False
-exp,exp_druhove,635,Investiční transfery,63,3,True,False
-exp,exp_druhove,636,Investiční převody,63,3,True,False
-exp,exp_druhove,637,Investiční,63,3,True,False
-exp,exp_druhove,638,Investiční,63,3,True,False
-exp,exp_druhove,641,Investiční půjčené,64,3,True,False
-exp,exp_druhove,644,Investiční půjčené,64,3,True,False
-exp,exp_druhove,690,Ostatní investiční,69,3,True,False
-exp,exp_druhove,5011,Platy zaměstnanců,501,4,True,False
-exp,exp_druhove,5012,Platy zaměstnanců,501,4,True,False
-exp,exp_druhove,5013,Platy zaměstnanců,501,4,True,False
-exp,exp_druhove,5014,Platy zaměstnanců,501,4,True,False
+exp,exp_druhove,614,Nadlimitní věcná břemena a právo stavby,61,3,True,False
+exp,exp_druhove,620,Nákup majetkových podílů a nároků,62,3,True,False
+exp,exp_druhove,631,Investiční transfery podnikatelům,63,3,True,False
+exp,exp_druhove,632,Investiční transfery neziskovým a podobným osobám,63,3,True,False
+exp,exp_druhove,633,Investiční transfery rozpočtům ústřední úrovně,63,3,True,False
+exp,exp_druhove,634,Investiční transfery rozpočtům územní úrovně,63,3,True,False
+exp,exp_druhove,635,Investiční transfery příspěvkovým a podobným organizacím,63,3,True,False
+exp,exp_druhove,636,Investiční převody vlastním fondům a ve vztahu k útvarům bez právní osobnosti,63,3,True,False
+exp,exp_druhove,637,Investiční transfery fyzickým osobám,63,3,True,False
+exp,exp_druhove,638,Investiční transfery do zahraničí,63,3,True,False
+exp,exp_druhove,641,Investiční půjčené prostředky podnikatelům,64,3,True,False
+exp,exp_druhove,644,Investiční půjčené prostředky rozpočtům územní úrovně,64,3,True,False
+exp,exp_druhove,690,Ostatní investiční výdaje,69,3,True,False
+exp,exp_druhove,5011,Platy zaměstnanců v pracovním poměru vyjma zaměstnanců na služebních místech,501,4,True,False
+exp,exp_druhove,5012,Platy zaměstnanců bezpečnostních sborů a ozbrojených sil ve služebním poměru,501,4,True,False
+exp,exp_druhove,5013,Platy zaměstnanců na služebních místech podle zákona o státní službě,501,4,True,False
+exp,exp_druhove,5014,Platy zaměstnanců v pracovním poměru odvozované od platů ústavních činitelů,501,4,True,False
 exp,exp_druhove,5019,Ostatní platy,501,4,True,False
-exp,exp_druhove,5021,Ostatní osobní,502,4,True,False
-exp,exp_druhove,5022,Platy představitelů,502,4,True,False
+exp,exp_druhove,5021,Ostatní osobní výdaje,502,4,True,False
+exp,exp_druhove,5022,Platy představitelů státní moci a některých orgánů,502,4,True,False
 exp,exp_druhove,5024,Odstupné,502,4,True,False
-exp,exp_druhove,5025,Odbytné vyplácené,502,4,True,False
+exp,exp_druhove,5025,Odbytné vyplácené státním zaměstnancům ve správních úřadech,502,4,True,False
 exp,exp_druhove,5026,Odchodné,502,4,True,False
-exp,exp_druhove,5027,Peněžní náležitosti,502,4,True,False
-exp,exp_druhove,5028,Kázeňské odměny,502,4,True,False
-exp,exp_druhove,5029,Ostatní platby za,502,4,True,False
+exp,exp_druhove,5027,Peněžní náležitosti vojáků v záloze ve službě,502,4,True,False
+exp,exp_druhove,5028,Kázeňské odměny poskytnuté formou peněžitých darů příslušníkům bezpečnostních sborů a vojákům z povolání,502,4,True,False
+exp,exp_druhove,5029,Ostatní platby za provedenou práci jinde nezařazené,502,4,True,False
 exp,exp_odvetvove,0,VÝDAJE,,0,False,True
-exp,exp_odvetvove,1,"Zemědělství,",0,1,False,False
-exp,exp_odvetvove,2,Průmyslová a,0,1,False,False
-exp,exp_odvetvove,3,Služby pro,0,1,False,False
-exp,exp_odvetvove,4,Sociální věci a,0,1,False,False
-exp,exp_odvetvove,5,Bezpečnost,0,1,False,False
-exp,exp_odvetvove,6,Všeobecná,0,1,False,False
-exp,exp_odvetvove,10,"Zemědělství,",1,2,False,False
-exp,exp_odvetvove,21,,2,2,False,False
-exp,exp_odvetvove,22,,2,2,False,False
-exp,exp_odvetvove,23,,2,2,False,False
-exp,exp_odvetvove,24,,2,2,False,False
-exp,exp_odvetvove,25,Všeobecné,2,2,False,False
-exp,exp_odvetvove,31,,3,2,False,False
-exp,exp_odvetvove,31_32,,3,2,True,False
-exp,exp_odvetvove,32,,3,2,False,False
-exp,exp_odvetvove,33,,3,2,False,False
-exp,exp_odvetvove,34,,3,2,False,False
-exp,exp_odvetvove,35,,3,2,False,False
-exp,exp_odvetvove,36,,3,2,False,False
-exp,exp_odvetvove,37,Ochrana,3,2,False,False
-exp,exp_odvetvove,38,Ostatní výzkum,3,2,False,False
-exp,exp_odvetvove,39,Ostatní činnosti,3,2,False,False
-exp,exp_odvetvove,41,,4,2,False,False
-exp,exp_odvetvove,42,Politika,4,2,False,False
-exp,exp_odvetvove,43,Sociální služby a,4,2,False,False
-exp,exp_odvetvove,51,,5,2,False,False
-exp,exp_odvetvove,52,,5,2,False,False
-exp,exp_odvetvove,53,,5,2,False,False
-exp,exp_odvetvove,54,,5,2,False,False
-exp,exp_odvetvove,55,Požární ochrana,5,2,False,False
-exp,exp_odvetvove,61,"Státní moc, státní",6,2,False,False
-exp,exp_odvetvove,62,Jiné veřejné,6,2,False,False
+exp,exp_odvetvove,1,"Zemědělství, lesní hospodářství a rybářství",0,1,False,False
+exp,exp_odvetvove,2,Průmyslová a ostatní odvětví hospodářství,0,1,False,False
+exp,exp_odvetvove,3,Služby pro fyzické osoby,0,1,False,False
+exp,exp_odvetvove,4,Sociální věci a politika zaměstnanosti,0,1,False,False
+exp,exp_odvetvove,5,Bezpečnost státu a právní ochrana,0,1,False,False
+exp,exp_odvetvove,6,Všeobecná veřejná správa a služby,0,1,False,False
+exp,exp_odvetvove,10,"Zemědělství, lesní hospodářství a rybářství",1,2,False,False
+exp,exp_odvetvove,21,"Průmysl, stavebnictví, obchod a služby",2,2,False,False
+exp,exp_odvetvove,22,Doprava,2,2,False,False
+exp,exp_odvetvove,23,Vodní hospodářství,2,2,False,False
+exp,exp_odvetvove,24,Spoje,2,2,False,False
+exp,exp_odvetvove,25,Všeobecné hospodářské záležitosti a ostatní ekonomické funkce,2,2,False,False
+exp,exp_odvetvove,31,Vzdělávání a školské služby,3,2,False,False
+exp,exp_odvetvove,31_32,Vzdělávání a školské služby celkem,3,2,True,False
+exp,exp_odvetvove,32,Vzdělávání a školské služby - vysoké školy,3,2,False,False
+exp,exp_odvetvove,33,"Kultura, církve a sdělovací prostředky",3,2,False,False
+exp,exp_odvetvove,34,Sport a zájmová činnost,3,2,False,False
+exp,exp_odvetvove,35,Zdravotnictví,3,2,False,False
+exp,exp_odvetvove,36,"Bydlení, komunální služby a územní rozvoj",3,2,False,False
+exp,exp_odvetvove,37,Ochrana životního prostředí,3,2,False,False
+exp,exp_odvetvove,38,Ostatní výzkum a vývoj,3,2,False,False
+exp,exp_odvetvove,39,Ostatní činnosti související se službami pro fyzické osoby,3,2,False,False
+exp,exp_odvetvove,41,Dávky a podpory v sociálním zabezpečení,4,2,False,False
+exp,exp_odvetvove,42,Politika zaměstnanosti,4,2,False,False
+exp,exp_odvetvove,43,Sociální služby a společné činnosti v sociálním zabezpečení a politice zaměstnanosti,4,2,False,False
+exp,exp_odvetvove,51,Obrana,5,2,False,False
+exp,exp_odvetvove,52,Civilní připravenost na krizové stavy,5,2,False,False
+exp,exp_odvetvove,53,Bezpečnost a veřejný pořádek,5,2,False,False
+exp,exp_odvetvove,54,Právní ochrana,5,2,False,False
+exp,exp_odvetvove,55,Požární ochrana a integrovaný záchranný systém,5,2,False,False
+exp,exp_odvetvove,61,"Státní moc, státní správa, územní samospráva a politické strany",6,2,False,False
+exp,exp_odvetvove,62,Jiné veřejné služby a činnosti,6,2,False,False
 exp,exp_odvetvove,63,Finanční operace,6,2,False,False
 exp,exp_odvetvove,64,Ostatní činnosti,6,2,False,False
-exp,exp_odvetvove,101,Zemědělská a,10,3,True,False
-exp,exp_odvetvove,102,Regulace,10,3,True,False
+exp,exp_odvetvove,101,Zemědělská a potravinářská činnost a rozvoj,10,3,True,False
+exp,exp_odvetvove,102,Regulace zemědělské produkce organizace trhu a poskytování podpor,10,3,True,False
 exp,exp_odvetvove,103,Lesní hospodářství,10,3,True,False
-exp,exp_odvetvove,106,Správa v,10,3,True,False
-exp,exp_odvetvove,108,Zemědělský a,10,3,True,False
-exp,exp_odvetvove,109,Ostatní činnost a,10,3,True,False
-exp,exp_odvetvove,211,Záležitosti,21,3,True,False
-exp,exp_odvetvove,212,Ostatní odvětvové a,21,3,True,False
+exp,exp_odvetvove,106,Správa v zemědělství,10,3,True,False
+exp,exp_odvetvove,108,Zemědělský a lesnický výzkum a vývoj,10,3,True,False
+exp,exp_odvetvove,109,Ostatní činnost a nespecifikované výdaje,10,3,True,False
+exp,exp_odvetvove,211,Záležitosti těžebního průmyslu a energetiky,21,3,True,False
+exp,exp_odvetvove,212,Ostatní odvětvové a oborové záležitosti v průmyslu a stavebnictví,21,3,True,False
 exp,exp_odvetvove,213,Zahraniční obchod,21,3,True,False
-exp,exp_odvetvove,214,"Vnitřní obchod,",21,3,True,False
-exp,exp_odvetvove,216,,21,3,True,False
-exp,exp_odvetvove,218,,21,3,True,False
-exp,exp_odvetvove,219,,21,3,True,False
-exp,exp_odvetvove,221,,22,3,True,False
-exp,exp_odvetvove,222,,22,3,True,False
-exp,exp_odvetvove,223,,22,3,True,False
-exp,exp_odvetvove,224,,22,3,True,False
-exp,exp_odvetvove,225,,22,3,True,False
-exp,exp_odvetvove,226,,22,3,True,False
-exp,exp_odvetvove,227,,22,3,True,False
-exp,exp_odvetvove,228,,22,3,True,False
-exp,exp_odvetvove,229,,22,3,True,False
-exp,exp_odvetvove,231,,23,3,True,False
-exp,exp_odvetvove,232,,23,3,True,False
-exp,exp_odvetvove,233,,23,3,True,False
-exp,exp_odvetvove,234,,23,3,True,False
-exp,exp_odvetvove,239,,23,3,True,False
-exp,exp_odvetvove,241,,24,3,True,False
-exp,exp_odvetvove,246,,24,3,True,False
-exp,exp_odvetvove,249,,24,3,True,False
+exp,exp_odvetvove,214,"Vnitřní obchod, služby a cestovní ruch",21,3,True,False
+exp,exp_odvetvove,216,"Správa v odvětví energetiky, průmyslu, stavebnictví, obchodu a služeb",21,3,True,False
+exp,exp_odvetvove,218,"Výzkum a vývoj v průmyslu, stavebnictví, obchodu a službách",21,3,True,False
+exp,exp_odvetvove,219,Ostatní činnost a nespecifikované výdaje,21,3,True,False
+exp,exp_odvetvove,221,Pozemní komunikace,22,3,True,False
+exp,exp_odvetvove,222,Silniční doprava,22,3,True,False
+exp,exp_odvetvove,223,Vnitrozemská a námořní plavba,22,3,True,False
+exp,exp_odvetvove,224,Železniční doprava,22,3,True,False
+exp,exp_odvetvove,225,Civilní letecká doprava,22,3,True,False
+exp,exp_odvetvove,226,Správa v dopravě,22,3,True,False
+exp,exp_odvetvove,227,Doprava ostatních drah,22,3,True,False
+exp,exp_odvetvove,228,Výzkum v dopravě,22,3,True,False
+exp,exp_odvetvove,229,Ostatní činnost a nespecifikované výdaje v dopravě,22,3,True,False
+exp,exp_odvetvove,231,Pitná voda,23,3,True,False
+exp,exp_odvetvove,232,Odvádění a čistění odpadních vod,23,3,True,False
+exp,exp_odvetvove,233,Vodní toky a vodohospodářská díla,23,3,True,False
+exp,exp_odvetvove,234,Voda v zemědělské krajině,23,3,True,False
+exp,exp_odvetvove,239,Ostatní činnost a nespecifikované výdaje ve vodním hospodářství,23,3,True,False
+exp,exp_odvetvove,241,Činnosti spojů,24,3,True,False
+exp,exp_odvetvove,246,Správa ve spojích,24,3,True,False
+exp,exp_odvetvove,249,Ostatní činnost a nespecifikované výdaje ve spojích,24,3,True,False
 exp,exp_odvetvove,251,Podpora podnikání,25,3,True,False
-exp,exp_odvetvove,253,Všeobecné,25,3,True,False
-exp,exp_odvetvove,254,Všeobecné,25,3,True,False
-exp,exp_odvetvove,256,Všeobecná,25,3,True,False
-exp,exp_odvetvove,258,Výzkum a vývoj v,25,3,True,False
-exp,exp_odvetvove,259,Ostatní činnosti a,25,3,True,False
-exp,exp_odvetvove,311,Předškolní a,31,3,True,False
-exp,exp_odvetvove,312,Střední vzdělávání,31,3,True,False
-exp,exp_odvetvove,313,Školská zařízení,31,3,True,False
-exp,exp_odvetvove,314,Ostatní zařízení,31,3,True,False
-exp,exp_odvetvove,315,Vyšší odborné,31,3,True,False
-exp,exp_odvetvove,321,,32,3,True,False
-exp,exp_odvetvove,322,,32,3,True,False
-exp,exp_odvetvove,323,,32,3,True,False
-exp,exp_odvetvove,326,,32,3,True,False
-exp,exp_odvetvove,329,,32,3,True,False
-exp,exp_odvetvove,331,,33,3,True,False
-exp,exp_odvetvove,332,,33,3,True,False
-exp,exp_odvetvove,333,,33,3,True,False
-exp,exp_odvetvove,334,,33,3,True,False
-exp,exp_odvetvove,336,,33,3,True,False
-exp,exp_odvetvove,338,,33,3,True,False
-exp,exp_odvetvove,339,,33,3,True,False
-exp,exp_odvetvove,341,,34,3,True,False
-exp,exp_odvetvove,342,,34,3,True,False
-exp,exp_odvetvove,346,,34,3,True,False
-exp,exp_odvetvove,348,,34,3,True,False
-exp,exp_odvetvove,351,,35,3,True,False
-exp,exp_odvetvove,352,,35,3,True,False
-exp,exp_odvetvove,353,,35,3,True,False
-exp,exp_odvetvove,354,,35,3,True,False
-exp,exp_odvetvove,356,,35,3,True,False
-exp,exp_odvetvove,358,,35,3,True,False
-exp,exp_odvetvove,359,,35,3,True,False
-exp,exp_odvetvove,361,,36,3,True,False
-exp,exp_odvetvove,363,,36,3,True,False
-exp,exp_odvetvove,366,,36,3,True,False
-exp,exp_odvetvove,369,,36,3,True,False
-exp,exp_odvetvove,371,,37,3,True,False
-exp,exp_odvetvove,372,,37,3,True,False
-exp,exp_odvetvove,373,,37,3,True,False
-exp,exp_odvetvove,374,,37,3,True,False
-exp,exp_odvetvove,376,Správa v ochraně,37,3,True,False
-exp,exp_odvetvove,377,Ochrana proti,37,3,True,False
-exp,exp_odvetvove,378,Výzkum životního,37,3,True,False
-exp,exp_odvetvove,379,Ostatní činnosti v,37,3,True,False
-exp,exp_odvetvove,380,Ostatní výzkum a,38,3,True,False
-exp,exp_odvetvove,390,Ostatní činnosti,39,3,True,False
-exp,exp_odvetvove,411,Dávky důchodového,41,3,True,False
-exp,exp_odvetvove,412,Dávky,41,3,True,False
-exp,exp_odvetvove,413,,41,3,True,False
-exp,exp_odvetvove,414,,41,3,True,False
-exp,exp_odvetvove,415,,41,3,True,False
-exp,exp_odvetvove,417,,41,3,True,False
-exp,exp_odvetvove,418,,41,3,True,False
-exp,exp_odvetvove,419,,41,3,True,False
-exp,exp_odvetvove,421,,42,3,True,False
-exp,exp_odvetvove,422,,42,3,True,False
-exp,exp_odvetvove,423,,42,3,True,False
-exp,exp_odvetvove,424,,42,3,True,False
-exp,exp_odvetvove,425,,42,3,True,False
-exp,exp_odvetvove,431,Sociální,43,3,True,False
-exp,exp_odvetvove,432,Sociální péče a,43,3,True,False
-exp,exp_odvetvove,433,Sociální péče a,43,3,True,False
-exp,exp_odvetvove,434,Sociální,43,3,True,False
-exp,exp_odvetvove,435,Sociální služby v,43,3,True,False
-exp,exp_odvetvove,436,Správa v sociálním,43,3,True,False
-exp,exp_odvetvove,437,Služby sociální,43,3,True,False
-exp,exp_odvetvove,438,Výzkum v,43,3,True,False
-exp,exp_odvetvove,439,Ostatní činnost a,43,3,True,False
+exp,exp_odvetvove,253,Všeobecné finanční záležitosti,25,3,True,False
+exp,exp_odvetvove,254,Všeobecné hospodářské služby,25,3,True,False
+exp,exp_odvetvove,256,Všeobecná hospodářská správa,25,3,True,False
+exp,exp_odvetvove,258,Výzkum a vývoj v oblasti všeobecných hospodářských záležitostí,25,3,True,False
+exp,exp_odvetvove,259,Ostatní činnosti a nespecifikované výdaje,25,3,True,False
+exp,exp_odvetvove,311,Předškolní a základní vzdělávání,31,3,True,False
+exp,exp_odvetvove,312,Střední vzdělávání a vzdělávání v konzervatořích,31,3,True,False
+exp,exp_odvetvove,313,Školská zařízení pro výkon ústavní a ochranné výchovy,31,3,True,False
+exp,exp_odvetvove,314,Ostatní zařízení související s výchovou a vzděláváním mládeže,31,3,True,False
+exp,exp_odvetvove,315,Vyšší odborné vzdělávání,31,3,True,False
+exp,exp_odvetvove,321,Vysokoškolské vzdělávání,32,3,True,False
+exp,exp_odvetvove,322,Zařízení související s vysokoškolským vzděláváním,32,3,True,False
+exp,exp_odvetvove,323,"Základní umělecké, jazykové a zájmové vzdělávání",32,3,True,False
+exp,exp_odvetvove,326,Správa ve vzdělávání,32,3,True,False
+exp,exp_odvetvove,329,Ostatní činnost a nespecifikované výdaje ve vzdělávání,32,3,True,False
+exp,exp_odvetvove,331,Kultura,33,3,True,False
+exp,exp_odvetvove,332,Ochrana památek a péče o kulturní dědictví a národní a historické povědomí,33,3,True,False
+exp,exp_odvetvove,333,Činnosti registrovaných církví a náboženských společností,33,3,True,False
+exp,exp_odvetvove,334,Sdělovací prostředky,33,3,True,False
+exp,exp_odvetvove,336,"Správa v oblasti kultury, církví a sdělovacích prostředků",33,3,True,False
+exp,exp_odvetvove,338,"Výzkum a vývoj v oblasti kultury, církví a sdělovacích prostředků",33,3,True,False
+exp,exp_odvetvove,339,"Ostatní činnosti v záležitostech kultury, církví a sdělovacích prostředků",33,3,True,False
+exp,exp_odvetvove,341,Sport,34,3,True,False
+exp,exp_odvetvove,342,Zájmová činnost a rekreace,34,3,True,False
+exp,exp_odvetvove,346,Správa v oblasti sportu,34,3,True,False
+exp,exp_odvetvove,348,"Výzkum v oblasti sportu, zájmové činnosti a rekreace",34,3,True,False
+exp,exp_odvetvove,351,Ambulantní péče,35,3,True,False
+exp,exp_odvetvove,352,Lůžková péče,35,3,True,False
+exp,exp_odvetvove,353,Zvláštní zdravotnická zařízení a služby pro zdravotnictví,35,3,True,False
+exp,exp_odvetvove,354,Zdravotnické programy,35,3,True,False
+exp,exp_odvetvove,356,Správa ve zdravotnictví,35,3,True,False
+exp,exp_odvetvove,358,Výzkum a vývoj ve zdravotnictví,35,3,True,False
+exp,exp_odvetvove,359,Ostatní činnost ve zdravotnictví,35,3,True,False
+exp,exp_odvetvove,361,Rozvoj bydlení a bytové hospodářství,36,3,True,False
+exp,exp_odvetvove,363,Komunální služby a územní rozvoj,36,3,True,False
+exp,exp_odvetvove,366,"Správa v oblasti bydlení, komunálních služeb a územního rozvoje",36,3,True,False
+exp,exp_odvetvove,369,"Ostatní činnost v oblasti bydlení, komunálních služeb a územního rozvoje",36,3,True,False
+exp,exp_odvetvove,371,Ochrana ovzduší a klimatu,37,3,True,False
+exp,exp_odvetvove,372,Nakládání s odpady,37,3,True,False
+exp,exp_odvetvove,373,Ochrana a sanace půdy a podzemní vody,37,3,True,False
+exp,exp_odvetvove,374,Ochrana přírody a krajiny,37,3,True,False
+exp,exp_odvetvove,376,Správa v ochraně životního prostředí,37,3,True,False
+exp,exp_odvetvove,377,Ochrana proti záření,37,3,True,False
+exp,exp_odvetvove,378,Výzkum životního prostředí,37,3,True,False
+exp,exp_odvetvove,379,Ostatní činnosti v životním prostředí,37,3,True,False
+exp,exp_odvetvove,380,Ostatní výzkum a vývoj,38,3,True,False
+exp,exp_odvetvove,390,Ostatní činnosti související se službami pro fyzické osoby,39,3,True,False
+exp,exp_odvetvove,411,Dávky důchodového pojištění,41,3,True,False
+exp,exp_odvetvove,412,Dávky nemocenského pojištění,41,3,True,False
+exp,exp_odvetvove,413,Dávky státní sociální podpory a dávky pěstounské péče,41,3,True,False
+exp,exp_odvetvove,414,Příspěvek na péči,41,3,True,False
+exp,exp_odvetvove,415,Zvláštní sociální dávky příslušníků ozbrojených sil a bezpečnostních sborů při skončení služebního poměru,41,3,True,False
+exp,exp_odvetvove,417,Dávky pomoci v hmotné nouzi,41,3,True,False
+exp,exp_odvetvove,418,Dávky osobám se zdravotním postižením,41,3,True,False
+exp,exp_odvetvove,419,Ostatní dávky povahy sociálního zabezpečení,41,3,True,False
+exp,exp_odvetvove,421,Podpory v nezaměstnanosti,42,3,True,False
+exp,exp_odvetvove,422,Aktivní politika zaměstnanosti,42,3,True,False
+exp,exp_odvetvove,423,Ochrana zaměstnanců při platební neschopnosti zaměstnavatelů,42,3,True,False
+exp,exp_odvetvove,424,Zaměstnávání zdravotně postižených občanů,42,3,True,False
+exp,exp_odvetvove,425,Příspěvky na sociální důsledky restrukturalizace,42,3,True,False
+exp,exp_odvetvove,431,Sociální poradenství,43,3,True,False
+exp,exp_odvetvove,432,Sociální péče a pomoc dětem a mládeži,43,3,True,False
+exp,exp_odvetvove,433,Sociální péče a pomoc manželství a rodinám,43,3,True,False
+exp,exp_odvetvove,434,Sociální rehabilitace a ostatní sociální péče a pomoc,43,3,True,False
+exp,exp_odvetvove,435,Sociální služby v oblasti sociální péče,43,3,True,False
+exp,exp_odvetvove,436,Správa v sociálním zabezpečení a politice zaměstnanosti,43,3,True,False
+exp,exp_odvetvove,437,Služby sociální prevence,43,3,True,False
+exp,exp_odvetvove,438,Výzkum v sociálním zabezpečení a politice zaměstnanosti,43,3,True,False
+exp,exp_odvetvove,439,Ostatní činnost a nespecifikované výdaje,43,3,True,False
 exp,exp_odvetvove,511,Vojenská obrana,51,3,True,False
-exp,exp_odvetvove,516,,51,3,True,False
-exp,exp_odvetvove,517,,51,3,True,False
-exp,exp_odvetvove,518,,51,3,True,False
-exp,exp_odvetvove,519,,51,3,True,False
-exp,exp_odvetvove,521,,52,3,True,False
-exp,exp_odvetvove,522,,52,3,True,False
-exp,exp_odvetvove,526,,52,3,True,False
-exp,exp_odvetvove,527,,52,3,True,False
-exp,exp_odvetvove,528,,52,3,True,False
-exp,exp_odvetvove,529,,52,3,True,False
-exp,exp_odvetvove,531,,53,3,True,False
-exp,exp_odvetvove,538,,53,3,True,False
-exp,exp_odvetvove,539,,53,3,True,False
-exp,exp_odvetvove,541,,54,3,True,False
-exp,exp_odvetvove,542,,54,3,True,False
-exp,exp_odvetvove,543,,54,3,True,False
-exp,exp_odvetvove,544,,54,3,True,False
-exp,exp_odvetvove,545,,54,3,True,False
-exp,exp_odvetvove,546,,54,3,True,False
-exp,exp_odvetvove,547,,54,3,True,False
-exp,exp_odvetvove,548,,54,3,True,False
-exp,exp_odvetvove,549,,54,3,True,False
-exp,exp_odvetvove,551,Požární ochrana,55,3,True,False
-exp,exp_odvetvove,552,Ostatní složky a,55,3,True,False
-exp,exp_odvetvove,556,Státní správa v,55,3,True,False
-exp,exp_odvetvove,558,Výzkum a vývoj v,55,3,True,False
-exp,exp_odvetvove,559,Ostatní záležitosti,55,3,True,False
-exp,exp_odvetvove,611,Zastupitelské orgány,61,3,True,False
-exp,exp_odvetvove,612,Kancelář,61,3,True,False
-exp,exp_odvetvove,613,Nejvyšší kontrolní,61,3,True,False
-exp,exp_odvetvove,614,Všeobecná vnitřní,61,3,True,False
-exp,exp_odvetvove,615,Zahraniční služba a,61,3,True,False
-exp,exp_odvetvove,618,Výzkum ve státní,61,3,True,False
-exp,exp_odvetvove,619,Politické strany a,61,3,True,False
-exp,exp_odvetvove,621,Ostatní veřejné,62,3,True,False
-exp,exp_odvetvove,622,Zahraniční pomoc,62,3,True,False
-exp,exp_odvetvove,631,Obecné příjmy a,63,3,True,False
-exp,exp_odvetvove,632,Pojištění funkčně,63,3,True,False
-exp,exp_odvetvove,639,Ostatní finanční,63,3,True,False
-exp,exp_odvetvove,640,Ostatní činnosti,64,3,True,False
-rev,rev_druhove,0,PŘÍJMY STÁTNÍHO,,0,False,True
-rev,rev_druhove,1,DAŇOVÉ PŘÍJMY,0,1,False,False
-rev,rev_druhove,2,NEDAŇOVÉ,0,1,False,False
-rev,rev_druhove,3,KAPITÁLOVÉ,0,1,False,False
-rev,rev_druhove,4,PŘIJATÉ TRANSFERY,0,1,False,False
-rev,rev_druhove,11,"Daně z příjmů,",1,2,False,False
-rev,rev_druhove,12,"Daně, poplatky a",1,2,False,False
-rev,rev_druhove,13,Daně a poplatky,1,2,False,False
-rev,rev_druhove,14,Příjem z daní a,1,2,False,False
-rev,rev_druhove,16,Příjem z,1,2,False,False
-rev,rev_druhove,17,Ostatní daňové,1,2,False,False
-rev,rev_druhove,21,Příjem z vlastní,2,2,False,False
-rev,rev_druhove,22,Přijaté sankční,2,2,False,False
-rev,rev_druhove,23,Příjem z prodeje,2,2,False,False
-rev,rev_druhove,24,Přijaté splátky,2,2,False,False
-rev,rev_druhove,25,Příjmy sdílené s,2,2,False,False
-rev,rev_druhove,31,Příjem z prodeje,3,2,False,False
-rev,rev_druhove,32,Příjem z prodeje,3,2,False,False
-rev,rev_druhove,41,Neinvestiční,4,2,False,False
+exp,exp_odvetvove,516,Správa v oblasti obrany,51,3,True,False
+exp,exp_odvetvove,517,Výzkum a vývoj obrany,51,3,True,False
+exp,exp_odvetvove,518,Mezinárodní spolupráce ve vojenské oblasti,51,3,True,False
+exp,exp_odvetvove,519,Ostatní záležitosti obrany,51,3,True,False
+exp,exp_odvetvove,521,Ochrana obyvatelstva,52,3,True,False
+exp,exp_odvetvove,522,Státní správa v oblasti hospodářských opatření pro krizové stavy,52,3,True,False
+exp,exp_odvetvove,526,Krizové řízení,52,3,True,False
+exp,exp_odvetvove,527,Integrovaný záchranný systém,52,3,True,False
+exp,exp_odvetvove,528,Výzkum a vývoj v oblasti civilní připravenosti na krizové stavy,52,3,True,False
+exp,exp_odvetvove,529,Ostatní záležitosti civilní připravenosti pro krizové stavy,52,3,True,False
+exp,exp_odvetvove,531,Policie,53,3,True,False
+exp,exp_odvetvove,538,Výzkum týkající se bezpečnosti a veřejného pořádku,53,3,True,False
+exp,exp_odvetvove,539,Ostatní záležitosti bezpečnosti a veřejného pořádku,53,3,True,False
+exp,exp_odvetvove,541,Soudnictví,54,3,True,False
+exp,exp_odvetvove,542,Státní zastupitelství,54,3,True,False
+exp,exp_odvetvove,543,Vězeňství,54,3,True,False
+exp,exp_odvetvove,544,Probační a mediační služba,54,3,True,False
+exp,exp_odvetvove,545,Veřejná ochrana práv,54,3,True,False
+exp,exp_odvetvove,546,Správa v oblasti právní ochrany,54,3,True,False
+exp,exp_odvetvove,547,Právní pomoc a poradenství,54,3,True,False
+exp,exp_odvetvove,548,Výzkum v oblasti právní ochrany,54,3,True,False
+exp,exp_odvetvove,549,Ostatní záležitosti právní ochrany,54,3,True,False
+exp,exp_odvetvove,551,Požární ochrana - Loss prevention,55,3,True,False
+exp,exp_odvetvove,552,Ostatní složky a činnosti integrovaného záchranného systému,55,3,True,False
+exp,exp_odvetvove,556,Státní správa v požární ochraně a integrovaném záchranném systému,55,3,True,False
+exp,exp_odvetvove,558,Výzkum a vývoj v požární ochraně a integrovaném záchranném systému,55,3,True,False
+exp,exp_odvetvove,559,Ostatní záležitosti požární ochrany a integrovaného záchranného systému,55,3,True,False
+exp,exp_odvetvove,611,Zastupitelské orgány a volby,61,3,True,False
+exp,exp_odvetvove,612,Kancelář prezidenta republiky,61,3,True,False
+exp,exp_odvetvove,613,Nejvyšší kontrolní úřad,61,3,True,False
+exp,exp_odvetvove,614,Všeobecná vnitřní správa,61,3,True,False
+exp,exp_odvetvove,615,Zahraniční služba a záležitosti nezařazené v jiných funkcích,61,3,True,False
+exp,exp_odvetvove,618,Výzkum ve státní správě a samosprávě,61,3,True,False
+exp,exp_odvetvove,619,Politické strany a hnutí,61,3,True,False
+exp,exp_odvetvove,621,Ostatní veřejné služby a činnosti,62,3,True,False
+exp,exp_odvetvove,622,Zahraniční pomoc a mezinárodní spolupráce jinde nezařazená,62,3,True,False
+exp,exp_odvetvove,631,Obecné příjmy a výdaje z finančních operací,63,3,True,False
+exp,exp_odvetvove,632,Pojištění funkčně nespecifikované,63,3,True,False
+exp,exp_odvetvove,639,Ostatní finanční operace,63,3,True,False
+exp,exp_odvetvove,640,Ostatní činnosti jinde nezařazené,64,3,True,False
+rev,rev_druhove,0,PŘÍJMY STÁTNÍHO ROZPOČTU,,0,False,True
+rev,rev_druhove,1,DAŇOVÉ PŘÍJMY CELKEM,0,1,False,False
+rev,rev_druhove,2,NEDAŇOVÉ PŘÍJMY CELKEM,0,1,False,False
+rev,rev_druhove,3,KAPITÁLOVÉ PŘÍJMY CELKEM,0,1,False,False
+rev,rev_druhove,4,PŘIJATÉ TRANSFERY CELKEM,0,1,False,False
+rev,rev_druhove,11,"Daně z příjmů, zisku a kapitálových výnosů a některé další přímé daně",1,2,False,False
+rev,rev_druhove,12,"Daně, poplatky a jiná obdobná peněžitá plnění ze zboží a služeb v tuzemsku",1,2,False,False
+rev,rev_druhove,13,Daně a poplatky z vybraných činností a služeb,1,2,False,False
+rev,rev_druhove,14,Příjem z daní a cel za zboží a služby ze zahraničí,1,2,False,False
+rev,rev_druhove,16,Příjem z povinného pojistného,1,2,False,False
+rev,rev_druhove,17,Ostatní daňové příjmy,1,2,False,False
+rev,rev_druhove,21,Příjem z vlastní činnosti a odvody přebytků organizací s přímým vztahem,2,2,False,False
+rev,rev_druhove,22,Přijaté sankční platby a vratky transferů,2,2,False,False
+rev,rev_druhove,23,Příjem z prodeje neinvestičního majetku a ostatní nedaňové příjmy,2,2,False,False
+rev,rev_druhove,24,Přijaté splátky půjčených prostředků,2,2,False,False
+rev,rev_druhove,25,Příjmy sdílené s Evropskou unií nebo s jejím členským státem,2,2,False,False
+rev,rev_druhove,31,Příjem z prodeje dlouhodobého majetku a ostatní kapitálové příjmy,3,2,False,False
+rev,rev_druhove,32,Příjem z prodeje dlouhodobého finančního majetku,3,2,False,False
+rev,rev_druhove,41,Neinvestiční přijaté transfery,4,2,False,False
 rev,rev_druhove,42,Investiční přijaté transfery,4,2,False,False
-rev,rev_druhove,111,Příjem z daní,11,3,False,False
-rev,rev_druhove,112,Příjem z daní z příjmů,11,3,True,False
-rev,rev_druhove,113,Příjem z některých,11,3,True,False
-rev,rev_druhove,121,Příjem,12,3,False,False
-rev,rev_druhove,122_123,Příjem ze zvláštních,12,3,True,False
-rev,rev_druhove,132,Příjem z daní a,13,3,True,False
-rev,rev_druhove,133,Příjem z poplatků,13,3,True,False
-rev,rev_druhove,135,Příjem z ostatních,13,3,True,False
-rev,rev_druhove,136,Příjem ze,13,3,True,False
-rev,rev_druhove,137,Příjem z poplatků,13,3,True,False
-rev,rev_druhove,138,"Příjem z daní,",13,3,True,False
-rev,rev_druhove,140,Příjem z daní a cel,14,3,True,False
-rev,rev_druhove,161,Příjem z pojistného,16,3,True,False
-rev,rev_druhove,162,Příjem související s,16,3,True,False
+rev,rev_druhove,111,Příjem z daní z příjmů fyzických osob,11,3,False,False
+rev,rev_druhove,112,Příjem z daní z příjmů právnických osob,11,3,True,False
+rev,rev_druhove,113,Příjem z některých dalších přímých daní,11,3,True,False
+rev,rev_druhove,121,Příjem ze všeobecných daní ze zboží a služeb v tuzemsku,12,3,False,False
+rev,rev_druhove,122_123,Příjem ze zvláštních daní poplatků a jiných obdobných peněžitých plnění ze zboží a služeb v tuzemsku,12,3,True,False
+rev,rev_druhove,132,Příjem z daní a poplatků z provozu motorových vozidel,13,3,True,False
+rev,rev_druhove,133,Příjem z poplatků a odvodů v oblasti životního prostředí,13,3,True,False
+rev,rev_druhove,135,Příjem z ostatních odvodů z vybraných činností a služeb,13,3,True,False
+rev,rev_druhove,136,Příjem ze správních a soudních poplatků,13,3,True,False
+rev,rev_druhove,137,Příjem z poplatků na činnost správních úřadů,13,3,True,False
+rev,rev_druhove,138,"Příjem z daní, poplatků a jiných obdobných peněžitých plnění v oblasti hazardních her",13,3,True,False
+rev,rev_druhove,140,Příjem z daní a cel za zboží a služby ze zahraničí,14,3,True,False
+rev,rev_druhove,161,Příjem z pojistného na sociální zabezpečení a z příspěvku na státní politiku zaměstnanosti,16,3,True,False
+rev,rev_druhove,162,Příjem související s pojistným na sociální zabezpečení,16,3,True,False
 rev,rev_druhove,170,Ostatní daňové příjmy,17,3,True,False
-rev,rev_druhove,211,Příjem z vlastní,21,3,True,False
-rev,rev_druhove,212,Příjem z odvodů,21,3,True,False
-rev,rev_druhove,213,Příjem z pronájmu,21,3,True,False
-rev,rev_druhove,214,Přijaté výnosy z,21,3,True,False
-rev,rev_druhove,221,Přijaté sankční,22,3,True,False
-rev,rev_druhove,222,Přijaté vratky,22,3,True,False
-rev,rev_druhove,231,Příjem z prodeje,23,3,True,False
-rev,rev_druhove,232,Ostatní nedaňové,23,3,True,False
-rev,rev_druhove,235,Příjmy za,23,3,True,False
-rev,rev_druhove,236,Příjmy z,23,3,True,False
-rev,rev_druhove,241,Splátky půjčených,24,3,True,False
-rev,rev_druhove,242,Splátky půjčených,24,3,True,False
-rev,rev_druhove,244,Splátky půjčených,24,3,True,False
-rev,rev_druhove,245,Splátky půjčených,24,3,True,False
-rev,rev_druhove,247,Splátky půjčených,24,3,True,False
-rev,rev_druhove,248,Splátky za úhradu,24,3,True,False
-rev,rev_druhove,251,Příjmy sdílené s,25,3,True,False
-rev,rev_druhove,311,Příjem z prodeje,31,3,True,False
-rev,rev_druhove,320,Příjem z prodeje,32,3,True,False
-rev,rev_druhove,411,Neinvestiční přijaté,41,3,False,False
-rev,rev_druhove,413,Neinvestiční,41,3,True,False
-rev,rev_druhove,415,Neinvestiční přijaté,41,3,False,False
-rev,rev_druhove,421,Investiční přijaté,42,3,False,False
-rev,rev_druhove,423,Investiční přijaté,42,3,False,False
-rev,rev_druhove,1111,Příjem z daně z příjmů,111,4,True,False
-rev,rev_druhove,1112,Příjem z daně,111,4,True,False
-rev,rev_druhove,1113,Příjem z daně,111,4,True,False
-rev,rev_druhove,1211,Příjem z daně,121,4,True,False
-rev,rev_druhove,4118,Neinvestiční,411,4,True,False
-rev,rev_druhove,4153,Neinvestiční,415,4,True,False
-rev,rev_druhove,4218,Investiční převody z,421,4,True,False
+rev,rev_druhove,211,Příjem z vlastní činnosti,21,3,True,False
+rev,rev_druhove,212,Příjem z odvodů organizací s přímým vztahem,21,3,True,False
+rev,rev_druhove,213,Příjem z pronájmu nebo pachtu majetku,21,3,True,False
+rev,rev_druhove,214,Přijaté výnosy z finančního majetku,21,3,True,False
+rev,rev_druhove,221,Přijaté sankční platby,22,3,True,False
+rev,rev_druhove,222,Přijaté vratky transferů a ostatní podobné příjmy,22,3,True,False
+rev,rev_druhove,231,Příjem z prodeje krátkodobého a drobného dlouhodobého majetku,23,3,True,False
+rev,rev_druhove,232,Ostatní nedaňové příjmy,23,3,True,False
+rev,rev_druhove,235,Příjmy za využívání dalších majetkových práv,23,3,True,False
+rev,rev_druhove,236,Příjmy z dobrovolného pojistného,23,3,True,False
+rev,rev_druhove,241,Splátky půjčených prostředků od podnikatelů,24,3,True,False
+rev,rev_druhove,242,Splátky půjčených prostředků od obecně prospěšných společností a obdobných osob,24,3,True,False
+rev,rev_druhove,244,Splátky půjčených prostředků od rozpočtů územní úrovně,24,3,True,False
+rev,rev_druhove,245,Splátky půjčených prostředků od zřízených a obdobných osob,24,3,True,False
+rev,rev_druhove,247,Splátky půjčených prostředků ze zahraničí,24,3,True,False
+rev,rev_druhove,248,Splátky za úhradu dluhů nebo dodávek,24,3,True,False
+rev,rev_druhove,251,Příjmy sdílené s Evropskou unií nebo s jejím členským státem,25,3,True,False
+rev,rev_druhove,311,Příjem z prodeje dlouhodobého majetku (kromě drobného),31,3,True,False
+rev,rev_druhove,320,Příjem z prodeje dlouhodobého finančního majetku,32,3,True,False
+rev,rev_druhove,411,Neinvestiční přijaté transfery od rozpočtů ústřední úrovně,41,3,False,False
+rev,rev_druhove,413,Neinvestiční převody z vlastních fondů a ve vztahu k útvarům bez právní osobnosti,41,3,True,False
+rev,rev_druhove,415,Neinvestiční přijaté transfery ze zahraničí,41,3,False,False
+rev,rev_druhove,421,Investiční přijaté transfery od rozpočtů ústřední úrovně,42,3,False,False
+rev,rev_druhove,423,Investiční přijaté transfery ze zahraničí,42,3,False,False
+rev,rev_druhove,1111,Příjem z daně z příjmů fyzických osob placené plátci,111,4,True,False
+rev,rev_druhove,1112,Příjem z daně z příjmů fyzických osob placené poplatníky,111,4,True,False
+rev,rev_druhove,1113,Příjem z daně z příjmů fyzických osob vybírané srážkou podle zvláštní sazby daně,111,4,True,False
+rev,rev_druhove,1211,Příjem z daně z přidané hodnoty,121,4,True,False
+rev,rev_druhove,4118,Neinvestiční převody z Národního fondu,411,4,True,False
+rev,rev_druhove,4153,Neinvestiční transfery přijaté od Evropské unie,415,4,True,False
+rev,rev_druhove,4218,Investiční převody z Národního fondu,421,4,True,False
 rev,rev_druhove,4233,Investiční transfery přijaté od Evropské unie,423,4,True,False

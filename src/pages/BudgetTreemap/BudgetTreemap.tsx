@@ -17,12 +17,6 @@ interface ClassificationRow {
   is_total: boolean;
 }
 
-interface TreeFileNode {
-  id: string;
-  name: string;
-  children?: TreeFileNode[];
-}
-
 interface TreeNode {
   id: string;
   name: string;
@@ -36,7 +30,6 @@ type ViewType = 'revenues' | 'exp_druhove' | 'exp_odvetvove';
 const VIEW_CONFIG: Record<ViewType, { 
   label: string; 
   dataFile: string;
-  treeFile: string;
   system: string;
   kind: string;
   order: number;
@@ -44,7 +37,6 @@ const VIEW_CONFIG: Record<ViewType, {
   revenues: { 
     label: 'Příjmy', 
     dataFile: 'fact_revenues_by_chapter.csv',
-    treeFile: 'tree_rev_druhove.json',
     system: 'rev_druhove',
     kind: 'rev',
     order: 1
@@ -52,7 +44,6 @@ const VIEW_CONFIG: Record<ViewType, {
   exp_odvetvove: { 
     label: 'Výdaje (odvětvové)', 
     dataFile: 'fact_expenditures_by_chapter.csv',
-    treeFile: 'tree_exp_odvetvove.json',
     system: 'exp_odvetvove',
     kind: 'exp',
     order: 2
@@ -60,7 +51,6 @@ const VIEW_CONFIG: Record<ViewType, {
   exp_druhove: { 
     label: 'Výdaje (druhové)', 
     dataFile: 'fact_expenditures_by_chapter.csv',
-    treeFile: 'tree_exp_druhove.json',
     system: 'exp_druhove',
     kind: 'exp',
     order: 3
@@ -131,20 +121,9 @@ function parseClassificationCSV(text: string): ClassificationRow[] {
   });
 }
 
-// Extract names from tree file into a map
-function extractNamesFromTree(node: TreeFileNode, nameMap: Map<string, string>): void {
-  if (node.name && node.id !== 'root') {
-    nameMap.set(node.id, node.name);
-  }
-  if (node.children) {
-    node.children.forEach(child => extractNamesFromTree(child, nameMap));
-  }
-}
-
 export function BudgetTreemap() {
   const [classification, setClassification] = useState<ClassificationRow[]>([]);
   const [budgetRows, setBudgetRows] = useState<BudgetRow[]>([]);
-  const [nameMap, setNameMap] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState<ViewType>('exp_odvetvove');
   const [breadcrumbs, setBreadcrumbs] = useState<Array<{ id: string; name: string }>>([]);
@@ -166,27 +145,16 @@ export function BudgetTreemap() {
     loadClassification();
   }, []);
 
-  // Load budget data and names when view changes
+  // Load budget data when view changes
   useEffect(() => {
     async function loadData() {
       setLoading(true);
       setBreadcrumbs([]);
       try {
         const config = VIEW_CONFIG[activeView];
-        const [dataRes, treeRes] = await Promise.all([
-          fetch(`/data/budget/${config.dataFile}`),
-          fetch(`/data/budget/${config.treeFile}`)
-        ]);
-        
+        const dataRes = await fetch(`/data/budget/${config.dataFile}`);
         const text = await dataRes.text();
         setBudgetRows(parseCSV(text));
-        
-        // Extract names from tree file
-        const treeData = await treeRes.json() as TreeFileNode;
-        const names = new Map<string, string>();
-        extractNamesFromTree(treeData, names);
-        setNameMap(names);
-        
         setLoading(false);
       } catch (error) {
         console.error('Failed to load data:', error);
@@ -268,16 +236,12 @@ export function BudgetTreemap() {
 
   // Get the best name for a code
   const getName = useCallback((code: string, classificationName?: string): string => {
-    // First try tree file names (best quality)
-    const treeName = nameMap.get(code);
-    if (treeName && treeName.length > 3) return treeName;
-    
-    // Then try classification name
+    // Use classification name (now contains full names)
     if (classificationName && classificationName.length > 3) return classificationName;
     
     // Fallback to code
     return `[${code}]`;
-  }, [nameMap]);
+  }, []);
 
   // Build tree from classification data
   const buildTree = useCallback((): TreeNode | null => {
