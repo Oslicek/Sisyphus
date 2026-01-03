@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
+import html2canvas from 'html2canvas';
 import { Footer } from '../../components/Footer';
 import { 
   parseCSV, 
@@ -61,6 +62,10 @@ export function DeficitGame() {
   const expenditureChartRef = useRef<SVGSVGElement>(null);
   const revenueContainerRef = useRef<HTMLDivElement>(null);
   const expenditureContainerRef = useRef<HTMLDivElement>(null);
+  const shareableRef = useRef<HTMLDivElement>(null);
+  
+  // Share state
+  const [shareState, setShareState] = useState<'idle' | 'capturing' | 'success' | 'error'>('idle');
 
   // Calculate current deficit
   const currentDeficit = useMemo(() => {
@@ -270,27 +275,99 @@ export function DeficitGame() {
     setAdjustments([]);
   }, []);
 
-  // Share result
-  const handleShare = useCallback(async () => {
-    const shareText = formatGameResultForShare(ORIGINAL_DEFICIT, adjustments);
+  // Capture screenshot of shareable content
+  const captureScreenshot = useCallback(async (): Promise<Blob | null> => {
+    if (!shareableRef.current) return null;
     
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Zrušil/a jsem schodek!',
-          text: shareText,
-          url: window.location.href
-        });
-      } catch (e) {
-        // User cancelled or share failed, copy to clipboard instead
-        await navigator.clipboard.writeText(shareText);
-        alert('Výsledek zkopírován do schránky!');
+    try {
+      // Make shareable div visible temporarily
+      shareableRef.current.style.display = 'block';
+      shareableRef.current.style.position = 'absolute';
+      shareableRef.current.style.left = '-9999px';
+      shareableRef.current.style.top = '0';
+      
+      const canvas = await html2canvas(shareableRef.current, {
+        backgroundColor: '#f8f9fa',
+        scale: 2,
+        logging: false,
+        useCORS: true,
+        width: 600,
+        windowWidth: 600,
+      });
+      
+      // Hide it again
+      shareableRef.current.style.display = 'none';
+      
+      return new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), 'image/png', 0.95);
+      });
+    } catch (err) {
+      console.error('Failed to capture screenshot:', err);
+      if (shareableRef.current) {
+        shareableRef.current.style.display = 'none';
       }
-    } else {
-      await navigator.clipboard.writeText(shareText);
-      alert('Výsledek zkopírován do schránky!');
+      return null;
     }
-  }, [adjustments]);
+  }, []);
+
+  // Share result with image
+  const handleShare = useCallback(async () => {
+    setShareState('capturing');
+    
+    try {
+      const blob = await captureScreenshot();
+      const shareText = formatGameResultForShare(ORIGINAL_DEFICIT, adjustments);
+      
+      if (blob && navigator.share && navigator.canShare) {
+        const file = new File([blob], 'rozpoctovka-vysledek.png', { type: 'image/png' });
+        
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: 'Zrušil/a jsem schodek!',
+            text: shareText,
+            files: [file],
+          });
+          setShareState('success');
+        } else {
+          // Fallback: share just text + URL
+          await navigator.share({
+            title: 'Zrušil/a jsem schodek!',
+            text: shareText,
+            url: window.location.href
+          });
+          setShareState('success');
+        }
+      } else if (blob) {
+        // No Web Share API - download the image
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'rozpoctovka-vysledek.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        // Also copy text to clipboard
+        await navigator.clipboard.writeText(shareText);
+        setShareState('success');
+      } else {
+        // Fallback: just copy text
+        await navigator.clipboard.writeText(shareText);
+        setShareState('success');
+      }
+    } catch (e) {
+      if ((e as Error).name !== 'AbortError') {
+        console.error('Share failed:', e);
+        setShareState('error');
+      } else {
+        setShareState('idle');
+        return;
+      }
+    }
+    
+    setTimeout(() => setShareState('idle'), 2000);
+  }, [adjustments, captureScreenshot]);
 
   // Render icicle chart with navigation
   const renderIcicleChart = useCallback((
@@ -559,8 +636,15 @@ export function DeficitGame() {
                 ? 'Vyrovnaný rozpočet! Podařilo se vám eliminovat schodek.'
                 : `Přebytek ${formatCurrency(currentDeficit)}! Už máte více než vyrovnaný rozpočet.`}
             </span>
-            <button className={styles.successBannerShare} onClick={handleShare}>
-              📤 Sdílet
+            <button 
+              className={styles.successBannerShare} 
+              onClick={handleShare}
+              disabled={shareState === 'capturing'}
+            >
+              {shareState === 'capturing' ? '⏳ Vytvářím...' : 
+               shareState === 'success' ? '✓ Hotovo!' :
+               shareState === 'error' ? '⚠ Chyba' :
+               '📤 Sdílet'}
             </button>
           </div>
         )}
@@ -644,8 +728,15 @@ export function DeficitGame() {
                 })}
               </div>
               <div className={styles.actionsInline}>
-                <button className={`${styles.shareButton} ${styles.shareButtonPrimary}`} onClick={handleShare}>
-                  📤 Sdílet můj plán
+                <button 
+                  className={`${styles.shareButton} ${styles.shareButtonPrimary}`} 
+                  onClick={handleShare}
+                  disabled={shareState === 'capturing'}
+                >
+                  {shareState === 'capturing' ? '⏳ Vytvářím obrázek...' : 
+                   shareState === 'success' ? '✓ Hotovo!' :
+                   shareState === 'error' ? '⚠ Chyba' :
+                   '📤 Sdílet můj plán'}
                 </button>
                 <button className={styles.resetButton} onClick={handleReset}>
                   🔄 Začít znovu
@@ -726,6 +817,93 @@ export function DeficitGame() {
           </div>
         </section>
       </main>
+
+      {/* Hidden shareable content for screenshot */}
+      <div ref={shareableRef} className={styles.shareableContent} style={{ display: 'none' }}>
+        <div className={styles.shareableHeader}>
+          <img src={rozpoctovkaLogo} alt="Rozpočtovka" className={styles.shareableLogo} />
+          <h1 className={styles.shareableTitle}>Zruším schodek!</h1>
+        </div>
+        
+        <div className={styles.shareableProgress}>
+          <div className={styles.shareableProgressHeader}>
+            <span>Cíl: Snížit schodek z -286 mld. na 0 mld.</span>
+            <span className={`${styles.shareableDeficitValue} ${
+              currentDeficit === 0 ? styles.deficitZero :
+              currentDeficit > 0 ? styles.deficitPositive :
+              styles.deficitNegative
+            }`}>
+              {currentDeficit === 0 ? 'Vyrovnáno! 🎉' :
+               currentDeficit > 0 ? `Přebytek: ${formatCurrency(currentDeficit)}` :
+               `Zbývá: ${formatCurrency(currentDeficit)}`}
+            </span>
+          </div>
+          <div className={styles.shareableProgressBar}>
+            <div 
+              className={`${styles.shareableProgressFill} ${
+                currentDeficit === 0 ? styles.progressFillZero :
+                currentDeficit > 0 ? styles.progressFillPositive :
+                styles.progressFillNegative
+              }`}
+              style={{ width: `${progressPercent}%` }}
+            />
+            <span className={styles.shareableProgressText}>
+              {progressPercent.toFixed(0)}% vyřešeno
+            </span>
+          </div>
+        </div>
+
+        {adjustments.length > 0 && (
+          <div className={styles.shareableAdjustments}>
+            <h2 className={styles.shareableAdjustmentsTitle}>📋 Moje úpravy rozpočtu</h2>
+            <div className={styles.shareableAdjustmentsList}>
+              {adjustments.filter(a => a.adjustmentAmount !== 0).map(adjustment => {
+                const billionsChange = adjustment.adjustmentAmount / 1_000_000_000;
+                const baseBillions = adjustment.originalValue / 1_000_000_000;
+                const sign = adjustment.adjustmentAmount >= 0 ? '+' : '';
+                const percentChange = adjustment.originalValue !== 0 
+                  ? (adjustment.adjustmentAmount / adjustment.originalValue) * 100 
+                  : 0;
+                const percentSign = percentChange >= 0 ? '+' : '';
+                
+                const isGoodChange = adjustment.type === 'revenue' 
+                  ? adjustment.adjustmentAmount > 0
+                  : adjustment.adjustmentAmount < 0;
+                const isBadChange = adjustment.type === 'revenue'
+                  ? adjustment.adjustmentAmount < 0
+                  : adjustment.adjustmentAmount > 0;
+                
+                return (
+                  <div 
+                    key={adjustment.id}
+                    className={`${styles.shareableAdjustmentItem} ${
+                      adjustment.type === 'revenue' ? styles.adjustmentRevenue : styles.adjustmentExpenditure
+                    }`}
+                  >
+                    <span className={styles.shareableAdjustmentName}>
+                      {adjustment.type === 'revenue' ? '📈' : '📉'} {adjustment.name}
+                    </span>
+                    <span className={styles.shareableAdjustmentBase}>
+                      Základ: {baseBillions.toFixed(1)} mld.
+                    </span>
+                    <span className={`${styles.shareableAdjustmentValue} ${
+                      isGoodChange ? styles.adjustmentValueGood :
+                      isBadChange ? styles.adjustmentValueBad :
+                      styles.adjustmentValueZero
+                    }`}>
+                      {sign}{billionsChange.toFixed(0)} mld. ({percentSign}{percentChange.toFixed(0)}%)
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        <div className={styles.shareableFooter}>
+          🔗 sisyfos.cz/zrusim-schodek
+        </div>
+      </div>
 
       <Footer />
     </div>

@@ -431,7 +431,7 @@ All files           |     100 |      100 |     100 |     100 |
   - Adjustment sliders (±50% range) with absolute and percentage display
   - Progress bar with real-time deficit tracking
   - Non-blocking success banner when deficit reaches zero or surplus
-  - Share functionality for game results
+  - Image sharing (screenshot with logo, deficit indicator, and adjustments)
   - Tooltips showing full item names and values
   - Instructions explaining 50% adjustment limit
 - [x] Hamburger menu navigation with tree structure:

@@ -564,4 +564,148 @@
   font-size: 1.1rem;
 }
 
+/* Shareable Content (for screenshot) */
+.shareableContent {
+  width: 600px;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+}
+
+.shareableHeader {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.shareableLogo {
+  width: 150px;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+.shareableTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  color: #1f2937;
+  margin: 0;
+}
+
+.shareableProgress {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.shareableProgressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.shareableDeficitValue {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.shareableProgressBar {
+  height: 20px;
+  background: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.shareableProgressFill {
+  height: 100%;
+  border-radius: 10px;
+}
+
+.shareableProgressText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.shareableAdjustments {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.shareableAdjustmentsTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  color: #1f2937;
+  margin: 0 0 1rem;
+}
+
+.shareableAdjustmentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.shareableAdjustmentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  border-left: 3px solid;
+  gap: 0.5rem;
+}
+
+.shareableAdjustmentName {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shareableAdjustmentBase {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.shareableAdjustmentValue {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.shareableFooter {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6b7280;
+  padding-top: 0.5rem;
+}
+
+/* Disabled button state */
+.shareButton:disabled,
+.successBannerShare:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
 
