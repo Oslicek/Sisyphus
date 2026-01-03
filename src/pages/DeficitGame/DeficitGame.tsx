@@ -51,9 +51,10 @@ export function DeficitGame() {
   const [revenueHoverButton, setRevenueHoverButton] = useState<HoverButton | null>(null);
   const [expenditureHoverButton, setExpenditureHoverButton] = useState<HoverButton | null>(null);
   
-  // Current root node for each chart (for navigation)
-  const [revenueRoot, setRevenueRoot] = useState<HierarchyRectNode | null>(null);
-  const [expenditureRoot, setExpenditureRoot] = useState<HierarchyRectNode | null>(null);
+  // Current focus node ID for each chart (for navigation)
+  // We store the ID instead of the node reference because the hierarchy is rebuilt on each render
+  const [revenueFocusId, setRevenueFocusId] = useState<string | null>(null);
+  const [expenditureFocusId, setExpenditureFocusId] = useState<string | null>(null);
   
   const revenueChartRef = useRef<SVGSVGElement>(null);
   const expenditureChartRef = useRef<SVGSVGElement>(null);
@@ -62,7 +63,12 @@ export function DeficitGame() {
 
   // Calculate current deficit
   const currentDeficit = useMemo(() => {
-    return calculateAdjustedDeficit(ORIGINAL_DEFICIT, adjustments);
+    const raw = calculateAdjustedDeficit(ORIGINAL_DEFICIT, adjustments);
+    // Treat values within 1 billion of zero as zero (accounts for rounding)
+    if (Math.abs(raw) < 1_000_000_000) {
+      return 0;
+    }
+    return raw;
   }, [adjustments]);
 
   // Check for success
@@ -300,8 +306,8 @@ export function DeficitGame() {
     tree: TreeNode | null,
     type: 'revenue' | 'expenditure',
     setHoverButton: React.Dispatch<React.SetStateAction<HoverButton | null>>,
-    currentRoot: HierarchyRectNode | null,
-    setCurrentRoot: React.Dispatch<React.SetStateAction<HierarchyRectNode | null>>
+    focusId: string | null,
+    setFocusId: React.Dispatch<React.SetStateAction<string | null>>
   ) => {
     if (!svgRef.current || !containerRef.current || !tree) return;
 
@@ -323,12 +329,14 @@ export function DeficitGame() {
       .size([height, fullWidth])
       .padding(0)(root);
 
-    // Set current root if not set
-    if (!currentRoot) {
-      setCurrentRoot(root);
+    // Find focus node by ID, default to root
+    let focus: HierarchyRectNode = root;
+    if (focusId) {
+      const foundNode = root.descendants().find(d => d.data.id === focusId);
+      if (foundNode) {
+        focus = foundNode as HierarchyRectNode;
+      }
     }
-
-    const focus = currentRoot || root;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
@@ -384,17 +392,17 @@ export function DeficitGame() {
         // - If clicking on the current focus node, zoom out to its parent
         // - If clicking on a node with children, zoom into it
         // - If clicking on a leaf, zoom to its parent
-        if (d === focus) {
+        if (d.data.id === focus.data.id) {
           // Clicking on current focus -> zoom out
           if (focus.parent) {
-            setCurrentRoot(focus.parent as HierarchyRectNode);
+            setFocusId(focus.parent.data.id);
           }
         } else if (d.children) {
           // Clicking on a node with children -> zoom in
-          setCurrentRoot(d);
+          setFocusId(d.data.id);
         } else if (d.parent) {
           // Clicking on leaf -> zoom to its parent
-          setCurrentRoot(d.parent as HierarchyRectNode);
+          setFocusId(d.parent.data.id);
         }
       })
       .on('mouseenter', function(event, d) {
@@ -440,7 +448,7 @@ export function DeficitGame() {
       });
 
     // Add breadcrumb/back navigation hint
-    if (focus !== root && focus.parent) {
+    if (focus.data.id !== root.data.id && focus.parent) {
       svg.append('text')
         .attr('x', 10)
         .attr('y', height - 10)
@@ -450,7 +458,7 @@ export function DeficitGame() {
         .style('cursor', 'pointer')
         .on('click', () => {
           if (focus.parent) {
-            setCurrentRoot(focus.parent as HierarchyRectNode);
+            setFocusId(focus.parent.data.id);
           }
         });
     }
@@ -476,13 +484,13 @@ export function DeficitGame() {
 
   // Render revenue chart
   useEffect(() => {
-    renderIcicleChart(revenueChartRef, revenueContainerRef, revenueTree, 'revenue', setRevenueHoverButton, revenueRoot, setRevenueRoot);
-  }, [revenueTree, revenueRoot, renderIcicleChart]);
+    renderIcicleChart(revenueChartRef, revenueContainerRef, revenueTree, 'revenue', setRevenueHoverButton, revenueFocusId, setRevenueFocusId);
+  }, [revenueTree, revenueFocusId, renderIcicleChart]);
 
   // Render expenditure chart
   useEffect(() => {
-    renderIcicleChart(expenditureChartRef, expenditureContainerRef, expenditureTree, 'expenditure', setExpenditureHoverButton, expenditureRoot, setExpenditureRoot);
-  }, [expenditureTree, expenditureRoot, renderIcicleChart]);
+    renderIcicleChart(expenditureChartRef, expenditureContainerRef, expenditureTree, 'expenditure', setExpenditureHoverButton, expenditureFocusId, setExpenditureFocusId);
+  }, [expenditureTree, expenditureFocusId, renderIcicleChart]);
 
   // Calculate progress percentage using the tested utility function
   const progressPercent = useMemo(() => {
