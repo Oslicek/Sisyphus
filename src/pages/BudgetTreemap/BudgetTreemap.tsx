@@ -226,8 +226,9 @@ export function BudgetTreemap() {
     });
 
     // Also add any codes from data that aren't in classification
+    // (but skip _other codes - those are handled by assignValues)
     valueMap.forEach((_, code) => {
-      if (!nodeMap.has(code)) {
+      if (!nodeMap.has(code) && !code.endsWith('_other')) {
         // Find parent by prefix matching
         let parentCode = code.slice(0, -1);
         while (parentCode.length > 0 && !nodeMap.has(parentCode)) {
