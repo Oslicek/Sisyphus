@@ -749,7 +749,7 @@ export function DeficitGame() {
         {/* Instructions */}
         <div className={styles.instructions}>
           <span className={styles.instructionIcon}>💡</span>
-          Najeďte myší na <strong>koncovou položku</strong> v grafu a klikněte na tlačítko <strong>+</strong> pro přidání do seznamu úprav. Každou položku můžete navýšit nebo snížit maximálně o 50 %. Položky nelze odebírat ani přidávat.
+          Najeďte myší na <strong>koncovou položku</strong> v grafu a klikněte na tlačítko <strong>+</strong> pro přidání do seznamu úprav. Každou položku můžete navýšit nebo snížit maximálně o 50 %. Položky nelze odebírat ani přidávat. Jde o rozpočet vlády Petra Fialy na rok 2026.
         </div>
 
         {/* Charts Section */}
