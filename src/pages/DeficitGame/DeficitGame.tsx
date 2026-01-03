@@ -379,7 +379,8 @@ export function DeficitGame() {
       .join('g')
       .attr('transform', d => `translate(${yScale(d.y0)},${xScale(d.x0)})`);
 
-    cell.append('rect')
+    // Add rectangles - store reference for tooltip
+    const rects = cell.append('rect')
       .attr('width', d => Math.max(0, d.y1 - d.y0))
       .attr('height', d => Math.max(0, xScale(d.x1) - xScale(d.x0)))
       .attr('fill', (d, i) => getNodeColor(d.depth, i, type))
@@ -434,8 +435,7 @@ export function DeficitGame() {
       });
 
     // Add tooltip with full name and value to each rect
-    cell.select('rect')
-      .append('title')
+    rects.append('title')
       .text(d => `${d.data.name}\n${(d.value! / 1_000_000_000).toFixed(1)} mld. Kč`);
 
     // Add text labels
