@@ -29,6 +29,17 @@ export interface Chapter {
   chapter_name: string;
 }
 
+export interface Classification {
+  kind: 'rev' | 'exp';
+  system: string;
+  code: string;
+  name: string;
+  parent_code: string;
+  level: number;
+  is_leaf: boolean;
+  is_total: boolean;
+}
+
 export interface BudgetItem {
   id: string;
   name: string;
@@ -233,6 +244,42 @@ export function parseChaptersCSV(text: string): Chapter[] {
     return {
       chapter_code,
       chapter_name: rest.join(',').replace(/^"|"$/g, '')
+    };
+  });
+}
+
+/**
+ * Parse classification CSV (dim_classification.csv).
+ */
+export function parseClassificationCSV(text: string): Classification[] {
+  const lines = text.trim().split('\n');
+  
+  return lines.slice(1).map(line => {
+    const values: string[] = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (const char of line) {
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        values.push(current);
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    values.push(current);
+    
+    return {
+      kind: values[0] as 'rev' | 'exp',
+      system: values[1],
+      code: values[2],
+      name: values[3],
+      parent_code: values[4],
+      level: parseInt(values[5], 10) || 0,
+      is_leaf: values[6] === 'True',
+      is_total: values[7] === 'True'
     };
   });
 }

@@ -16,8 +16,6 @@ import {
 import { Footer } from '../../components/Footer';
 import { 
   parseBudgetItemsCSV,
-  buildValueMapFromItems,
-  buildNameMapFromItems,
   formatCurrency,
   type BudgetItem
 } from '../../utils/budgetData';
@@ -136,7 +134,6 @@ export function DeficitGame() {
 
     // Filter items with values (non-zero)
     const validItems = items.filter(item => item.sum > 0 && item.id !== '0');
-    const nameMap = buildNameMapFromItems(items);
     
     // Sort by code length (parents first)
     validItems.sort((a, b) => {
@@ -199,12 +196,6 @@ export function DeficitGame() {
       value: totalItem?.sum,
       children: topLevel
     };
-  }, [revenueItems, expenditureItems]);
-
-  // Build value map from items
-  const buildValueMap = useCallback((type: 'revenue' | 'expenditure'): Map<string, number> => {
-    const items = type === 'revenue' ? revenueItems : expenditureItems;
-    return buildValueMapFromItems(items);
   }, [revenueItems, expenditureItems]);
 
   // Clean up tree - remove empty children arrays and nodes without value
