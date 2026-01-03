@@ -237,10 +237,9 @@
 }
 
 .adjustmentItem {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  gap: 1rem;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   padding: 0.75rem 1rem;
   background: #f9fafb;
   border-radius: 8px;
@@ -255,6 +254,13 @@
   border-left-color: #dc2626;
 }
 
+.adjustmentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
 .adjustmentName {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.95rem;
@@ -263,6 +269,20 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.adjustmentBase {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.adjustmentControls {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  align-items: center;
 }
 
 .adjustmentSlider {
@@ -299,11 +319,11 @@
   text-align: right;
 }
 
-.adjustmentValuePositive {
+.adjustmentValueGood {
   color: #16a34a;
 }
 
-.adjustmentValueNegative {
+.adjustmentValueBad {
   color: #dc2626;
 }
 
@@ -513,4 +533,5 @@
   color: #6b7280;
   font-size: 1.1rem;
 }
+
 

@@ -50,6 +50,10 @@ export function DeficitGame() {
   const [revenueHoverButton, setRevenueHoverButton] = useState<HoverButton | null>(null);
   const [expenditureHoverButton, setExpenditureHoverButton] = useState<HoverButton | null>(null);
   
+  // Current root node for each chart (for navigation)
+  const [revenueRoot, setRevenueRoot] = useState<HierarchyRectNode | null>(null);
+  const [expenditureRoot, setExpenditureRoot] = useState<HierarchyRectNode | null>(null);
+  
   const revenueChartRef = useRef<SVGSVGElement>(null);
   const expenditureChartRef = useRef<SVGSVGElement>(null);
   const revenueContainerRef = useRef<HTMLDivElement>(null);
@@ -288,13 +292,15 @@ export function DeficitGame() {
     }
   }, [adjustments]);
 
-  // Render icicle chart
+  // Render icicle chart with navigation
   const renderIcicleChart = useCallback((
     svgRef: React.RefObject<SVGSVGElement | null>,
     containerRef: React.RefObject<HTMLDivElement | null>,
     tree: TreeNode | null,
     type: 'revenue' | 'expenditure',
-    setHoverButton: React.Dispatch<React.SetStateAction<HoverButton | null>>
+    setHoverButton: React.Dispatch<React.SetStateAction<HoverButton | null>>,
+    currentRoot: HierarchyRectNode | null,
+    setCurrentRoot: React.Dispatch<React.SetStateAction<HierarchyRectNode | null>>
   ) => {
     if (!svgRef.current || !containerRef.current || !tree) return;
 
@@ -316,39 +322,89 @@ export function DeficitGame() {
       .size([height, fullWidth])
       .padding(0)(root);
 
+    // Set current root if not set
+    if (!currentRoot) {
+      setCurrentRoot(root);
+    }
+
+    const focus = currentRoot || root;
+
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
+
+    // Add clip path
+    const clipId = `clip-${type}`;
+    svg.append('defs')
+      .append('clipPath')
+      .attr('id', clipId)
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', width)
+      .attr('height', height);
 
     svg
       .attr('viewBox', `0 0 ${width} ${height}`)
       .attr('width', width)
       .attr('height', height)
-      .style('font', '11px Source Sans 3, system-ui, sans-serif');
+      .style('font', '11px Source Sans 3, system-ui, sans-serif')
+      .style('overflow', 'hidden');
 
-    const cell = svg
+    const mainGroup = svg.append('g')
+      .attr('clip-path', `url(#${clipId})`);
+
+    // Calculate scale based on focus
+    const xScale = (x: number) => {
+      const focusX0 = focus.x0;
+      const focusX1 = focus.x1;
+      return ((x - focusX0) / (focusX1 - focusX0)) * height;
+    };
+    
+    const yScale = (y: number) => {
+      return y - focus.y0;
+    };
+
+    const cell = mainGroup
       .selectAll<SVGGElement, HierarchyRectNode>('g')
       .data(root.descendants() as HierarchyRectNode[])
       .join('g')
-      .attr('transform', d => `translate(${d.y0},${d.x0})`);
+      .attr('transform', d => `translate(${yScale(d.y0)},${xScale(d.x0)})`);
 
     cell.append('rect')
-      .attr('width', d => d.y1 - d.y0)
-      .attr('height', d => d.x1 - d.x0)
+      .attr('width', d => Math.max(0, d.y1 - d.y0))
+      .attr('height', d => Math.max(0, xScale(d.x1) - xScale(d.x0)))
       .attr('fill', (d, i) => getNodeColor(d.depth, i, type))
       .attr('stroke', '#fff')
       .attr('stroke-width', 0.5)
-      .style('cursor', 'pointer')
+      .style('cursor', d => d.children ? 'pointer' : 'default')
+      .on('click', function(event, d) {
+        event.stopPropagation();
+        // Navigate: click on node with children to zoom in, click on root to zoom out
+        if (d.children) {
+          setCurrentRoot(d);
+        } else if (d.parent) {
+          // If clicking on leaf, zoom to parent
+          setCurrentRoot(d.parent as HierarchyRectNode);
+        }
+      })
       .on('mouseenter', function(event, d) {
-        if (d.depth > 0 && d.data.value) {
+        // Show hover button for any node with value (d.value from D3 sum)
+        if (d.depth > 0 && d.value && d.value > 0) {
           const rect = (event.target as SVGRectElement).getBoundingClientRect();
           const containerRect = container.getBoundingClientRect();
-          setHoverButton({
-            nodeId: d.data.id,
-            x: rect.right - containerRect.left - 30,
-            y: rect.top - containerRect.top + 5,
-            name: d.data.name,
-            value: d.data.value
-          });
+          const rectWidth = rect.width;
+          const rectHeight = rect.height;
+          
+          // Only show button if rect is large enough
+          if (rectWidth > 30 && rectHeight > 20) {
+            setHoverButton({
+              nodeId: d.data.id,
+              x: rect.right - containerRect.left - 30,
+              y: rect.top - containerRect.top + 5,
+              name: d.data.name,
+              value: d.value // Use D3's summed value
+            });
+          }
         }
       })
       .on('mouseleave', function(event) {
@@ -366,42 +422,57 @@ export function DeficitGame() {
       .attr('font-weight', 500)
       .text(d => {
         const rectWidth = d.y1 - d.y0;
-        const rectHeight = d.x1 - d.x0;
+        const rectHeight = xScale(d.x1) - xScale(d.x0);
         if (rectWidth < 40 || rectHeight < 20) return '';
         const name = d.data.name || '';
         const maxChars = Math.floor(rectWidth / 7);
         return name.length > maxChars ? name.slice(0, maxChars - 1) + '…' : name;
       });
 
+    // Add breadcrumb/back navigation hint
+    if (focus !== root && focus.parent) {
+      svg.append('text')
+        .attr('x', 10)
+        .attr('y', height - 10)
+        .attr('fill', '#666')
+        .attr('font-size', '10px')
+        .text('← Klikni na levý sloupec pro návrat')
+        .style('cursor', 'pointer')
+        .on('click', () => {
+          if (focus.parent) {
+            setCurrentRoot(focus.parent as HierarchyRectNode);
+          }
+        });
+    }
+
   }, [getNodeColor]);
+
+  // Build enriched trees
+  const revenueTree = useMemo(() => {
+    if (loading || budgetRows.length === 0 || classifications.length === 0) return null;
+    const tree = buildTree('rev', 'rev_druhove');
+    if (!tree) return null;
+    const valueMap = buildValueMap('rev_druhove');
+    return assignValues(tree, valueMap);
+  }, [loading, budgetRows, classifications, buildTree, buildValueMap, assignValues]);
+
+  const expenditureTree = useMemo(() => {
+    if (loading || budgetRows.length === 0 || classifications.length === 0) return null;
+    const tree = buildTree('exp', 'exp_odvetvove');
+    if (!tree) return null;
+    const valueMap = buildValueMap('exp_odvetvove');
+    return assignValues(tree, valueMap);
+  }, [loading, budgetRows, classifications, buildTree, buildValueMap, assignValues]);
 
   // Render revenue chart
   useEffect(() => {
-    if (loading || budgetRows.length === 0 || classifications.length === 0) return;
-
-    const tree = buildTree('rev', 'rev_druhove');
-    if (!tree) return;
-
-    const valueMap = buildValueMap('rev_druhove');
-    const enrichedTree = assignValues(tree, valueMap);
-    if (!enrichedTree) return;
-    
-    renderIcicleChart(revenueChartRef, revenueContainerRef, enrichedTree, 'revenue', setRevenueHoverButton);
-  }, [loading, budgetRows, classifications, buildTree, buildValueMap, assignValues, renderIcicleChart]);
+    renderIcicleChart(revenueChartRef, revenueContainerRef, revenueTree, 'revenue', setRevenueHoverButton, revenueRoot, setRevenueRoot);
+  }, [revenueTree, revenueRoot, renderIcicleChart]);
 
   // Render expenditure chart
   useEffect(() => {
-    if (loading || budgetRows.length === 0 || classifications.length === 0) return;
-
-    const tree = buildTree('exp', 'exp_odvetvove');
-    if (!tree) return;
-
-    const valueMap = buildValueMap('exp_odvetvove');
-    const enrichedTree = assignValues(tree, valueMap);
-    if (!enrichedTree) return;
-    
-    renderIcicleChart(expenditureChartRef, expenditureContainerRef, enrichedTree, 'expenditure', setExpenditureHoverButton);
-  }, [loading, budgetRows, classifications, buildTree, buildValueMap, assignValues, renderIcicleChart]);
+    renderIcicleChart(expenditureChartRef, expenditureContainerRef, expenditureTree, 'expenditure', setExpenditureHoverButton, expenditureRoot, setExpenditureRoot);
+  }, [expenditureTree, expenditureRoot, renderIcicleChart]);
 
   // Calculate progress percentage
   const progressPercent = useMemo(() => {
@@ -546,7 +617,18 @@ export function DeficitGame() {
               {adjustments.map(adjustment => {
                 const { min, max } = calculateMaxAdjustment(adjustment.type, adjustment.originalValue);
                 const billionsChange = adjustment.adjustmentAmount / 1_000_000_000;
+                const baseBillions = adjustment.originalValue / 1_000_000_000;
                 const sign = adjustment.adjustmentAmount >= 0 ? '+' : '';
+                
+                // Color logic:
+                // Revenue: + is good (green), - is bad (red)
+                // Expenditure: + is bad (red), - is good (green)
+                const isGoodChange = adjustment.type === 'revenue' 
+                  ? adjustment.adjustmentAmount > 0  // Revenue: increase is good
+                  : adjustment.adjustmentAmount < 0; // Expenditure: decrease is good
+                const isBadChange = adjustment.type === 'revenue'
+                  ? adjustment.adjustmentAmount < 0  // Revenue: decrease is bad
+                  : adjustment.adjustmentAmount > 0; // Expenditure: increase is bad
                 
                 return (
                   <div 
@@ -555,32 +637,39 @@ export function DeficitGame() {
                       adjustment.type === 'revenue' ? styles.adjustmentRevenue : styles.adjustmentExpenditure
                     }`}
                   >
-                    <span className={styles.adjustmentName} title={adjustment.name}>
-                      {adjustment.type === 'revenue' ? '📈' : '📉'} {adjustment.name}
-                    </span>
-                    <input
-                      type="range"
-                      className={styles.adjustmentSlider}
-                      min={min}
-                      max={max}
-                      step={1_000_000_000}
-                      value={adjustment.adjustmentAmount}
-                      onChange={(e) => handleAdjustmentChange(adjustment.id, Number(e.target.value))}
-                    />
-                    <span className={`${styles.adjustmentValue} ${
-                      adjustment.adjustmentAmount > 0 ? styles.adjustmentValuePositive :
-                      adjustment.adjustmentAmount < 0 ? styles.adjustmentValueNegative :
-                      styles.adjustmentValueZero
-                    }`}>
-                      {sign}{billionsChange.toFixed(0)} mld.
-                    </span>
-                    <button 
-                      className={styles.removeButton}
-                      onClick={() => handleRemoveAdjustment(adjustment.id)}
-                      title="Odebrat"
-                    >
-                      ×
-                    </button>
+                    <div className={styles.adjustmentHeader}>
+                      <span className={styles.adjustmentName} title={adjustment.name}>
+                        {adjustment.type === 'revenue' ? '📈' : '📉'} {adjustment.name}
+                      </span>
+                      <span className={styles.adjustmentBase}>
+                        Základ: {baseBillions.toFixed(1)} mld.
+                      </span>
+                    </div>
+                    <div className={styles.adjustmentControls}>
+                      <input
+                        type="range"
+                        className={styles.adjustmentSlider}
+                        min={min}
+                        max={max}
+                        step={1_000_000_000}
+                        value={adjustment.adjustmentAmount}
+                        onChange={(e) => handleAdjustmentChange(adjustment.id, Number(e.target.value))}
+                      />
+                      <span className={`${styles.adjustmentValue} ${
+                        isGoodChange ? styles.adjustmentValueGood :
+                        isBadChange ? styles.adjustmentValueBad :
+                        styles.adjustmentValueZero
+                      }`}>
+                        {sign}{billionsChange.toFixed(0)} mld.
+                      </span>
+                      <button 
+                        className={styles.removeButton}
+                        onClick={() => handleRemoveAdjustment(adjustment.id)}
+                        title="Odebrat"
+                      >
+                        ×
+                      </button>
+                    </div>
                   </div>
                 );
               })}

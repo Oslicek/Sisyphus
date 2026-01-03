@@ -260,17 +260,17 @@
 
 .gameButton {
   display: inline-block;
-  font-family: 'Crimson Pro', Georgia, serif;
-  font-size: 1.25rem;
-  font-style: italic;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: var(--color-accent, #c41e3a);
   text-decoration: none;
   padding: 1rem 2rem;
-  border: 3px solid var(--color-accent, #c41e3a);
-  border-radius: 12px;
+  border: 2px solid var(--color-accent, #c41e3a);
+  border-radius: 8px;
   background: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
   text-align: center;
 }
 
