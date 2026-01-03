@@ -222,6 +222,35 @@ export function DeficitGame() {
         return null;
       }
       
+      // Check if this node has additional direct value beyond its children
+      // This happens when some chapters have data at parent level without child breakdown
+      const directValue = valueMap.get(node.id);
+      if (directValue && directValue > 0) {
+        // Calculate sum of children values
+        const childrenSum = validChildren.reduce((sum, child) => {
+          if (child.value) return sum + child.value;
+          // For non-leaf children, we need to sum their descendants
+          const sumDescendants = (n: TreeNode): number => {
+            if (n.value) return n.value;
+            if (n.children) return n.children.reduce((s, c) => s + sumDescendants(c), 0);
+            return 0;
+          };
+          return sum + sumDescendants(child);
+        }, 0);
+        
+        // If direct value exceeds children sum, add "ostatní" node
+        const remainder = directValue - childrenSum;
+        if (remainder > 1000000) { // Only if significant (> 1 mil CZK)
+          const otherNode: TreeNode = {
+            id: `${node.id}_other`,
+            name: `Ostatní (${node.name})`,
+            value: remainder,
+            children: undefined
+          };
+          return { ...node, children: [...validChildren, otherNode] };
+        }
+      }
+      
       return { ...node, children: validChildren };
     }
 

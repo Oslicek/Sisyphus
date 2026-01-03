@@ -312,31 +312,60 @@ export function BudgetTreemap() {
   }, [currentClassification, valueMap, activeView, getName]);
 
   // Assign values to leaf nodes only
-  const assignValues = useCallback((node: TreeNode): TreeNode | null => {
-    const hasChildren = node.children && node.children.length > 0;
-    
-    if (!hasChildren) {
-      // Leaf node - get value from data
-      const value = valueMap.get(node.id);
-      if (!value || value === 0) return null;
-      return { ...node, value, children: undefined };
-    }
-    
-    // Non-leaf: process children
-    const validChildren = node.children!
-      .map(child => assignValues(child))
-      .filter((child): child is TreeNode => child !== null);
-    
-    if (validChildren.length === 0) {
-      // No children with values - check if this node has direct value
+  const assignValues = useCallback((tree: TreeNode): TreeNode | null => {
+    function assignRecursive(node: TreeNode): TreeNode | null {
+      const hasChildren = node.children && node.children.length > 0;
+      
+      if (!hasChildren) {
+        // Leaf node - get value from data
+        const value = valueMap.get(node.id);
+        if (!value || value === 0) return null;
+        return { ...node, value, children: undefined };
+      }
+      
+      // Non-leaf: process children
+      const validChildren = node.children!
+        .map(child => assignRecursive(child))
+        .filter((child): child is TreeNode => child !== null);
+      
+      if (validChildren.length === 0) {
+        // No children with values - check if this node has direct value
+        const directValue = valueMap.get(node.id);
+        if (directValue && directValue > 0) {
+          return { ...node, value: directValue, children: undefined };
+        }
+        return null;
+      }
+      
+      // Check if this node has additional direct value beyond its children
+      // This happens when some chapters have data at parent level without child breakdown
       const directValue = valueMap.get(node.id);
       if (directValue && directValue > 0) {
-        return { ...node, value: directValue, children: undefined };
+        // Calculate sum of children values
+        const sumDescendants = (n: TreeNode): number => {
+          if (n.value) return n.value;
+          if (n.children) return n.children.reduce((s, c) => s + sumDescendants(c), 0);
+          return 0;
+        };
+        const childrenSum = validChildren.reduce((sum, child) => sum + sumDescendants(child), 0);
+        
+        // If direct value exceeds children sum, add "ostatní" node
+        const remainder = directValue - childrenSum;
+        if (remainder > 1000000) { // Only if significant (> 1 mil CZK)
+          const otherNode: TreeNode = {
+            id: `${node.id}_other`,
+            name: `Ostatní (${node.name})`,
+            value: remainder,
+            children: undefined
+          };
+          return { ...node, children: [...validChildren, otherNode] };
+        }
       }
-      return null;
+      
+      return { ...node, children: validChildren };
     }
     
-    return { ...node, children: validChildren };
+    return assignRecursive(tree);
   }, [valueMap]);
 
   // Get color for a node
