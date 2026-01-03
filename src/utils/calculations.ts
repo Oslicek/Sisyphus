@@ -71,8 +71,9 @@ interface AnchorEntry {
   anchorDate: string;
   plannedEoyDebt?: number;
   plannedDeficit?: number;
+  dailyIncrement?: number;
   eoyDate: string;
-  calculationType: 'eoy-target' | 'deficit-based';
+  calculationType: 'eoy-target' | 'deficit-based' | 'daily-increment';
 }
 
 /**
@@ -105,7 +106,7 @@ export function selectActiveAnchor(
 
 /**
  * Calculate growth rate per second for a given anchor entry
- * Supports both EOY target and deficit-based calculation types
+ * Supports EOY target, deficit-based, and daily-increment calculation types
  * @param anchor - The anchor entry
  * @returns Growth rate per second in CZK
  */
@@ -120,6 +121,10 @@ export function calculateGrowthRateForAnchor(anchor: AnchorEntry): number {
     // Calculate rate from deficit spread across the year
     const secondsInPeriod = (eoyDate.getTime() - anchorDate.getTime()) / 1000;
     return anchor.plannedDeficit / secondsInPeriod;
+  } else if (anchor.calculationType === 'daily-increment' && anchor.dailyIncrement !== undefined) {
+    // Calculate rate from fixed daily increment (for budget provisorium)
+    const secondsPerDay = 24 * 60 * 60;
+    return anchor.dailyIncrement / secondsPerDay;
   }
   
   // Fallback: return 0 if no valid calculation type

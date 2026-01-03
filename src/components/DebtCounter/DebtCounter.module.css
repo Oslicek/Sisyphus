@@ -28,6 +28,12 @@
   margin: 0.25rem 0 0 0;
 }
 
+.provisorium {
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
 .debtDisplay {
   display: flex;
   align-items: baseline;

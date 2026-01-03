@@ -15,8 +15,10 @@ export interface DebtAnchorEntry {
   plannedDeficit?: number;
   /** End of year date in ISO 8601 format (YYYY-MM-DD) - typically Jan 1 of next year */
   eoyDate: string;
-  /** Calculation type: 'eoy-target' interpolates to EOY debt, 'deficit-based' uses yearly deficit */
-  calculationType: 'eoy-target' | 'deficit-based';
+  /** Daily increment for provisorium mode in CZK */
+  dailyIncrement?: number;
+  /** Calculation type: 'eoy-target' interpolates to EOY debt, 'deficit-based' uses yearly deficit, 'daily-increment' uses fixed daily amount */
+  calculationType: 'eoy-target' | 'deficit-based' | 'daily-increment';
   /** Data source name */
   source?: string;
   /** Source URL */

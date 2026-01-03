@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-03 (v4)
+> **Last Updated:** 2026-01-03 (v5)
 
 ## Overview
 
@@ -288,13 +288,14 @@ sisyphus/
 ### Debt Anchor (debt-anchor.json) - Multi-Anchor System
 ```typescript
 interface DebtAnchorEntry {
-  id: string;                   // Year identifier ("2025", "2026")
+  id: string;                   // Year identifier ("2025", "2026-provisorium")
   baseAmount: number;           // Debt at anchor date in CZK
   anchorDate: string;           // ISO 8601 date (YYYY-MM-DD)
   plannedEoyDebt?: number;      // For 'eoy-target' type
   plannedDeficit?: number;      // For 'deficit-based' type
+  dailyIncrement?: number;      // For 'daily-increment' type (budget provisorium)
   eoyDate: string;              // End of year (typically Jan 1 next year)
-  calculationType: 'eoy-target' | 'deficit-based';
+  calculationType: 'eoy-target' | 'deficit-based' | 'daily-increment';
   source?: string;
   sourceUrl?: string;
 }
@@ -309,6 +310,7 @@ interface DebtAnchorData {
 **Calculation Types:**
 - `eoy-target`: Growth rate = (plannedEoyDebt - baseAmount) / seconds to EOY
 - `deficit-based`: Growth rate = plannedDeficit / seconds in year
+- `daily-increment`: Growth rate = dailyIncrement / 86400 (for budget provisorium)
 
 **Anchor Switching:**
 - Counter automatically selects the active anchor based on current date
@@ -383,7 +385,7 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 205 tests across 9 test files
+- 223 tests across 9 test files
 - All utility functions fully covered
 - Integration tests for chart computation chains (deficit-inflation-adjusted, deficit-gdp-percent, population modes, metric units)
 - Multi-anchor debt counter tests (anchor selection, growth rate calculation, boundary transitions)
@@ -418,7 +420,8 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] About page (O projektu Sisyfos) with centered logo and contact section
 - [x] Data Sources page with data series tables, bar/line charts, grid lines, axes
 - [x] TDD: 205 tests, 100% coverage
-- [x] Multi-anchor debt counter with auto-switching (2025→2026)
+- [x] Multi-anchor debt counter with auto-switching (2025→2026-provisorium)
+- [x] Budget provisorium mode with daily-increment calculation (700M CZK/day)
 - [x] Project logo with tagline (responsive sizing)
 - [x] Logo links to About page
 - [x] Collapsible governments and events sections (collapsed by default)
@@ -467,8 +470,10 @@ All files           |     100 |      100 |     100 |     100 |
 - Babiš government budget for 2026 is pending - currently shows info modal
 - Multi-anchor debt counter:
   - 2025: EOY-target mode (interpolates to 3613.6B on Jan 1, 2026)
-  - 2026: Deficit-based mode (adds 286B Fiala government budget deficit over the year)
+  - 2026-provisorium: Daily-increment mode (700M CZK/day = 8102 CZK/second) - currently active
+  - 2026-fiala: Deficit-based mode (adds 286B Fiala government budget deficit over the year) - for when budget is approved
   - Auto-switches at 2026-01-01 00:00:00 UTC
+- Budget provisorium mode displays "ROZPOČTOVÉ PROVIZORIUM" in the counter subtitle
 
 ## Contact
 

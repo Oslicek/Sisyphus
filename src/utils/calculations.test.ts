@@ -270,6 +270,39 @@ describe('calculateGrowthRateForAnchor', () => {
     const result = calculateGrowthRateForAnchor(anchor);
     expect(result).toBe(0);
   });
+
+  it('should calculate growth rate from daily increment for provisorium anchor', () => {
+    // Budget provisorium: 700 million CZK per day
+    const anchor = {
+      id: '2026-provisorium',
+      baseAmount: 3_613_600_000_000,
+      anchorDate: '2026-01-01',
+      dailyIncrement: 700_000_000,
+      eoyDate: '2027-01-01',
+      calculationType: 'daily-increment' as const,
+    };
+    
+    const result = calculateGrowthRateForAnchor(anchor);
+    
+    // 700,000,000 / 86,400 = 8101.85... CZK/second
+    const expectedRate = 700_000_000 / (24 * 60 * 60);
+    expect(result).toBeCloseTo(expectedRate, 2);
+    expect(result).toBeCloseTo(8101.85, 2);
+  });
+
+  it('should return 0 for daily-increment type with missing dailyIncrement', () => {
+    const anchor = {
+      id: 'invalid',
+      baseAmount: 1_000_000_000_000,
+      anchorDate: '2025-01-01',
+      eoyDate: '2026-01-01',
+      // Missing dailyIncrement
+      calculationType: 'daily-increment' as const,
+    };
+    
+    const result = calculateGrowthRateForAnchor(anchor);
+    expect(result).toBe(0);
+  });
 });
 
 describe('multi-anchor debt counter integration', () => {
@@ -351,6 +384,64 @@ describe('multi-anchor debt counter integration', () => {
     expect(Math.abs(debtAt - debtBefore)).toBeLessThan(growthRate2025 + growthRate2026);
     // 2026 anchor starts exactly at planned EOY debt
     expect(debtAt).toBe(3_613_600_000_000);
+  });
+});
+
+describe('budget provisorium (daily-increment)', () => {
+  it('should calculate correct debt after one day of provisorium', () => {
+    const anchor = {
+      id: '2026-provisorium',
+      baseAmount: 3_613_600_000_000,
+      anchorDate: '2026-01-01',
+      dailyIncrement: 700_000_000,
+      eoyDate: '2027-01-01',
+      calculationType: 'daily-increment' as const,
+    };
+    
+    const anchorDate = new Date('2026-01-01T00:00:00Z');
+    const afterOneDay = new Date('2026-01-02T00:00:00Z');
+    const growthRate = calculateGrowthRateForAnchor(anchor);
+    const secondsElapsed = calculateSecondsSinceAnchor(anchorDate, afterOneDay);
+    const debt = calculateCurrentDebt(anchor.baseAmount, growthRate, secondsElapsed);
+    
+    // After 1 day, debt should increase by 700 million
+    expect(debt).toBeCloseTo(3_613_600_000_000 + 700_000_000, -3);
+  });
+
+  it('should calculate correct debt after 30 days of provisorium', () => {
+    const anchor = {
+      id: '2026-provisorium',
+      baseAmount: 3_613_600_000_000,
+      anchorDate: '2026-01-01',
+      dailyIncrement: 700_000_000,
+      eoyDate: '2027-01-01',
+      calculationType: 'daily-increment' as const,
+    };
+    
+    const anchorDate = new Date('2026-01-01T00:00:00Z');
+    const after30Days = new Date('2026-01-31T00:00:00Z');
+    const growthRate = calculateGrowthRateForAnchor(anchor);
+    const secondsElapsed = calculateSecondsSinceAnchor(anchorDate, after30Days);
+    const debt = calculateCurrentDebt(anchor.baseAmount, growthRate, secondsElapsed);
+    
+    // After 30 days, debt should increase by 30 * 700 million = 21 billion
+    expect(debt).toBeCloseTo(3_613_600_000_000 + 21_000_000_000, -6);
+  });
+
+  it('should report correct per-second growth rate of ~8102 CZK', () => {
+    const anchor = {
+      id: '2026-provisorium',
+      baseAmount: 3_613_600_000_000,
+      anchorDate: '2026-01-01',
+      dailyIncrement: 700_000_000,
+      eoyDate: '2027-01-01',
+      calculationType: 'daily-increment' as const,
+    };
+    
+    const growthRate = calculateGrowthRateForAnchor(anchor);
+    
+    // Should be approximately 8102 CZK per second
+    expect(Math.round(growthRate)).toBe(8102);
   });
 });
 

@@ -3,7 +3,10 @@ import { formatCzechCurrency } from '../../utils/formatters';
 import styles from './DebtCounter.module.css';
 
 export function DebtCounter() {
-  const { currentDebt, growthPerSecond, isLoading, error } = useDebtCounter();
+  const { currentDebt, growthPerSecond, activeAnchorId, isLoading, error } = useDebtCounter();
+  
+  // Determine if we're in budget provisorium mode
+  const isProvisorium = activeAnchorId.includes('provisorium');
 
   if (isLoading) {
     return (
@@ -25,7 +28,10 @@ export function DebtCounter() {
     <section className={styles.container}>
       <header className={styles.header}>
         <h1 className={styles.title}>Státní dluh České republiky</h1>
-        <p className={styles.subtitle}>Počítadlo státního dluhu v reálném čase</p>
+        <p className={styles.subtitle}>
+          Počítadlo státního dluhu v reálném čase
+          {isProvisorium && <span className={styles.provisorium}> – ROZPOČTOVÉ PROVIZORIUM</span>}
+        </p>
       </header>
 
       <div className={styles.debtDisplay}>
