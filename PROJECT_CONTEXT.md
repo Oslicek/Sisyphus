@@ -237,13 +237,13 @@ sisyphus/
 │       ├── governments.json    # Government timeline + party colors
 │       ├── budget-plans.json   # 2026 budget predictions
 │       ├── budget/             # Státní rozpočet 2026 (Fiala)
-│       │   ├── dim_chapter.csv
-│       │   ├── dim_classification.csv
-│       │   ├── fact_revenues_by_chapter.csv
-│       │   ├── fact_expenditures_by_chapter.csv
-│       │   ├── tree_rev_druhove.json
-│       │   ├── tree_exp_druhove.json
-│       │   └── tree_exp_odvetvove.json
+│       │   ├── dim_chapter.csv           # Chapter definitions (for tables)
+│       │   ├── dim_classification.csv    # Classification codes and names (for tables)
+│       │   ├── fact_revenues_by_chapter.csv    # Revenues by chapter (for tables)
+│       │   ├── fact_expenditures_by_chapter.csv # Expenditures by chapter (for tables)
+│       │   ├── prijmy_druhove_2026.csv         # Aggregated revenues (for treemaps/game)
+│       │   ├── vydaje_druhove_2026.csv         # Aggregated expenditures by type (for treemaps)
+│       │   └── vydaje_odvetvove_2026.csv       # Aggregated expenditures by sector (for treemaps/game)
 │       ├── economic-data.json  # Inflation rates + GDP 1993-2024
 │       ├── demographic-data.json # Population data 1993-2024
 │       ├── wage-data.json      # Average/minimum wages 1993-2024
@@ -385,7 +385,7 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 223 tests across 9 test files
+- 212 tests across 9 test files
 - All utility functions fully covered
 - Integration tests for chart computation chains (deficit-inflation-adjusted, deficit-gdp-percent, population modes, metric units)
 - Multi-anchor debt counter tests (anchor selection, growth rate calculation, boundary transitions)

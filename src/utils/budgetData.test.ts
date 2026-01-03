@@ -4,16 +4,17 @@ import { join } from 'path';
 import { 
   parseCSV, 
   parseChaptersCSV,
-  parseClassificationCSV,
+  parseBudgetItemsCSV,
+  buildValueMapFromItems,
+  buildNameMapFromItems,
+  buildTreeFromItems,
   calculateTotalRevenues, 
   calculateTotalExpenditures,
   getRevenuesByChapter,
   getExpendituresByChapter,
-  formatCurrency,
-  enrichTreeWithValues,
-  buildEffectiveLeafValueMap
+  formatCurrency
 } from './budgetData';
-import type { BudgetRow, TreeNode } from './budgetData';
+import type { BudgetRow, BudgetItem } from './budgetData';
 
 // Expected totals from P01 (official budget document)
 const EXPECTED_TOTAL_REVENUES = 2_122_672_638_307;
@@ -109,29 +110,91 @@ describe('parseChaptersCSV', () => {
   });
 });
 
-describe('parseClassificationCSV', () => {
-  it('should parse classification CSV', () => {
-    const csv = 'kind,system,code,name,parent_code,level,is_leaf,is_total\nrev,rev_druhove,1,Daňové příjmy,0,1,False,False';
-    const classifications = parseClassificationCSV(csv);
+describe('parseBudgetItemsCSV', () => {
+  it('should parse simple budget items CSV', () => {
+    const csv = 'id,name,sum\n1,Daňové příjmy,1000000000\n11,Daň z příjmů,500000000';
+    const items = parseBudgetItemsCSV(csv);
     
-    expect(classifications).toHaveLength(1);
-    expect(classifications[0].kind).toBe('rev');
-    expect(classifications[0].code).toBe('1');
-    expect(classifications[0].name).toBe('Daňové příjmy');
-    expect(classifications[0].level).toBe(1);
-    expect(classifications[0].is_leaf).toBe(false);
-    expect(classifications[0].is_total).toBe(false);
+    expect(items).toHaveLength(2);
+    expect(items[0].id).toBe('1');
+    expect(items[0].name).toBe('Daňové příjmy');
+    expect(items[0].sum).toBe(1000000000);
+    expect(items[1].id).toBe('11');
+    expect(items[1].sum).toBe(500000000);
   });
 
-  it('should parse is_leaf and is_total flags correctly', () => {
-    const csv = 'kind,system,code,name,parent_code,level,is_leaf,is_total\nrev,rev_druhove,11,Daň z příjmů,1,2,True,False\nrev,rev_druhove,0,Celkem,,-1,False,True';
-    const classifications = parseClassificationCSV(csv);
+  it('should handle quoted names with commas', () => {
+    const csv = 'id,name,sum\n333,"Ministerstvo školství, mládeže",5000000';
+    const items = parseBudgetItemsCSV(csv);
     
-    expect(classifications).toHaveLength(2);
-    expect(classifications[0].is_leaf).toBe(true);
-    expect(classifications[0].is_total).toBe(false);
-    expect(classifications[1].is_leaf).toBe(false);
-    expect(classifications[1].is_total).toBe(true);
+    expect(items).toHaveLength(1);
+    expect(items[0].name).toBe('Ministerstvo školství, mládeže');
+  });
+});
+
+describe('buildValueMapFromItems', () => {
+  it('should build value map from items', () => {
+    const items: BudgetItem[] = [
+      { id: '1', name: 'A', sum: 1000 },
+      { id: '2', name: 'B', sum: 2000 },
+      { id: '3', name: 'C', sum: 0 } // should be excluded
+    ];
+    
+    const map = buildValueMapFromItems(items);
+    
+    expect(map.size).toBe(2);
+    expect(map.get('1')).toBe(1000);
+    expect(map.get('2')).toBe(2000);
+    expect(map.has('3')).toBe(false);
+  });
+});
+
+describe('buildNameMapFromItems', () => {
+  it('should build name map from items', () => {
+    const items: BudgetItem[] = [
+      { id: '1', name: 'Daňové příjmy', sum: 1000 },
+      { id: '2', name: 'Nedaňové příjmy', sum: 2000 }
+    ];
+    
+    const map = buildNameMapFromItems(items);
+    
+    expect(map.size).toBe(2);
+    expect(map.get('1')).toBe('Daňové příjmy');
+    expect(map.get('2')).toBe('Nedaňové příjmy');
+  });
+});
+
+describe('buildTreeFromItems', () => {
+  it('should build tree from simple items', () => {
+    const items: BudgetItem[] = [
+      { id: '0', name: 'Celkem', sum: 3000 },
+      { id: '1', name: 'Parent', sum: 3000 },
+      { id: '11', name: 'Child 1', sum: 1000 },
+      { id: '12', name: 'Child 2', sum: 2000 }
+    ];
+    
+    const tree = buildTreeFromItems(items);
+    
+    expect(tree).not.toBeNull();
+    expect(tree.code).toBe('0');
+    expect(tree.name).toBe('Celkem');
+    expect(tree.value).toBe(3000);
+    expect(tree.children).toHaveLength(1);
+    expect(tree.children![0].code).toBe('1');
+    expect(tree.children![0].children).toHaveLength(2);
+  });
+
+  it('should filter out zero-value items', () => {
+    const items: BudgetItem[] = [
+      { id: '0', name: 'Celkem', sum: 1000 },
+      { id: '1', name: 'Has value', sum: 1000 },
+      { id: '2', name: 'No value', sum: 0 }
+    ];
+    
+    const tree = buildTreeFromItems(items);
+    
+    expect(tree.children).toHaveLength(1);
+    expect(tree.children![0].code).toBe('1');
   });
 });
 
@@ -234,297 +297,34 @@ describe('formatCurrency', () => {
   });
 });
 
-describe('enrichTreeWithValues', () => {
-  it('should enrich leaf nodes with values', () => {
-    const tree: TreeNode = {
-      code: '1',
-      name: 'Root',
-      children: [
-        { code: '11', name: 'Child 1' },
-        { code: '12', name: 'Child 2' }
-      ]
-    };
+describe('New aggregated data files validation', () => {
+  it('should have revenue total matching expected value', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/prijmy_druhove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
     
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '11', amount_czk: 1000 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '302', chapter_name: 'B', class_code: '12', amount_czk: 2000 },
-    ];
-    
-    const result = enrichTreeWithValues(tree, rows, 'rev_druhove');
-    
-    expect(result.children).toBeDefined();
-    expect(result.children).toHaveLength(2);
-    expect(result.children![0].value).toBe(1000);
-    expect(result.children![1].value).toBe(2000);
+    const totalItem = items.find(i => i.id === '0');
+    expect(totalItem).toBeDefined();
+    expect(totalItem!.sum).toBe(EXPECTED_TOTAL_REVENUES);
   });
 
-  it('should sum values from multiple rows for same code', () => {
-    const tree: TreeNode = { code: '11', name: 'Leaf' };
+  it('should have expenditure (druhové) total matching expected value', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/vydaje_druhove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
     
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '11', amount_czk: 1000 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '302', chapter_name: 'B', class_code: '11', amount_czk: 2000 },
-    ];
-    
-    const result = enrichTreeWithValues(tree, rows, 'rev_druhove');
-    
-    expect(result.value).toBe(3000);
+    const totalItem = items.find(i => i.id === '0');
+    expect(totalItem).toBeDefined();
+    expect(totalItem!.sum).toBe(EXPECTED_TOTAL_EXPENDITURES);
   });
 
-  it('should filter out children with no values', () => {
-    const tree: TreeNode = {
-      code: '1',
-      name: 'Root',
-      children: [
-        { code: '11', name: 'Has Value' },
-        { code: '12', name: 'No Value' }
-      ]
-    };
+  it('should have expenditure (odvětvové) total matching expected value', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/vydaje_odvetvove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
     
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '11', amount_czk: 1000 },
-    ];
-    
-    const result = enrichTreeWithValues(tree, rows, 'rev_druhove');
-    
-    expect(result.children).toBeDefined();
-    expect(result.children).toHaveLength(1);
-    expect(result.children![0].code).toBe('11');
-  });
-
-  it('should calculate parent value from children when no direct value', () => {
-    const tree: TreeNode = {
-      code: '1',
-      name: 'Parent',
-      children: [
-        { code: '11', name: 'Child 1' },
-        { code: '12', name: 'Child 2' }
-      ]
-    };
-    
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '11', amount_czk: 1000 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '302', chapter_name: 'B', class_code: '12', amount_czk: 2000 },
-    ];
-    
-    const result = enrichTreeWithValues(tree, rows, 'rev_druhove');
-    
-    expect(result.value).toBe(3000); // sum of children
-  });
-
-  it('should filter by year', () => {
-    const tree: TreeNode = { code: '11', name: 'Leaf' };
-    
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '11', amount_czk: 1000 },
-      { year: 2025, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '11', amount_czk: 5000 },
-    ];
-    
-    const result = enrichTreeWithValues(tree, rows, 'rev_druhove', 2026);
-    
-    expect(result.value).toBe(1000);
-  });
-});
-
-describe('buildEffectiveLeafValueMap', () => {
-  it('should aggregate values for simple leaf codes', () => {
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 1000 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '302', chapter_name: 'B', class_code: '111', amount_czk: 2000 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    expect(result.get('111')).toBe(3000);
-  });
-
-  it('should skip parent codes when children exist in same chapter', () => {
-    const rows: BudgetRow[] = [
-      // Chapter 301 has both 41 and 411 - only 411 should count
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '41', amount_czk: 5000 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '411', amount_czk: 5000 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    // 41 should be skipped because 411 exists in same chapter
-    expect(result.get('41')).toBeUndefined();
-    expect(result.get('411')).toBe(5000);
-  });
-
-  it('should include parent codes when children do NOT exist in same chapter', () => {
-    const rows: BudgetRow[] = [
-      // Chapter 301 has 411 with child 4118 (same value - no remainder)
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '411', amount_czk: 1000 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '4118', amount_czk: 1000 },
-      // Chapter 398 has only 411, no 4118
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '398', chapter_name: 'B', class_code: '411', amount_czk: 27000000000 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    // 411 should include value from chapter 398 (where it has no children)
-    expect(result.get('411')).toBe(27000000000);
-    // 4118 should include value from chapter 301
-    expect(result.get('4118')).toBe(1000);
-    // No _other code should be created for 301 since 411 = 4118 (no remainder)
-    expect(result.get('411_other')).toBeUndefined();
-  });
-
-  it('should create _other codes when parent value exceeds children sum', () => {
-    const rows: BudgetRow[] = [
-      // Chapter 315 has 411 = 1.18 mld but 4118 = 0.23 mld
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '315', chapter_name: 'A', class_code: '411', amount_czk: 1182560503 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '315', chapter_name: 'A', class_code: '4118', amount_czk: 232560503 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    // 4118 should have its direct value
-    expect(result.get('4118')).toBe(232560503);
-    // 411_other should have the remainder (1182560503 - 232560503 = 950000000)
-    expect(result.get('411_other')).toBe(950000000);
-    // 411 itself should NOT be in the map (it has children)
-    expect(result.get('411')).toBeUndefined();
-  });
-
-  it('should skip combined codes when all parts exist', () => {
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '31', amount_czk: 100 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '32', amount_czk: 200 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '31_32', amount_czk: 300 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    // 31_32 should be skipped because both 31 and 32 exist
-    expect(result.get('31_32')).toBeUndefined();
-    expect(result.get('31')).toBe(100);
-    expect(result.get('32')).toBe(200);
-  });
-
-  it('should include combined codes when NOT all parts exist', () => {
-    const rows: BudgetRow[] = [
-      // Only 122_123 exists, without separate 122 and 123
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '122_123', amount_czk: 500 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    expect(result.get('122_123')).toBe(500);
-  });
-
-  it('should exclude class_code 0 (totals)', () => {
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '0', amount_czk: 99999 },
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 1000 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    expect(result.get('0')).toBeUndefined();
-    expect(result.get('111')).toBe(1000);
-  });
-
-  it('should filter by year correctly', () => {
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 1000 },
-      { year: 2025, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 9999 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    expect(result.get('111')).toBe(1000);
-  });
-
-  it('should filter by system correctly', () => {
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 1000 },
-      { year: 2026, kind: 'exp', system: 'exp_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: 9999 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    expect(result.get('111')).toBe(1000);
-  });
-
-  it('should use absolute values for negative amounts', () => {
-    const rows: BudgetRow[] = [
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '111', amount_czk: -1000 },
-    ];
-    
-    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    
-    expect(result.get('111')).toBe(1000);
-  });
-});
-
-describe('buildEffectiveLeafValueMap consistency with totals', () => {
-  it('should produce revenue sum matching calculateTotalRevenues', () => {
-    // Load actual revenue data
-    const csvPath = join(__dirname, '../../public/data/budget/fact_revenues_by_chapter.csv');
-    const csvContent = readFileSync(csvPath, 'utf-8');
-    const rows = parseCSV(csvContent);
-    
-    // Calculate total using table method (class_code='0')
-    const expectedTotal = calculateTotalRevenues(rows, 2026);
-    
-    // Calculate total using chart method (buildEffectiveLeafValueMap)
-    const valueMap = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
-    const chartTotal = Array.from(valueMap.values()).reduce((sum, val) => sum + val, 0);
-    
-    // Log for debugging
-    console.log(`Revenues - Expected (tables): ${(expectedTotal / 1e9).toFixed(2)} mld`);
-    console.log(`Revenues - Chart total: ${(chartTotal / 1e9).toFixed(2)} mld`);
-    console.log(`Revenues - Difference: ${((expectedTotal - chartTotal) / 1e9).toFixed(2)} mld`);
-    
-    // They should match (allowing small rounding difference - within 1 million)
-    expect(chartTotal).toBeCloseTo(expectedTotal, -6);
-  });
-
-  it('should produce expenditure (odvětvové) sum matching calculateTotalExpenditures', () => {
-    // Load actual expenditure data
-    const csvPath = join(__dirname, '../../public/data/budget/fact_expenditures_by_chapter.csv');
-    const csvContent = readFileSync(csvPath, 'utf-8');
-    const rows = parseCSV(csvContent);
-    
-    // Calculate total using table method (class_code='0', exp_druhove)
-    const expectedTotal = calculateTotalExpenditures(rows, 2026);
-    
-    // Calculate total using chart method (buildEffectiveLeafValueMap) for exp_odvetvove
-    const valueMap = buildEffectiveLeafValueMap(rows, 'exp_odvetvove', 2026);
-    const chartTotal = Array.from(valueMap.values()).reduce((sum, val) => sum + val, 0);
-    
-    // Log for debugging
-    console.log(`Expenditures (odvětvové) - Expected (tables): ${(expectedTotal / 1e9).toFixed(2)} mld`);
-    console.log(`Expenditures (odvětvové) - Chart total: ${(chartTotal / 1e9).toFixed(2)} mld`);
-    console.log(`Expenditures (odvětvové) - Difference: ${((expectedTotal - chartTotal) / 1e9).toFixed(2)} mld`);
-    
-    // They should match (allowing small rounding difference - within 10 million)
-    // Note: Small difference (~7.6M) due to _other value calculation with 1M threshold
-    const difference = Math.abs(chartTotal - expectedTotal);
-    expect(difference).toBeLessThan(10_000_000); // within 10 million
-  });
-
-  it('should produce expenditure (druhové) sum matching calculateTotalExpenditures', () => {
-    // Load actual expenditure data
-    const csvPath = join(__dirname, '../../public/data/budget/fact_expenditures_by_chapter.csv');
-    const csvContent = readFileSync(csvPath, 'utf-8');
-    const rows = parseCSV(csvContent);
-    
-    // Calculate total using table method (class_code='0', exp_druhove)
-    const expectedTotal = calculateTotalExpenditures(rows, 2026);
-    
-    // Calculate total using chart method (buildEffectiveLeafValueMap) for exp_druhove
-    const valueMap = buildEffectiveLeafValueMap(rows, 'exp_druhove', 2026);
-    const chartTotal = Array.from(valueMap.values()).reduce((sum, val) => sum + val, 0);
-    
-    // Log for debugging
-    console.log(`Expenditures (druhové) - Expected (tables): ${(expectedTotal / 1e9).toFixed(2)} mld`);
-    console.log(`Expenditures (druhové) - Chart total: ${(chartTotal / 1e9).toFixed(2)} mld`);
-    console.log(`Expenditures (druhové) - Difference: ${((expectedTotal - chartTotal) / 1e9).toFixed(2)} mld`);
-    
-    // They should match (allowing small rounding difference - within 1 million)
-    expect(chartTotal).toBeCloseTo(expectedTotal, -6);
+    const totalItem = items.find(i => i.id === '0');
+    expect(totalItem).toBeDefined();
+    expect(totalItem!.sum).toBe(EXPECTED_TOTAL_EXPENDITURES);
   });
 });
