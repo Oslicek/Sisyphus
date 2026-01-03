@@ -48,7 +48,7 @@ interface GovernmentSpan {
 
 export function DebtChart() {
   const svgRef = useRef<SVGSVGElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 450 });
   const [tooltip, setTooltip] = useState<{
     visible: boolean;
@@ -74,21 +74,23 @@ export function DebtChart() {
     setMetricUnit('czk');
   };
 
-  // Handle responsive sizing
+  // Handle responsive sizing - triggered when containerElement changes
   useEffect(() => {
     function updateDimensions() {
-      if (containerRef.current) {
+      if (containerElement) {
         // Subtract 2px to prevent potential overflow from rounding
-        const width = Math.floor(containerRef.current.clientWidth) - 2;
+        const width = Math.floor(containerElement.clientWidth) - 2;
         const height = Math.min(450, Math.max(350, width * 0.45));
         setDimensions({ width: Math.max(300, width), height });
       }
     }
 
+    if (!containerElement) return;
+
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
+  }, [containerElement]);
 
   // Build chart data with predictions for 2025 and 2026
   // 2025 always uses Fiala's plan (approved budget), 2026 uses selected plan (toggle)
@@ -366,7 +368,7 @@ export function DebtChart() {
       .attr('fill', (d) => d.isPrediction ? (d.planColor || '#666') : '')
       .on('mouseenter', (event, d) => {
         const rect = event.target.getBoundingClientRect();
-        const containerRect = containerRef.current?.getBoundingClientRect();
+        const containerRect = containerElement?.getBoundingClientRect();
         if (containerRect) {
           setTooltip({
             visible: true,
@@ -734,7 +736,7 @@ export function DebtChart() {
   const titleSuffix = getMetricSuffix();
 
   return (
-    <section className={styles.container} ref={containerRef}>
+    <section className={styles.container} ref={setContainerElement}>
       <h2 className={styles.chartTitle}>{variantInfo.name}{titleSuffix} ({titleYears})</h2>
       
       {/* Graph variant selector */}

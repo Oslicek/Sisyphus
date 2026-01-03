@@ -79,7 +79,8 @@ export function BudgetTreemap() {
         const config = VIEW_CONFIG[activeView];
         const dataRes = await fetch(`/data/budget/${config.dataFile}`);
         const text = await dataRes.text();
-        setBudgetItems(parseBudgetItemsCSV(text));
+        const items = parseBudgetItemsCSV(text);
+        setBudgetItems(items);
         setLoading(false);
       } catch (error) {
         console.error('Failed to load data:', error);
