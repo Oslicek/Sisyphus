@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { TestBanner } from '../../components/TestBanner';
+import { Footer } from '../../components/Footer';
 import { 
   parseCSV, 
   parseChaptersCSV,
@@ -418,18 +418,7 @@ export function BudgetTables() {
         )}
       </main>
 
-      <footer className={styles.footer}>
-        <div className={styles.footerLinks}>
-          <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
-          <span className={styles.separator}>•</span>
-          <Link to="/rozpocet-vizualizace" className={styles.footerLink}>Vizualizace rozpočtu</Link>
-          <span className={styles.separator}>•</span>
-          <Link to="/zdroje-dat" className={styles.footerLink}>Datové řady</Link>
-          <span className={styles.separator}>•</span>
-          <Link to="/o-projektu" className={styles.footerLink}>O projektu</Link>
-        </div>
-        <TestBanner />
-      </footer>
+      <Footer />
     </div>
   );
 }

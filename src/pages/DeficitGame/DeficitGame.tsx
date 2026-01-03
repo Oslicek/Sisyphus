@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
-import { TestBanner } from '../../components/TestBanner';
+import { Footer } from '../../components/Footer';
 import { 
   parseCSV, 
   parseClassificationCSV,
@@ -734,16 +734,7 @@ export function DeficitGame() {
         </div>
       )}
 
-      <footer className={styles.footer}>
-        <div className={styles.footerLinks}>
-          <Link to="/" className={styles.footerLink}>Hlavní stránka</Link>
-          <span className={styles.separator}>•</span>
-          <Link to="/rozpocet" className={styles.footerLink}>Tabulky rozpočtu</Link>
-          <span className={styles.separator}>•</span>
-          <Link to="/rozpocet-vizualizace" className={styles.footerLink}>Vizualizace rozpočtu</Link>
-        </div>
-        <TestBanner />
-      </footer>
+      <Footer />
     </div>
   );
 }

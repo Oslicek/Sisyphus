@@ -160,9 +160,17 @@ sisyphus/
 │   │   │   ├── BuyCalculator.tsx
 │   │   │   ├── BuyCalculator.module.css
 │   │   │   └── index.ts
-│   │   └── Navigation/         # Hamburger menu navigation
-│   │       ├── Navigation.tsx
-│   │       ├── Navigation.module.css
+│   │   ├── Navigation/         # Hamburger menu navigation
+│   │   │   ├── Navigation.tsx
+│   │   │   ├── Navigation.module.css
+│   │   │   └── index.ts
+│   │   ├── Footer/             # Unified footer (links + test banner)
+│   │   │   ├── Footer.tsx
+│   │   │   ├── Footer.module.css
+│   │   │   └── index.ts
+│   │   └── TestBanner/         # Test mode banner
+│   │       ├── TestBanner.tsx
+│   │       ├── TestBanner.module.css
 │   │       └── index.ts
 │   ├── pages/
 │   │   ├── About/              # O projektu Sisyfos
@@ -257,6 +265,7 @@ sisyphus/
 | `ShareButtons` | src/components/ShareButtons/ | Social sharing + screenshot capture |
 | `BuyCalculator` | src/components/BuyCalculator/ | "What can I buy with my debt share" wizard |
 | `Navigation` | src/components/Navigation/ | Hamburger menu with tree navigation |
+| `Footer` | src/components/Footer/ | Unified footer with links and test banner |
 | `About` | src/pages/About/ | O projektu Sisyfos page |
 | `DataSources` | src/pages/DataSources/ | Datové řady a zdroje dat page |
 | `BudgetTables` | src/pages/BudgetTables/ | Tabulky rozpočtu 2026 (kapitoly, příjmy, výdaje) |
@@ -427,7 +436,10 @@ All files           |     100 |      100 |     100 |     100 |
   - Hra Rozpočtovka
   - Blog
   - O Projektu Sisyfos
-- [x] Test banner moved to footer on all pages
+- [x] Unified footer component on all pages:
+  - Basic links: Dluh | Rozpočet | Rozpočtovka | Blog | O projektu Sisyfos
+  - Active page shown as text (not link)
+  - Test banner as second line
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates

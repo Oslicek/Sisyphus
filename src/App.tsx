@@ -3,7 +3,7 @@ import { DebtCounter } from './components/DebtCounter';
 import { DebtChart } from './components/DebtChart';
 import { BuyCalculator } from './components/BuyCalculator';
 import { ShareButtons } from './components/ShareButtons';
-import { TestBanner } from './components/TestBanner';
+import { Footer } from './components/Footer';
 import { Navigation } from './components/Navigation';
 import { About } from './pages/About';
 import { Blog } from './pages/Blog';
@@ -38,35 +38,7 @@ function Home() {
 
       <ShareButtons />
 
-      <footer className={styles.footer}>
-        <nav className={styles.footerNav}>
-          <Link to="/rozpocet-vizualizace" className={styles.footerLink}>
-            Rozpočet 2026
-          </Link>
-          <span className={styles.footerSeparator}>•</span>
-          <Link to="/blog" className={styles.footerLink}>
-            Blog
-          </Link>
-          <span className={styles.footerSeparator}>•</span>
-          <Link to="/zdroje-dat" className={styles.footerLink}>
-            Datové řady a zdroje dat
-          </Link>
-          <span className={styles.footerSeparator}>•</span>
-          <Link to="/o-projektu" className={styles.footerLink}>
-            O projektu Sisyfos
-          </Link>
-          <span className={styles.footerSeparator}>•</span>
-          <a 
-            href="https://www.facebook.com/profile.php?id=61585770336155" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className={styles.footerLink}
-          >
-            Facebook
-          </a>
-        </nav>
-        <TestBanner />
-      </footer>
+      <Footer />
     </div>
   );
 }
