@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-03 (v5)
+> **Last Updated:** 2026-01-03 (v6)
 
 ## Overview
 
@@ -435,7 +435,10 @@ All files           |     100 |      100 |     100 |     100 |
   - Progress bar with real-time deficit tracking
   - Non-blocking success banner when deficit reaches zero or surplus
   - Image sharing (screenshot with logo, deficit indicator, and adjustments)
-  - Copy image to clipboard functionality
+  - Web Share API support on HTTPS (native share dialog on mobile)
+  - Fallback to image download on HTTP/non-secure contexts
+  - Graceful handling of missing Clipboard API
+  - Copy image to clipboard functionality (when available)
   - Social share buttons (Facebook, X, LinkedIn, WhatsApp, Telegram)
   - Open Graph meta tags for social media previews
   - Tooltips showing full item names and values
@@ -479,6 +482,11 @@ All files           |     100 |      100 |     100 |     100 |
   - Per-chapter CSV files (fact_revenues_by_chapter.csv, fact_expenditures_by_chapter.csv) for tables
   - `buildTreeFromItems()` ensures only leaf nodes have values; parent nodes calculated by D3's `.sum()`
   - Automatic "_other" nodes for parent values not fully broken down into children
+- Web Share API (Deficit Game):
+  - Requires secure context (HTTPS or localhost)
+  - On production (HTTPS): Shows native share dialog with image
+  - On development (HTTP): Falls back to image download
+  - Gracefully handles missing Clipboard API on older browsers/contexts
 
 ## Contact
 
