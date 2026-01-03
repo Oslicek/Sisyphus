@@ -59,6 +59,7 @@ export interface TreeNode {
 
 /**
  * Parse simple CSV format (id,name,sum) used by new aggregated files.
+ * Filters out combined codes (like "122 a 123") that duplicate data.
  */
 export function parseBudgetItemsCSV(text: string): BudgetItem[] {
   const lines = text.trim().split('\n');
@@ -85,6 +86,10 @@ export function parseBudgetItemsCSV(text: string): BudgetItem[] {
       name: values[1],
       sum: parseInt(values[2], 10) || 0
     };
+  }).filter(item => {
+    // Filter out combined codes like "122 a 123" or "31 a 32"
+    // These are duplicates - the individual codes already exist
+    return !item.id.includes(' a ');
   });
 }
 

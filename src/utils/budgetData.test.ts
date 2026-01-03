@@ -327,4 +327,73 @@ describe('New aggregated data files validation', () => {
     expect(totalItem).toBeDefined();
     expect(totalItem!.sum).toBe(EXPECTED_TOTAL_EXPENDITURES);
   });
+
+  it('should have sum of effective leaf revenues matching total', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/prijmy_druhove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
+    
+    // Get all items except total
+    const nonTotalItems = items.filter(i => i.id !== '0' && i.sum > 0);
+    
+    // Find effective leaves: items that have no children in the data
+    const effectiveLeaves = nonTotalItems.filter(item => {
+      const hasChild = nonTotalItems.some(other => 
+        other.id !== item.id && 
+        other.id.startsWith(item.id)
+      );
+      return !hasChild;
+    });
+    
+    const leafSum = effectiveLeaves.reduce((sum, item) => sum + item.sum, 0);
+    
+    // The sum of leaf values should match the total
+    expect(leafSum).toBe(EXPECTED_TOTAL_REVENUES);
+  });
+
+  it('should have sum of effective leaf expenditures (druhové) matching total', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/vydaje_druhove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
+    
+    // Get all items except total
+    const nonTotalItems = items.filter(i => i.id !== '0' && i.sum > 0);
+    
+    // Find effective leaves: items that have no children in the data
+    const effectiveLeaves = nonTotalItems.filter(item => {
+      const hasChild = nonTotalItems.some(other => 
+        other.id !== item.id && 
+        other.id.startsWith(item.id)
+      );
+      return !hasChild;
+    });
+    
+    const leafSum = effectiveLeaves.reduce((sum, item) => sum + item.sum, 0);
+    
+    // The sum of leaf values should match the total
+    expect(leafSum).toBe(EXPECTED_TOTAL_EXPENDITURES);
+  });
+
+  it('should have sum of effective leaf expenditures (odvětvové) matching total', () => {
+    const csvPath = join(__dirname, '../../public/data/budget/vydaje_odvetvove_2026.csv');
+    const text = readFileSync(csvPath, 'utf-8');
+    const items = parseBudgetItemsCSV(text);
+    
+    // Get all items except total
+    const nonTotalItems = items.filter(i => i.id !== '0' && i.sum > 0);
+    
+    // Find effective leaves: items that have no children in the data
+    const effectiveLeaves = nonTotalItems.filter(item => {
+      const hasChild = nonTotalItems.some(other => 
+        other.id !== item.id && 
+        other.id.startsWith(item.id)
+      );
+      return !hasChild;
+    });
+    
+    const leafSum = effectiveLeaves.reduce((sum, item) => sum + item.sum, 0);
+    
+    // The sum of leaf values should match the total
+    expect(leafSum).toBe(EXPECTED_TOTAL_EXPENDITURES);
+  });
 });
