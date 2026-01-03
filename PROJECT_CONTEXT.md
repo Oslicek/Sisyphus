@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-03 (v2)
+> **Last Updated:** 2026-01-03 (v3)
 
 ## Overview
 
@@ -21,7 +21,7 @@
 | Charts | D3.js |
 | Sharing | react-share, html2canvas |
 | Routing | react-router-dom |
-| Fonts | Bebas Neue, Crimson Pro, Source Sans 3, JetBrains Mono (OFL) |
+| Fonts | Bebas Neue, Crimson Pro, Source Sans 3, JetBrains Mono, Lilita One, Nunito (OFL) |
 | Hosting | Cloudflare Pages |
 | Data Storage | Static JSON files (public/data/) |
 | Testing | Vitest + @vitest/coverage-v8 |
@@ -271,7 +271,7 @@ sisyphus/
 | `DataSources` | src/pages/DataSources/ | Datové řady a zdroje dat page |
 | `BudgetTables` | src/pages/BudgetTables/ | Tabulky rozpočtu 2026 (kapitoly, příjmy, výdaje) |
 | `BudgetTreemap` | src/pages/BudgetTreemap/ | Vizualizace rozpočtu vlády Petra Fialy (zoomable icicle) |
-| `DeficitGame` | src/pages/DeficitGame/ | "Zruším schodek!" interactive game |
+| `DeficitGame` | src/pages/DeficitGame/ | "Zruším schodek!" interactive game (unique playful theme) |
 | `deficitGame.ts` | src/utils/ | Deficit game logic with progress calculation |
 | `budgetData.ts` | src/utils/ | Budget CSV/JSON parsing utilities |
 | `useDebtCounter` | src/hooks/ | Fetches anchor, computes & updates every second |

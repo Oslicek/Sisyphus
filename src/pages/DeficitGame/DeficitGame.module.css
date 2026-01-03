@@ -1,7 +1,20 @@
+/* ============================================
+   ROZPOČTOVKA - Playful Game Theme
+   Colors from logo: Teal, Navy, Orange, Green, Yellow
+   Fonts: Lilita One (headings), Nunito (body)
+   ============================================ */
+
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  /* Hravý gradient s tyrkysovými tóny */
+  background: linear-gradient(135deg, #E8F6F8 0%, #D1EEF2 50%, #C4E8ED 100%);
   padding: 1rem;
+  /* Jemný vzor pro hravost */
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(30, 138, 154, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.04) 0%, transparent 70%),
+    linear-gradient(135deg, #E8F6F8 0%, #D1EEF2 50%, #C4E8ED 100%);
 }
 
 .header {
@@ -10,15 +23,16 @@
 }
 
 .backLink {
-  color: #b91c1c;
+  color: #1E8A9A;
   text-decoration: none;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   font-size: 0.95rem;
+  font-weight: 700;
   transition: color 0.2s;
 }
 
 .backLink:hover {
-  color: #991b1b;
+  color: #167080;
   text-decoration: underline;
 }
 
@@ -37,32 +51,42 @@
 .logo {
   max-width: 200px;
   height: auto;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(13, 40, 71, 0.2));
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
 .title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
-  color: #1f2937;
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  color: #0D2847;
   margin: 0 0 0.5rem;
   text-align: center;
+  text-shadow: 3px 3px 0 #FACC15, 5px 5px 0 rgba(0,0,0,0.1);
+  letter-spacing: 0.02em;
 }
 
 .subtitle {
-  font-family: 'Crimson Pro', Georgia, serif;
-  font-size: 1.1rem;
-  color: #6b7280;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 1.2rem;
+  color: #1A3A5C;
   text-align: center;
   margin: 0 0 1.5rem;
-  font-style: italic;
+  font-weight: 600;
 }
 
-/* Progress Section */
+/* Progress Section - Hlavní ukazatel */
 .progressSection {
-  background: white;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #0D2847 0%, #1A3A5C 100%);
+  border-radius: 16px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(13, 40, 71, 0.3);
+  border: 3px solid #1E8A9A;
 }
 
 .progressHeader {
@@ -75,35 +99,37 @@
 }
 
 .progressLabel {
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   font-size: 1rem;
-  color: #374151;
+  font-weight: 700;
+  color: white;
 }
 
 .deficitValue {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.6rem;
+  font-weight: 700;
 }
 
 .deficitNegative {
-  color: #dc2626;
+  color: #FB923C;
 }
 
 .deficitZero {
-  color: #16a34a;
+  color: #4ADE80;
 }
 
 .deficitPositive {
-  color: #2563eb;
+  color: #FDE047;
 }
 
 .progressBar {
-  height: 24px;
-  background: #e5e7eb;
-  border-radius: 12px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
   overflow: hidden;
   position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .progressFill {
@@ -113,15 +139,15 @@
 }
 
 .progressFillNegative {
-  background: linear-gradient(90deg, #dc2626, #ef4444);
+  background: linear-gradient(90deg, #F97316, #FB923C);
 }
 
 .progressFillZero {
-  background: linear-gradient(90deg, #16a34a, #22c55e);
+  background: linear-gradient(90deg, #22C55E, #4ADE80);
 }
 
 .progressFillPositive {
-  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  background: linear-gradient(90deg, #1E8A9A, #2BA3B5);
 }
 
 .progressText {
@@ -129,11 +155,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: 'Source Sans 3', system-ui, sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
   color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 /* Success Banner (non-modal) */
@@ -143,63 +169,76 @@
   justify-content: center;
   gap: 1rem;
   padding: 1rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 16px;
   margin-bottom: 1.5rem;
-  animation: slideIn 0.3s ease;
+  animation: bounceIn 0.5s ease;
   flex-wrap: wrap;
+  position: relative;
 }
 
-@keyframes slideIn {
-  from {
+@keyframes bounceIn {
+  0% {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: scale(0.9) translateY(-20px);
   }
-  to {
+  50% {
+    transform: scale(1.02) translateY(0);
+  }
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
 }
 
 .successBannerZero {
-  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-  border: 2px solid #16a34a;
+  background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+  border: 3px solid #22C55E;
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
 }
 
 .successBannerPositive {
-  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-  border: 2px solid #2563eb;
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  border: 3px solid #FACC15;
+  box-shadow: 0 4px 20px rgba(250, 204, 21, 0.3);
 }
 
 .successBannerIcon {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 .successBannerText {
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   font-size: 1rem;
-  font-weight: 600;
-  color: #1f2937;
+  font-weight: 700;
+  color: #0D2847;
 }
 
 .successBannerShare {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  padding: 0.6rem 1.2rem;
+  font-family: 'Nunito', system-ui, sans-serif;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   background: white;
-  color: #374151;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  color: #0D2847;
+  border: 2px solid #0D2847;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  transition: all 0.2s;
 }
 
 .successBannerShare:hover {
-  background: #f9fafb;
-  transform: translateY(-1px);
+  background: #0D2847;
+  color: white;
+  transform: translateY(-2px);
 }
 
 /* Charts Section */
@@ -218,15 +257,23 @@
 
 .chartCard {
   background: white;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 20px rgba(13, 40, 71, 0.1);
+  border: 2px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.chartCard:hover {
+  border-color: #1E8A9A;
+  box-shadow: 0 8px 32px rgba(30, 138, 154, 0.2);
+  transform: translateY(-2px);
 }
 
 .chartTitle {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.3rem;
-  color: #1f2937;
+  font-family: 'Lilita One', cursive;
+  font-size: 1.5rem;
+  color: #0D2847;
   margin: 0 0 0.75rem;
   display: flex;
   align-items: center;
@@ -234,19 +281,19 @@
 }
 
 .chartTitleRevenue {
-  color: #16a34a;
+  color: #1E8A9A;
 }
 
 .chartTitleExpenditure {
-  color: #dc2626;
+  color: #F97316;
 }
 
 .chartContainer {
   position: relative;
   height: 400px;
   overflow: hidden;
-  border-radius: 8px;
-  background: #f9fafb;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f0f9fa 0%, #e8f4f5 100%);
 }
 
 .chartSvg {
@@ -257,14 +304,14 @@
 /* Hover button for selection */
 .selectButton {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: white;
-  border: 2px solid #3b82f6;
-  color: #3b82f6;
-  font-size: 16px;
-  font-weight: bold;
+  border: 3px solid #1E8A9A;
+  color: #1E8A9A;
+  font-size: 18px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -272,14 +319,14 @@
   opacity: 0;
   transition: opacity 0.2s, transform 0.2s, background 0.2s;
   z-index: 100;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 10px rgba(30, 138, 154, 0.4);
   pointer-events: none;
 }
 
 .selectButton:hover {
-  background: #3b82f6;
+  background: #1E8A9A;
   color: white;
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .selectButtonVisible {
@@ -288,23 +335,25 @@
 }
 
 .selectButtonSelected {
-  background: #3b82f6;
+  background: #22C55E;
+  border-color: #22C55E;
   color: white;
 }
 
 /* Adjustments Section */
 .adjustmentsSection {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(13, 40, 71, 0.1);
+  border: 2px solid #1E8A9A;
 }
 
 .adjustmentsTitle {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.3rem;
-  color: #1f2937;
+  font-family: 'Lilita One', cursive;
+  font-size: 1.4rem;
+  color: #0D2847;
   margin: 0 0 1rem;
 }
 
@@ -319,17 +368,18 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: #f9fafb;
-  border-radius: 8px;
-  border-left: 4px solid;
+  border-radius: 12px;
+  border-left: 5px solid;
 }
 
 .adjustmentRevenue {
-  border-left-color: #16a34a;
+  border-left-color: #1E8A9A;
+  background: linear-gradient(90deg, rgba(30, 138, 154, 0.1) 0%, rgba(30, 138, 154, 0.02) 100%);
 }
 
 .adjustmentExpenditure {
-  border-left-color: #dc2626;
+  border-left-color: #F97316;
+  background: linear-gradient(90deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.02) 100%);
 }
 
 .adjustmentHeader {
@@ -340,10 +390,10 @@
 }
 
 .adjustmentName {
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   font-size: 0.95rem;
-  font-weight: 500;
-  color: #374151;
+  font-weight: 600;
+  color: #0D2847;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -366,44 +416,45 @@
 .adjustmentSlider {
   width: 100%;
   min-width: 150px;
-  height: 8px;
+  height: 10px;
   -webkit-appearance: none;
   appearance: none;
-  background: #e5e7eb;
-  border-radius: 4px;
+  background: linear-gradient(90deg, #e0e7eb 0%, #d1dde2 100%);
+  border-radius: 5px;
   outline: none;
 }
 
 .adjustmentSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: linear-gradient(135deg, #1E8A9A, #167080);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 8px rgba(30, 138, 154, 0.5);
 }
 
 .adjustmentSlider::-webkit-slider-thumb:hover {
-  background: #2563eb;
+  transform: scale(1.1);
 }
 
 .adjustmentValue {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   min-width: 130px;
   text-align: right;
   white-space: nowrap;
 }
 
 .adjustmentValueGood {
-  color: #16a34a;
+  color: #22C55E;
 }
 
 .adjustmentValueBad {
-  color: #dc2626;
+  color: #F97316;
 }
 
 .adjustmentValueZero {
@@ -411,34 +462,37 @@
 }
 
 .removeButton {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: #fee2e2;
+  background: linear-gradient(135deg, #FED7AA, #FDBA74);
   border: none;
-  color: #dc2626;
+  color: #F97316;
   font-size: 18px;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .removeButton:hover {
-  background: #fecaca;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
 }
 
 .emptyState {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  color: #1A3A5C;
+  font-family: 'Nunito', system-ui, sans-serif;
 }
 
 .emptyStateIcon {
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin-bottom: 0.5rem;
+  animation: float 2s ease-in-out infinite;
 }
 
 /* Actions Section */
@@ -456,7 +510,7 @@
   flex-wrap: wrap;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 2px dashed #d1dde2;
 }
 
 .shareButton {
@@ -464,29 +518,33 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .shareButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
 }
 
 .shareButtonPrimary {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #1E8A9A, #167080);
   color: white;
+  box-shadow: 0 4px 15px rgba(30, 138, 154, 0.4);
+}
+
+.shareButtonPrimary:hover {
+  box-shadow: 0 6px 20px rgba(30, 138, 154, 0.5);
 }
 
 .shareButtonSecondary {
   background: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
+  color: #0D2847;
+  border: 2px solid #d1d5db;
 }
 
 .resetButton {
@@ -494,33 +552,35 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   font-size: 1rem;
-  font-weight: 600;
-  background: #fee2e2;
-  color: #dc2626;
+  font-weight: 700;
+  background: linear-gradient(135deg, #FED7AA, #FDBA74);
+  color: #F97316;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .resetButton:hover {
-  background: #fecaca;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3);
 }
-
 
 /* Instructions */
 .instructions {
-  font-family: 'Source Sans 3', system-ui, sans-serif;
-  font-size: 0.9rem;
-  color: #6b7280;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0D2847;
   text-align: center;
   margin-bottom: 1rem;
-  padding: 0.75rem;
-  background: #f0f9ff;
-  border-radius: 8px;
-  border: 1px solid #bae6fd;
+  padding: 1rem;
+  background: linear-gradient(135deg, #FEF9C3, #FEF08A);
+  border-radius: 12px;
+  border: 2px solid #FACC15;
+  box-shadow: 0 2px 10px rgba(250, 204, 21, 0.2);
 }
 
 .instructionIcon {
@@ -533,23 +593,24 @@
   margin: 2rem auto 0;
   padding: 1rem 0;
   text-align: center;
-  border-top: 1px solid #e5e7eb;
+  border-top: 2px dashed #1E8A9A;
 }
 
 .footerLink {
-  color: #6b7280;
+  color: #1A3A5C;
   text-decoration: none;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   font-size: 0.9rem;
+  font-weight: 600;
   transition: color 0.2s;
 }
 
 .footerLink:hover {
-  color: #b91c1c;
+  color: #1E8A9A;
 }
 
 .separator {
-  color: #d1d5db;
+  color: #1E8A9A;
   margin: 0 0.75rem;
 }
 
@@ -559,17 +620,18 @@
   align-items: center;
   justify-content: center;
   min-height: 50vh;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
-  color: #6b7280;
-  font-size: 1.1rem;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-weight: 600;
+  color: #1A3A5C;
+  font-size: 1.2rem;
 }
 
 /* Shareable Content (for screenshot) */
 .shareableContent {
   width: 600px;
   padding: 2rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  background: linear-gradient(135deg, #E8F6F8 0%, #D1EEF2 100%);
+  font-family: 'Nunito', system-ui, sans-serif;
   /* Always rendered but positioned off-screen */
   position: absolute;
   left: -9999px;
@@ -589,18 +651,19 @@
 }
 
 .shareableTitle {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2rem;
-  color: #1f2937;
+  font-family: 'Lilita One', cursive;
+  font-size: 2.2rem;
+  color: #0D2847;
   margin: 0;
+  text-shadow: 2px 2px 0 #FACC15;
 }
 
 .shareableProgress {
-  background: white;
+  background: linear-gradient(135deg, #0D2847 0%, #1A3A5C 100%);
   border-radius: 12px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid #1E8A9A;
 }
 
 .shareableProgressHeader {
@@ -609,26 +672,28 @@
   align-items: center;
   margin-bottom: 0.75rem;
   font-size: 0.95rem;
-  color: #374151;
+  font-weight: 700;
+  color: white;
 }
 
 .shareableDeficitValue {
   font-family: 'JetBrains Mono', monospace;
   font-size: 1.3rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .shareableProgressBar {
   height: 20px;
-  background: #e5e7eb;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   overflow: hidden;
   position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .shareableProgressFill {
   height: 100%;
-  border-radius: 10px;
+  border-radius: 9px;
 }
 
 .shareableProgressText {
@@ -637,9 +702,9 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .shareableAdjustments {
@@ -647,13 +712,13 @@
   border-radius: 12px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid #1E8A9A;
 }
 
 .shareableAdjustmentsTitle {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Lilita One', cursive;
   font-size: 1.2rem;
-  color: #1f2937;
+  color: #0D2847;
   margin: 0 0 1rem;
 }
 
@@ -668,16 +733,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0.75rem;
-  background: #f9fafb;
-  border-radius: 6px;
-  border-left: 3px solid;
+  border-radius: 8px;
+  border-left: 4px solid;
   gap: 0.5rem;
 }
 
 .shareableAdjustmentName {
   font-size: 0.85rem;
-  font-weight: 500;
-  color: #374151;
+  font-weight: 600;
+  color: #0D2847;
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
@@ -694,14 +758,15 @@
 .shareableAdjustmentValue {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
 }
 
 .shareableFooter {
   text-align: center;
-  font-size: 0.9rem;
-  color: #6b7280;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1E8A9A;
   padding-top: 0.5rem;
 }
 
@@ -712,5 +777,3 @@
   cursor: not-allowed;
   transform: none;
 }
-
-
