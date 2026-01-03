@@ -459,8 +459,9 @@ All files           |     100 |      100 |     100 |     100 |
 - [ ] Cloudflare Worker for data updates
 
 **Deployment:**
-- Production: https://sisyphus-9u4.pages.dev/
-- Deploy via Wrangler CLI: `npm run build && wrangler pages deploy dist --project-name sisyphus`
+- Production: https://sisyphus-prod.pages.dev/ (project: sisyphus-prod)
+- Staging: https://sisyphus-9u4.pages.dev/ (project: sisyphus)
+- Deploy to production: `npm run build && wrangler pages deploy dist --project-name sisyphus-prod`
 - Auto-deploy on push to main (Cloudflare Pages integration)
 
 ## Notes
