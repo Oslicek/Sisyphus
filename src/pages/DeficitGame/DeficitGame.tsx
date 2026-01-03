@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 import html2canvas from 'html2canvas';
 import {
@@ -673,10 +672,6 @@ export function DeficitGame() {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <Link to="/rozpocet" className={styles.backLink}>← Zpět na tabulky rozpočtu</Link>
-      </header>
-
       <main className={styles.main}>
         <div className={styles.logoContainer}>
           <img src={rozpoctovkaLogo} alt="Rozpočtovka" className={styles.logo} />
