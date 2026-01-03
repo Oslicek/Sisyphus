@@ -458,3 +458,73 @@ describe('buildEffectiveLeafValueMap', () => {
     expect(result.get('111')).toBe(1000);
   });
 });
+
+describe('buildEffectiveLeafValueMap consistency with totals', () => {
+  it('should produce revenue sum matching calculateTotalRevenues', () => {
+    // Load actual revenue data
+    const csvPath = join(__dirname, '../../public/data/budget/fact_revenues_by_chapter.csv');
+    const csvContent = readFileSync(csvPath, 'utf-8');
+    const rows = parseCSV(csvContent);
+    
+    // Calculate total using table method (class_code='0')
+    const expectedTotal = calculateTotalRevenues(rows, 2026);
+    
+    // Calculate total using chart method (buildEffectiveLeafValueMap)
+    const valueMap = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    const chartTotal = Array.from(valueMap.values()).reduce((sum, val) => sum + val, 0);
+    
+    // Log for debugging
+    console.log(`Revenues - Expected (tables): ${(expectedTotal / 1e9).toFixed(2)} mld`);
+    console.log(`Revenues - Chart total: ${(chartTotal / 1e9).toFixed(2)} mld`);
+    console.log(`Revenues - Difference: ${((expectedTotal - chartTotal) / 1e9).toFixed(2)} mld`);
+    
+    // They should match (allowing small rounding difference - within 1 million)
+    expect(chartTotal).toBeCloseTo(expectedTotal, -6);
+  });
+
+  it('should produce expenditure (odvětvové) sum matching calculateTotalExpenditures', () => {
+    // Load actual expenditure data
+    const csvPath = join(__dirname, '../../public/data/budget/fact_expenditures_by_chapter.csv');
+    const csvContent = readFileSync(csvPath, 'utf-8');
+    const rows = parseCSV(csvContent);
+    
+    // Calculate total using table method (class_code='0', exp_druhove)
+    const expectedTotal = calculateTotalExpenditures(rows, 2026);
+    
+    // Calculate total using chart method (buildEffectiveLeafValueMap) for exp_odvetvove
+    const valueMap = buildEffectiveLeafValueMap(rows, 'exp_odvetvove', 2026);
+    const chartTotal = Array.from(valueMap.values()).reduce((sum, val) => sum + val, 0);
+    
+    // Log for debugging
+    console.log(`Expenditures (odvětvové) - Expected (tables): ${(expectedTotal / 1e9).toFixed(2)} mld`);
+    console.log(`Expenditures (odvětvové) - Chart total: ${(chartTotal / 1e9).toFixed(2)} mld`);
+    console.log(`Expenditures (odvětvové) - Difference: ${((expectedTotal - chartTotal) / 1e9).toFixed(2)} mld`);
+    
+    // They should match (allowing small rounding difference - within 10 million)
+    // Note: Small difference (~7.6M) due to _other value calculation with 1M threshold
+    const difference = Math.abs(chartTotal - expectedTotal);
+    expect(difference).toBeLessThan(10_000_000); // within 10 million
+  });
+
+  it('should produce expenditure (druhové) sum matching calculateTotalExpenditures', () => {
+    // Load actual expenditure data
+    const csvPath = join(__dirname, '../../public/data/budget/fact_expenditures_by_chapter.csv');
+    const csvContent = readFileSync(csvPath, 'utf-8');
+    const rows = parseCSV(csvContent);
+    
+    // Calculate total using table method (class_code='0', exp_druhove)
+    const expectedTotal = calculateTotalExpenditures(rows, 2026);
+    
+    // Calculate total using chart method (buildEffectiveLeafValueMap) for exp_druhove
+    const valueMap = buildEffectiveLeafValueMap(rows, 'exp_druhove', 2026);
+    const chartTotal = Array.from(valueMap.values()).reduce((sum, val) => sum + val, 0);
+    
+    // Log for debugging
+    console.log(`Expenditures (druhové) - Expected (tables): ${(expectedTotal / 1e9).toFixed(2)} mld`);
+    console.log(`Expenditures (druhové) - Chart total: ${(chartTotal / 1e9).toFixed(2)} mld`);
+    console.log(`Expenditures (druhové) - Difference: ${((expectedTotal - chartTotal) / 1e9).toFixed(2)} mld`);
+    
+    // They should match (allowing small rounding difference - within 1 million)
+    expect(chartTotal).toBeCloseTo(expectedTotal, -6);
+  });
+});
