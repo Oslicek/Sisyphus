@@ -2,15 +2,16 @@
  * Budget data utilities for parsing and calculating state budget totals.
  * 
  * Data structure:
- * - fact_revenues_by_chapter.csv: Revenue data by chapter
- * - fact_expenditures_by_chapter.csv: Expenditure data by chapter
- * - fact_leaf_only.csv: Leaf codes only (no subtotals) for breakdowns
- * 
- * Key rules:
- * - For total revenues: SUM(amount_czk) WHERE class_code='0' AND kind='rev'
- * - For total expenditures: SUM(amount_czk) WHERE class_code='0' AND kind='exp' AND system='exp_druhove'
- * - For non-overlapping breakdowns: use fact_leaf_only.csv or filter is_leaf=true AND is_total=false
+ * - prijmy_druhove_2026.csv: Aggregated revenue data by classification code
+ * - vydaje_druhove_2026.csv: Aggregated expenditure data by type classification
+ * - vydaje_odvetvove_2026.csv: Aggregated expenditure data by sector classification
+ * - fact_revenues_by_chapter.csv: Revenue data by chapter (for tables)
+ * - fact_expenditures_by_chapter.csv: Expenditure data by chapter (for tables)
  */
+
+// ============================================================================
+// TYPES
+// ============================================================================
 
 export interface BudgetRow {
   year: number;
@@ -28,15 +29,10 @@ export interface Chapter {
   chapter_name: string;
 }
 
-export interface Classification {
-  kind: string;
-  system: string;
-  code: string;
+export interface BudgetItem {
+  id: string;
   name: string;
-  parent_code: string;
-  level: number;
-  is_leaf: boolean;
-  is_total: boolean;
+  sum: number;
 }
 
 export interface TreeNode {
@@ -46,6 +42,145 @@ export interface TreeNode {
   value?: number;
 }
 
+// ============================================================================
+// SIMPLE FORMAT PARSERS (new aggregated files)
+// ============================================================================
+
+/**
+ * Parse simple CSV format (id,name,sum) used by new aggregated files.
+ */
+export function parseBudgetItemsCSV(text: string): BudgetItem[] {
+  const lines = text.trim().split('\n');
+  
+  return lines.slice(1).map(line => {
+    const values: string[] = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (const char of line) {
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        values.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    values.push(current.trim());
+    
+    return {
+      id: values[0],
+      name: values[1],
+      sum: parseInt(values[2], 10) || 0
+    };
+  });
+}
+
+/**
+ * Build a value map from budget items (id -> sum).
+ */
+export function buildValueMapFromItems(items: BudgetItem[]): Map<string, number> {
+  const map = new Map<string, number>();
+  items.forEach(item => {
+    if (item.sum > 0) {
+      map.set(item.id, item.sum);
+    }
+  });
+  return map;
+}
+
+/**
+ * Build a name map from budget items (id -> name).
+ */
+export function buildNameMapFromItems(items: BudgetItem[]): Map<string, string> {
+  const map = new Map<string, string>();
+  items.forEach(item => {
+    map.set(item.id, item.name);
+  });
+  return map;
+}
+
+/**
+ * Build a hierarchical tree from flat budget items.
+ * Items are assumed to have hierarchical codes (e.g., "11", "111", "1111").
+ */
+export function buildTreeFromItems(items: BudgetItem[]): TreeNode {
+  // Filter out zero values and the total (id='0')
+  const validItems = items.filter(item => item.sum > 0 && item.id !== '0');
+  
+  // Sort by code length (shorter = higher level) then by code
+  validItems.sort((a, b) => {
+    if (a.id.length !== b.id.length) return a.id.length - b.id.length;
+    return a.id.localeCompare(b.id);
+  });
+  
+  // Find the root code (shortest non-zero item, typically "1", "2", etc.)
+  const rootCodes = new Set<string>();
+  validItems.forEach(item => {
+    // Root is the first character for most items
+    const rootChar = item.id.charAt(0);
+    if (rootChar >= '1' && rootChar <= '9') {
+      rootCodes.add(rootChar);
+    }
+  });
+  
+  // Build tree recursively
+  function buildNode(code: string, name: string): TreeNode {
+    const children: TreeNode[] = [];
+    
+    // Find direct children
+    validItems.forEach(item => {
+      if (item.id !== code && item.id.startsWith(code)) {
+        // Check if this is a direct child (no intermediate codes)
+        const isDirectChild = !validItems.some(other => 
+          other.id !== code && 
+          other.id !== item.id && 
+          item.id.startsWith(other.id) && 
+          other.id.startsWith(code)
+        );
+        
+        if (isDirectChild) {
+          children.push(buildNode(item.id, item.name));
+        }
+      }
+    });
+    
+    const item = validItems.find(i => i.id === code);
+    const value = item?.sum;
+    
+    return {
+      code,
+      name,
+      children: children.length > 0 ? children : undefined,
+      value
+    };
+  }
+  
+  // Build root node containing all top-level items
+  const rootChildren: TreeNode[] = [];
+  rootCodes.forEach(rootCode => {
+    const item = validItems.find(i => i.id === rootCode);
+    if (item) {
+      rootChildren.push(buildNode(rootCode, item.name));
+    }
+  });
+  
+  // Get total from original items
+  const totalItem = items.find(i => i.id === '0');
+  
+  return {
+    code: '0',
+    name: totalItem?.name || 'Celkem',
+    children: rootChildren,
+    value: totalItem?.sum
+  };
+}
+
+// ============================================================================
+// LEGACY PARSERS (for per-chapter files used by tables)
+// ============================================================================
+
 /**
  * Parse CSV text into budget rows, handling quoted fields.
  */
@@ -54,7 +189,6 @@ export function parseCSV(text: string): BudgetRow[] {
   const headers = lines[0].split(',');
   
   return lines.slice(1).map(line => {
-    // Handle quoted fields (chapter names may contain commas)
     const values: string[] = [];
     let current = '';
     let inQuotes = false;
@@ -103,47 +237,9 @@ export function parseChaptersCSV(text: string): Chapter[] {
   });
 }
 
-/**
- * Parse classification CSV.
- */
-export function parseClassificationCSV(text: string): Classification[] {
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',');
-  
-  return lines.slice(1).map(line => {
-    const values: string[] = [];
-    let current = '';
-    let inQuotes = false;
-    
-    for (const char of line) {
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        values.push(current);
-        current = '';
-      } else {
-        current += char;
-      }
-    }
-    values.push(current);
-    
-    const row: Record<string, string> = {};
-    headers.forEach((header, i) => {
-      row[header] = values[i] || '';
-    });
-    
-    return {
-      kind: row.kind,
-      system: row.system,
-      code: row.code,
-      name: row.name,
-      parent_code: row.parent_code,
-      level: parseInt(row.level, 10) || 0,
-      is_leaf: row.is_leaf === 'True',
-      is_total: row.is_total === 'True'
-    };
-  });
-}
+// ============================================================================
+// CALCULATIONS (for tables)
+// ============================================================================
 
 /**
  * Calculate total revenues for a year.
@@ -205,6 +301,10 @@ export function getExpendituresByChapter(rows: BudgetRow[], year: number = 2026)
   return result;
 }
 
+// ============================================================================
+// FORMATTING
+// ============================================================================
+
 /**
  * Format amount in CZK to human-readable format.
  */
@@ -225,134 +325,3 @@ export function formatCurrency(amount: number): string {
   }
   return amount.toLocaleString('cs-CZ') + ' Kč';
 }
-
-/**
- * Enrich tree nodes with values from budget data.
- */
-export function enrichTreeWithValues(
-  node: TreeNode, 
-  rows: BudgetRow[], 
-  system: string,
-  year: number = 2026
-): TreeNode {
-  // Find direct value for this code
-  const relevantRows = rows.filter(
-    row => row.year === year && row.system === system && row.class_code === node.code
-  );
-  
-  const directValue = relevantRows.reduce((sum, row) => sum + Math.abs(row.amount_czk), 0);
-
-  if (!node.children || node.children.length === 0) {
-    return {
-      ...node,
-      value: directValue > 0 ? directValue : undefined
-    };
-  }
-
-  const enrichedChildren = node.children
-    .map(child => enrichTreeWithValues(child, rows, system, year))
-    .filter(child => child.value !== undefined && child.value > 0);
-
-  const childrenValue = enrichedChildren.reduce((sum, child) => sum + (child.value || 0), 0);
-  
-  return {
-    ...node,
-    children: enrichedChildren.length > 0 ? enrichedChildren : undefined,
-    value: directValue > 0 ? directValue : (childrenValue > 0 ? childrenValue : undefined)
-  };
-}
-
-/**
- * Build a value map for budget data using effective leaves per chapter.
- * This avoids counting hierarchical sums as separate values.
- * 
- * Algorithm:
- * 1. Group all codes per chapter
- * 2. Filter out combined codes (like "31_32") if all parts exist separately
- * 3. For each chapter, find effective leaves (codes without children in that chapter)
- * 4. For parent codes, calculate remainder (parent value - sum of children) and add as "code_other"
- * 5. Aggregate effective leaf values across all chapters
- */
-export function buildEffectiveLeafValueMap(
-  budgetRows: BudgetRow[],
-  system: string,
-  year: number = 2026
-): Map<string, number> {
-  // First pass: collect all codes per chapter
-  const byChapterAll = new Map<string, Map<string, number>>();
-  
-  budgetRows
-    .filter(row => row.year === year && row.system === system && row.class_code !== '0')
-    .forEach(row => {
-      if (!byChapterAll.has(row.chapter_code)) {
-        byChapterAll.set(row.chapter_code, new Map());
-      }
-      const chapterMap = byChapterAll.get(row.chapter_code)!;
-      const existing = chapterMap.get(row.class_code) || 0;
-      chapterMap.set(row.class_code, existing + Math.abs(row.amount_czk));
-    });
-  
-  // Second pass: filter combined codes that have all parts present
-  const byChapter = new Map<string, Map<string, number>>();
-  
-  byChapterAll.forEach((chapterCodes, chapterCode) => {
-    const filtered = new Map<string, number>();
-    
-    chapterCodes.forEach((amount, code) => {
-      if (code.includes('_')) {
-        // Combined code like "31_32" or "122_123"
-        const parts = code.split('_');
-        // Only skip if ALL parts exist as separate entries
-        const allPartsExist = parts.every(part => chapterCodes.has(part));
-        if (allPartsExist) {
-          // This is a sum of existing parts - skip it
-          return;
-        }
-      }
-      filtered.set(code, amount);
-    });
-    
-    byChapter.set(chapterCode, filtered);
-  });
-  
-  // Third pass: for each chapter, find effective leaves and calculate remainders
-  const aggregated = new Map<string, number>();
-  
-  byChapter.forEach((chapterCodes) => {
-    const allCodesInChapter = Array.from(chapterCodes.keys());
-    
-    chapterCodes.forEach((amount, code) => {
-      // Find all direct children of this code in THIS chapter
-      const childCodes = allCodesInChapter.filter(
-        other => other !== code && other.startsWith(code) && 
-        // Only direct children - no other code between this and the child
-        !allCodesInChapter.some(mid => 
-          mid !== code && mid !== other && 
-          other.startsWith(mid) && mid.startsWith(code)
-        )
-      );
-      
-      if (childCodes.length === 0) {
-        // This is an effective leaf for this chapter - add to aggregate
-        const existing = aggregated.get(code) || 0;
-        aggregated.set(code, existing + amount);
-      } else {
-        // This code has children - calculate remainder
-        const childrenSum = childCodes.reduce((sum, childCode) => {
-          return sum + (chapterCodes.get(childCode) || 0);
-        }, 0);
-        
-        const remainder = amount - childrenSum;
-        if (remainder > 1000000) { // Only if significant (> 1 mil CZK)
-          // Add remainder as "code_other"
-          const otherCode = `${code}_other`;
-          const existing = aggregated.get(otherCode) || 0;
-          aggregated.set(otherCode, existing + remainder);
-        }
-      }
-    });
-  });
-  
-  return aggregated;
-}
-

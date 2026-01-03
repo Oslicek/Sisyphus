@@ -1,0 +1,87 @@
+id,name,sum
+111,Příjem z daní z příjmů fyzických osob,194100000000
+1111,Příjem z daně z příjmů fyzických osob placené plátci,153300000000
+1112,Příjem z daně z příjmů fyzických osob placené poplatníky,14700000000
+1113,Příjem z daně z příjmů fyzických osob vybírané srážkou podle zvláštní sazby daně,26100000000
+112,Příjem z daní z příjmů právnických osob,221500000000
+113,Příjem z některých dalších přímých daní,1000000000
+11,"Daně z příjmů, zisku a kapitálových výnosů a některé další přímé daně",416600000000
+121,Příjem ze všeobecných daní ze zboží a služeb v tuzemsku,415400000000
+1211,Příjem z daně z přidané hodnoty,415400000000
+122 a 123,"Příjem ze zvláštních daní, poplatků a jiných obdobných peněžitých plnění ze zboží a služeb v tuzemsku",171300000000
+12,"Daně, poplatky a jiná obdobná peněžitá plnění ze zboží a služeb v tuzemsku",586700000000
+132,Příjem z daní a poplatků z provozu motorových vozidel,800000000
+133,Příjem z poplatků a odvodů v oblasti životního prostředí,3261000000
+134,Příjem z místních poplatků z vybraných činností a služeb,0
+135,Příjem z ostatních odvodů z vybraných činností a služeb,466333332
+136,Příjem ze správních a soudních poplatků,4065567800
+137,Příjem z poplatků na činnost správních úřadů,698393000
+138,"Příjem z daní, poplatků a jiných obdobných peněžitých plnění v oblasti hazardních her",18500000000
+13,Daně a poplatky z vybraných činností a služeb,27791294132
+140,Příjem z daní a cel za zboží a služby ze zahraničí,400000
+14,Příjem z daní a cel za zboží a služby ze zahraničí,400000
+151,Příjem z daní z majetku,0
+152,Příjem ze zrušených daní z majetkových a kapitálových převodů,0
+15,Příjem z majetkových daní,0
+161,Příjem z pojistného na sociální zabezpečení a z příspěvku na státní politiku zaměstnanosti,876181757372
+162,Příjem související s pojistným na sociální zabezpečení,537512274
+16,Příjem z povinného pojistného,876719269646
+170,Ostatní daňové příjmy,1354000000
+17,Ostatní daňové příjmy,1354000000
+1,"DAŇOVÉ PŘÍJMY CELKEM (daně,poplatky,po jistné)",1909164963778
+211,Příjem z vlastní činnosti,2409032129
+212,Příjem z odvodů organizací s přímým vztahem,11683514111
+213,Příjem z pronájmu nebo pachtu majetku,838941826
+214,Přijaté výnosy z finančního majetku,4963149500
+215,Soudní poplatky,0
+21,Příjem z vlastní činnosti a odvody přebytků organizací s přímým vztahem,19894637566
+221,Přijaté sankční platby,2217121704
+222,Přijaté vratky transferů a ostatní podobné příjmy,1981220000
+22,Přijaté sankční platby a vratky transferů,4198341704
+231,Příjem z prodeje krátkodobého a drobného dlouhodobého majetku,27663000
+232,Ostatní nedaňové příjmy,2847632769
+234,Příjmy z plateb za využívání výhradních práv k přírodním zdrojům,0
+235,Příjmy za využívání dalších majetkových práv,178910000
+236,Příjmy z dobrovolného pojistného,910000000
+239,Dočasné zatřídění příjmů,0
+23,Příjem z prodeje neinvestičního majetku a ostatní nedaňové příjmy,3964205769
+241,Splátky půjčených prostředků od podnikatelů,98951000
+242,Splátky půjčených prostředků od obecně prospěšných společností a obdobných osob,94000000
+243,Splátky půjčených prostředků od rozpočtů ústřední úrovně,0
+244,Splátky půjčených prostředků od rozpočtů územní úrovně,5482469
+245,Splátky půjčených prostředků od zřízených a obdobných osob,910338735
+246,Splátky půjčených prostředků od fyzických osob,0
+247,Splátky půjčených prostředků ze zahraničí,173000000
+248,Splátky za úhradu dluhů nebo dodávek,5000000
+24,Přijaté splátky půjčených prostředků,1286772204
+251,Příjmy sdílené s Evropskou unií nebo s jejím členským státem,3000000000
+25,Příjmy sdílené s Evropskou unií nebo s jejím členským státem,3000000000
+2,NEDAŇOVÉ PŘÍJMY CELKEM,32343957243
+311,Příjem z prodeje dlouhodobého majetku (kromě drobného),7367999000
+312,Ostatní kapitálové příjmy,0
+31,Příjem z prodeje dlouhodobého majetku a ostatní kapitálové příjmy,7367999000
+320,Příjem z prodeje dlouhodobého finančního majetku,19855000
+32,Příjem z prodeje dlouhodobého finančního majetku,19855000
+3,KAPITÁLOVÉ PŘÍJMY CELKEM,7387854000
+411,Neinvestiční přijaté transfery od rozpočtů ústřední úrovně,56844138986
+4118,Neinvestiční převody z Národního fondu,26088353047
+412,Neinvestiční přijaté transfery od rozpočtů územní úrovně,0
+413,Neinvestiční převody z vlastních fondů a ve vztahu k útvarům bez právní osobnosti,352000000
+414,Převody z vlastních fondů přes rok,0
+415,Neinvestiční přijaté transfery ze zahraničí,27653744684
+4153,Neinvestiční transfery přijaté od Evropské unie,27464941500
+4155,Neinvestiční transfery z finančních mechanismů,0
+416,Neinvestiční přijaté transfery ze státních finančních aktiv,0
+417,Příjem náhrad za nezpůsobenou újmu a příjem náhrad škod způsobených nezákonným rozhodnutím nebo nesprávným úředním postupem při výkonu veřejné moci,0
+41,Neinvestiční přijaté transfery,84849883670
+421,Investiční přijaté transfery od rozpočtů ústřední úrovně,68137235593
+4218,Investiční převody z Národního fondu,64193873918
+422,Investiční přijaté transfery od rozpočtů územní úrovně,0
+423,Investiční přijaté transfery ze zahraničí,20788744023
+4233,Investiční transfery přijaté od Evropské unie,20788744023
+4234,Investiční transfery z finančních mechanismů,0
+424,Investiční přijaté transfery ze státních finančních aktiv,0
+425,Investiční převody z vlastních fondů a ve vztahu k útvarům bez právní osobnosti,0
+42,Investiční přijaté transfery,88925979616
+4,PŘIJATÉ TRANSFERY CELKEM,173775863286
+0,PŘÍJMY STÁTNÍHO ROZPOČTU CELKEM,2122672638307

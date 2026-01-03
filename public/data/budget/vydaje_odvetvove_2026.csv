@@ -1,0 +1,188 @@
+id,name,sum
+101,Zemědělská a potravinářská činnost a rozvoj,37829668812
+102,"Regulace zemědělské produkce, organizace trhu a poskytování podpor",2913062298
+103,Lesní hospodářství,2277645716
+106,Správa v zemědělství,6283472269
+107,Rybářství a myslivost,0
+108,Zemědělský a lesnický výzkum a vývoj,1224015584
+109,Ostatní činnost a nespecifikované výdaje,2279840080
+10,"Zemědělství, lesní hospodářství a rybářství",52807704759
+1,"Zemědělství, lesní hospodářství a rybářství",52807704759
+211,Záležitosti těžebního průmyslu a energetiky,47302000000
+212,Ostatní odvětvové a oborové záležitosti v průmyslu a stavebnictví,9315704842
+213,Zahraniční obchod,238400000
+214,"Vnitřní obchod, služby a cestovní ruch",811352425
+216,"Správa v odvětví energetiky, průmyslu, stavebnictví, obchodu a služeb",3470630823
+218,"Výzkum a vývoj v průmyslu, stavebnictví, obchodu a službách",3831451566
+219,Ostatní činnost a nespecifikované výdaje,603465631
+21,"Průmysl, stavebnictví, obchod a služby",65573005287
+221,Pozemní komunikace,55050000
+222,Silniční doprava,45837924
+223,Vnitrozemská a námořní plavba,29418444
+224,Železniční doprava,567834000
+225,Civilní letecká doprava,29940000
+226,Správa v dopravě,2372814710
+227,Doprava ostatních drah,33636077
+228,Výzkum v dopravě,2093031570
+229,Ostatní činnost a nespecifikované výdaje v dopravě,103378160061
+22,Doprava,108605722786
+231,Pitná voda,550000000
+232,Odvádění a čistění odpadních vod,631737650
+233,Vodní toky a vodohospodářská díla,849500000
+234,Voda v zemědělské krajině,160000000
+236,Správa ve vodním hospodářství,0
+238,Vodohospodářský výzkum a vývoj,0
+239,Ostatní činnost a nespecifikované výdaje,5000000
+23,Vodní hospodářství,2196237650
+241,Činnosti spojů,2836000000
+246,Správa ve spojích,590103695
+248,Výzkum a vývoj ve spojích,0
+249,Ostatní činnost a nespecifikované výdaje ve spojích,7653000
+24,Spoje,3433756695
+251,Podpora podnikání,0
+252,Všeobecné pracovní záležitosti,0
+253,Všeobecné finanční záležitosti,27147351
+254,Všeobecné hospodářské služby,772225889
+256,Všeobecná hospodářská správa,9137141411
+258,Výzkum a vývoj v oblasti všeobecných hospodářských záležitostí,13032124
+259,Ostatní činnosti a nespecifikované výdaje,16430000
+25,Všeobecné hospodářské záležitosti a ostatní ekonomické funkce,9965976775
+2,Průmyslová a ostatní odvětví hospodářství,189774699193
+311,Předškolní a základní vzdělávání,675315875
+312,Střední vzdělávání a vzdělávání v konzervatořích,1122748702
+313,Školská zařízení pro výkon ústavní a ochranné výchovy,2076351920
+314,Ostatní zařízení související s výchovou a vzděláváním mládeže,880438550
+315,Vyšší odborné vzdělávání,229328187
+31,Vzdělávání a školské služby,4984183234
+321,Vysokoškolské vzdělávání,55036462462
+322,Zařízení související s vysokoškolským vzděláváním,0
+323,"Základní umělecké, jazykové a zájmové vzdělávání",3222654
+326,Správa ve vzdělávání,1982035723
+328,Výzkum školství a vzdělávání,0
+329,Ostatní činnost a nespecifikované výdaje,210950315513
+32,Vzdělávání a školské služby,267972036352
+31 a 32,Vzdělávání a školské služby,272956219586
+331,Kultura,10680294479
+332,Ochrana památek a péče o kulturní dědictví a národní a historické povědomí,3799035921
+333,Činnosti registrovaných církví a náboženských společností,3779064917
+334,Sdělovací prostředky,35000000
+336,"Správa v oblasti kultury, církví a sdělovacích prostředků",684851286
+338,"Výzkum a vývoj v oblasti kultury, církví a sdělovacích prostředků",496712881
+339,"Ostatní činnosti v záležitostech kultury, církví a sdělovacích prostředků",84455000
+33,"Kultura, církve a sdělovací prostředky",19559414484
+341,Sport,9587977577
+342,Zájmová činnost a rekreace,269589252
+346,Správa v oblasti sportu,175288508
+348,"Výzkum v oblasti sportu, zájmové činnosti a rekreace",5782000
+34,Sport a zájmová činnost,10038637337
+351,Ambulantní péče,517567168
+352,Lůžková péče,3974638669
+353,Zvláštní zdravotnická zařízení a služby pro zdravotnictví,2264416773
+354,Zdravotnické programy,3802447579
+356,Správa ve zdravotnictví,2565251535
+358,Výzkum a vývoj ve zdravotnictví,2055280972
+359,Ostatní činnost ve zdravotnictví,158441221634
+35,Zdravotnictví,173620824330
+361,Rozvoj bydlení a bytové hospodářství,4156596000
+363,Komunální služby a územní rozvoj,17952668274
+366,"Správa v oblasti bydlení, komunálních služeb a územního rozvoje",3774401797
+368,"Výzkum a vývoj v oblasti bydlení, komunálních služeb a územního rozvoje",0
+369,"Ostatní činnost v oblasti bydlení, komunálních služeb a územního rozvoje",36519250
+36,"Bydlení, komunální služby a územní rozvoj",25920185321
+371,Ochrana ovzduší a klimatu,80000
+372,Nakládání s odpady,122901498
+373,Ochrana a sanace půdy a podzemní vody,1311039100
+374,Ochrana přírody a krajiny,1756039265
+375,Omezování hluku a vibrací,0
+376,Správa v ochraně životního prostředí,1481556894
+377,Ochrana proti záření,1015597866
+378,Výzkum životního prostředí,360113414
+379,Ostatní činnosti v životním prostředí,16917323490
+37,Ochrana životního prostředí,22964651527
+380,Ostatní výzkum a vývoj,29870359835
+38,Ostatní výzkum a vývoj,29870359835
+390,Ostatní činnosti související se službami pro fyzické osoby,0
+39,Ostatní činnosti související se službami pro fyzické osoby,0
+3,Služby pro fyzické osoby,554930292420
+411,Dávky důchodového pojištění,739566772671
+412,Dávky nemocenského pojištění,47564170245
+413,Dávky státní sociální podpory a dávky pěstounské péče,37003000000
+414,Dávky státní sociální podpory a dávky pěstounské péče,6585000000
+415,Zvláštní sociální dávky příslušníků ozbrojených sil a bezpečnostních sborů při skončení služebního poměru,15338947304
+417,Dávky pomoci v hmotné nouzi,7000000000
+418,Dávky osobám se zdravotním postižením,4170000000
+419,Ostatní dávky povahy sociálního zabezpečení,71310611530
+41,Dávky a podpory v sociálním zabezpečení,928538501750
+421,Podpory v nezaměstnanosti,15110900000
+422,Aktivní politika zaměstnanosti,2633630011
+423,Ochrana zaměstnanců při platební neschopnosti zaměstnavatelů,350000000
+424,Zaměstnávání zdravotně postižených občanů,12400000000
+425,Příspěvky na sociální důsledky restrukturalizace,300000000
+428,Výzkum a vývoj v politice zaměstnanosti,0
+42,Politika zaměstnanosti,30794530011
+431,Sociální poradenství,1926508044
+432,Sociální péče a pomoc dětem a mládeži,2810000000
+433,Sociální péče a pomoc manželství a rodinám,4931315348
+434,Sociální rehabilitace a ostatní sociální péče a pomoc,40550000
+435,Sociální služby v oblasti sociální péče,27766051850
+436,Správa v sociálním zabezpečení a politice zaměstnanosti,31675494481
+437,Služby sociální prevence,0
+438,Výzkum v sociálním zabezpečení a politice zaměstnanosti,85462500
+439,Ostatní činnost a nespecifikované výdaje,5080045387
+43,Sociální služby a společné činnosti v sociálním zabezpečení a politice zaměstnanosti,74315427610
+4,Sociální věci a politika zaměstnanosti,1033648459371
+511,Vojenská obrana,144250296689
+516,Státní správa ve vojenské obraně,8682638283
+517,Zabezpečení potřeb ozbrojených sil,1891765000
+518,Výzkum a vývoj v oblasti obrany,1285622698
+519,Ostatní záležitosti obrany,29119229091
+51,Obrana,185229551761
+521,Ochrana fyzických osob,9926950
+522,Hospodářská opatření pro krizové stavy,4580253553
+526,Státní správa v oblasti hospodářských opatření,453039534
+527,Krizové řízení,21646782
+528,Výzkum a vývoj v oblasti civilní připravenosti na krizové stavy,3313909
+529,Ostatní záležitosti civilní připravenosti pro krizové stavy,790000
+52,Civilní připravenost na krizové stavy,5068970728
+531,Bezpečnost a veřejný pořádek,79382374771
+538,Výzkum týkající se bezpečnosti a veřejného pořádku,4476438
+539,Ostatní záležitosti bezpečnosti a veřejného pořádku,528744597
+53,Bezpečnost a veřejný pořádek,79915595806
+541,Ústavní soudnictví,248779303
+542,Soudnictví,20050722261
+543,Státní zastupitelství,4612489061
+544,Vězeňství,12786995674
+545,Probační a mediační služba,425832173
+546,Správa v oblasti právní ochrany,2300898117
+547,Veřejná ochrana,298729612
+548,Výzkum v oblasti právní ochrany,0
+549,Ostatní záležitosti právní ochrany,127787360
+54,Právní ochrana,40852233561
+551,Požární ochrana,13593739687
+552,Ostatní složky a činnosti integrovaného záchranného systému,60000000
+556,Státní správa v požární ochraně a integrovaném záchranném systému,3273200675
+558,Výzkum a vývoj v požární ochraně a integrovaném záchranném systému,1221356
+559,Ostatní záležitosti požární ochrany a integrovaného záchranného systému,42475000
+55,Požární ochrana a integrovaný záchranný systém,16970636718
+5,Bezpečnost státu a právní ochrana,328036988574
+611,Zastupitelské orgány a volby,3579194612
+612,Kancelář prezidenta republiky,210346764
+613,Nejvyšší kontrolní úřad,690042574
+614,Všeobecná vnitřní státní správa nezařazená v jiných funkcích,95971976248
+615,Zahraniční služba a záležitosti nezařazené v jiných funkcích,6367092618
+617,Regionální a místní správa,0
+618,Výzkum ve státní správě a samosprávě,836043909
+619,Politické strany a hnutí,588900000
+61,"Státní moc, státní správa, územní samospráva a politické strany",108243596725
+621,Ostatní veřejné služby,1384564414
+622,Zahraniční pomoc a mezinárodní spolupráce jinde nezařazená,6085522465
+62,Jiné veřejné služby a činnosti,7470086879
+631,Obecné příjmy a výdaje z finančních operací,110225880286
+632,Pojištění funkčně nespecifikované,0
+633,Převody vlastním fondům v rozpočtech územní úrovně,0
+639,Ostatní finanční operace,47000000
+63,Finanční operace,110272880286
+640,Ostatní činnosti,23487930100
+64,Ostatní činnosti,23487930100
+6,Všeobecná veřejná správa a služby,249474493990
+0,VÝDAJE STÁTNÍHO ROZPOČTU CELKEM,2408672638307

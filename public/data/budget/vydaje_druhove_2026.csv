@@ -1,0 +1,96 @@
+id,name,sum
+501,Platy,133180045929
+5011,Platy zaměstnanců v pracovním poměru vyjma zaměstnanců na služebních místech,25860789918
+5012,Platy zaměstnanců bezpečnostních sborů a ozbrojených sil ve služebním poměru,67871015134
+5013,Platy zaměstnanců na služebních místech podle zákona o státní službě,36742620436
+5014,Platy zaměstnanců v pracovním poměru odvozované od platů ústavních činitelů,2705620441
+5019,Ostatní platy,0
+502,Výdaje na ostatní platby za provedenou práci,11365616141
+5021,Ostatní osobní výdaje,1201454744
+5022,Platy představitelů státní moci a některých orgánů,7958497979
+5023,Odměny členů zastupitelstev obcí a krajů,0
+5024,Odstupné,33674763
+5025,Odbytné vyplácené státním zaměstnancům ve správních úřadech,10600000
+5026,Odchodné,41875600
+5027,Peněžní náležitosti vojáků v záloze ve službě,211000000
+5028,Kázeňské odměny poskytnuté formou peněžitých darů příslušníkům bezpečnostních sborů a vojákům z povolání,481909740
+5029,Ostatní platby za provedenou práci jinde nezařazené,1426603315
+503,Povinné a zákonné pojistné placené zaměstnavatelem,49560167480
+504,Výdaje na odměny za užití duševního vlastnictví,624199523
+505,Výdaje na platové a mzdové náhrady,50000
+506,Mzdy podle cizího práva,381650000
+50,Výdaje na platy a obdobné a související výdaje,195111729073
+512,Výdaje na některé úpravy hmotných věcí a pořízení některých práv k hmotným věcem,25302489
+513,Výdaje na nákup materiálu,25783568676
+514,Úroky a ostatní finanční výdaje,108653571303
+515,"Výdaje na nákup vody, paliv a energie",7884640520
+516,Výdaje na nákup služeb,52379449239
+517,Výdaje na ostatní nákupy,13250393676
+518,"Výdaje na netransferové převody uvnitř rozpočtové jednotky, na převzaté povinnosti a na jistoty",62270265
+519,"Výdaje související s neinvestičními nákupy, příspěvky, náhrady a výdaje na věcné dary",13450522576
+51,Výdaje na neinvestiční nákupy a související výdaje,221489718744
+521,Neinvestiční transfery podnikatelům,63224357623
+522,Neinvestiční transfery neziskovým a podobným osobám,26480880443
+52,Neinvestiční transfery soukromoprávní m osobám,89705238066
+531,Neinvestiční transfery rozpočtům ústřední úrovně,215198451550
+532,Neinvestiční transfery rozpočtům územní úrovně,257969094244
+533,Neinvestiční transfery příspěvkovým apod. organizacím,100939475423
+534,Neinvestiční převody vlastním fondům a ve vztahu k útvarům bez právní osobnosti,1406159816
+535,Převody do vlastních fondů přes rok,0
+536,Ostatní neinvestiční transfery jiným rozpočtům a platby daní,397882887
+53,Neinvestiční transfery veřejnoprávním osobám a mezi peněžními fondy téže osoby a platby daní,575911063920
+541,Sociální dávky,934994869750
+542,Náhrady placené fyzickým osobám,287252750
+549,Ostatní neinvestiční transfery fyzickým osobám,15665290489
+54,Neinvestiční transfery a některé náhrady fyzickým osobám,950947412989
+551,Neinvestiční transfery mezinárodním vládním organizacím a nadnárodním orgánům,69120228913
+552,Neinvestiční transfery cizím státům,0
+553,Ostatní neinvestiční transfery do zahraničí,306163692
+554,Členské příspěvky mezinárodním organizacím,3632509173
+55,Neinvestiční transfery a související platby do zahraničí,73058901778
+561,Neinvestiční půjčené prostředky podnikatelům,0
+562,Neinvestiční půjčené prostředky neziskovým a podobným osobám,0
+563,Neinvestiční půjčené prostředky rozpočtům ústřední úrovně,0
+564,Neinvestiční půjčené prostředky rozpočtům územní úrovně,0
+565,Neinvestiční půjčené prostředky příspěvkovým apod. organizacím,0
+566,Neinvestiční půjčené prostředky fyzickým osobám,0
+567,Neinvestiční půjčené prostředky do zahraničí,0
+56,Neinvestiční půjčené prostředky,0
+571,Neinvestiční převody Národnímu fondu,500000000
+579,Ostatní převody do Národního fondu,0
+57,Neinvestiční převody Národnímu fondu,500000000
+581,Výdaje na náhrady za nezpůsobenou újmu a výdaje na náhrady škod způsobených nezákonným rozhodnutím nebo nesprávným úředním postupem při výkonu veřejné moci,7591278906
+58,Výdaje na náhrady za nezpůsobenou újmu,7591278906
+590,Ostatní neinvestiční výdaje,22005040621
+599,Dočasné zatřídění výdajů,0
+59,Ostatní neinvestiční výdaje,22005040621
+5,BĚŽNÉ VÝDAJE CELKEM,2136320384097
+611,Pořízení dlouhodobého nehmotného majetku,6767424238
+612,Pořízení dlouhodobého hmotného majetku,61026766875
+613,Pozemky,296480280
+614,Nadlimitní věcná břemena a právo stavby,0
+61,Investiční nákupy a související výdaje,68090671393
+620,Nákup majetkových podílů a nároků,4019000000
+621,Vklady do fundací a ústavů,0
+62,Nákup majetkových podílů a nároků a vklady do fundací a ústavů,4019000000
+631,Investiční transfery podnikatelům,10249636077
+632,Investiční transfery neziskovým a podobným osobám,671594100
+633,Investiční transfery rozpočtům ústřední úrovně,92553162246
+634,Investiční transfery rozpočtům územní úrovně,14379954035
+635,Investiční transfery příspěvkovým a podobným organizacím,13181943206
+636,Investiční převody vlastním fondům a ve vztahu k útvarům bez právní osobnosti,0
+637,Investiční transfery fyzickým osobám,0
+638,Investiční transfery do zahraničí,456200000
+63,Investiční transfery,131492489664
+641,Investiční půjčené prostředky podnikatelům,14547000000
+642,Investiční půjčené prostředky neziskovým a podobným osobám,0
+643,Investiční půjčené prostředky rozpočtům ústřední úrovně,0
+644,Investiční půjčené prostředky rozpočtům územní úrovně,0
+645,Investiční půjčené prostředky příspěvkovým apod. organizacím,0
+646,Investiční půjčené prostředky fyzickým osobám,0
+647,Investiční půjčené prostředky do zahraničí,0
+64,Investiční půjčené prostředky,14547000000
+671,Investiční převody Národnímu fondu,0
+67,Investiční převody Národnímu fondu,0
+690,Ostatní investiční výdaje,54203093153
+69,Ostatní investiční výdaje,54203093153

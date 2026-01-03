@@ -15,10 +15,11 @@ import {
 } from 'react-share';
 import { Footer } from '../../components/Footer';
 import { 
-  parseCSV, 
-  parseClassificationCSV,
+  parseBudgetItemsCSV,
+  buildValueMapFromItems,
+  buildNameMapFromItems,
   formatCurrency,
-  buildEffectiveLeafValueMap
+  type BudgetItem
 } from '../../utils/budgetData';
 import {
   calculateAdjustedDeficit,
@@ -28,7 +29,6 @@ import {
   calculateProgressPercent,
   type BudgetAdjustment
 } from '../../utils/deficitGame';
-import type { BudgetRow, Classification } from '../../utils/budgetData';
 import styles from './DeficitGame.module.css';
 import rozpoctovkaLogo from '../../assets/rozpoctovka-logo-250x204-pruhledne.png';
 
@@ -55,8 +55,8 @@ interface HoverButton {
 }
 
 export function DeficitGame() {
-  const [budgetRows, setBudgetRows] = useState<BudgetRow[]>([]);
-  const [classifications, setClassifications] = useState<Classification[]>([]);
+  const [revenueItems, setRevenueItems] = useState<BudgetItem[]>([]);
+  const [expenditureItems, setExpenditureItems] = useState<BudgetItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [adjustments, setAdjustments] = useState<BudgetAdjustment[]>([]);
   
@@ -102,26 +102,22 @@ export function DeficitGame() {
     }
   }, [currentDeficit]);
 
-  // Load data
+  // Load data from new aggregated CSV files
   useEffect(() => {
     async function loadData() {
       try {
-        const [revenuesRes, expendituresRes, classRes] = await Promise.all([
-          fetch('/data/budget/fact_revenues_by_chapter.csv'),
-          fetch('/data/budget/fact_expenditures_by_chapter.csv'),
-          fetch('/data/budget/dim_classification.csv')
+        const [revenuesRes, expendituresRes] = await Promise.all([
+          fetch('/data/budget/prijmy_druhove_2026.csv'),
+          fetch('/data/budget/vydaje_odvetvove_2026.csv')
         ]);
 
-        const [revenuesText, expendituresText, classText] = await Promise.all([
+        const [revenuesText, expendituresText] = await Promise.all([
           revenuesRes.text(),
-          expendituresRes.text(),
-          classRes.text()
+          expendituresRes.text()
         ]);
 
-        const revenues = parseCSV(revenuesText);
-        const expenditures = parseCSV(expendituresText);
-        setBudgetRows([...revenues, ...expenditures]);
-        setClassifications(parseClassificationCSV(classText));
+        setRevenueItems(parseBudgetItemsCSV(revenuesText));
+        setExpenditureItems(parseBudgetItemsCSV(expendituresText));
 
         setLoading(false);
       } catch (error) {
@@ -133,98 +129,112 @@ export function DeficitGame() {
     loadData();
   }, []);
 
-  // Build tree from classification data
-  const buildTree = useCallback((kind: 'rev' | 'exp', system: string): TreeNode | null => {
-    // Filter classification for this kind/system, excluding totals but keeping root
-    const relevantClass = classifications.filter(c => 
-      c.kind === kind && c.system === system && (!c.is_total || c.code === '0')
-    );
-    if (relevantClass.length === 0) return null;
+  // Build tree from budget items
+  const buildTree = useCallback((type: 'revenue' | 'expenditure'): TreeNode | null => {
+    const items = type === 'revenue' ? revenueItems : expenditureItems;
+    if (items.length === 0) return null;
 
-    const nodeMap = new Map<string, TreeNode>();
+    // Filter items with values (non-zero)
+    const validItems = items.filter(item => item.sum > 0 && item.id !== '0');
+    const nameMap = buildNameMapFromItems(items);
     
-    // Create all nodes
-    relevantClass.forEach(c => {
-      const fullName = c.name || c.code;
-      nodeMap.set(c.code, { id: c.code, name: fullName, children: [] });
+    // Sort by code length (parents first)
+    validItems.sort((a, b) => {
+      if (a.id.length !== b.id.length) return a.id.length - b.id.length;
+      return a.id.localeCompare(b.id);
     });
 
-    // Create root node
-    const rootLabel = kind === 'rev' ? 'Příjmy' : 'Výdaje';
-    const root: TreeNode = {
-      id: 'root',
-      name: rootLabel,
-      children: []
-    };
+    // Build node map
+    const nodeMap = new Map<string, TreeNode>();
+    validItems.forEach(item => {
+      nodeMap.set(item.id, {
+        id: item.id,
+        name: item.name,
+        value: item.sum,
+        children: []
+      });
+    });
 
-    // Build hierarchy
-    relevantClass.forEach(c => {
-      const node = nodeMap.get(c.code)!;
-      if (!c.parent_code || c.parent_code === '' || c.parent_code === '0') {
-        // Top-level node
-        root.children!.push(node);
-      } else if (nodeMap.has(c.parent_code)) {
-        nodeMap.get(c.parent_code)!.children!.push(node);
+    // Build hierarchy - find parent for each node
+    validItems.forEach(item => {
+      const node = nodeMap.get(item.id)!;
+      
+      // Find parent - the longest code that is a prefix of this code
+      let parentCode: string | null = null;
+      for (let len = item.id.length - 1; len >= 1; len--) {
+        const potentialParent = item.id.substring(0, len);
+        if (nodeMap.has(potentialParent)) {
+          parentCode = potentialParent;
+          break;
+        }
+      }
+      
+      if (parentCode) {
+        nodeMap.get(parentCode)!.children!.push(node);
       }
     });
 
-    if (root.children!.length === 0) return null;
+    // Find top-level nodes (no parent in nodeMap)
+    const topLevel: TreeNode[] = [];
+    validItems.forEach(item => {
+      let hasParent = false;
+      for (let len = item.id.length - 1; len >= 1; len--) {
+        if (nodeMap.has(item.id.substring(0, len))) {
+          hasParent = true;
+          break;
+        }
+      }
+      if (!hasParent) {
+        topLevel.push(nodeMap.get(item.id)!);
+      }
+    });
 
-    return root;
-  }, [classifications]);
+    // Get total
+    const totalItem = items.find(i => i.id === '0');
+    const rootLabel = type === 'revenue' ? 'Příjmy' : 'Výdaje';
 
-  // Build value map for a system using effective leaves per chapter
-  const buildValueMap = useCallback((system: string): Map<string, number> => {
-    return buildEffectiveLeafValueMap(budgetRows, system, 2026);
-  }, [budgetRows]);
+    return {
+      id: 'root',
+      name: totalItem?.name || rootLabel,
+      value: totalItem?.sum,
+      children: topLevel
+    };
+  }, [revenueItems, expenditureItems]);
 
-  // Assign values to tree nodes (only to leaves)
-  const assignValues = useCallback((tree: TreeNode, valueMap: Map<string, number>): TreeNode | null => {
-    function assignRecursive(node: TreeNode): TreeNode | null {
+  // Build value map from items
+  const buildValueMap = useCallback((type: 'revenue' | 'expenditure'): Map<string, number> => {
+    const items = type === 'revenue' ? revenueItems : expenditureItems;
+    return buildValueMapFromItems(items);
+  }, [revenueItems, expenditureItems]);
+
+  // Clean up tree - remove empty children arrays and nodes without value
+  const cleanupTree = useCallback((tree: TreeNode): TreeNode | null => {
+    function cleanRecursive(node: TreeNode): TreeNode | null {
       const hasChildren = node.children && node.children.length > 0;
       
       if (!hasChildren) {
-        // Leaf node - get value from map
-        const value = valueMap.get(node.id);
-        if (!value || value === 0) return null;
-        return { ...node, value, children: undefined };
+        // Leaf node - keep if has value
+        if (!node.value || node.value === 0) return null;
+        return { ...node, children: undefined };
       }
       
       // Non-leaf: process children
       const validChildren = node.children!
-        .map(child => assignRecursive(child))
+        .map(child => cleanRecursive(child))
         .filter((child): child is TreeNode => child !== null);
       
       if (validChildren.length === 0) {
-        // Check for direct value (this node might be a leaf in some chapters)
-        const directValue = valueMap.get(node.id);
-        if (directValue && directValue > 0) {
-          return { ...node, value: directValue, children: undefined };
+        // No valid children - check if this node has a value
+        if (node.value && node.value > 0) {
+          return { ...node, children: undefined };
         }
         return null;
-      }
-      
-      // Check for additional values that should be added as "Ostatní" node:
-      // 1. Direct value (node.id) - when this node is a leaf in some chapters but has children in classification
-      // 2. Other value (node.id + "_other") - calculated remainder from buildEffectiveLeafValueMap
-      const directValue = valueMap.get(node.id) || 0;
-      const otherValue = valueMap.get(`${node.id}_other`) || 0;
-      const totalOtherValue = directValue + otherValue;
-      
-      if (totalOtherValue > 0) {
-        const otherNode: TreeNode = {
-          id: `${node.id}_other`,
-          name: `Ostatní (${node.name})`,
-          value: totalOtherValue,
-          children: undefined
-        };
-        return { ...node, children: [...validChildren, otherNode] };
       }
       
       return { ...node, children: validChildren };
     }
 
-    return assignRecursive(tree);
+    return cleanRecursive(tree);
   }, []);
 
   // Get color for node
@@ -606,22 +616,20 @@ export function DeficitGame() {
 
   }, [getNodeColor]);
 
-  // Build enriched trees
+  // Build trees from loaded data
   const revenueTree = useMemo(() => {
-    if (loading || budgetRows.length === 0 || classifications.length === 0) return null;
-    const tree = buildTree('rev', 'rev_druhove');
+    if (loading || revenueItems.length === 0) return null;
+    const tree = buildTree('revenue');
     if (!tree) return null;
-    const valueMap = buildValueMap('rev_druhove');
-    return assignValues(tree, valueMap);
-  }, [loading, budgetRows, classifications, buildTree, buildValueMap, assignValues]);
+    return cleanupTree(tree);
+  }, [loading, revenueItems, buildTree, cleanupTree]);
 
   const expenditureTree = useMemo(() => {
-    if (loading || budgetRows.length === 0 || classifications.length === 0) return null;
-    const tree = buildTree('exp', 'exp_odvetvove');
+    if (loading || expenditureItems.length === 0) return null;
+    const tree = buildTree('expenditure');
     if (!tree) return null;
-    const valueMap = buildValueMap('exp_odvetvove');
-    return assignValues(tree, valueMap);
-  }, [loading, budgetRows, classifications, buildTree, buildValueMap, assignValues]);
+    return cleanupTree(tree);
+  }, [loading, expenditureItems, buildTree, cleanupTree]);
 
   // Render revenue chart
   useEffect(() => {
