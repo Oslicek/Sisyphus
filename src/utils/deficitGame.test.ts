@@ -6,6 +6,7 @@ import {
   validateAdjustment,
   formatAdjustmentForShare,
   formatGameResultForShare,
+  calculateProgressPercent,
   type BudgetAdjustment
 } from './deficitGame';
 
@@ -241,6 +242,94 @@ describe('Deficit Game Logic', () => {
       expect(result).toContain('Daně');
       expect(result).not.toContain('NicNemenim');
       expect(result).toContain('Počet úprav: 1');
+    });
+  });
+
+  describe('calculateProgressPercent', () => {
+    it('should return 0% when no improvement', () => {
+      const originalDeficit = -286_000_000_000;
+      const currentDeficit = -286_000_000_000;
+      
+      expect(calculateProgressPercent(originalDeficit, currentDeficit)).toBe(0);
+    });
+
+    it('should return positive percentage when deficit is reduced', () => {
+      const originalDeficit = -286_000_000_000;
+      const currentDeficit = -236_000_000_000; // 50B improvement
+      
+      // 50 / 286 ≈ 17.48%
+      const percent = calculateProgressPercent(originalDeficit, currentDeficit);
+      expect(percent).toBeCloseTo(17.48, 1);
+    });
+
+    it('should return 100% when deficit is eliminated', () => {
+      const originalDeficit = -286_000_000_000;
+      const currentDeficit = 0;
+      
+      expect(calculateProgressPercent(originalDeficit, currentDeficit)).toBe(100);
+    });
+
+    it('should cap at 100% even with surplus', () => {
+      const originalDeficit = -286_000_000_000;
+      const currentDeficit = 50_000_000_000; // Surplus
+      
+      expect(calculateProgressPercent(originalDeficit, currentDeficit)).toBe(100);
+    });
+
+    it('should return 0% when deficit gets worse', () => {
+      const originalDeficit = -286_000_000_000;
+      const currentDeficit = -336_000_000_000; // 50B worse
+      
+      // We don't show negative progress, just 0
+      expect(calculateProgressPercent(originalDeficit, currentDeficit)).toBe(0);
+    });
+
+    it('should work correctly when increasing revenue improves deficit', () => {
+      const originalDeficit = -286_000_000_000;
+      // Increase revenue by 50B -> deficit becomes -236B
+      const adjustments: BudgetAdjustment[] = [
+        { id: '1', name: 'Daně', type: 'revenue', originalValue: 100_000_000_000, adjustmentAmount: 50_000_000_000 }
+      ];
+      const currentDeficit = calculateAdjustedDeficit(originalDeficit, adjustments);
+      
+      expect(currentDeficit).toBe(-236_000_000_000);
+      expect(calculateProgressPercent(originalDeficit, currentDeficit)).toBeGreaterThan(0);
+    });
+
+    it('should work correctly when decreasing expenditure improves deficit', () => {
+      const originalDeficit = -286_000_000_000;
+      // Decrease expenditure by 50B -> deficit becomes -236B
+      const adjustments: BudgetAdjustment[] = [
+        { id: '1', name: 'Výdaje', type: 'expenditure', originalValue: 100_000_000_000, adjustmentAmount: -50_000_000_000 }
+      ];
+      const currentDeficit = calculateAdjustedDeficit(originalDeficit, adjustments);
+      
+      expect(currentDeficit).toBe(-236_000_000_000);
+      expect(calculateProgressPercent(originalDeficit, currentDeficit)).toBeGreaterThan(0);
+    });
+
+    it('should return 0% when increasing expenditure worsens deficit', () => {
+      const originalDeficit = -286_000_000_000;
+      // Increase expenditure by 50B -> deficit becomes -336B (worse!)
+      const adjustments: BudgetAdjustment[] = [
+        { id: '1', name: 'Výdaje', type: 'expenditure', originalValue: 100_000_000_000, adjustmentAmount: 50_000_000_000 }
+      ];
+      const currentDeficit = calculateAdjustedDeficit(originalDeficit, adjustments);
+      
+      expect(currentDeficit).toBe(-336_000_000_000);
+      expect(calculateProgressPercent(originalDeficit, currentDeficit)).toBe(0);
+    });
+
+    it('should return 0% when decreasing revenue worsens deficit', () => {
+      const originalDeficit = -286_000_000_000;
+      // Decrease revenue by 50B -> deficit becomes -336B (worse!)
+      const adjustments: BudgetAdjustment[] = [
+        { id: '1', name: 'Daně', type: 'revenue', originalValue: 100_000_000_000, adjustmentAmount: -50_000_000_000 }
+      ];
+      const currentDeficit = calculateAdjustedDeficit(originalDeficit, adjustments);
+      
+      expect(currentDeficit).toBe(-336_000_000_000);
+      expect(calculateProgressPercent(originalDeficit, currentDeficit)).toBe(0);
     });
   });
 });

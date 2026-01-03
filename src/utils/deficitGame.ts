@@ -112,6 +112,30 @@ export function formatAdjustmentForShare(adjustment: BudgetAdjustment): string {
 }
 
 /**
+ * Calculate the progress percentage toward eliminating the deficit.
+ * 
+ * @param originalDeficit - The original deficit (negative number)
+ * @param currentDeficit - The current deficit after adjustments
+ * @returns Progress percentage (0-100), clamped to valid range
+ */
+export function calculateProgressPercent(
+  originalDeficit: number,
+  currentDeficit: number
+): number {
+  // Improvement is how much we moved toward zero (or positive)
+  // originalDeficit is negative, currentDeficit should be less negative (closer to 0) for improvement
+  // improvement = currentDeficit - originalDeficit
+  // e.g., -236B - (-286B) = 50B improvement
+  const improvement = currentDeficit - originalDeficit;
+  
+  // Calculate percentage of original deficit that has been fixed
+  const percentFixed = (improvement / Math.abs(originalDeficit)) * 100;
+  
+  // Clamp to 0-100 range
+  return Math.min(100, Math.max(0, percentFixed));
+}
+
+/**
  * Format the complete game result for sharing.
  * 
  * @param originalDeficit - The original deficit

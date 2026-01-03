@@ -11,6 +11,7 @@ import {
   calculateMaxAdjustment,
   createBudgetAdjustment,
   formatGameResultForShare,
+  calculateProgressPercent,
   type BudgetAdjustment
 } from '../../utils/deficitGame';
 import type { BudgetRow, Classification } from '../../utils/budgetData';
@@ -376,14 +377,23 @@ export function DeficitGame() {
       .attr('fill', (d, i) => getNodeColor(d.depth, i, type))
       .attr('stroke', '#fff')
       .attr('stroke-width', 0.5)
-      .style('cursor', d => d.children ? 'pointer' : 'default')
+      .style('cursor', 'pointer')
       .on('click', function(event, d) {
         event.stopPropagation();
-        // Navigate: click on node with children to zoom in, click on root to zoom out
-        if (d.children) {
+        // Navigation logic:
+        // - If clicking on the current focus node, zoom out to its parent
+        // - If clicking on a node with children, zoom into it
+        // - If clicking on a leaf, zoom to its parent
+        if (d === focus) {
+          // Clicking on current focus -> zoom out
+          if (focus.parent) {
+            setCurrentRoot(focus.parent as HierarchyRectNode);
+          }
+        } else if (d.children) {
+          // Clicking on a node with children -> zoom in
           setCurrentRoot(d);
         } else if (d.parent) {
-          // If clicking on leaf, zoom to parent
+          // Clicking on leaf -> zoom to its parent
           setCurrentRoot(d.parent as HierarchyRectNode);
         }
       })
@@ -474,11 +484,9 @@ export function DeficitGame() {
     renderIcicleChart(expenditureChartRef, expenditureContainerRef, expenditureTree, 'expenditure', setExpenditureHoverButton, expenditureRoot, setExpenditureRoot);
   }, [expenditureTree, expenditureRoot, renderIcicleChart]);
 
-  // Calculate progress percentage
+  // Calculate progress percentage using the tested utility function
   const progressPercent = useMemo(() => {
-    const improvement = ORIGINAL_DEFICIT - currentDeficit;
-    const percentFixed = (improvement / Math.abs(ORIGINAL_DEFICIT)) * 100;
-    return Math.min(100, Math.max(0, percentFixed));
+    return calculateProgressPercent(ORIGINAL_DEFICIT, currentDeficit);
   }, [currentDeficit]);
 
   if (loading) {
