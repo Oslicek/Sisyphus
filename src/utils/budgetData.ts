@@ -270,7 +270,8 @@ export function enrichTreeWithValues(
  * 1. Group all codes per chapter
  * 2. Filter out combined codes (like "31_32") if all parts exist separately
  * 3. For each chapter, find effective leaves (codes without children in that chapter)
- * 4. Aggregate effective leaf values across all chapters
+ * 4. For parent codes, calculate remainder (parent value - sum of children) and add as "code_other"
+ * 5. Aggregate effective leaf values across all chapters
  */
 export function buildEffectiveLeafValueMap(
   budgetRows: BudgetRow[],
@@ -314,22 +315,40 @@ export function buildEffectiveLeafValueMap(
     byChapter.set(chapterCode, filtered);
   });
   
-  // Third pass: for each chapter, find effective leaves (codes with no children in that chapter)
+  // Third pass: for each chapter, find effective leaves and calculate remainders
   const aggregated = new Map<string, number>();
   
   byChapter.forEach((chapterCodes) => {
     const allCodesInChapter = Array.from(chapterCodes.keys());
     
     chapterCodes.forEach((amount, code) => {
-      // Check if this code has any children with values in THIS chapter
-      const hasChildWithValue = allCodesInChapter.some(
-        other => other !== code && other.startsWith(code)
+      // Find all direct children of this code in THIS chapter
+      const childCodes = allCodesInChapter.filter(
+        other => other !== code && other.startsWith(code) && 
+        // Only direct children - no other code between this and the child
+        !allCodesInChapter.some(mid => 
+          mid !== code && mid !== other && 
+          other.startsWith(mid) && mid.startsWith(code)
+        )
       );
       
-      if (!hasChildWithValue) {
+      if (childCodes.length === 0) {
         // This is an effective leaf for this chapter - add to aggregate
         const existing = aggregated.get(code) || 0;
         aggregated.set(code, existing + amount);
+      } else {
+        // This code has children - calculate remainder
+        const childrenSum = childCodes.reduce((sum, childCode) => {
+          return sum + (chapterCodes.get(childCode) || 0);
+        }, 0);
+        
+        const remainder = amount - childrenSum;
+        if (remainder > 1000000) { // Only if significant (> 1 mil CZK)
+          // Add remainder as "code_other"
+          const otherCode = `${code}_other`;
+          const existing = aggregated.get(otherCode) || 0;
+          aggregated.set(otherCode, existing + remainder);
+        }
       }
     });
   });

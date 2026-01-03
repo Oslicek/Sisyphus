@@ -354,20 +354,38 @@ describe('buildEffectiveLeafValueMap', () => {
 
   it('should include parent codes when children do NOT exist in same chapter', () => {
     const rows: BudgetRow[] = [
-      // Chapter 301 has 411 with child 4118
+      // Chapter 301 has 411 with child 4118 (same value - no remainder)
       { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '411', amount_czk: 1000 },
       { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '301', chapter_name: 'A', class_code: '4118', amount_czk: 1000 },
       // Chapter 398 has only 411, no 4118
-      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '398', chapter_name: 'B', class_code: '411', amount_czk: 27000 },
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '398', chapter_name: 'B', class_code: '411', amount_czk: 27000000000 },
     ];
     
     const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
     
     // 411 should include value from chapter 398 (where it has no children)
-    // but NOT from chapter 301 (where 4118 exists)
-    expect(result.get('411')).toBe(27000);
+    expect(result.get('411')).toBe(27000000000);
     // 4118 should include value from chapter 301
     expect(result.get('4118')).toBe(1000);
+    // No _other code should be created for 301 since 411 = 4118 (no remainder)
+    expect(result.get('411_other')).toBeUndefined();
+  });
+
+  it('should create _other codes when parent value exceeds children sum', () => {
+    const rows: BudgetRow[] = [
+      // Chapter 315 has 411 = 1.18 mld but 4118 = 0.23 mld
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '315', chapter_name: 'A', class_code: '411', amount_czk: 1182560503 },
+      { year: 2026, kind: 'rev', system: 'rev_druhove', page_number: 1, chapter_code: '315', chapter_name: 'A', class_code: '4118', amount_czk: 232560503 },
+    ];
+    
+    const result = buildEffectiveLeafValueMap(rows, 'rev_druhove', 2026);
+    
+    // 4118 should have its direct value
+    expect(result.get('4118')).toBe(232560503);
+    // 411_other should have the remainder (1182560503 - 232560503 = 950000000)
+    expect(result.get('411_other')).toBe(950000000);
+    // 411 itself should NOT be in the map (it has children)
+    expect(result.get('411')).toBeUndefined();
   });
 
   it('should skip combined codes when all parts exist', () => {

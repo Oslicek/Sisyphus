@@ -196,7 +196,7 @@ export function DeficitGame() {
         .filter((child): child is TreeNode => child !== null);
       
       if (validChildren.length === 0) {
-        // Check for direct value
+        // Check for direct value (this node might be a leaf in some chapters)
         const directValue = valueMap.get(node.id);
         if (directValue && directValue > 0) {
           return { ...node, value: directValue, children: undefined };
@@ -204,33 +204,16 @@ export function DeficitGame() {
         return null;
       }
       
-      // Check if this node has additional direct value beyond its children
-      // This happens when some chapters have data at parent level without child breakdown
-      const directValue = valueMap.get(node.id);
-      if (directValue && directValue > 0) {
-        // Calculate sum of children values
-        const childrenSum = validChildren.reduce((sum, child) => {
-          if (child.value) return sum + child.value;
-          // For non-leaf children, we need to sum their descendants
-          const sumDescendants = (n: TreeNode): number => {
-            if (n.value) return n.value;
-            if (n.children) return n.children.reduce((s, c) => s + sumDescendants(c), 0);
-            return 0;
-          };
-          return sum + sumDescendants(child);
-        }, 0);
-        
-        // If direct value exceeds children sum, add "ostatní" node
-        const remainder = directValue - childrenSum;
-        if (remainder > 1000000) { // Only if significant (> 1 mil CZK)
-          const otherNode: TreeNode = {
-            id: `${node.id}_other`,
-            name: `Ostatní (${node.name})`,
-            value: remainder,
-            children: undefined
-          };
-          return { ...node, children: [...validChildren, otherNode] };
-        }
+      // Check if there's an "_other" value for this node (calculated by buildEffectiveLeafValueMap)
+      const otherValue = valueMap.get(`${node.id}_other`);
+      if (otherValue && otherValue > 0) {
+        const otherNode: TreeNode = {
+          id: `${node.id}_other`,
+          name: `Ostatní (${node.name})`,
+          value: otherValue,
+          children: undefined
+        };
+        return { ...node, children: [...validChildren, otherNode] };
       }
       
       return { ...node, children: validChildren };
