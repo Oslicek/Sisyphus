@@ -570,6 +570,11 @@
   padding: 2rem;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   font-family: 'Source Sans 3', system-ui, sans-serif;
+  /* Always rendered but positioned off-screen */
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  visibility: hidden;
 }
 
 .shareableHeader {

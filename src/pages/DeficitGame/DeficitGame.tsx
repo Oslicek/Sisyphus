@@ -280,16 +280,11 @@ export function DeficitGame() {
     if (!shareableRef.current) return null;
     
     try {
-      // Make shareable div visible temporarily
-      shareableRef.current.style.display = 'block';
-      shareableRef.current.style.position = 'absolute';
-      shareableRef.current.style.left = '-9999px';
-      shareableRef.current.style.top = '0';
+      // Make shareable div visible for capture (it's always rendered, just hidden)
+      shareableRef.current.style.visibility = 'visible';
       
-      // Wait for browser to render the content
-      await new Promise(resolve => requestAnimationFrame(() => {
-        requestAnimationFrame(resolve);
-      }));
+      // Small delay to ensure everything is painted
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       const canvas = await html2canvas(shareableRef.current, {
         backgroundColor: '#f8f9fa',
@@ -301,7 +296,7 @@ export function DeficitGame() {
       });
       
       // Hide it again
-      shareableRef.current.style.display = 'none';
+      shareableRef.current.style.visibility = 'hidden';
       
       return new Promise((resolve) => {
         canvas.toBlob((blob) => resolve(blob), 'image/png', 0.95);
@@ -309,7 +304,7 @@ export function DeficitGame() {
     } catch (err) {
       console.error('Failed to capture screenshot:', err);
       if (shareableRef.current) {
-        shareableRef.current.style.display = 'none';
+        shareableRef.current.style.visibility = 'hidden';
       }
       return null;
     }
@@ -823,8 +818,8 @@ export function DeficitGame() {
         </section>
       </main>
 
-      {/* Hidden shareable content for screenshot */}
-      <div ref={shareableRef} className={styles.shareableContent} style={{ display: 'none' }}>
+      {/* Hidden shareable content for screenshot - always rendered but off-screen */}
+      <div ref={shareableRef} className={styles.shareableContent}>
         <div className={styles.shareableHeader}>
           <img src={rozpoctovkaLogo} alt="Rozpočtovka" className={styles.shareableLogo} />
           <h1 className={styles.shareableTitle}>Zruším schodek!</h1>
