@@ -18,7 +18,7 @@ import {
 } from '../../utils/deficitGame';
 import type { BudgetRow, Classification } from '../../utils/budgetData';
 import styles from './DeficitGame.module.css';
-import rozpoctovkaLogo from '../../assets/rozpoctovka-logo-250x204.png';
+import rozpoctovkaLogo from '../../assets/rozpoctovka-logo-250x204-pruhledne.png';
 
 // Original deficit from 2026 budget
 const ORIGINAL_DEFICIT = -286_000_000_000;
@@ -285,6 +285,11 @@ export function DeficitGame() {
       shareableRef.current.style.position = 'absolute';
       shareableRef.current.style.left = '-9999px';
       shareableRef.current.style.top = '0';
+      
+      // Wait for browser to render the content
+      await new Promise(resolve => requestAnimationFrame(() => {
+        requestAnimationFrame(resolve);
+      }));
       
       const canvas = await html2canvas(shareableRef.current, {
         backgroundColor: '#f8f9fa',
@@ -901,7 +906,7 @@ export function DeficitGame() {
         )}
 
         <div className={styles.shareableFooter}>
-          🔗 sisyfos.cz/zrusim-schodek
+          🔗 rozpoctovka.cz
         </div>
       </div>
 

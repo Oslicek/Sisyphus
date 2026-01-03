@@ -175,7 +175,7 @@ export function formatGameResultForShare(
     }
   }
   
-  result += `\n🔗 Zkuste to také: sisyfos.cz/rozpocet`;
+  result += `\n🔗 Zkuste to také: rozpoctovka.cz`;
   
   return result;
 }

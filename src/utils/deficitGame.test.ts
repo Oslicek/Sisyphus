@@ -208,7 +208,7 @@ describe('Deficit Game Logic', () => {
       expect(result).toContain('-286');
       expect(result).toContain('Daně');
       expect(result).toContain('Výdaje');
-      expect(result).toContain('sisyfos.cz');
+      expect(result).toContain('rozpoctovka.cz');
     });
 
     it('should format surplus result', () => {
