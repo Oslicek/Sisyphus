@@ -406,8 +406,12 @@ export function DeficitGame() {
         }
       })
       .on('mouseenter', function(event, d) {
-        // Show hover button for any node with value (d.value from D3 sum)
-        if (d.depth > 0 && d.value && d.value > 0) {
+        // Show tooltip with full name
+        d3.select(this).append('title').text(`${d.data.name}\n${(d.value! / 1_000_000_000).toFixed(1)} mld. Kč`);
+        
+        // Show hover button only for LEAF nodes (no children) with value
+        const isLeaf = !d.children || d.children.length === 0;
+        if (d.depth > 0 && isLeaf && d.value && d.value > 0) {
           const rect = (event.target as SVGRectElement).getBoundingClientRect();
           const containerRect = container.getBoundingClientRect();
           const rectWidth = rect.width;
@@ -548,10 +552,94 @@ export function DeficitGame() {
           </div>
         </section>
 
+        {/* Adjustments Section - placed above charts for better UX */}
+        <section className={styles.adjustmentsSection}>
+          <h2 className={styles.adjustmentsTitle}>📋 Moje úpravy rozpočtu</h2>
+          
+          {adjustments.length === 0 ? (
+            <div className={styles.emptyState}>
+              <div className={styles.emptyStateIcon}>🎯</div>
+              <p>Zatím nemáte žádné úpravy. Vyberte položky z grafů níže.</p>
+            </div>
+          ) : (
+            <>
+              <div className={styles.adjustmentsList}>
+                {adjustments.map(adjustment => {
+                  const { min, max } = calculateMaxAdjustment(adjustment.type, adjustment.originalValue);
+                  const billionsChange = adjustment.adjustmentAmount / 1_000_000_000;
+                  const baseBillions = adjustment.originalValue / 1_000_000_000;
+                  const sign = adjustment.adjustmentAmount >= 0 ? '+' : '';
+                  
+                  // Color logic:
+                  // Revenue: + is good (green), - is bad (red)
+                  // Expenditure: + is bad (red), - is good (green)
+                  const isGoodChange = adjustment.type === 'revenue' 
+                    ? adjustment.adjustmentAmount > 0
+                    : adjustment.adjustmentAmount < 0;
+                  const isBadChange = adjustment.type === 'revenue'
+                    ? adjustment.adjustmentAmount < 0
+                    : adjustment.adjustmentAmount > 0;
+                  
+                  return (
+                    <div 
+                      key={adjustment.id} 
+                      className={`${styles.adjustmentItem} ${
+                        adjustment.type === 'revenue' ? styles.adjustmentRevenue : styles.adjustmentExpenditure
+                      }`}
+                    >
+                      <div className={styles.adjustmentHeader}>
+                        <span className={styles.adjustmentName} title={adjustment.name}>
+                          {adjustment.type === 'revenue' ? '📈' : '📉'} {adjustment.name}
+                        </span>
+                        <span className={styles.adjustmentBase}>
+                          Základ: {baseBillions.toFixed(1)} mld.
+                        </span>
+                      </div>
+                      <div className={styles.adjustmentControls}>
+                        <input
+                          type="range"
+                          className={styles.adjustmentSlider}
+                          min={min}
+                          max={max}
+                          step={1_000_000_000}
+                          value={adjustment.adjustmentAmount}
+                          onChange={(e) => handleAdjustmentChange(adjustment.id, Number(e.target.value))}
+                        />
+                        <span className={`${styles.adjustmentValue} ${
+                          isGoodChange ? styles.adjustmentValueGood :
+                          isBadChange ? styles.adjustmentValueBad :
+                          styles.adjustmentValueZero
+                        }`}>
+                          {sign}{billionsChange.toFixed(0)} mld.
+                        </span>
+                        <button 
+                          className={styles.removeButton}
+                          onClick={() => handleRemoveAdjustment(adjustment.id)}
+                          title="Odebrat"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className={styles.actionsInline}>
+                <button className={`${styles.shareButton} ${styles.shareButtonPrimary}`} onClick={handleShare}>
+                  📤 Sdílet můj plán
+                </button>
+                <button className={styles.resetButton} onClick={handleReset}>
+                  🔄 Začít znovu
+                </button>
+              </div>
+            </>
+          )}
+        </section>
+
         {/* Instructions */}
         <div className={styles.instructions}>
           <span className={styles.instructionIcon}>💡</span>
-          Najeďte myší na položku v grafu a klikněte na tlačítko <strong>+</strong> pro přidání do seznamu úprav
+          Najeďte myší na <strong>koncovou položku</strong> v grafu a klikněte na tlačítko <strong>+</strong> pro přidání do seznamu úprav
         </div>
 
         {/* Charts Section */}
@@ -617,94 +705,6 @@ export function DeficitGame() {
               )}
             </div>
           </div>
-        </section>
-
-        {/* Adjustments Section */}
-        <section className={styles.adjustmentsSection}>
-          <h2 className={styles.adjustmentsTitle}>📋 Moje úpravy rozpočtu</h2>
-          
-          {adjustments.length === 0 ? (
-            <div className={styles.emptyState}>
-              <div className={styles.emptyStateIcon}>🎯</div>
-              <p>Zatím nemáte žádné úpravy. Vyberte položky z grafů výše.</p>
-            </div>
-          ) : (
-            <div className={styles.adjustmentsList}>
-              {adjustments.map(adjustment => {
-                const { min, max } = calculateMaxAdjustment(adjustment.type, adjustment.originalValue);
-                const billionsChange = adjustment.adjustmentAmount / 1_000_000_000;
-                const baseBillions = adjustment.originalValue / 1_000_000_000;
-                const sign = adjustment.adjustmentAmount >= 0 ? '+' : '';
-                
-                // Color logic:
-                // Revenue: + is good (green), - is bad (red)
-                // Expenditure: + is bad (red), - is good (green)
-                const isGoodChange = adjustment.type === 'revenue' 
-                  ? adjustment.adjustmentAmount > 0  // Revenue: increase is good
-                  : adjustment.adjustmentAmount < 0; // Expenditure: decrease is good
-                const isBadChange = adjustment.type === 'revenue'
-                  ? adjustment.adjustmentAmount < 0  // Revenue: decrease is bad
-                  : adjustment.adjustmentAmount > 0; // Expenditure: increase is bad
-                
-                return (
-                  <div 
-                    key={adjustment.id} 
-                    className={`${styles.adjustmentItem} ${
-                      adjustment.type === 'revenue' ? styles.adjustmentRevenue : styles.adjustmentExpenditure
-                    }`}
-                  >
-                    <div className={styles.adjustmentHeader}>
-                      <span className={styles.adjustmentName} title={adjustment.name}>
-                        {adjustment.type === 'revenue' ? '📈' : '📉'} {adjustment.name}
-                      </span>
-                      <span className={styles.adjustmentBase}>
-                        Základ: {baseBillions.toFixed(1)} mld.
-                      </span>
-                    </div>
-                    <div className={styles.adjustmentControls}>
-                      <input
-                        type="range"
-                        className={styles.adjustmentSlider}
-                        min={min}
-                        max={max}
-                        step={1_000_000_000}
-                        value={adjustment.adjustmentAmount}
-                        onChange={(e) => handleAdjustmentChange(adjustment.id, Number(e.target.value))}
-                      />
-                      <span className={`${styles.adjustmentValue} ${
-                        isGoodChange ? styles.adjustmentValueGood :
-                        isBadChange ? styles.adjustmentValueBad :
-                        styles.adjustmentValueZero
-                      }`}>
-                        {sign}{billionsChange.toFixed(0)} mld.
-                      </span>
-                      <button 
-                        className={styles.removeButton}
-                        onClick={() => handleRemoveAdjustment(adjustment.id)}
-                        title="Odebrat"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </section>
-
-        {/* Actions Section */}
-        <section className={styles.actionsSection}>
-          {adjustments.length > 0 && (
-            <>
-              <button className={`${styles.shareButton} ${styles.shareButtonPrimary}`} onClick={handleShare}>
-                📤 Sdílet můj plán
-              </button>
-              <button className={styles.resetButton} onClick={handleReset}>
-                🔄 Začít znovu
-              </button>
-            </>
-          )}
         </section>
       </main>
 

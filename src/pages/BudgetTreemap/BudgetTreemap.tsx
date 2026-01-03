@@ -509,7 +509,7 @@ export function BudgetTreemap() {
       .attr('class', 'cell')
       .attr('transform', d => `translate(${d.y0},${d.x0})`);
 
-    // Add rectangles
+    // Add rectangles with tooltip
     const rect = cell.append('rect')
       .attr('width', d => rectWidth(d))
       .attr('height', d => rectHeight(d))
@@ -518,6 +518,10 @@ export function BudgetTreemap() {
       .attr('stroke-width', 0.5)
       .style('cursor', 'pointer')
       .on('click', clicked);
+    
+    // Add tooltip with full name and value
+    rect.append('title')
+      .text(d => `${d.data.name}\n${(d.value! / 1_000_000_000).toFixed(1)} mld. Kč`);
 
     // Add text elements
     const text = cell.append('text')

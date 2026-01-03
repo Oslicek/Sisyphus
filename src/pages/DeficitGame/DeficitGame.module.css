@@ -370,6 +370,16 @@
   flex-wrap: wrap;
 }
 
+.actionsInline {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
 .shareButton {
   display: flex;
   align-items: center;

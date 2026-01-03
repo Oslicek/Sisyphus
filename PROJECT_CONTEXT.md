@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-02
+> **Last Updated:** 2026-01-03
 
 ## Overview
 
@@ -173,9 +173,13 @@ sisyphus/
 │   │   │   ├── BudgetTables.tsx
 │   │   │   ├── BudgetTables.module.css
 │   │   │   └── index.ts
-│   │   └── BudgetTreemap/      # Vizualizace rozpočtu (zoomable icicle)
-│   │       ├── BudgetTreemap.tsx
-│   │       ├── BudgetTreemap.module.css
+│   │   ├── BudgetTreemap/      # Vizualizace rozpočtu (zoomable icicle)
+│   │   │   ├── BudgetTreemap.tsx
+│   │   │   ├── BudgetTreemap.module.css
+│   │   │   └── index.ts
+│   │   └── DeficitGame/        # "Zruším schodek!" interactive game
+│   │       ├── DeficitGame.tsx
+│   │       ├── DeficitGame.module.css
 │   │       └── index.ts
 │   ├── config/
 │   │   ├── graphVariants.ts    # Graph variant definitions
@@ -197,6 +201,10 @@ sisyphus/
 │   │   ├── graphCalculations.test.ts
 │   │   ├── unitConversions.ts  # Metric unit conversions (TDD)
 │   │   ├── unitConversions.test.ts
+│   │   ├── deficitGame.ts      # Deficit game logic (TDD)
+│   │   ├── deficitGame.test.ts
+│   │   ├── budgetData.ts       # Budget data parsing (TDD)
+│   │   ├── budgetData.test.ts
 │   │   └── chartIntegration.test.ts # Integration tests for chart computation chains
 │   ├── types/
 │   │   └── debt.ts             # TypeScript interfaces
@@ -248,6 +256,9 @@ sisyphus/
 | `DataSources` | src/pages/DataSources/ | Datové řady a zdroje dat page |
 | `BudgetTables` | src/pages/BudgetTables/ | Tabulky rozpočtu 2026 (kapitoly, příjmy, výdaje) |
 | `BudgetTreemap` | src/pages/BudgetTreemap/ | Vizualizace rozpočtu vlády Petra Fialy (zoomable icicle) |
+| `DeficitGame` | src/pages/DeficitGame/ | "Zruším schodek!" interactive game |
+| `deficitGame.ts` | src/utils/ | Deficit game logic with progress calculation |
+| `budgetData.ts` | src/utils/ | Budget CSV/JSON parsing utilities |
 | `useDebtCounter` | src/hooks/ | Fetches anchor, computes & updates every second |
 | `useHistoricalDebt` | src/hooks/ | Fetches all JSON data files |
 | `calculations.ts` | src/utils/ | Deficit per second, elapsed time, current debt |
@@ -357,10 +368,11 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 148 tests across 7 test files
+- 205 tests across 9 test files
 - All utility functions fully covered
 - Integration tests for chart computation chains (deficit-inflation-adjusted, deficit-gdp-percent, population modes, metric units)
 - Multi-anchor debt counter tests (anchor selection, growth rate calculation, boundary transitions)
+- Deficit game logic tests (progress calculation, adjustment validation, sharing)
 
 ## Current State
 
@@ -390,13 +402,20 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Multi-page app with react-router-dom
 - [x] About page (O projektu Sisyfos) with centered logo and contact section
 - [x] Data Sources page with data series tables, bar/line charts, grid lines, axes
-- [x] TDD: 148 tests, 100% coverage
+- [x] TDD: 205 tests, 100% coverage
 - [x] Multi-anchor debt counter with auto-switching (2025→2026)
 - [x] Project logo with tagline (responsive sizing)
 - [x] Logo links to About page
 - [x] Collapsible governments and events sections (collapsed by default)
 - [x] Budget 2026 tables page (chapters, revenues, expenditures overview)
 - [x] Budget 2026 visualization page (zoomable icicle chart with D3.js)
+- [x] "Zruším schodek!" interactive deficit game with:
+  - Dual icicle charts (revenues, expenditures)
+  - Leaf-node selection with hover buttons
+  - Adjustment sliders (±50% range)
+  - Progress bar with real-time deficit tracking
+  - Share functionality for game results
+  - Tooltips showing full item names and values
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates
