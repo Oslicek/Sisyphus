@@ -184,6 +184,12 @@ export function BudgetTables() {
           {' '}(Ministerstvo financí)
         </p>
 
+        <div className={styles.navLinks}>
+          <Link to="/rozpocet-vizualizace" className={styles.navLink}>
+            📊 Interaktivní vizualizace (Tree)
+          </Link>
+        </div>
+
         {/* Summary box */}
         <div className={styles.summaryBox}>
           <div className={styles.summaryItem}>
@@ -198,19 +204,11 @@ export function BudgetTables() {
             <span className={styles.summaryLabel}>Schodek</span>
             <span className={`${styles.summaryValue} ${styles.negative}`}>{formatCurrency(-deficit)}</span>
           </div>
-        </div>
-
-        <div className={styles.navLinks}>
-          <Link to="/rozpocet-vizualizace" className={styles.navLink}>
-            📊 Interaktivní vizualizace (Tree)
-          </Link>
-        </div>
-
-        {/* Deficit Game Button */}
-        <div className={styles.gameButtonContainer}>
-          <Link to="/rozpoctovka" className={styles.gameButton}>
-            Zruším schodek!
-          </Link>
+          <div className={styles.summaryItem}>
+            <Link to="/rozpoctovka" className={styles.gameButton}>
+              Zruším schodek!
+            </Link>
+          </div>
         </div>
 
         <div className={styles.tabs}>

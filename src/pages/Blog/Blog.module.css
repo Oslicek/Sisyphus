@@ -113,6 +113,12 @@
   text-decoration: underline;
 }
 
+.shareButtons {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-bg-subtle, #e9ecef);
+}
+
 .footer {
   margin-top: 3rem;
   padding: 1.5rem;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Footer } from '../../components/Footer';
+import { ShareButtons } from '../../components/ShareButtons';
 import styles from './Blog.module.css';
 
 interface BlogPost {
@@ -110,6 +111,13 @@ export function Blog() {
                   {post.content.split('\n\n').map((paragraph, index) => (
                     <p key={index}>{parseContent(paragraph)}</p>
                   ))}
+                </div>
+                <div className={styles.shareButtons}>
+                  <ShareButtons 
+                    shareUrl={`${window.location.origin}/blog#${post.id}`}
+                    shareTitle={post.title}
+                    shareText={post.title}
+                  />
                 </div>
               </article>
             ))}

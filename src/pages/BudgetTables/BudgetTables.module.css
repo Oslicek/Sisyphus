@@ -252,31 +252,29 @@
 }
 
 /* Game Button - styled like the "Buy Calculator" button */
-.gameButtonContainer {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
 .gameButton {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--color-accent, #c41e3a);
+  color: white;
   text-decoration: none;
   padding: 1rem 2rem;
   border: 2px solid var(--color-accent, #c41e3a);
   border-radius: 8px;
-  background: white;
+  background: var(--color-accent, #c41e3a);
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
   text-align: center;
+  min-width: 180px;
 }
 
 .gameButton:hover {
-  background: var(--color-accent, #c41e3a);
-  color: white;
+  background: #a01728;
+  border-color: #a01728;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
 }
