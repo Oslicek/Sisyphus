@@ -406,9 +406,6 @@ export function DeficitGame() {
         }
       })
       .on('mouseenter', function(event, d) {
-        // Show tooltip with full name
-        d3.select(this).append('title').text(`${d.data.name}\n${(d.value! / 1_000_000_000).toFixed(1)} mld. Kč`);
-        
         // Show hover button only for LEAF nodes (no children) with value
         const isLeaf = !d.children || d.children.length === 0;
         if (d.depth > 0 && isLeaf && d.value && d.value > 0) {
@@ -435,6 +432,11 @@ export function DeficitGame() {
           setHoverButton(null);
         }
       });
+
+    // Add tooltip with full name and value to each rect
+    cell.select('rect')
+      .append('title')
+      .text(d => `${d.data.name}\n${(d.value! / 1_000_000_000).toFixed(1)} mld. Kč`);
 
     // Add text labels
     cell.append('text')
