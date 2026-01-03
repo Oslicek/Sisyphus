@@ -17,6 +17,7 @@ import {
 } from '../../utils/deficitGame';
 import type { BudgetRow, Classification } from '../../utils/budgetData';
 import styles from './DeficitGame.module.css';
+import rozpoctovkaLogo from '../../assets/rozpoctovka-logo-250x204.png';
 
 // Original deficit from 2026 budget
 const ORIGINAL_DEFICIT = -286_000_000_000;
@@ -46,7 +47,6 @@ export function DeficitGame() {
   const [treeNames, setTreeNames] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
   const [adjustments, setAdjustments] = useState<BudgetAdjustment[]>([]);
-  const [showSuccess, setShowSuccess] = useState(false);
   
   // Hover buttons for each chart
   const [revenueHoverButton, setRevenueHoverButton] = useState<HoverButton | null>(null);
@@ -71,13 +71,6 @@ export function DeficitGame() {
     }
     return raw;
   }, [adjustments]);
-
-  // Check for success
-  useEffect(() => {
-    if (currentDeficit >= 0 && adjustments.length > 0) {
-      setShowSuccess(true);
-    }
-  }, [currentDeficit, adjustments.length]);
 
   // Load data
   useEffect(() => {
@@ -275,7 +268,6 @@ export function DeficitGame() {
   // Reset all adjustments
   const handleReset = useCallback(() => {
     setAdjustments([]);
-    setShowSuccess(false);
   }, []);
 
   // Share result
@@ -519,6 +511,9 @@ export function DeficitGame() {
       </header>
 
       <main className={styles.main}>
+        <div className={styles.logoContainer}>
+          <img src={rozpoctovkaLogo} alt="Rozpočtovka" className={styles.logo} />
+        </div>
         <h1 className={styles.title}>Zruším schodek!</h1>
         <p className={styles.subtitle}>
           Upravte příjmy a výdaje státního rozpočtu tak, aby schodek klesl na nulu
@@ -555,6 +550,21 @@ export function DeficitGame() {
           </div>
         </section>
 
+        {/* Success Banner (non-modal) */}
+        {currentDeficit >= 0 && adjustments.length > 0 && (
+          <div className={`${styles.successBanner} ${currentDeficit === 0 ? styles.successBannerZero : styles.successBannerPositive}`}>
+            <span className={styles.successBannerIcon}>{currentDeficit === 0 ? '🎉' : '💰'}</span>
+            <span className={styles.successBannerText}>
+              {currentDeficit === 0 
+                ? 'Vyrovnaný rozpočet! Podařilo se vám eliminovat schodek.'
+                : `Přebytek ${formatCurrency(currentDeficit)}! Už máte více než vyrovnaný rozpočet.`}
+            </span>
+            <button className={styles.successBannerShare} onClick={handleShare}>
+              📤 Sdílet
+            </button>
+          </div>
+        )}
+
         {/* Adjustments Section - placed above charts for better UX */}
         <section className={styles.adjustmentsSection}>
           <h2 className={styles.adjustmentsTitle}>📋 Moje úpravy rozpočtu</h2>
@@ -583,7 +593,13 @@ export function DeficitGame() {
                     ? adjustment.adjustmentAmount < 0
                     : adjustment.adjustmentAmount > 0;
                   
-                  return (
+                  // Calculate percentage change
+                const percentChange = adjustment.originalValue !== 0 
+                  ? (adjustment.adjustmentAmount / adjustment.originalValue) * 100 
+                  : 0;
+                const percentSign = percentChange >= 0 ? '+' : '';
+                
+                return (
                     <div 
                       key={adjustment.id} 
                       className={`${styles.adjustmentItem} ${
@@ -613,7 +629,7 @@ export function DeficitGame() {
                           isBadChange ? styles.adjustmentValueBad :
                           styles.adjustmentValueZero
                         }`}>
-                          {sign}{billionsChange.toFixed(0)} mld.
+                          {sign}{billionsChange.toFixed(0)} mld. ({percentSign}{percentChange.toFixed(0)}%)
                         </span>
                         <button 
                           className={styles.removeButton}
@@ -642,7 +658,7 @@ export function DeficitGame() {
         {/* Instructions */}
         <div className={styles.instructions}>
           <span className={styles.instructionIcon}>💡</span>
-          Najeďte myší na <strong>koncovou položku</strong> v grafu a klikněte na tlačítko <strong>+</strong> pro přidání do seznamu úprav
+          Najeďte myší na <strong>koncovou položku</strong> v grafu a klikněte na tlačítko <strong>+</strong> pro přidání do seznamu úprav. Každou položku můžete navýšit nebo snížit maximálně o 50 %. Položky nelze odebírat ani přidávat.
         </div>
 
         {/* Charts Section */}
@@ -710,29 +726,6 @@ export function DeficitGame() {
           </div>
         </section>
       </main>
-
-      {/* Success Modal */}
-      {showSuccess && (
-        <div className={styles.successOverlay} onClick={() => setShowSuccess(false)}>
-          <div className={styles.successModal} onClick={e => e.stopPropagation()}>
-            <div className={styles.successIcon}>🎉</div>
-            <h2 className={styles.successTitle}>Gratulujeme!</h2>
-            <p className={styles.successText}>
-              {currentDeficit === 0 
-                ? 'Podařilo se vám vyrovnat státní rozpočet!'
-                : `Máte dokonce přebytek ${formatCurrency(currentDeficit)}!`}
-            </p>
-            <div className={styles.successActions}>
-              <button className={`${styles.shareButton} ${styles.shareButtonPrimary}`} onClick={handleShare}>
-                📤 Sdílet výsledek
-              </button>
-              <button className={`${styles.shareButton} ${styles.shareButtonSecondary}`} onClick={() => setShowSuccess(false)}>
-                Pokračovat v úpravách
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <Footer />
     </div>

@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-03
+> **Last Updated:** 2026-01-03 (v2)
 
 ## Overview
 
@@ -222,7 +222,8 @@ sisyphus/
 │   │   └── debt.ts             # TypeScript interfaces
 │   ├── assets/
 │   │   ├── sisyfos-logo-200x200.png  # Logo for main page
-│   │   └── sisyfos-logo-400x400.png  # Logo for About page
+│   │   ├── sisyfos-logo-400x400.png  # Logo for About page
+│   │   └── rozpoctovka-logo-250x204.png  # Logo for deficit game
 │   ├── App.tsx                 # Main app with logo, tagline, footer
 │   ├── App.module.css
 │   ├── main.tsx
@@ -424,12 +425,15 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Budget 2026 tables page (chapters, revenues, expenditures overview)
 - [x] Budget 2026 visualization page (zoomable icicle chart with D3.js)
 - [x] "Zruším schodek!" interactive deficit game with:
+  - Rozpočtovka logo at top of page
   - Dual icicle charts (revenues, expenditures)
   - Leaf-node selection with hover buttons
-  - Adjustment sliders (±50% range)
+  - Adjustment sliders (±50% range) with absolute and percentage display
   - Progress bar with real-time deficit tracking
+  - Non-blocking success banner when deficit reaches zero or surplus
   - Share functionality for game results
   - Tooltips showing full item names and values
+  - Instructions explaining 50% adjustment limit
 - [x] Hamburger menu navigation with tree structure:
   - Státní dluh → Datové řady a zdroje dat
   - Státní rozpočet → Vizualizace
