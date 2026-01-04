@@ -2,6 +2,13 @@
   "description": "Příspěvky blogu Projekt Sisyfos",
   "posts": [
     {
+      "id": "2026-01-04-uvadime-rozpoctovku",
+      "date": "2026-01-04",
+      "title": "Uvádíme Rozpočtovku",
+      "image": "uvadime-rozpoctovku.png",
+      "content": "Opravte státní rozpočet! Dosáhněte nulového schodku! Naše online hra Rozpočtovka vám to umožní. Najdete ji na adrese [rozpoctovka.cz](https://rozpoctovka.cz).\n\nPokud vás zajímá \"pouze\" názorná vizualizace českého rozpočtu, podívejte se na stránku [ceskyrozpocet.cz](https://ceskyrozpocet.cz)."
+    },
+    {
       "id": "2025-12-31-spoustime-projekt-sisyfos",
       "date": "2025-12-31",
       "title": "Spouštíme Projekt Sisyfos",

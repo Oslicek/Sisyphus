@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-03 (v7)
+> **Last Updated:** 2026-01-04 (v8)
 
 ## Overview
 
@@ -49,6 +49,7 @@
 │                                      │ - wage-data.json                  │   │
 │                                      │ - price-data.json                 │   │
 │                                      │ - food-prices.json                │   │
+│                                      │ - blog-posts.json                 │   │
 │                                      └──────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -177,6 +178,10 @@ sisyphus/
 │   │   │   ├── About.tsx
 │   │   │   ├── About.module.css
 │   │   │   └── index.ts
+│   │   ├── Blog/               # Blog - příspěvky Projektu Sisyfos
+│   │   │   ├── Blog.tsx
+│   │   │   ├── Blog.module.css
+│   │   │   └── index.ts
 │   │   ├── DataSources/        # Datové řady a zdroje dat
 │   │   │   ├── DataSources.tsx
 │   │   │   ├── DataSources.module.css
@@ -229,6 +234,10 @@ sisyphus/
 │   ├── main.tsx
 │   └── index.css               # Global styles, light theme
 ├── public/
+│   ├── images/
+│   │   └── blog/               # Blog post images
+│   │       ├── Vyplouvame.png
+│   │       └── uvadime-rozpoctovku.png
 │   └── data/
 │       ├── debt-anchor.json    # Anchor for real-time counter
 │       ├── debt-historical.json # Historical debt 1993-2025
@@ -236,6 +245,7 @@ sisyphus/
 │       ├── events.json         # Significant events with dates
 │       ├── governments.json    # Government timeline + party colors
 │       ├── budget-plans.json   # 2026 budget predictions
+│       ├── blog-posts.json     # Blog posts with metadata
 │       ├── budget/             # Státní rozpočet 2026 (Fiala)
 │       │   ├── dim_chapter.csv           # Chapter definitions (for tables)
 │       │   ├── dim_classification.csv    # Classification codes and names (for tables)
@@ -268,6 +278,7 @@ sisyphus/
 | `Navigation` | src/components/Navigation/ | Hamburger menu with tree navigation |
 | `Footer` | src/components/Footer/ | Unified footer with links and test banner |
 | `About` | src/pages/About/ | O projektu Sisyfos page |
+| `Blog` | src/pages/Blog/ | Blog příspěvky - dynamically loaded from JSON |
 | `DataSources` | src/pages/DataSources/ | Datové řady a zdroje dat page |
 | `BudgetTables` | src/pages/BudgetTables/ | Tabulky rozpočtu 2026 (kapitoly, příjmy, výdaje) |
 | `BudgetTreemap` | src/pages/BudgetTreemap/ | Vizualizace rozpočtu vlády Petra Fialy (zoomable icicle) |
@@ -453,7 +464,15 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Unified footer component on all pages:
   - Basic links: Dluh | Rozpočet | Rozpočtovka | Blog | O projektu Sisyfos
   - Active page shown as text (not link)
+  - Data disclaimer text: "V našich datech mohou být chyby. Pokud je chcete k něčemu použít, důrazně doporučujeme jejich ověření."
   - Test banner as second line
+- [x] Blog page with dynamic content loading:
+  - Blog posts loaded from blog-posts.json
+  - Support for title images (stored in /images/blog/)
+  - Markdown-style links in content [text](url)
+  - Date formatting in Czech locale
+  - Social sharing buttons per post
+  - Český dluh logo in Rozpočtovka page (top-left, links to main page)
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates
