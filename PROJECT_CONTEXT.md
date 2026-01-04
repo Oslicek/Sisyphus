@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-04 (v8)
+> **Last Updated:** 2026-01-05 (v9)
 
 ## Overview
 
@@ -396,7 +396,7 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 212 tests across 9 test files
+- 220 tests across 9 test files
 - All utility functions fully covered
 - Integration tests for chart computation chains (deficit-inflation-adjusted, deficit-gdp-percent, population modes, metric units)
 - Multi-anchor debt counter tests (anchor selection, growth rate calculation, boundary transitions)
@@ -511,6 +511,9 @@ All files           |     100 |      100 |     100 |     100 |
   - On production (HTTPS): Shows native share dialog with image
   - On development (HTTP): Falls back to image download
   - Gracefully handles missing Clipboard API on older browsers/contexts
+- Cloudflare Pages redirects (`public/_redirects`):
+  - `/*.html / 301` - Redirect all .html requests to root (prevents duplicate content)
+  - `/* /index.html 200` - SPA fallback for client-side routing
 
 ## Contact
 
