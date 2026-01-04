@@ -39,6 +39,9 @@ export function Footer() {
           </span>
         ))}
       </nav>
+      <p className={styles.disclaimer}>
+        V našich datech mohou být chyby. Pokud je chcete k něčemu použít, důrazně doporučujeme jejich ověření.
+      </p>
       <TestBanner />
     </footer>
   );

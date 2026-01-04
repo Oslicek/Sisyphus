@@ -39,6 +39,33 @@
 .main {
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+}
+
+/* Český dluh logo - top left */
+.ceskyDluhLogoLink {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.ceskyDluhLogoLink:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.ceskyDluhLogo {
+  width: 80px;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .ceskyDluhLogo {
+    width: 60px;
+  }
 }
 
 /* Logo */

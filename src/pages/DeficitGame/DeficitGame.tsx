@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 import html2canvas from 'html2canvas';
 import {
@@ -31,6 +32,7 @@ import {
 } from '../../utils/deficitGame';
 import styles from './DeficitGame.module.css';
 import rozpoctovkaLogo from '../../assets/rozpoctovka-logo-250x204-pruhledne.png';
+import ceskyDluhLogo from '../../assets/cesky-dluh-logo-pozmenene-barvy140x135.png';
 
 // Original deficit from 2026 budget
 const ORIGINAL_DEFICIT = -286_000_000_000;
@@ -566,6 +568,9 @@ export function DeficitGame() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
+        <Link to="/" className={styles.ceskyDluhLogoLink}>
+          <img src={ceskyDluhLogo} alt="Český dluh" className={styles.ceskyDluhLogo} />
+        </Link>
         <div className={styles.logoContainer}>
           <img src={rozpoctovkaLogo} alt="Rozpočtovka" className={styles.logo} />
         </div>
