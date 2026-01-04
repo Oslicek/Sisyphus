@@ -42,6 +42,33 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // DEBUG: Log just before loading main.tsx module
+      (function() {
+        var logEntry = {
+          timestamp: Date.now(),
+          location: 'index.html:body',
+          message: 'Body loaded - BEFORE main.tsx module',
+          data: {
+            href: window.location.href,
+            pathname: window.location.pathname
+          },
+          sessionId: 'debug-session',
+          hypothesisId: 'F'
+        };
+        
+        try {
+          var existingLogs = localStorage.getItem('sisyphus_debug_logs');
+          var logs = existingLogs ? JSON.parse(existingLogs) : [];
+          logs.push(logEntry);
+          localStorage.setItem('sisyphus_debug_logs', JSON.stringify(logs.slice(-500)));
+        } catch (e) {
+          console.error('Failed to write debug log:', e);
+        }
+        
+        console.log('[DEBUG:F] index.html:body - Body loaded', logEntry.data);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
