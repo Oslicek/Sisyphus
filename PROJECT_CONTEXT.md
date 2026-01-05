@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-05 (v9)
+> **Last Updated:** 2026-01-05 (v10)
 
 ## Overview
 
@@ -204,6 +204,8 @@ sisyphus/
 │   │   └── metricUnits.ts      # Metric unit definitions
 │   ├── hooks/
 │   │   ├── useDebtCounter.ts   # Counter logic hook
+│   │   ├── useDocumentMeta.ts  # SEO: dynamic title, description, canonical, GA tracking
+│   │   ├── useDocumentMeta.test.ts
 │   │   └── useHistoricalDebt.ts # All data fetching hook
 │   ├── utils/
 │   │   ├── calculations.ts     # Debt calculations (TDD)
@@ -224,7 +226,8 @@ sisyphus/
 │   │   ├── budgetData.test.ts
 │   │   └── chartIntegration.test.ts # Integration tests for chart computation chains
 │   ├── types/
-│   │   └── debt.ts             # TypeScript interfaces
+│   │   ├── debt.ts             # TypeScript interfaces
+│   │   └── gtag.d.ts           # Google Analytics gtag types
 │   ├── assets/
 │   │   ├── sisyfos-logo-200x200.png  # Logo for main page
 │   │   ├── sisyfos-logo-400x400.png  # Logo for About page
@@ -234,10 +237,14 @@ sisyphus/
 │   ├── main.tsx
 │   └── index.css               # Global styles, light theme
 ├── public/
+│   ├── robots.txt              # SEO: crawler instructions
+│   ├── sitemap.xml             # SEO: sitemap for search engines
 │   ├── images/
-│   │   └── blog/               # Blog post images
-│   │       ├── Vyplouvame.png
-│   │       └── uvadime-rozpoctovku.png
+│   │   ├── blog/               # Blog post images
+│   │   │   ├── Vyplouvame.png
+│   │   │   └── uvadime-rozpoctovku.png
+│   │   └── og/                 # Open Graph share images
+│   │       └── rozpoctovka-sisyfos-sharing-pic-1200x630.jpg
 │   └── data/
 │       ├── debt-anchor.json    # Anchor for real-time counter
 │       ├── debt-historical.json # Historical debt 1993-2025
@@ -396,7 +403,7 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 220 tests across 9 test files
+- 228 tests across 10 test files
 - All utility functions fully covered
 - Integration tests for chart computation chains (deficit-inflation-adjusted, deficit-gdp-percent, population modes, metric units)
 - Multi-anchor debt counter tests (anchor selection, growth rate calculation, boundary transitions)
@@ -430,12 +437,12 @@ All files           |     100 |      100 |     100 |     100 |
 - [x] Multi-page app with react-router-dom
 - [x] About page (O projektu Sisyfos) with centered logo and contact section
 - [x] Data Sources page with data series tables, bar/line charts, grid lines, axes
-- [x] TDD: 205 tests, 100% coverage
+- [x] TDD: 228 tests, 100% coverage
 - [x] Multi-anchor debt counter with auto-switching (2025→2026-provisorium)
 - [x] Budget provisorium mode with daily-increment calculation (700M CZK/day)
 - [x] Project logo with tagline (responsive sizing)
 - [x] Logo links to About page
-- [x] Collapsible governments and events sections (collapsed by default)
+- [x] Collapsible governments and events sections (governments expanded by default on desktop/tablet)
 - [x] Budget 2026 tables page (chapters, revenues, expenditures overview)
 - [x] Budget 2026 visualization page (zoomable icicle chart with D3.js)
 - [x] "Zruším schodek!" interactive deficit game with:
@@ -473,6 +480,14 @@ All files           |     100 |      100 |     100 |     100 |
   - Date formatting in Czech locale
   - Social sharing buttons per post
   - Český dluh logo in Rozpočtovka page (top-left, links to main page)
+- [x] SEO optimizations:
+  - Dynamic page titles and meta descriptions per page (useDocumentMeta hook)
+  - Open Graph tags with custom share image (1200x630)
+  - JSON-LD structured data (WebSite, WebApplication schemas)
+  - Canonical URL support
+  - robots.txt for search engine crawlers
+  - sitemap.xml with all pages
+  - Google Analytics SPA page tracking (tracks route changes)
 
 **Pending:**
 - [ ] Cloudflare Worker for data updates
@@ -490,7 +505,8 @@ All files           |     100 |      100 |     100 |     100 |
 - Light theme only
 - Fonts support Czech diacritics (háčky, čárky)
 - Chart uses Q4 values (or latest available quarter)
-- Governments and events sections are collapsible (collapsed by default, expandable by user)
+- Governments section expanded by default on desktop/tablet (>= 768px), collapsed on mobile
+- Events section always collapsed by default, expandable by user
 - Inflation baseline: 2025
 - Historical data updated from MFCR as of 2025-10-17
 - Data files contain only verified historical data (no projections except budget plans)

@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Footer } from '../../components/Footer';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta';
 import sisyfosLogo from '../../assets/sisyfos-logo-400x400.png';
 import styles from './About.module.css';
 
 export function About() {
+  useDocumentMeta({
+    title: 'O projektu Sisyfos – Kdo jsme',
+    description: 'Cílem projektu Sisyfos je zpřístupnit objektivní data o státním dluhu České republiky v atraktivní formě.',
+  });
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>

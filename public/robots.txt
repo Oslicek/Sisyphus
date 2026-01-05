@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sisyfos.cz/sitemap.xml
+Sitemap: https://rozpoctovka.cz/sitemap.xml
+Sitemap: https://ceskyrozpocet.cz/sitemap.xml
+

@@ -62,8 +62,12 @@ export function DebtChart() {
   const [metricUnit, setMetricUnit] = useState<MetricUnit>('czk');
   const [showBabisInfoModal, setShowBabisInfoModal] = useState(false);
   
-  // Governments and events are collapsed by default
-  const [showGovernments, setShowGovernments] = useState(false);
+  // Detect if desktop/tablet (wider than mobile breakpoint)
+  const isDesktopOrTablet = typeof window !== 'undefined' && window.innerWidth >= 768;
+  
+  // Governments expanded by default on desktop/tablet, collapsed on mobile
+  // Events always collapsed by default
+  const [showGovernments, setShowGovernments] = useState(isDesktopOrTablet);
   const [showEvents, setShowEvents] = useState(false);
 
   const { chartData, events, governments, parties, budgetPlans, economicData, demographicData, wageData, priceData, foodPriceData, interestData, isLoading, error } = useHistoricalDebt();

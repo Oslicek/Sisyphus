@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 import { Footer } from '../../components/Footer';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta';
 import { 
   parseBudgetItemsCSV,
   buildTreeFromItems,
@@ -62,6 +63,11 @@ interface RectNode extends d3.HierarchyRectangularNode<TreeNode> {
 }
 
 export function BudgetTreemap() {
+  useDocumentMeta({
+    title: 'Vizualizace státního rozpočtu 2026 – Interaktivní graf',
+    description: 'Prozkoumejte strukturu státního rozpočtu ČR na rok 2026 pomocí interaktivní hierarchické vizualizace.',
+  });
+
   const [budgetItems, setBudgetItems] = useState<BudgetItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState<ViewType>('exp_odvetvove');

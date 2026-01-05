@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Footer } from '../../components/Footer';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta';
 import styles from './DataSources.module.css';
 
 interface DataPoint {
@@ -410,6 +411,11 @@ function DataTable({ data, columns }: { data: DataPoint[]; columns: { key: strin
 }
 
 export function DataSources() {
+  useDocumentMeta({
+    title: 'Datové řady – Historická data o dluhu a ekonomice ČR',
+    description: 'Historické datové řady o státním dluhu, HDP, inflaci, demografii a dalších ekonomických ukazatelích.',
+  });
+
   const [dataSets, setDataSets] = useState<DataSet[]>([]);
   const [loading, setLoading] = useState(true);
 

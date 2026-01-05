@@ -15,6 +15,7 @@ import {
   TelegramIcon,
 } from 'react-share';
 import { Footer } from '../../components/Footer';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta';
 import { 
   parseBudgetItemsCSV,
   buildTreeFromItems,
@@ -50,6 +51,11 @@ interface HoverButton {
 }
 
 export function DeficitGame() {
+  useDocumentMeta({
+    title: 'Rozpočtovka – Opravte státní rozpočet!',
+    description: 'Interaktivní hra, kde můžete upravit příjmy a výdaje státního rozpočtu a pokusit se dosáhnout nulového schodku.',
+  });
+
   const [revenueItems, setRevenueItems] = useState<BudgetItem[]>([]);
   const [expenditureItems, setExpenditureItems] = useState<BudgetItem[]>([]);
   const [loading, setLoading] = useState(true);

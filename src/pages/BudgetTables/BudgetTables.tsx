@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Footer } from '../../components/Footer';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta';
 import { 
   parseCSV, 
   parseChaptersCSV,
@@ -17,6 +18,11 @@ import styles from './BudgetTables.module.css';
 type TabType = 'overview' | 'revenues' | 'expenditures' | 'chapters';
 
 export function BudgetTables() {
+  useDocumentMeta({
+    title: 'Státní rozpočet ČR 2026 – Příjmy a výdaje',
+    description: 'Kompletní přehled návrhu státního rozpočtu České republiky na rok 2026. Příjmy, výdaje a saldo podle kapitol.',
+  });
+
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [classifications, setClassifications] = useState<Classification[]>([]);
   const [revenueRows, setRevenueRows] = useState<BudgetRow[]>([]);

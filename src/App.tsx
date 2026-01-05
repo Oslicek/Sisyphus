@@ -5,6 +5,7 @@ import { BuyCalculator } from './components/BuyCalculator';
 import { ShareButtons } from './components/ShareButtons';
 import { Footer } from './components/Footer';
 import { Navigation } from './components/Navigation';
+import { useDocumentMeta } from './hooks/useDocumentMeta';
 import { About } from './pages/About';
 import { Blog } from './pages/Blog';
 import { DataSources } from './pages/DataSources';
@@ -15,6 +16,11 @@ import sisyfosLogo from './assets/sisyfos-logo-200x200.png';
 import styles from './App.module.css';
 
 function Home() {
+  useDocumentMeta({
+    title: 'Státní dluh ČR v reálném čase – Projekt Sisyfos',
+    description: 'Kolik dluží Česká republika? Sledujte počítadlo státního dluhu v reálném čase a historický vývoj zadlužení od roku 1993.',
+  });
+
   return (
     <div className={styles.app}>
       <div className={styles.logoContainer}>

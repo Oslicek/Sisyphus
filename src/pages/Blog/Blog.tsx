@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Footer } from '../../components/Footer';
 import { ShareButtons } from '../../components/ShareButtons';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta';
 import styles from './Blog.module.css';
 
 interface BlogPost {
@@ -18,6 +19,11 @@ interface BlogData {
 }
 
 export function Blog() {
+  useDocumentMeta({
+    title: 'Blog – Novinky o státním dluhu a rozpočtu ČR',
+    description: 'Aktuální články a analýzy o státním dluhu, rozpočtu a veřejných financích České republiky.',
+  });
+
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
