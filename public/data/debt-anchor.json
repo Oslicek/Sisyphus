@@ -4,15 +4,15 @@
       "id": "2025",
       "baseAmount": 3517950000000,
       "anchorDate": "2025-10-01",
-      "plannedEoyDebt": 3613600000000,
+      "plannedEoyDebt": 3655900000000,
       "eoyDate": "2026-01-01",
       "calculationType": "eoy-target",
       "source": "Ministerstvo financí ČR",
-      "sourceUrl": "https://www.mfcr.cz/assets/attachments/2025-03-27_Statni-rozpocet-2025-v-kostce.pdf"
+      "sourceUrl": "https://www.mfcr.cz/cs/rozpoctova-politika/rizeni-statniho-dluhu/statistiky/struktura-a-vyvoj-statniho-dluhu"
     },
     {
       "id": "2026-provisorium",
-      "baseAmount": 3613600000000,
+      "baseAmount": 3655900000000,
       "anchorDate": "2026-01-01",
       "dailyIncrement": 700000000,
       "eoyDate": "2027-01-01",
@@ -22,7 +22,7 @@
     },
     {
       "id": "2026-fiala",
-      "baseAmount": 3613600000000,
+      "baseAmount": 3655900000000,
       "anchorDate": "2026-01-01",
       "plannedDeficit": 286000000000,
       "eoyDate": "2027-01-01",
@@ -32,5 +32,5 @@
     }
   ],
   "currency": "CZK",
-  "lastUpdated": "2026-01-03"
+  "lastUpdated": "2026-01-06"
 }

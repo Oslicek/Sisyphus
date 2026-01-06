@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-05 (v10)
+> **Last Updated:** 2026-01-06 (v11)
 
 ## Overview
 
@@ -508,11 +508,13 @@ All files           |     100 |      100 |     100 |     100 |
 - Governments section expanded by default on desktop/tablet (>= 768px), collapsed on mobile
 - Events section always collapsed by default, expandable by user
 - Inflation baseline: 2025
-- Historical data updated from MFCR as of 2025-10-17
+- Historical data updated from MFCR as of 2026-01-06
+- 2025 actual deficit: 290.7B CZK (final, vs planned 241B)
+- 2025 actual debt: 3655.9B CZK (actual value shown only in "Nominální dluh" + "Celá země" + "Kč")
 - Data files contain only verified historical data (no projections except budget plans)
 - Babiš government budget for 2026 is pending - currently shows info modal
 - Multi-anchor debt counter:
-  - 2025: EOY-target mode (interpolates to 3613.6B on Jan 1, 2026)
+  - 2025: EOY-target mode (interpolates to 3655.9B on Jan 1, 2026)
   - 2026-provisorium: Daily-increment mode (700M CZK/day = 8102 CZK/second) - currently active
   - 2026-fiala: Deficit-based mode (adds 286B Fiala government budget deficit over the year) - for when budget is approved
   - Auto-switches at 2026-01-01 00:00:00 UTC

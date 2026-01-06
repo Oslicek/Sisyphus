@@ -252,6 +252,26 @@ export function DebtChart() {
       result = convertToMetricUnit(result, metricUnit, populationMode, priceData, wageData, foodPriceData);
     }
 
+    // For 2025: Only show as actual (red bar) for debt-absolute + country + czk
+    // All other variants use additional estimates (inflation, GDP, demographics, prices)
+    // so 2025 should be marked as prediction (blue bar) for those
+    const isActual2025Variant = activeVariant === 'debt-absolute' && populationMode === 'country' && metricUnit === 'czk';
+    if (!isActual2025Variant) {
+      result = result.map((point) => {
+        if (point.year === 2025 && !point.isPrediction) {
+          const fialaPlan = budgetPlans.find((p) => p.id === 'fiala');
+          return {
+            ...point,
+            isPrediction: true,
+            planId: 'fiala',
+            planName: fialaPlan?.name || 'Rozpočet Fialovy vlády',
+            planColor: fialaPlan?.color || '#0033A0',
+          };
+        }
+        return point;
+      });
+    }
+
     return result;
   }, [chartData, economicData, demographicData, activeVariant, activePlan, budgetPlans, populationMode, metricUnit, priceData, wageData, foodPriceData, interestData]);
 
