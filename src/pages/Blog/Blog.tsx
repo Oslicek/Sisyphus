@@ -101,6 +101,28 @@ export function Blog() {
       .join('\n');
   };
 
+  // Check if paragraph is an unordered list (all lines start with "- ")
+  const isUnorderedList = (text: string): boolean => {
+    const lines = text.split('\n');
+    return lines.length > 0 && lines.every(line => line.startsWith('- '));
+  };
+
+  // Check if paragraph is an ordered list (all lines start with "N. ")
+  const isOrderedList = (text: string): boolean => {
+    const lines = text.split('\n');
+    return lines.length > 0 && lines.every(line => /^\d+\.\s/.test(line));
+  };
+
+  // Parse list items
+  const parseListItems = (text: string, isOrdered: boolean): string[] => {
+    return text.split('\n').map(line => {
+      if (isOrdered) {
+        return line.replace(/^\d+\.\s/, '');
+      }
+      return line.slice(2); // Remove "- "
+    });
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -135,6 +157,26 @@ export function Blog() {
                         <blockquote key={index} className={styles.blockquote}>
                           <p>{parseLinks(quoteText, `quote-${index}-`)}</p>
                         </blockquote>
+                      );
+                    }
+                    if (isUnorderedList(paragraph)) {
+                      const items = parseListItems(paragraph, false);
+                      return (
+                        <ul key={index} className={styles.list}>
+                          {items.map((item, itemIndex) => (
+                            <li key={itemIndex}>{parseLinks(item, `ul-${index}-${itemIndex}-`)}</li>
+                          ))}
+                        </ul>
+                      );
+                    }
+                    if (isOrderedList(paragraph)) {
+                      const items = parseListItems(paragraph, true);
+                      return (
+                        <ol key={index} className={styles.list}>
+                          {items.map((item, itemIndex) => (
+                            <li key={itemIndex}>{parseLinks(item, `ol-${index}-${itemIndex}-`)}</li>
+                          ))}
+                        </ol>
                       );
                     }
                     return <p key={index}>{parseLinks(paragraph, `p-${index}-`)}</p>;

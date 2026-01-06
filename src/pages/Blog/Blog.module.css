@@ -127,6 +127,21 @@
   margin: 0;
 }
 
+.list {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  color: var(--color-text, #1a1a2e);
+}
+
+.list li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.list li:last-child {
+  margin-bottom: 0;
+}
+
 .shareButtons {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
