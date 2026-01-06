@@ -53,7 +53,7 @@ export function Blog() {
   };
 
   // Parse markdown-style links [text](url) in content
-  const parseContent = (text: string) => {
+  const parseLinks = (text: string, keyPrefix: string = ''): React.ReactNode[] => {
     const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
     const parts: React.ReactNode[] = [];
     let lastIndex = 0;
@@ -67,7 +67,7 @@ export function Blog() {
       // Add the link
       parts.push(
         <a 
-          key={match.index} 
+          key={`${keyPrefix}${match.index}`} 
           href={match[2]} 
           target="_blank" 
           rel="noopener noreferrer"
@@ -84,7 +84,21 @@ export function Blog() {
       parts.push(text.slice(lastIndex));
     }
 
-    return parts.length > 0 ? parts : text;
+    return parts.length > 0 ? parts : [text];
+  };
+
+  // Check if paragraph is a blockquote (starts with "> ")
+  const isBlockquote = (text: string): boolean => {
+    return text.startsWith('> ');
+  };
+
+  // Remove blockquote marker and parse content
+  const parseBlockquote = (text: string): string => {
+    // Handle multi-line blockquotes (each line starts with "> ")
+    return text
+      .split('\n')
+      .map(line => line.startsWith('> ') ? line.slice(2) : line)
+      .join('\n');
   };
 
   return (
@@ -114,9 +128,17 @@ export function Blog() {
                   />
                 )}
                 <div className={styles.postContent}>
-                  {post.content.split('\n\n').map((paragraph, index) => (
-                    <p key={index}>{parseContent(paragraph)}</p>
-                  ))}
+                  {post.content.split('\n\n').map((paragraph, index) => {
+                    if (isBlockquote(paragraph)) {
+                      const quoteText = parseBlockquote(paragraph);
+                      return (
+                        <blockquote key={index} className={styles.blockquote}>
+                          <p>{parseLinks(quoteText, `quote-${index}-`)}</p>
+                        </blockquote>
+                      );
+                    }
+                    return <p key={index}>{parseLinks(paragraph, `p-${index}-`)}</p>;
+                  })}
                 </div>
                 <div className={styles.shareButtons}>
                   <ShareButtons 
