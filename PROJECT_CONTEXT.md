@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-06 (v11)
+> **Last Updated:** 2026-01-06 (v12)
 
 ## Overview
 
@@ -511,6 +511,7 @@ All files           |     100 |      100 |     100 |     100 |
 - Historical data updated from MFCR as of 2026-01-06
 - 2025 actual deficit: 290.7B CZK (final, vs planned 241B)
 - 2025 actual debt: 3655.9B CZK (actual value shown only in "Nominální dluh" + "Celá země" + "Kč")
+- 2025 actual interest: 98.1B CZK (actual value shown only in "Úroky"/"Σ Úroky" + "Celá země" + "Kč")
 - Data files contain only verified historical data (no projections except budget plans)
 - Babiš government budget for 2026 is pending - currently shows info modal
 - Multi-anchor debt counter:
