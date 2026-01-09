@@ -1,0 +1,328 @@
+/**
+ * Pension Projection Engine
+ * Combines demography and PAYG calculations for multi-year projections
+ */
+
+import type {
+  PensionDataset,
+  SliderValues,
+  PopulationBySex,
+  YearPoint,
+  ScenarioResult,
+} from '../types/pension';
+
+import {
+  mxArrayToQx,
+  calculateSurvivors,
+  ageCohorts,
+  calculateBirths,
+  applyMigration,
+  createFullAgeArray,
+  calibrateMortality,
+  scaleEmployment,
+  calculateASFR,
+  calculateNetMigration,
+  sumPopulation,
+  countDeaths,
+} from './pensionDemography';
+
+import {
+  calculateWageBill,
+  calculateContributions,
+  countPensioners,
+  calculateBenefits,
+  calculateBalance,
+  calculateRequiredRate,
+  calculateDependencyRatio,
+  countWorkers,
+  calculateAvgWage,
+  calculateAvgPension,
+} from './pensionPayg';
+
+/**
+ * Prepared projection parameters for efficient computation
+ */
+export interface PreparedParams {
+  maxAge: number;
+  retAge: number;
+  contribRate: number;
+  avgWage0: number;
+  avgPension0: number;
+  wageGrowthReal: number;
+  cpiAssumed: number;
+  indexWageWeight: number;
+  srb: number;
+  pMale: number;
+  
+  // Age-specific arrays
+  asfr: number[];
+  qxM: number[];
+  qxF: number[];
+  empM: number[];
+  empF: number[];
+  wRelM: number[];
+  wRelF: number[];
+  netMigM: number[];
+  netMigF: number[];
+}
+
+/**
+ * Prepare projection parameters from dataset and sliders
+ * Pre-computes calibrated mortality, scaled employment, ASFR, etc.
+ */
+export function prepareProjectionParams(
+  dataset: PensionDataset,
+  sliders: SliderValues
+): PreparedParams {
+  const { meta, mortalityCurves, fertilityCurve, laborParticipation, wageProfile, migrationShape, pensionParams, basePopulation } = dataset;
+  const maxAge = meta.maxAge;
+  
+  // Get base mortality rates (mx)
+  const baseMxM = mortalityCurves.mx?.M || mortalityCurves.qx?.M || [];
+  const baseMxF = mortalityCurves.mx?.F || mortalityCurves.qx?.F || [];
+  
+  // Calibrate mortality to target life expectancy
+  const { scaledMx: scaledMxM } = calibrateMortality(baseMxM, sliders.e0_M);
+  const { scaledMx: scaledMxF } = calibrateMortality(baseMxF, sliders.e0_F);
+  
+  // Convert to qx
+  const qxM = mxArrayToQx(scaledMxM);
+  const qxF = mxArrayToQx(scaledMxF);
+  
+  // Create full ASFR array from shape and TFR
+  const fullShape = createFullAgeArray(fertilityCurve.ages, fertilityCurve.shape, maxAge);
+  const asfr = calculateASFR(sliders.tfr, fullShape);
+  
+  // Scale employment rates
+  const empM = scaleEmployment(laborParticipation.emp.M, sliders.empMultiplier);
+  const empF = scaleEmployment(laborParticipation.emp.F, sliders.empMultiplier);
+  
+  // Calculate net migration by age
+  const totalPop = sumPopulation(basePopulation.population);
+  const totalNetMig = (sliders.netMigPer1000 / 1000) * totalPop;
+  const netMigM = calculateNetMigration(totalNetMig, migrationShape.shape.M);
+  const netMigF = calculateNetMigration(totalNetMig, migrationShape.shape.F);
+  
+  // Sex ratio at birth
+  const pMale = meta.srb / (1 + meta.srb);
+  
+  return {
+    maxAge,
+    retAge: sliders.retAge,
+    contribRate: pensionParams.contribRate,
+    avgWage0: pensionParams.avgWage0,
+    avgPension0: pensionParams.avgPension0,
+    wageGrowthReal: sliders.wageGrowthReal,
+    cpiAssumed: pensionParams.cpiAssumed,
+    indexWageWeight: sliders.indexWageWeight,
+    srb: meta.srb,
+    pMale,
+    asfr,
+    qxM,
+    qxF,
+    empM,
+    empF,
+    wRelM: wageProfile.wRel.M,
+    wRelF: wageProfile.wRel.F,
+    netMigM,
+    netMigF,
+  };
+}
+
+/**
+ * Result of one year projection step
+ */
+export interface OneYearResult {
+  newPop: PopulationBySex;
+  births: number;
+  deaths: number;
+}
+
+/**
+ * Project population forward one year using cohort-component method
+ * 
+ * Steps:
+ * 1. Apply mortality (survivors)
+ * 2. Age cohorts
+ * 3. Apply migration
+ * 4. Calculate and add births
+ */
+export function projectOneYear(
+  pop: PopulationBySex,
+  params: PreparedParams
+): OneYearResult {
+  const { maxAge, qxM, qxF, asfr, netMigM, netMigF } = params;
+  
+  // Step 1: Calculate survivors (apply mortality)
+  const survivorsM = calculateSurvivors(pop.M, qxM);
+  const survivorsF = calculateSurvivors(pop.F, qxF);
+  
+  // Calculate deaths
+  const deathsM = countDeaths(pop.M, qxM);
+  const deathsF = countDeaths(pop.F, qxF);
+  const deaths = deathsM + deathsF;
+  
+  // Step 2: Age cohorts (shift to next age)
+  let agedM = ageCohorts(survivorsM, maxAge);
+  let agedF = ageCohorts(survivorsF, maxAge);
+  
+  // Step 3: Apply migration
+  agedM = applyMigration(agedM, netMigM);
+  agedF = applyMigration(agedF, netMigF);
+  
+  // Step 4: Calculate and add births (using post-migration female population)
+  const { totalBirths, maleBirths, femaleBirths } = calculateBirths(agedF, asfr, params.srb);
+  
+  // Add newborns to age 0
+  agedM[0] += maleBirths;
+  agedF[0] += femaleBirths;
+  
+  return {
+    newPop: { M: agedM, F: agedF },
+    births: totalBirths,
+    deaths,
+  };
+}
+
+/**
+ * Calculate PAYG metrics for a given population state
+ */
+function calculateYearPoint(
+  pop: PopulationBySex,
+  params: PreparedParams,
+  year: number,
+  yearIndex: number,
+  births: number,
+  deaths: number
+): YearPoint {
+  const empPop: PopulationBySex = { M: params.empM, F: params.empF };
+  const wRelPop: PopulationBySex = { M: params.wRelM, F: params.wRelF };
+  
+  const avgWage = calculateAvgWage(params.avgWage0, params.wageGrowthReal, yearIndex);
+  const avgPension = calculateAvgPension(
+    params.avgPension0, 
+    params.wageGrowthReal, 
+    params.cpiAssumed, 
+    params.indexWageWeight, 
+    yearIndex
+  );
+  
+  const totalPop = sumPopulation(pop);
+  const wageBill = calculateWageBill(pop, empPop, wRelPop, avgWage);
+  const contrib = calculateContributions(wageBill, params.contribRate);
+  const pensioners = countPensioners(pop, params.retAge);
+  const benefits = calculateBenefits(pensioners, avgPension);
+  const balance = calculateBalance(contrib, benefits);
+  const workers = countWorkers(pop, empPop);
+  const requiredRate = calculateRequiredRate(benefits, wageBill);
+  const dependencyRatio = calculateDependencyRatio(pensioners, workers);
+  
+  return {
+    year,
+    totalPop,
+    births,
+    deaths,
+    pensioners,
+    workers,
+    wageBill,
+    contrib,
+    benefits,
+    balance,
+    requiredRate,
+    dependencyRatio,
+    avgWage,
+    avgPension,
+  };
+}
+
+/**
+ * Run full projection from base year to horizon
+ */
+export function runProjection(
+  dataset: PensionDataset,
+  sliders: SliderValues,
+  horizonYears: number
+): ScenarioResult {
+  const params = prepareProjectionParams(dataset, sliders);
+  const baseYear = dataset.meta.baseYear;
+  
+  // Initialize with base population (deep copy)
+  let currentPop: PopulationBySex = {
+    M: [...dataset.basePopulation.population.M],
+    F: [...dataset.basePopulation.population.F],
+  };
+  
+  const points: YearPoint[] = [];
+  
+  // Year 0 (base year)
+  points.push(calculateYearPoint(currentPop, params, baseYear, 0, 0, 0));
+  
+  // Project forward
+  for (let i = 1; i <= horizonYears; i++) {
+    const { newPop, births, deaths } = projectOneYear(currentPop, params);
+    currentPop = newPop;
+    
+    points.push(calculateYearPoint(currentPop, params, baseYear + i, i, births, deaths));
+  }
+  
+  return {
+    datasetId: dataset.meta.datasetId,
+    baseYear,
+    horizonYears,
+    points,
+  };
+}
+
+/**
+ * Load pension dataset from static files
+ * 
+ * @param datasetPath - Path relative to /data/ (e.g., "pension/test-cz-2024")
+ * @returns Loaded and parsed dataset
+ */
+export async function loadPensionDataset(datasetPath: string): Promise<PensionDataset> {
+  const basePath = `/data/${datasetPath}`;
+  
+  const [
+    metaRes,
+    popRes,
+    fertRes,
+    mortRes,
+    laborRes,
+    wageRes,
+    pensionRes,
+    migRes,
+    baselineRes,
+  ] = await Promise.all([
+    fetch(`${basePath}/meta.json`),
+    fetch(`${basePath}/base-population-czk.json`),
+    fetch(`${basePath}/fertility-curve-shape.json`),
+    fetch(`${basePath}/mortality-curves.json`),
+    fetch(`${basePath}/labor-participation.json`),
+    fetch(`${basePath}/wage-profile.json`),
+    fetch(`${basePath}/pension-params.json`),
+    fetch(`${basePath}/migration-shape.json`),
+    fetch(`${basePath}/baseline-totals.json`),
+  ]);
+  
+  if (!metaRes.ok) throw new Error(`Failed to load meta.json: ${metaRes.statusText}`);
+  if (!popRes.ok) throw new Error(`Failed to load base-population-czk.json: ${popRes.statusText}`);
+  if (!fertRes.ok) throw new Error(`Failed to load fertility-curve-shape.json: ${fertRes.statusText}`);
+  if (!mortRes.ok) throw new Error(`Failed to load mortality-curves.json: ${mortRes.statusText}`);
+  if (!laborRes.ok) throw new Error(`Failed to load labor-participation.json: ${laborRes.statusText}`);
+  if (!wageRes.ok) throw new Error(`Failed to load wage-profile.json: ${wageRes.statusText}`);
+  if (!pensionRes.ok) throw new Error(`Failed to load pension-params.json: ${pensionRes.statusText}`);
+  if (!migRes.ok) throw new Error(`Failed to load migration-shape.json: ${migRes.statusText}`);
+  if (!baselineRes.ok) throw new Error(`Failed to load baseline-totals.json: ${baselineRes.statusText}`);
+  
+  return {
+    meta: await metaRes.json(),
+    basePopulation: await popRes.json(),
+    fertilityCurve: await fertRes.json(),
+    mortalityCurves: await mortRes.json(),
+    laborParticipation: await laborRes.json(),
+    wageProfile: await wageRes.json(),
+    pensionParams: await pensionRes.json(),
+    migrationShape: await migRes.json(),
+    baselineTotals: await baselineRes.json(),
+  };
+}

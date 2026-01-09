@@ -1,0 +1,61 @@
+{
+  "datasetId": "TEST_2024",
+  "country": "TEST",
+  "baseYear": 2024,
+  "maxAge": 20,
+  "currency": "TST",
+  "sexes": [
+    "M",
+    "F"
+  ],
+  "ageMinFert": 15,
+  "ageMaxFert": 49,
+  "ageMinWork": 15,
+  "ageMaxWork": 74,
+  "srb": 1.055,
+  "defaults": {
+    "horizonYears": 50,
+    "tfr": 1.8,
+    "e0_M": 23.0,
+    "e0_F": 25.0,
+    "netMigPer1000": 2.0,
+    "wageGrowthReal": 0.01,
+    "empMultiplier": 1.0,
+    "retAge": 18,
+    "indexWageWeight": 0.5
+  },
+  "sliderRanges": {
+    "tfr": [
+      0.8,
+      2.6
+    ],
+    "e0_M": [
+      15,
+      35
+    ],
+    "e0_F": [
+      15,
+      35
+    ],
+    "netMigPer1000": [
+      -10,
+      20
+    ],
+    "wageGrowthReal": [
+      -0.01,
+      0.03
+    ],
+    "empMultiplier": [
+      0.8,
+      1.2
+    ],
+    "retAge": [
+      15,
+      20
+    ],
+    "indexWageWeight": [
+      0,
+      1
+    ]
+  }
+}

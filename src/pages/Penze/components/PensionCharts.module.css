@@ -1,0 +1,125 @@
+/* PensionCharts Component Styles */
+
+.container {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chartTabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border, #dee2e6);
+  border-radius: 6px;
+  background: white;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #6c757d);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  border-color: var(--color-accent, #c41e3a);
+  color: var(--color-accent, #c41e3a);
+}
+
+.tabActive {
+  background: var(--color-accent, #c41e3a);
+  border-color: var(--color-accent, #c41e3a);
+  color: white;
+}
+
+.tabActive:hover {
+  background: var(--color-accent-dark, #a31830);
+  color: white;
+}
+
+.chartContainer {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.chartContainer svg {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Summary Cards */
+.summaryCards {
+  margin-top: 1rem;
+}
+
+.summaryTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+
+.summaryTable th,
+.summaryTable td {
+  padding: 0.75rem 1rem;
+  text-align: right;
+  border-bottom: 1px solid var(--color-border, #dee2e6);
+}
+
+.summaryTable th:first-child,
+.summaryTable td:first-child {
+  text-align: left;
+  font-weight: 600;
+}
+
+.summaryTable th {
+  background: var(--color-bg-secondary, #f8f9fa);
+  font-weight: 600;
+  color: var(--color-text-muted, #6c757d);
+}
+
+.summaryTable td {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}
+
+.summaryTable td:first-child {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+
+.negative {
+  color: var(--color-accent, #c41e3a);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .chartTabs {
+    gap: 0.25rem;
+  }
+
+  .tab {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .summaryTable th,
+  .summaryTable td {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .summaryTable td {
+    font-size: 0.75rem;
+  }
+}

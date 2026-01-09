@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-09 (v13)
+> **Last Updated:** 2026-01-09 (v14)
 
 ## Overview
 
@@ -198,10 +198,16 @@ sisyphus/
 │   │   │   ├── DeficitGame.tsx
 │   │   │   ├── DeficitGame.module.css
 │   │   │   └── index.ts
-│   │   └── Penze/              # Penze (důchodový systém)
+│   │   └── Penze/              # Penze (PAYG pension simulation)
 │   │       ├── Penze.tsx
 │   │       ├── Penze.module.css
-│   │       └── index.ts
+│   │       ├── index.ts
+│   │       └── components/
+│   │           ├── PensionSliders.tsx
+│   │           ├── PensionSliders.module.css
+│   │           ├── PensionCharts.tsx
+│   │           ├── PensionCharts.module.css
+│   │           └── index.ts
 │   ├── config/
 │   │   ├── graphVariants.ts    # Graph variant definitions
 │   │   ├── populationModes.ts  # Population mode definitions
@@ -210,7 +216,10 @@ sisyphus/
 │   │   ├── useDebtCounter.ts   # Counter logic hook
 │   │   ├── useDocumentMeta.ts  # SEO: dynamic title, description, canonical, GA tracking
 │   │   ├── useDocumentMeta.test.ts
-│   │   └── useHistoricalDebt.ts # All data fetching hook
+│   │   ├── useHistoricalDebt.ts # All data fetching hook
+│   │   └── usePensionSimulation.ts # Pension WebWorker management hook
+│   ├── workers/
+│   │   └── pensionWorker.ts    # Pension projection WebWorker
 │   ├── utils/
 │   │   ├── calculations.ts     # Debt calculations (TDD)
 │   │   ├── calculations.test.ts
@@ -228,10 +237,17 @@ sisyphus/
 │   │   ├── deficitGame.test.ts
 │   │   ├── budgetData.ts       # Budget data parsing (TDD)
 │   │   ├── budgetData.test.ts
-│   │   └── chartIntegration.test.ts # Integration tests for chart computation chains
+│   │   ├── chartIntegration.test.ts # Integration tests for chart computation chains
+│   │   ├── pensionDemography.ts     # Cohort-component demographic model (TDD)
+│   │   ├── pensionDemography.test.ts
+│   │   ├── pensionPayg.ts           # PAYG pension calculations (TDD)
+│   │   ├── pensionPayg.test.ts
+│   │   ├── pensionProjection.ts     # Full projection engine (TDD)
+│   │   └── pensionProjection.test.ts
 │   ├── types/
 │   │   ├── debt.ts             # TypeScript interfaces
-│   │   └── gtag.d.ts           # Google Analytics gtag types
+│   │   ├── gtag.d.ts           # Google Analytics gtag types
+│   │   └── pension.ts          # Pension simulation interfaces
 │   ├── assets/
 │   │   ├── sisyfos-logo-200x200.png  # Logo for main page
 │   │   ├── sisyfos-logo-400x400.png  # Logo for About page
@@ -269,7 +285,18 @@ sisyphus/
 │       ├── demographic-data.json # Population data 1993-2024
 │       ├── wage-data.json      # Average/minimum wages 1993-2024
 │       ├── price-data.json     # Petrol, highway, hospital, school 1993-2024
-│       └── food-prices.json    # Food prices 2006-2024 (bread, eggs, butter, potatoes, beer)
+│       ├── food-prices.json    # Food prices 2006-2024 (bread, eggs, butter, potatoes, beer)
+│       └── pension/            # Pension simulation datasets
+│           └── test-cz-2024/   # Test dataset (miniature, maxAge=20)
+│               ├── meta.json
+│               ├── base-population-czk.json
+│               ├── fertility-curve-shape.json
+│               ├── mortality-curves.json
+│               ├── labor-participation.json
+│               ├── wage-profile.json
+│               ├── pension-params.json
+│               ├── migration-shape.json
+│               └── baseline-totals.json
 ├── package.json
 ├── vite.config.ts
 ├── vitest.config.ts
@@ -294,7 +321,12 @@ sisyphus/
 | `BudgetTables` | src/pages/BudgetTables/ | Tabulky rozpočtu 2026 (kapitoly, příjmy, výdaje) |
 | `BudgetTreemap` | src/pages/BudgetTreemap/ | Vizualizace rozpočtu vlády Petra Fialy (zoomable icicle) |
 | `DeficitGame` | src/pages/DeficitGame/ | "Zruším schodek!" interactive game (unique playful theme) |
-| `Penze` | src/pages/Penze/ | Penze - důchodový systém ČR |
+| `Penze` | src/pages/Penze/ | PAYG pension simulation with cohort-component model |
+| `pensionDemography.ts` | src/utils/ | Core demographic calculations (qx, survivorship, aging, births) |
+| `pensionPayg.ts` | src/utils/ | PAYG calculations (wageBill, contrib, benefits, balance) |
+| `pensionProjection.ts` | src/utils/ | Full projection engine combining demography and PAYG |
+| `pensionWorker.ts` | src/workers/ | WebWorker for off-main-thread computation |
+| `usePensionSimulation` | src/hooks/ | React hook managing worker with debouncing |
 | `deficitGame.ts` | src/utils/ | Deficit game logic with progress calculation |
 | `budgetData.ts` | src/utils/ | Budget CSV/JSON parsing utilities |
 | `useDebtCounter` | src/hooks/ | Fetches anchor, computes & updates every second |
@@ -408,11 +440,14 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 **Test Summary:**
-- 228 tests across 10 test files
+- 294 tests across 13 test files
 - All utility functions fully covered
 - Integration tests for chart computation chains (deficit-inflation-adjusted, deficit-gdp-percent, population modes, metric units)
 - Multi-anchor debt counter tests (anchor selection, growth rate calculation, boundary transitions)
 - Deficit game logic tests (progress calculation, adjustment validation, sharing)
+- Pension demography tests (qx conversion, survivorship, aging, births, life expectancy)
+- Pension PAYG tests (wageBill, contributions, benefits, balance, required rate)
+- Pension projection tests (full multi-year projection with slider params)
 
 ## Current State
 
@@ -486,7 +521,14 @@ All files           |     100 |      100 |     100 |     100 |
   - Date formatting in Czech locale
   - Social sharing buttons per post
   - Český dluh logo in Rozpočtovka page (top-left, links to main page)
-- [x] Penze page (placeholder for pension system analysis)
+- [x] Penze page with interactive PAYG pension simulation:
+  - Cohort-component demographic model
+  - Life expectancy calibration via bisection
+  - 8 adjustable parameters via sliders
+  - D3.js charts (balance timeline, required rate, dependency ratio, population)
+  - WebWorker for off-main-thread computation
+  - Debounced slider updates (100ms)
+  - Summary table showing metrics at start/mid/end of projection
 - [x] SEO optimizations:
   - Dynamic page titles and meta descriptions per page (useDocumentMeta hook)
   - Open Graph tags with custom share image (1200x630)
