@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "source": "FICTION - Realistic estimate based on Czech pension system 2024. Data from ČSSZ/MPSV statistics.",
+    "generatedAt": "2026-01-09T17:00:00Z"
+  },
+  "unit": "annual",
+  "contribRate": 0.28,
+  "avgWage0": 580000,
+  "basicAmount0": 58000,
+  "percentageAmount0": 185000,
+  "cpiAssumed": 0.025,
+  "pensionerCPI": 0.030,
+  "baselineUnemploymentRate": 0.028,
+  "notes": {
+    "contribRate": "28% total (6.5% employee + 21.5% employer)",
+    "avgWage0": "~48,000 CZK/month × 12 = 576,000-580,000 CZK/year (2024 estimate)",
+    "basicAmount0": "Základní výměra ~4,840 CZK/month × 12 = ~58,000 CZK/year (2024)",
+    "percentageAmount0": "Procentní výměra ~15,400 CZK/month × 12 = ~185,000 CZK/year (avg 2024)",
+    "totalAvgPension": "~20,200 CZK/month = ~242,000 CZK/year",
+    "pensionerCPI": "Důchodcovská inflace typically 0.5-1% higher than general CPI",
+    "baselineUnemploymentRate": "Czech unemployment very low ~2.8% in 2024"
+  }
+}

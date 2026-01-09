@@ -1,0 +1,14 @@
+{
+  "currency": "CZK",
+  "baseYear": 2023,
+  "contributionRateTotal": 0.28,
+  "contributionCeilingMultipleAvgWage": 4.0,
+  "averageGrossAnnualWage": 600000,
+  "averageOldAgePensionAnnual": 240000,
+  "retirementAge": 65,
+  "indexation": {
+    "wageShare": 0.5,
+    "priceShare": 0.5
+  },
+  "notes": "PLACEHOLDER values; replace with official CZ sources (ČSÚ/ČSSZ/MPSV)."
+}

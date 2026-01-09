@@ -285,12 +285,188 @@ describe('integration: test dataset PAYG calculation', () => {
   });
 });
 
-// Import equilibrium functions
+// Import equilibrium functions and Czech pension functions
 import {
   findRequiredRetirementAge,
   findRequiredPensionRatio,
   findRequiredContribRate,
+  indexCzechPension,
+  calculateInitialPension,
+  type CzechPensionParams,
 } from './pensionPayg';
+import type { PensionComponents } from '../types/pension';
+
+// ============================================================================
+// Czech Pension System Tests
+// ============================================================================
+
+describe('calculateInitialPension', () => {
+  it('should calculate initial pension components from ratios', () => {
+    const avgWage0 = 600000; // 600k annual
+    const basicAmountRatio = 0.10; // 10%
+    const percentageAmountRatio = 0.35; // 35%
+    const minPensionRatio = 0.20; // 20%
+    
+    const result = calculateInitialPension(avgWage0, basicAmountRatio, percentageAmountRatio, minPensionRatio);
+    
+    expect(result.basicAmount).toBe(60000); // 10% of 600k
+    expect(result.percentageAmount).toBe(210000); // 35% of 600k
+    expect(result.totalPension).toBe(270000); // 60k + 210k
+    expect(result.minimumApplied).toBe(false);
+  });
+
+  it('should apply minimum pension when total is below threshold', () => {
+    const avgWage0 = 600000;
+    const basicAmountRatio = 0.05; // 5%
+    const percentageAmountRatio = 0.10; // 10%
+    const minPensionRatio = 0.25; // 25% = 150k minimum
+    
+    const result = calculateInitialPension(avgWage0, basicAmountRatio, percentageAmountRatio, minPensionRatio);
+    
+    // Basic: 30k, Percentage: 60k, Total: 90k < 150k minimum
+    expect(result.basicAmount).toBe(30000);
+    expect(result.percentageAmount).toBe(60000);
+    expect(result.totalPension).toBe(150000); // Raised to minimum
+    expect(result.minimumApplied).toBe(true);
+  });
+
+  it('should handle zero ratios', () => {
+    const result = calculateInitialPension(600000, 0, 0, 0);
+    
+    expect(result.basicAmount).toBe(0);
+    expect(result.percentageAmount).toBe(0);
+    expect(result.totalPension).toBe(0);
+    expect(result.minimumApplied).toBe(false);
+  });
+});
+
+describe('indexCzechPension', () => {
+  const baseComponents: PensionComponents = {
+    basicAmount: 60000,
+    percentageAmount: 180000,
+    totalPension: 240000,
+    minimumApplied: false,
+  };
+
+  it('should update basic amount to track average wage', () => {
+    const params: CzechPensionParams = {
+      avgWage: 620000, // Wage grew from 600k to 620k
+      basicAmountRatio: 0.10,
+      minPensionRatio: 0.20,
+      realWageIndexShare: 0.333,
+      pensionerCPI: 0.03,
+      realWageGrowth: 0.02,
+    };
+    
+    const result = indexCzechPension(baseComponents, params, 0);
+    
+    // Basic amount should be 10% of new avg wage
+    expect(result.components.basicAmount).toBe(62000);
+  });
+
+  it('should index percentage amount with CPI + wage share', () => {
+    const params: CzechPensionParams = {
+      avgWage: 620000,
+      basicAmountRatio: 0.10,
+      minPensionRatio: 0.10, // Low minimum
+      realWageIndexShare: 0.333,
+      pensionerCPI: 0.03, // 3%
+      realWageGrowth: 0.06, // 6% real wage growth
+    };
+    
+    const result = indexCzechPension(baseComponents, params, 0);
+    
+    // Index rate = 0.03 + 0.333 * 0.06 = 0.03 + 0.01998 ≈ 0.04998
+    // Percentage amount: 180000 * 1.04998 ≈ 188996.4
+    expect(result.components.percentageAmount).toBeCloseTo(188996.4, -1);
+  });
+
+  it('should accumulate negative wage growth in gap', () => {
+    const params: CzechPensionParams = {
+      avgWage: 580000, // Wage dropped
+      basicAmountRatio: 0.10,
+      minPensionRatio: 0.10,
+      realWageIndexShare: 0.333,
+      pensionerCPI: 0.03,
+      realWageGrowth: -0.05, // 5% wage DROP
+    };
+    
+    const result = indexCzechPension(baseComponents, params, 0);
+    
+    // Wage drop should be accumulated in gap, not applied to indexation
+    expect(result.newCumulativeGap).toBe(-0.05);
+    // Percentage amount indexed only by CPI (no wage component because growth is negative)
+    expect(result.components.percentageAmount).toBeCloseTo(180000 * 1.03, 0);
+  });
+
+  it('should erase accumulated gap with positive wage growth', () => {
+    const params: CzechPensionParams = {
+      avgWage: 600000,
+      basicAmountRatio: 0.10,
+      minPensionRatio: 0.10,
+      realWageIndexShare: 0.333,
+      pensionerCPI: 0.03,
+      realWageGrowth: 0.08, // 8% growth
+    };
+    
+    // Start with -5% accumulated gap
+    const result = indexCzechPension(baseComponents, params, -0.05);
+    
+    // 8% growth erases 5% gap, leaving 3% effective growth
+    // Gap should be 0 (or slightly positive rounding)
+    expect(result.newCumulativeGap).toBeCloseTo(0, 6);
+    
+    // Effective wage growth for indexation = 0.08 - 0.05 = 0.03
+    // Index rate = 0.03 + 0.333 * 0.03 = 0.03999
+    // 180000 * 1.03999 = 187198.2
+    expect(result.components.percentageAmount).toBeCloseTo(187198.2, -1);
+  });
+
+  it('should partially erase gap when growth is less than gap', () => {
+    const params: CzechPensionParams = {
+      avgWage: 600000,
+      basicAmountRatio: 0.10,
+      minPensionRatio: 0.10,
+      realWageIndexShare: 0.333,
+      pensionerCPI: 0.03,
+      realWageGrowth: 0.03, // 3% growth
+    };
+    
+    // Start with -10% accumulated gap
+    const result = indexCzechPension(baseComponents, params, -0.10);
+    
+    // 3% growth partially erases 10% gap, leaving -7%
+    expect(result.newCumulativeGap).toBeCloseTo(-0.07, 6);
+    
+    // All growth goes to erasing gap, no wage component in indexation
+    // Index rate = 0.03 + 0.333 * 0 = 0.03 (CPI only)
+    expect(result.components.percentageAmount).toBeCloseTo(180000 * 1.03, 0);
+  });
+
+  it('should apply minimum pension when indexed total falls below', () => {
+    const lowComponents: PensionComponents = {
+      basicAmount: 20000,
+      percentageAmount: 60000,
+      totalPension: 80000,
+      minimumApplied: false,
+    };
+    
+    const params: CzechPensionParams = {
+      avgWage: 600000,
+      basicAmountRatio: 0.05, // 5% = 30k
+      minPensionRatio: 0.25, // 25% = 150k minimum
+      realWageIndexShare: 0.333,
+      pensionerCPI: 0.02,
+      realWageGrowth: 0.01,
+    };
+    
+    const result = indexCzechPension(lowComponents, params, 0);
+    
+    // Total after indexation would be ~91k, but minimum is 150k
+    expect(result.components.totalPension).toBe(150000);
+    expect(result.components.minimumApplied).toBe(true);
+  });
+});
 
 describe('Equilibrium calculations', () => {
   // Simple test population
