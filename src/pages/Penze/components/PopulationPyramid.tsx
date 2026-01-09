@@ -41,7 +41,7 @@ export function PopulationPyramid({ pyramids, baseYear, horizonYears }: Populati
 
     const containerWidth = containerRef.current.clientWidth;
     const width = Math.min(containerWidth - 100, 500); // Leave space for legend on right
-    const height = Math.max(400, pyramids.maxAge * 12 + 60); // 4x taller
+    const height = Math.max(400, pyramids.maxAge * 3 + 60); // 3px per age group
     const margin = { top: 30, right: 10, bottom: 20, left: 10 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;

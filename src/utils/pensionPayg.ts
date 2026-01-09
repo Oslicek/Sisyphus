@@ -395,7 +395,7 @@ export function findRequiredRetirementAge(
 export function findRequiredPensionRatio(
   params: Omit<EquilibriumParams, 'avgPension'> & { avgWage0: number }
 ): number | null {
-  const { population, employment, wageRel, avgWage, avgWage0, contribRate, retAge } = params;
+  const { population, employment, wageRel, avgWage, contribRate, retAge } = params;
   
   // Calculate wage bill
   const wageBill = calculateWageBill(population, employment, wageRel, avgWage);
@@ -409,11 +409,9 @@ export function findRequiredPensionRatio(
   }
   
   // For balance: pensioners × avgPension = contributions
-  // avgPension = avgWage0 × pensionRatio (for year 0, simplified)
-  // But avgPension may have grown with indexation...
-  // For simplicity, we use avgWage as the reference for ratio
+  // Pension ratio = avgPension / avgWage (current year wage, not base year!)
   const requiredPension = contributions / pensioners;
-  const ratio = requiredPension / avgWage0;
+  const ratio = requiredPension / avgWage;
   
   // Clamp to reasonable range
   if (ratio < 0) return 0;
