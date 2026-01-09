@@ -28,7 +28,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
   },
   {
     key: 'e0_M',
-    label: 'Doživotí muži',
+    label: 'Dožití muži',
     unit: 'let',
     step: 0.5,
     format: (v) => v.toFixed(1),
@@ -36,7 +36,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
   },
   {
     key: 'e0_F',
-    label: 'Doživotí ženy',
+    label: 'Dožití ženy',
     unit: 'let',
     step: 0.5,
     format: (v) => v.toFixed(1),
