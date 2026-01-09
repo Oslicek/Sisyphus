@@ -17,6 +17,7 @@ type ChartType = 'balance' | 'requiredRate' | 'dependencyRatio' | 'population' |
 interface PensionChartsProps {
   result: ScenarioResult;
   mode?: 'balance' | 'equilibrium';
+  contribRate?: number;
 }
 
 interface ChartInfo {
@@ -55,7 +56,7 @@ const CHART_INFO: Record<ChartType, ChartInfo> = {
 const BALANCE_CHARTS: ChartType[] = ['balance', 'requiredRate', 'dependencyRatio', 'population'];
 const EQUILIBRIUM_CHARTS: ChartType[] = ['requiredRetAge', 'requiredPensionRatio', 'requiredRate', 'dependencyRatio'];
 
-export function PensionCharts({ result, mode = 'balance' }: PensionChartsProps) {
+export function PensionCharts({ result, mode = 'balance', contribRate = 0.2 }: PensionChartsProps) {
   const availableCharts = mode === 'equilibrium' ? EQUILIBRIUM_CHARTS : BALANCE_CHARTS;
   const [activeChart, setActiveChart] = useState<ChartType>(availableCharts[0]);
   const chartRef = useRef<SVGSVGElement>(null);
@@ -103,7 +104,7 @@ export function PensionCharts({ result, mode = 'balance' }: PensionChartsProps) 
         drawBalanceChart(g, points, xScale, innerWidth, innerHeight);
         break;
       case 'requiredRate':
-        drawRequiredRateChart(g, points, xScale, innerWidth, innerHeight, result.points[0]?.requiredRate || 0.2);
+        drawRequiredRateChart(g, points, xScale, innerWidth, innerHeight, contribRate);
         break;
       case 'dependencyRatio':
         drawDependencyRatioChart(g, points, xScale, innerWidth, innerHeight);

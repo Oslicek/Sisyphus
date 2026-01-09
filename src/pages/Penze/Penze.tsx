@@ -111,7 +111,7 @@ export function Penze() {
             {result && (
               <section className={styles.sectionCompact}>
                 <h2 className={styles.sectionTitle}>Výsledky projekce</h2>
-                <PensionCharts result={result} mode={simulationMode} />
+                <PensionCharts result={result} mode={simulationMode} contribRate={sliders.contribRate} />
               </section>
             )}
 
