@@ -5,7 +5,8 @@
  * All sliders update immediately with debounced projection runs.
  */
 
-import type { SliderValues, SliderRanges } from '../../../types/pension';
+import type { SliderValues, SliderRanges, PensionDataset } from '../../../types/pension';
+import { SliderDistributionChart, type DistributionType } from './SliderDistributionChart';
 import styles from './PensionSliders.module.css';
 
 interface SliderConfig {
@@ -15,6 +16,8 @@ interface SliderConfig {
   step: number;
   format: (value: number) => string;
   description: string;
+  /** If defined, shows a distribution chart below the slider */
+  distributionType?: DistributionType;
 }
 
 const SLIDER_CONFIGS: SliderConfig[] = [
@@ -25,6 +28,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     step: 0.05,
     format: (v) => v.toFixed(2),
     description: 'Průměrný počet dětí na jednu ženu. Hodnota 2,1 znamená zachování populace. Vyšší plodnost = více budoucích pracujících.',
+    distributionType: 'fertility',
   },
   {
     key: 'e0_M',
@@ -33,6 +37,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     step: 0.5,
     format: (v) => v.toFixed(1),
     description: 'Střední délka života mužů při narození. Delší život = více let v důchodu = vyšší náklady systému.',
+    distributionType: 'mortality_M',
   },
   {
     key: 'e0_F',
@@ -41,6 +46,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     step: 0.5,
     format: (v) => v.toFixed(1),
     description: 'Střední délka života žen při narození. Ženy se dožívají déle, takže pobírají důchod déle.',
+    distributionType: 'mortality_F',
   },
   {
     key: 'netMigPer1000',
@@ -49,6 +55,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     step: 0.5,
     format: (v) => v.toFixed(1),
     description: 'Roční čistá migrace v promile aktuální populace. Např. +10‰ při 10 mil. obyvatel = 100 000 migrantů ročně. Kladná = příliv, záporná = odliv.',
+    distributionType: 'migration',
   },
   {
     key: 'wageGrowthReal',
@@ -57,6 +64,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     step: 0.001,
     format: (v) => (v * 100).toFixed(1),
     description: 'Roční růst mezd očištěný o inflaci. Vyšší mzdy = vyšší příspěvky, ale i vyšší budoucí důchody.',
+    // No distribution chart - applies uniformly
   },
   {
     key: 'unemploymentRate',
@@ -65,6 +73,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     step: 0.005,
     format: (v) => (v * 100).toFixed(1),
     description: 'Celková míra nezaměstnanosti. Vyšší nezaměstnanost = méně pracujících = méně příspěvků do penzijního systému.',
+    distributionType: 'employment',
   },
   {
     key: 'retAge',
@@ -73,6 +82,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     step: 1,
     format: (v) => v.toFixed(0),
     description: 'Věk, od kterého lidé pobírají důchod. Vyšší věk = méně důchodců a více pracujících.',
+    // No distribution chart - simple threshold
   },
   {
     key: 'indexWageWeight',
@@ -81,6 +91,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     step: 0.05,
     format: (v) => `${(v * 100).toFixed(0)}% mzdy, ${((1 - v) * 100).toFixed(0)}% CPI`,
     description: 'Jak se zvyšují důchody: podle růstu mezd nebo podle inflace (CPI = index spotřebitelských cen). Mzdová valorizace udržuje životní úroveň důchodců vůči pracujícím, ale je dražší.',
+    // No distribution chart - applies uniformly
   },
 ];
 
@@ -89,6 +100,7 @@ interface PensionSlidersProps {
   ranges: SliderRanges;
   onChange: (values: SliderValues) => void;
   disabled?: boolean;
+  dataset?: PensionDataset;
 }
 
 export function PensionSliders({
@@ -96,6 +108,7 @@ export function PensionSliders({
   ranges,
   onChange,
   disabled = false,
+  dataset,
 }: PensionSlidersProps) {
   const handleSliderChange = (key: keyof SliderValues, newValue: number) => {
     onChange({
@@ -162,6 +175,14 @@ export function PensionSliders({
                 <span>{config.format(min)}</span>
                 <span>{config.format(max)}</span>
               </div>
+              {config.distributionType && dataset && (
+                <SliderDistributionChart
+                  type={config.distributionType}
+                  value={value}
+                  dataset={dataset}
+                  baselineUnemploymentRate={dataset.pensionParams.baselineUnemploymentRate}
+                />
+              )}
             </div>
           );
         })}

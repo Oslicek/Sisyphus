@@ -14,7 +14,9 @@ import type {
   ScenarioResult,
   WorkerRequest,
   WorkerResponse,
+  PensionDataset,
 } from '../types/pension';
+import { loadPensionDataset } from '../utils/pensionProjection';
 
 // Import worker as URL for Vite
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -49,6 +51,8 @@ export interface UsePensionSimulationResult {
   setSliders: (sliders: SliderValues) => void;
   /** Run projection with current sliders */
   runProjection: () => void;
+  /** Loaded dataset (for distribution charts) */
+  dataset: PensionDataset | null;
 }
 
 /**
@@ -68,6 +72,7 @@ export function usePensionSimulation(
   const [defaults, setDefaults] = useState<SliderValues | null>(null);
   const [sliderRanges, setSliderRanges] = useState<SliderRanges | null>(null);
   const [sliders, setSlidersState] = useState<SliderValues | null>(null);
+  const [dataset, setDataset] = useState<PensionDataset | null>(null);
   
   // Refs
   const workerRef = useRef<Worker | null>(null);
@@ -157,6 +162,11 @@ export function usePensionSimulation(
           setSliderRanges(message.sliderRanges);
           setSlidersState(message.defaults);
           
+          // Load dataset in main thread for distribution charts
+          loadPensionDataset(datasetPath)
+            .then(setDataset)
+            .catch(err => console.warn('Failed to load dataset for charts:', err));
+          
           // Auto-run initial projection
           setIsRunning(true);
           worker.postMessage({
@@ -213,6 +223,7 @@ export function usePensionSimulation(
     sliders,
     setSliders,
     runProjection,
+    dataset,
   }), [
     isLoading,
     isRunning,
@@ -224,5 +235,6 @@ export function usePensionSimulation(
     sliders,
     setSliders,
     runProjection,
+    dataset,
   ]);
 }

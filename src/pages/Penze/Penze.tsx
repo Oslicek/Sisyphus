@@ -31,6 +31,7 @@ export function Penze() {
     sliderRanges,
     sliders,
     setSliders,
+    dataset,
   } = usePensionSimulation({
     datasetPath: DATASET_PATH,
     debounceMs: 100,
@@ -103,6 +104,7 @@ export function Penze() {
                 ranges={sliderRanges}
                 onChange={setSliders}
                 disabled={isRunning}
+                dataset={dataset ?? undefined}
               />
             </section>
 
