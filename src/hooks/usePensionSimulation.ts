@@ -72,7 +72,7 @@ export function usePensionSimulation(
   // Refs
   const workerRef = useRef<Worker | null>(null);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendingRunRef = useRef(false);
+  const isInitializedRef = useRef(false);
   
   /**
    * Send message to worker
@@ -84,11 +84,10 @@ export function usePensionSimulation(
   }, []);
   
   /**
-   * Run projection with given sliders
+   * Run projection with given sliders (internal, no deps on state)
    */
-  const runWithSliders = useCallback((slidersToUse: SliderValues) => {
-    if (!workerRef.current || isLoading) {
-      pendingRunRef.current = true;
+  const runProjectionInternal = useCallback((slidersToUse: SliderValues) => {
+    if (!workerRef.current) {
       return;
     }
     
@@ -100,7 +99,7 @@ export function usePensionSimulation(
       sliders: slidersToUse,
       horizonYears: slidersToUse.horizonYears,
     });
-  }, [isLoading, postMessage]);
+  }, [postMessage]);
   
   /**
    * Set sliders with debouncing
@@ -115,9 +114,9 @@ export function usePensionSimulation(
     
     // Set new debounced run
     debounceTimerRef.current = setTimeout(() => {
-      runWithSliders(newSliders);
+      runProjectionInternal(newSliders);
     }, debounceMs);
-  }, [debounceMs, runWithSliders]);
+  }, [debounceMs, runProjectionInternal]);
   
   /**
    * Run projection immediately with current sliders
@@ -128,57 +127,57 @@ export function usePensionSimulation(
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
       }
-      runWithSliders(sliders);
+      runProjectionInternal(sliders);
     }
-  }, [sliders, runWithSliders]);
+  }, [sliders, runProjectionInternal]);
   
   /**
-   * Handle worker messages
-   */
-  const handleMessage = useCallback((event: MessageEvent<WorkerResponse>) => {
-    const message = event.data;
-    
-    switch (message.type) {
-      case 'ready':
-        setIsLoading(false);
-        setDatasetId(message.datasetId);
-        setDefaults(message.defaults);
-        setSliderRanges(message.sliderRanges);
-        setSlidersState(message.defaults);
-        
-        // Run initial projection if we have pending run
-        if (pendingRunRef.current) {
-          pendingRunRef.current = false;
-          runWithSliders(message.defaults);
-        } else {
-          // Auto-run initial projection
-          runWithSliders(message.defaults);
-        }
-        break;
-        
-      case 'result':
-        setIsRunning(false);
-        setResult(message.result);
-        break;
-        
-      case 'error':
-        setIsLoading(false);
-        setIsRunning(false);
-        setError(message.message);
-        break;
-    }
-  }, [runWithSliders]);
-  
-  /**
-   * Initialize worker on mount
+   * Initialize worker on mount - only runs once per datasetPath
    */
   useEffect(() => {
+    // Prevent re-initialization
+    if (isInitializedRef.current) {
+      return;
+    }
+    isInitializedRef.current = true;
+    
     // Create worker
     const worker = new PensionWorker();
     workerRef.current = worker;
     
-    // Set up message handler
-    worker.onmessage = handleMessage;
+    // Handle messages from worker
+    worker.onmessage = (event: MessageEvent<WorkerResponse>) => {
+      const message = event.data;
+      
+      switch (message.type) {
+        case 'ready':
+          setIsLoading(false);
+          setDatasetId(message.datasetId);
+          setDefaults(message.defaults);
+          setSliderRanges(message.sliderRanges);
+          setSlidersState(message.defaults);
+          
+          // Auto-run initial projection
+          setIsRunning(true);
+          worker.postMessage({
+            type: 'run',
+            sliders: message.defaults,
+            horizonYears: message.defaults.horizonYears,
+          });
+          break;
+          
+        case 'result':
+          setIsRunning(false);
+          setResult(message.result);
+          break;
+          
+        case 'error':
+          setIsLoading(false);
+          setIsRunning(false);
+          setError(message.message);
+          break;
+      }
+    };
     
     // Handle errors
     worker.onerror = (event) => {
@@ -199,8 +198,9 @@ export function usePensionSimulation(
       }
       worker.terminate();
       workerRef.current = null;
+      isInitializedRef.current = false;
     };
-  }, [datasetPath, handleMessage]);
+  }, [datasetPath]);
   
   return useMemo(() => ({
     isLoading,
