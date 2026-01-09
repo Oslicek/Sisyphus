@@ -12,6 +12,7 @@ import { DataSources } from './pages/DataSources';
 import { BudgetTables } from './pages/BudgetTables';
 import { BudgetTreemap } from './pages/BudgetTreemap';
 import { DeficitGame } from './pages/DeficitGame';
+import { Penze } from './pages/Penze';
 import sisyfosLogo from './assets/sisyfos-logo-200x200.png';
 import styles from './App.module.css';
 
@@ -61,6 +62,7 @@ function App() {
         <Route path="/rozpocet" element={<BudgetTables />} />
         <Route path="/rozpocet-vizualizace" element={<BudgetTreemap />} />
         <Route path="/rozpoctovka" element={<DeficitGame />} />
+        <Route path="/penze" element={<Penze />} />
       </Routes>
     </BrowserRouter>
   );

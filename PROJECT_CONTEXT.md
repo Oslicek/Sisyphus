@@ -1,6 +1,6 @@
 # Project Context
 
-> **Last Updated:** 2026-01-06 (v12)
+> **Last Updated:** 2026-01-09 (v13)
 
 ## Overview
 
@@ -194,9 +194,13 @@ sisyphus/
 │   │   │   ├── BudgetTreemap.tsx
 │   │   │   ├── BudgetTreemap.module.css
 │   │   │   └── index.ts
-│   │   └── DeficitGame/        # "Zruším schodek!" interactive game
-│   │       ├── DeficitGame.tsx
-│   │       ├── DeficitGame.module.css
+│   │   ├── DeficitGame/        # "Zruším schodek!" interactive game
+│   │   │   ├── DeficitGame.tsx
+│   │   │   ├── DeficitGame.module.css
+│   │   │   └── index.ts
+│   │   └── Penze/              # Penze (důchodový systém)
+│   │       ├── Penze.tsx
+│   │       ├── Penze.module.css
 │   │       └── index.ts
 │   ├── config/
 │   │   ├── graphVariants.ts    # Graph variant definitions
@@ -290,6 +294,7 @@ sisyphus/
 | `BudgetTables` | src/pages/BudgetTables/ | Tabulky rozpočtu 2026 (kapitoly, příjmy, výdaje) |
 | `BudgetTreemap` | src/pages/BudgetTreemap/ | Vizualizace rozpočtu vlády Petra Fialy (zoomable icicle) |
 | `DeficitGame` | src/pages/DeficitGame/ | "Zruším schodek!" interactive game (unique playful theme) |
+| `Penze` | src/pages/Penze/ | Penze - důchodový systém ČR |
 | `deficitGame.ts` | src/utils/ | Deficit game logic with progress calculation |
 | `budgetData.ts` | src/utils/ | Budget CSV/JSON parsing utilities |
 | `useDebtCounter` | src/hooks/ | Fetches anchor, computes & updates every second |
@@ -466,10 +471,11 @@ All files           |     100 |      100 |     100 |     100 |
   - Státní dluh → Datové řady a zdroje dat
   - Státní rozpočet → Vizualizace
   - Hra Rozpočtovka
+  - Penze
   - Blog
   - O Projektu Sisyfos
 - [x] Unified footer component on all pages:
-  - Basic links: Dluh | Rozpočet | Rozpočtovka | Blog | O projektu Sisyfos
+  - Basic links: Dluh | Rozpočet | Rozpočtovka | Penze | Blog | O projektu Sisyfos
   - Active page shown as text (not link)
   - Data disclaimer text: "V našich datech mohou být chyby. Pokud je chcete k něčemu použít, důrazně doporučujeme jejich ověření."
   - Test banner as second line
@@ -480,6 +486,7 @@ All files           |     100 |      100 |     100 |     100 |
   - Date formatting in Czech locale
   - Social sharing buttons per post
   - Český dluh logo in Rozpočtovka page (top-left, links to main page)
+- [x] Penze page (placeholder for pension system analysis)
 - [x] SEO optimizations:
   - Dynamic page titles and meta descriptions per page (useDocumentMeta hook)
   - Open Graph tags with custom share image (1200x630)

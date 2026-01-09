@@ -11,6 +11,7 @@ const footerLinks: FooterLink[] = [
   { label: 'Dluh', path: '/' },
   { label: 'Rozpočet', path: '/rozpocet' },
   { label: 'Rozpočtovka', path: '/rozpoctovka' },
+  { label: 'Penze', path: '/penze' },
   { label: 'Blog', path: '/blog' },
   { label: 'O projektu Sisyfos', path: '/o-projektu' },
 ];

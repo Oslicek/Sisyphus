@@ -24,6 +24,7 @@ const navItems: NavItem[] = [
     ]
   },
   { label: 'Hra Rozpočtovka', path: '/rozpoctovka' },
+  { label: 'Penze', path: '/penze' },
   { label: 'Blog', path: '/blog' },
   { label: 'O Projektu Sisyfos', path: '/o-projektu' }
 ];
