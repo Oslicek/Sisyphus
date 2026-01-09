@@ -20,7 +20,7 @@
     "e0_F": 25.0,
     "netMigPer1000": 2.0,
     "wageGrowthReal": 0.01,
-    "empMultiplier": 1.0,
+    "unemploymentRate": 0.04,
     "retAge": 18,
     "indexWageWeight": 0.5
   },
@@ -45,9 +45,9 @@
       -0.01,
       0.03
     ],
-    "empMultiplier": [
-      0.8,
-      1.2
+    "unemploymentRate": [
+      0.01,
+      0.20
     ],
     "retAge": [
       15,

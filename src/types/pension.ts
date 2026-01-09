@@ -54,8 +54,8 @@ export interface SliderValues {
   netMigPer1000: number;
   /** Real wage growth rate (decimal, e.g., 0.01 = 1%) */
   wageGrowthReal: number;
-  /** Employment rate multiplier */
-  empMultiplier: number;
+  /** Unemployment rate (decimal, e.g., 0.04 = 4%) */
+  unemploymentRate: number;
   /** Retirement age */
   retAge: number;
   /** Pension indexation weight (0=CPI only, 1=wage only) */
@@ -71,7 +71,7 @@ export interface SliderRanges {
   e0_F: [number, number];
   netMigPer1000: [number, number];
   wageGrowthReal: [number, number];
-  empMultiplier: [number, number];
+  unemploymentRate: [number, number];
   retAge: [number, number];
   indexWageWeight: [number, number];
 }
@@ -143,6 +143,8 @@ export interface PensionParamsData {
   avgPension0: number;
   /** Assumed CPI inflation rate */
   cpiAssumed: number;
+  /** Baseline unemployment rate for calibration (0-1, e.g., 0.04 = 4%) */
+  baselineUnemploymentRate: number;
 }
 
 /**

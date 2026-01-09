@@ -96,9 +96,13 @@ export function prepareProjectionParams(
   const fullShape = createFullAgeArray(fertilityCurve.ages, fertilityCurve.shape, maxAge);
   const asfr = calculateASFR(sliders.tfr, fullShape);
   
-  // Scale employment rates
-  const empM = scaleEmployment(laborParticipation.emp.M, sliders.empMultiplier);
-  const empF = scaleEmployment(laborParticipation.emp.F, sliders.empMultiplier);
+  // Scale employment rates based on unemployment rate
+  // empMultiplier = (1 - targetUnemployment) / (1 - baselineUnemployment)
+  const baselineUnemployment = pensionParams.baselineUnemploymentRate;
+  const targetUnemployment = sliders.unemploymentRate;
+  const empMultiplier = (1 - targetUnemployment) / (1 - baselineUnemployment);
+  const empM = scaleEmployment(laborParticipation.emp.M, empMultiplier);
+  const empF = scaleEmployment(laborParticipation.emp.F, empMultiplier);
   
   // Sex ratio at birth
   const pMale = meta.srb / (1 + meta.srb);

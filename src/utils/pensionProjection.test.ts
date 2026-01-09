@@ -31,7 +31,7 @@ const testMeta = {
     e0_F: 25.0,
     netMigPer1000: 2.0,
     wageGrowthReal: 0.01,
-    empMultiplier: 1.0,
+    unemploymentRate: 0.04,
     retAge: 18,
     indexWageWeight: 0.5,
   },
@@ -41,7 +41,7 @@ const testMeta = {
     e0_F: [15, 35] as [number, number],
     netMigPer1000: [-10, 20] as [number, number],
     wageGrowthReal: [-0.01, 0.03] as [number, number],
-    empMultiplier: [0.8, 1.2] as [number, number],
+    unemploymentRate: [0.01, 0.2] as [number, number],
     retAge: [15, 20] as [number, number],
     indexWageWeight: [0, 1] as [number, number],
   },
@@ -99,6 +99,7 @@ const testPensionParams = {
   avgWage0: 100000,
   avgPension0: 45000,
   cpiAssumed: 0.02,
+  baselineUnemploymentRate: 0.04,
 };
 
 const testMigration = {
@@ -141,7 +142,7 @@ describe('prepareProjectionParams', () => {
       e0_F: 25.0,
       netMigPer1000: 2.0,
       wageGrowthReal: 0.01,
-      empMultiplier: 1.0,
+      unemploymentRate: 0.04,
       retAge: 18,
       indexWageWeight: 0.5,
     };
@@ -162,16 +163,19 @@ describe('prepareProjectionParams', () => {
     expect(params.migShapeF.length).toBe(21);
   });
 
-  it('should scale employment rates by multiplier', () => {
+  it('should scale employment rates based on unemployment rate', () => {
+    // Lower unemployment = higher employment
+    // baseline = 4%, target = 2% => multiplier = (1-0.02)/(1-0.04) = 0.98/0.96 ≈ 1.0208
     const sliders: SliderValues = {
       ...testMeta.defaults,
-      empMultiplier: 1.2,
+      unemploymentRate: 0.02,
     };
     
     const params = prepareProjectionParams(testDataset, sliders);
+    const expectedMultiplier = (1 - 0.02) / (1 - 0.04);
     
-    // Original rate at age 15 is 0.7, scaled by 1.2 = 0.84
-    expect(params.empM[15]).toBeCloseTo(0.84, 2);
+    // Original rate at age 15 is 0.7, scaled by ~1.0208 = ~0.7146
+    expect(params.empM[15]).toBeCloseTo(0.7 * expectedMultiplier, 2);
     // But clamped to max 1.0
     expect(params.empM[15]).toBeLessThanOrEqual(1);
   });
@@ -295,7 +299,7 @@ describe('runProjection', () => {
       e0_F: 35,
       netMigPer1000: -10, // High emigration
       wageGrowthReal: -0.01, // Wage decline
-      empMultiplier: 0.8,
+      unemploymentRate: 0.15, // High unemployment
       retAge: 15,         // Early retirement
       indexWageWeight: 1,
     };

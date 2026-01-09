@@ -59,12 +59,12 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     description: 'Roční růst mezd očištěný o inflaci. Vyšší mzdy = vyšší příspěvky, ale i vyšší budoucí důchody.',
   },
   {
-    key: 'empMultiplier',
-    label: 'Zaměstnanost',
-    unit: '×',
-    step: 0.01,
-    format: (v) => v.toFixed(2),
-    description: 'Násobitel míry zaměstnanosti. 1,0 = beze změny. Vyšší zaměstnanost = více přispěvatelů do systému.',
+    key: 'unemploymentRate',
+    label: 'Nezaměstnanost',
+    unit: '%',
+    step: 0.005,
+    format: (v) => (v * 100).toFixed(1),
+    description: 'Celková míra nezaměstnanosti. Vyšší nezaměstnanost = méně pracujících = méně příspěvků do penzijního systému.',
   },
   {
     key: 'retAge',
