@@ -48,7 +48,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     unit: '‰',
     step: 0.5,
     format: (v) => v.toFixed(1),
-    description: 'Rozdíl mezi imigrací a emigrací na 1000 obyvatel. Kladná migrace = příliv pracujících, pomáhá bilanci.',
+    description: 'Roční čistá migrace v promile aktuální populace. Např. +10‰ při 10 mil. obyvatel = 100 000 migrantů ročně. Kladná = příliv, záporná = odliv.',
   },
   {
     key: 'wageGrowthReal',
@@ -80,7 +80,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     unit: '',
     step: 0.05,
     format: (v) => `${(v * 100).toFixed(0)}% mzdy, ${((1 - v) * 100).toFixed(0)}% CPI`,
-    description: 'Jak se zvyšují důchody: podle růstu mezd nebo inflace (CPI). Mzdová valorizace je štědřejší, ale dražší.',
+    description: 'Jak se zvyšují důchody: podle růstu mezd nebo podle inflace (CPI = index spotřebitelských cen). Mzdová valorizace udržuje životní úroveň důchodců vůči pracujícím, ale je dražší.',
   },
 ];
 

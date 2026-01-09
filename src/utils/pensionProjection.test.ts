@@ -156,8 +156,10 @@ describe('prepareProjectionParams', () => {
     expect(params.qxF.length).toBe(21);
     expect(params.empM.length).toBe(21);
     expect(params.empF.length).toBe(21);
-    expect(params.netMigM.length).toBe(21);
-    expect(params.netMigF.length).toBe(21);
+    // Migration is now stored as rate + shapes for dynamic calculation
+    expect(params.netMigPer1000).toBe(testMeta.defaults.netMigPer1000);
+    expect(params.migShapeM.length).toBe(21);
+    expect(params.migShapeF.length).toBe(21);
   });
 
   it('should scale employment rates by multiplier', () => {

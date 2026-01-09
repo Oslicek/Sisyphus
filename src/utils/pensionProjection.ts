@@ -62,8 +62,11 @@ export interface PreparedParams {
   empF: number[];
   wRelM: number[];
   wRelF: number[];
-  netMigM: number[];
-  netMigF: number[];
+  
+  // Migration - computed dynamically each year from current population
+  netMigPer1000: number;
+  migShapeM: number[];
+  migShapeF: number[];
 }
 
 /**
@@ -97,12 +100,6 @@ export function prepareProjectionParams(
   const empM = scaleEmployment(laborParticipation.emp.M, sliders.empMultiplier);
   const empF = scaleEmployment(laborParticipation.emp.F, sliders.empMultiplier);
   
-  // Calculate net migration by age
-  const totalPop = sumPopulation(basePopulation.population);
-  const totalNetMig = (sliders.netMigPer1000 / 1000) * totalPop;
-  const netMigM = calculateNetMigration(totalNetMig, migrationShape.shape.M);
-  const netMigF = calculateNetMigration(totalNetMig, migrationShape.shape.F);
-  
   // Sex ratio at birth
   const pMale = meta.srb / (1 + meta.srb);
   
@@ -124,8 +121,10 @@ export function prepareProjectionParams(
     empF,
     wRelM: wageProfile.wRel.M,
     wRelF: wageProfile.wRel.F,
-    netMigM,
-    netMigF,
+    // Migration parameters - calculated dynamically each year
+    netMigPer1000: sliders.netMigPer1000,
+    migShapeM: migrationShape.shape.M,
+    migShapeF: migrationShape.shape.F,
   };
 }
 
@@ -144,14 +143,14 @@ export interface OneYearResult {
  * Steps:
  * 1. Apply mortality (survivors)
  * 2. Age cohorts
- * 3. Apply migration
+ * 3. Apply migration (dynamically calculated from current population)
  * 4. Calculate and add births
  */
 export function projectOneYear(
   pop: PopulationBySex,
   params: PreparedParams
 ): OneYearResult {
-  const { maxAge, qxM, qxF, asfr, netMigM, netMigF } = params;
+  const { maxAge, qxM, qxF, asfr, netMigPer1000, migShapeM, migShapeF } = params;
   
   // Step 1: Calculate survivors (apply mortality)
   const survivorsM = calculateSurvivors(pop.M, qxM);
@@ -166,7 +165,11 @@ export function projectOneYear(
   let agedM = ageCohorts(survivorsM, maxAge);
   let agedF = ageCohorts(survivorsF, maxAge);
   
-  // Step 3: Apply migration
+  // Step 3: Apply migration (dynamically calculated from CURRENT population)
+  const currentPop = sumPopulation({ M: agedM, F: agedF });
+  const totalNetMig = (netMigPer1000 / 1000) * currentPop;
+  const netMigM = calculateNetMigration(totalNetMig, migShapeM);
+  const netMigF = calculateNetMigration(totalNetMig, migShapeF);
   agedM = applyMigration(agedM, netMigM);
   agedF = applyMigration(agedF, netMigF);
   
