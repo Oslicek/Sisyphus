@@ -24,7 +24,7 @@ export function Penze() {
     description: 'Interaktivní simulace průběžného důchodového systému. Zjistěte, jak demografické změny ovlivní penzijní bilanci.',
   });
 
-  const [simulationMode, setSimulationMode] = useState<SimulationMode>('balance');
+  const [simulationMode, setSimulationMode] = useState<SimulationMode>('equilibrium');
 
   const {
     isLoading,
@@ -78,16 +78,16 @@ export function Penze() {
             {/* Mode switch */}
             <div className={styles.modeSwitch}>
               <button
-                className={`${styles.modeButton} ${simulationMode === 'balance' ? styles.modeButtonActive : ''}`}
-                onClick={() => setSimulationMode('balance')}
-              >
-                📊 Co se stane?
-              </button>
-              <button
                 className={`${styles.modeButton} ${simulationMode === 'equilibrium' ? styles.modeButtonActive : ''}`}
                 onClick={() => setSimulationMode('equilibrium')}
               >
                 ⚖️ Udržení rovnováhy
+              </button>
+              <button
+                className={`${styles.modeButton} ${simulationMode === 'balance' ? styles.modeButtonActive : ''}`}
+                onClick={() => setSimulationMode('balance')}
+              >
+                📊 Co se stane?
               </button>
             </div>
             <p className={styles.modeDescription}>
