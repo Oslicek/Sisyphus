@@ -107,12 +107,15 @@ export function prepareProjectionParams(
   // Sex ratio at birth
   const pMale = meta.srb / (1 + meta.srb);
   
+  // Calculate initial pension from wage ratio
+  const avgPension0 = pensionParams.avgWage0 * sliders.pensionWageRatio;
+  
   return {
     maxAge,
     retAge: sliders.retAge,
     contribRate: pensionParams.contribRate,
     avgWage0: pensionParams.avgWage0,
-    avgPension0: sliders.avgPension0,
+    avgPension0,
     wageGrowthReal: sliders.wageGrowthReal,
     cpiAssumed: pensionParams.cpiAssumed,
     indexWageWeight: sliders.indexWageWeight,

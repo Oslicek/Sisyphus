@@ -59,12 +59,12 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     distributionType: 'migration',
   },
   {
-    key: 'avgPension0',
-    label: 'Počáteční důchod',
-    unit: 'ročně',
-    step: 1000,
-    format: (v) => v.toLocaleString('cs-CZ'),
-    description: 'Průměrný roční důchod v základním roce. Tato částka se každoročně valorizuje podle nastavení valorizace.',
+    key: 'pensionWageRatio',
+    label: 'Náhradový poměr',
+    unit: '% mzdy',
+    step: 0.01,
+    format: (v) => (v * 100).toFixed(0),
+    description: 'Průměrný důchod jako procento průměrné mzdy. Např. 45% znamená, že důchod je 45 000, když mzda je 100 000.',
     // No distribution chart - single value
   },
   {

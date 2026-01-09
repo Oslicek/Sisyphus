@@ -30,7 +30,7 @@ const testMeta = {
     e0_M: 23.0,
     e0_F: 25.0,
     netMigPer1000: 2.0,
-    avgPension0: 45000,
+    pensionWageRatio: 0.45,
     wageGrowthReal: 0.01,
     unemploymentRate: 0.04,
     retAge: 18,
@@ -41,7 +41,7 @@ const testMeta = {
     e0_M: [15, 35] as [number, number],
     e0_F: [15, 35] as [number, number],
     netMigPer1000: [-10, 20] as [number, number],
-    avgPension0: [20000, 80000] as [number, number],
+    pensionWageRatio: [0.2, 0.8] as [number, number],
     wageGrowthReal: [-0.01, 0.03] as [number, number],
     unemploymentRate: [0.01, 0.2] as [number, number],
     retAge: [15, 20] as [number, number],
@@ -143,7 +143,7 @@ describe('prepareProjectionParams', () => {
       e0_M: 23.0,
       e0_F: 25.0,
       netMigPer1000: 2.0,
-      avgPension0: 45000,
+      pensionWageRatio: 0.45,
       wageGrowthReal: 0.01,
       unemploymentRate: 0.04,
       retAge: 18,
@@ -301,7 +301,7 @@ describe('runProjection', () => {
       e0_M: 35,           // High life expectancy
       e0_F: 35,
       netMigPer1000: -10, // High emigration
-      avgPension0: 80000, // High pension
+      pensionWageRatio: 0.8, // High replacement rate (80% of wage)
       wageGrowthReal: -0.01, // Wage decline
       unemploymentRate: 0.15, // High unemployment
       retAge: 15,         // Early retirement
