@@ -284,6 +284,7 @@ export function runProjection(
 ): ScenarioResult {
   const params = prepareProjectionParams(dataset, sliders);
   const baseYear = dataset.meta.baseYear;
+  const maxAge = dataset.meta.maxAge;
   
   // Initialize with base population (deep copy)
   let currentPop: PopulationBySex = {
@@ -293,8 +294,15 @@ export function runProjection(
   
   const points: YearPoint[] = [];
   
+  // Population pyramids storage - optimized for slider animation
+  // pyramidsM[yearIndex][age] = male population at that age
+  const pyramidsM: number[][] = [];
+  const pyramidsF: number[][] = [];
+  
   // Year 0 (base year)
   points.push(calculateYearPoint(currentPop, params, baseYear, 0, 0, 0));
+  pyramidsM.push([...currentPop.M]);
+  pyramidsF.push([...currentPop.F]);
   
   // Project forward
   for (let i = 1; i <= horizonYears; i++) {
@@ -302,6 +310,8 @@ export function runProjection(
     currentPop = newPop;
     
     points.push(calculateYearPoint(currentPop, params, baseYear + i, i, births, deaths));
+    pyramidsM.push([...currentPop.M]);
+    pyramidsF.push([...currentPop.F]);
   }
   
   return {
@@ -309,6 +319,11 @@ export function runProjection(
     baseYear,
     horizonYears,
     points,
+    pyramids: {
+      M: pyramidsM,
+      F: pyramidsF,
+      maxAge,
+    },
   };
 }
 

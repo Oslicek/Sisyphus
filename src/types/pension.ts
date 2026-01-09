@@ -249,6 +249,21 @@ export interface YearPoint {
 }
 
 /**
+ * Population pyramid data for animation
+ * Optimized for slider-based year selection: O(1) access by year index
+ * pyramids.M[yearIndex][age] = male population at that age
+ * pyramids.F[yearIndex][age] = female population at that age
+ */
+export interface PopulationPyramids {
+  /** Male population by year index and age */
+  M: number[][];
+  /** Female population by year index and age */
+  F: number[][];
+  /** Maximum age in the arrays */
+  maxAge: number;
+}
+
+/**
  * Full scenario projection result
  */
 export interface ScenarioResult {
@@ -257,6 +272,8 @@ export interface ScenarioResult {
   horizonYears: number;
   /** Year-by-year results from baseYear to baseYear + horizonYears */
   points: YearPoint[];
+  /** Population pyramids for all years (for animation) */
+  pyramids: PopulationPyramids;
 }
 
 // ============================================================================

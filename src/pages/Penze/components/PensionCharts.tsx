@@ -10,9 +10,10 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import type { ScenarioResult, YearPoint } from '../../../types/pension';
+import { PopulationPyramid } from './PopulationPyramid';
 import styles from './PensionCharts.module.css';
 
-type ChartType = 'balance' | 'requiredRate' | 'dependencyRatio' | 'population' | 'requiredRetAge' | 'requiredPensionRatio';
+type ChartType = 'balance' | 'requiredRate' | 'dependencyRatio' | 'population' | 'requiredRetAge' | 'requiredPensionRatio' | 'pyramid';
 
 interface PensionChartsProps {
   result: ScenarioResult;
@@ -50,11 +51,15 @@ const CHART_INFO: Record<ChartType, ChartInfo> = {
     label: 'Požadovaný poměr',
     description: 'Jaký náhradový poměr (důchod/mzda) by byl nutný pro vyrovnanou bilanci při daném věku odchodu.',
   },
+  pyramid: {
+    label: 'Populační pyramida',
+    description: 'Věková struktura populace podle pohlaví. Posuvníkem pod grafem můžete procházet jednotlivé roky simulace.',
+  },
 };
 
 // Charts shown in each mode
-const BALANCE_CHARTS: ChartType[] = ['balance', 'requiredRate', 'dependencyRatio', 'population'];
-const EQUILIBRIUM_CHARTS: ChartType[] = ['requiredRetAge', 'requiredPensionRatio', 'requiredRate', 'dependencyRatio'];
+const BALANCE_CHARTS: ChartType[] = ['balance', 'requiredRate', 'dependencyRatio', 'population', 'pyramid'];
+const EQUILIBRIUM_CHARTS: ChartType[] = ['requiredRetAge', 'requiredPensionRatio', 'requiredRate', 'dependencyRatio', 'pyramid'];
 
 export function PensionCharts({ result, mode = 'balance', contribRate = 0.2 }: PensionChartsProps) {
   const availableCharts = mode === 'equilibrium' ? EQUILIBRIUM_CHARTS : BALANCE_CHARTS;
@@ -67,8 +72,12 @@ export function PensionCharts({ result, mode = 'balance', contribRate = 0.2 }: P
     setActiveChart(availableCharts[0]);
   }, [mode]);
 
-  // Draw chart when data or selection changes
+  // Draw chart when data or selection changes (skip for pyramid - it has its own component)
   useEffect(() => {
+    if (activeChart === 'pyramid') {
+      return;
+    }
+    
     if (!chartRef.current || !containerRef.current || !result.points.length) {
       return;
     }
@@ -160,9 +169,17 @@ export function PensionCharts({ result, mode = 'balance', contribRate = 0.2 }: P
 
       <p className={styles.chartDescription}>{CHART_INFO[activeChart].description}</p>
 
-      <div ref={containerRef} className={styles.chartContainer}>
-        <svg ref={chartRef} />
-      </div>
+      {activeChart === 'pyramid' ? (
+        <PopulationPyramid
+          pyramids={result.pyramids}
+          baseYear={result.baseYear}
+          horizonYears={result.horizonYears}
+        />
+      ) : (
+        <div ref={containerRef} className={styles.chartContainer}>
+          <svg ref={chartRef} />
+        </div>
+      )}
 
       <SummaryCards result={result} mode={mode} />
     </div>
