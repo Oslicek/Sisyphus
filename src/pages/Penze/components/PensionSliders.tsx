@@ -145,17 +145,35 @@ export function PensionSliders({
     });
   };
 
+  const getScrollAmount = useCallback(() => {
+    if (!gridRef.current) return 300;
+    
+    const container = gridRef.current;
+    const firstChild = container.firstElementChild as HTMLElement | null;
+    if (!firstChild) return 300;
+    
+    const boxWidth = firstChild.offsetWidth;
+    const gap = 16; // 1rem gap
+    const containerWidth = container.clientWidth;
+    
+    // Calculate visible boxes and scroll by (visible - 1) boxes
+    const visibleBoxes = Math.floor(containerWidth / (boxWidth + gap));
+    const scrollBoxes = Math.max(1, visibleBoxes - 1);
+    
+    return scrollBoxes * (boxWidth + gap);
+  }, []);
+
   const scrollLeft = useCallback(() => {
     if (gridRef.current) {
-      gridRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+      gridRef.current.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
     }
-  }, []);
+  }, [getScrollAmount]);
 
   const scrollRight = useCallback(() => {
     if (gridRef.current) {
-      gridRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      gridRef.current.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
     }
-  }, []);
+  }, [getScrollAmount]);
 
   return (
     <div className={styles.container}>
