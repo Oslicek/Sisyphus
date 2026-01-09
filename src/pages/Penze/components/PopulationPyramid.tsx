@@ -40,9 +40,9 @@ export function PopulationPyramid({ pyramids, baseYear, horizonYears }: Populati
     svg.selectAll('*').remove();
 
     const containerWidth = containerRef.current.clientWidth;
-    const width = Math.min(containerWidth, 600);
-    const height = Math.min(400, pyramids.maxAge * 4 + 60);
-    const margin = { top: 30, right: 20, bottom: 40, left: 20 };
+    const width = Math.min(containerWidth - 100, 500); // Leave space for legend on right
+    const height = Math.max(400, pyramids.maxAge * 12 + 60); // 4x taller
+    const margin = { top: 30, right: 10, bottom: 20, left: 10 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -135,37 +135,7 @@ export function PopulationPyramid({ pyramids, baseYear, horizonYears }: Populati
       .style('font-size', '14px')
       .style('font-weight', '600')
       .style('fill', '#1a1a2e')
-      .text(`Populační pyramida – rok ${currentYear}`);
-
-    // Legend
-    const legend = g.append('g')
-      .attr('transform', `translate(${innerWidth / 2 - 80}, ${innerHeight + 20})`);
-
-    legend.append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', 15)
-      .attr('height', 12)
-      .attr('fill', '#007bff');
-    legend.append('text')
-      .attr('x', 20)
-      .attr('y', 10)
-      .style('font-family', "'Source Sans 3', sans-serif")
-      .style('font-size', '11px')
-      .text('Muži');
-
-    legend.append('rect')
-      .attr('x', 80)
-      .attr('y', 0)
-      .attr('width', 15)
-      .attr('height', 12)
-      .attr('fill', '#e75480');
-    legend.append('text')
-      .attr('x', 100)
-      .attr('y', 10)
-      .style('font-family', "'Source Sans 3', sans-serif")
-      .style('font-size', '11px')
-      .text('Ženy');
+      .text(`Rok ${currentYear}`);
 
   }, [maleData, femaleData, pyramids.maxAge, currentYear]);
 
@@ -176,17 +146,31 @@ export function PopulationPyramid({ pyramids, baseYear, horizonYears }: Populati
 
   return (
     <div className={styles.container}>
-      <div ref={containerRef} className={styles.chartContainer}>
-        <svg ref={chartRef} />
+      <div className={styles.chartRow}>
+        <div ref={containerRef} className={styles.chartContainer}>
+          <svg ref={chartRef} />
+        </div>
+
+        <div className={styles.legend}>
+          <div className={styles.legendItem}>
+            <span className={styles.legendDot} style={{ background: '#007bff' }} />
+            <span className={styles.legendLabel}>Muži</span>
+            <span className={styles.legendValue}>{formatPopulation(totalMale)}</span>
+          </div>
+          <div className={styles.legendItem}>
+            <span className={styles.legendDot} style={{ background: '#e75480' }} />
+            <span className={styles.legendLabel}>Ženy</span>
+            <span className={styles.legendValue}>{formatPopulation(totalFemale)}</span>
+          </div>
+          <div className={styles.legendTotal}>
+            <span>Celkem</span>
+            <span className={styles.legendValue}>{formatPopulation(totalPop)}</span>
+          </div>
+        </div>
       </div>
 
       <div className={styles.controls}>
-        <div className={styles.yearDisplay}>
-          <span className={styles.yearLabel}>Rok:</span>
-          <span className={styles.yearValue}>{currentYear}</span>
-        </div>
-        
-        <div className={styles.sliderContainer}>
+        <div className={styles.sliderRow}>
           <span className={styles.sliderLabel}>{baseYear}</span>
           <input
             type="range"
@@ -197,20 +181,7 @@ export function PopulationPyramid({ pyramids, baseYear, horizonYears }: Populati
             className={styles.slider}
           />
           <span className={styles.sliderLabel}>{baseYear + horizonYears}</span>
-        </div>
-
-        <div className={styles.stats}>
-          <span className={styles.statItem}>
-            <span className={styles.statDot} style={{ background: '#007bff' }} />
-            Muži: {formatPopulation(totalMale)}
-          </span>
-          <span className={styles.statItem}>
-            <span className={styles.statDot} style={{ background: '#e75480' }} />
-            Ženy: {formatPopulation(totalFemale)}
-          </span>
-          <span className={styles.statItem}>
-            <strong>Celkem: {formatPopulation(totalPop)}</strong>
-          </span>
+          <span className={styles.yearValue}>{currentYear}</span>
         </div>
       </div>
     </div>
