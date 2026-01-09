@@ -15,8 +15,8 @@ import type { SimulationMode } from '../../types/pension';
 import { PensionSliders, PensionCharts } from './components';
 import styles from './Penze.module.css';
 
-// Dataset path for test data
-const DATASET_PATH = 'pension/test-cz-2024';
+// Dataset path for real Czech data
+const DATASET_PATH = 'pension/cz-2024';
 
 export function Penze() {
   useDocumentMeta({

@@ -1,0 +1,42 @@
+{
+  "datasetId": "CZ_2024",
+  "country": "CZ",
+  "baseYear": 2024,
+  "maxAge": 100,
+  "currency": "CZK",
+  "sexes": ["M", "F"],
+  "ageMinFert": 15,
+  "ageMaxFert": 49,
+  "ageMinWork": 15,
+  "ageMaxWork": 74,
+  "srb": 1.055,
+  "defaults": {
+    "horizonYears": 50,
+    "tfr": 1.46,
+    "e0_M": 76.0,
+    "e0_F": 82.0,
+    "netMigPer1000": 3.0,
+    "wageGrowthReal": 0.015,
+    "unemploymentRate": 0.028,
+    "contribRate": 0.28,
+    "retAge": 65,
+    "basicAmountRatio": 0.10,
+    "percentageAmountRatio": 0.32,
+    "realWageIndexShare": 0.333,
+    "minPensionRatio": 0.20
+  },
+  "sliderRanges": {
+    "tfr": [0, 5],
+    "e0_M": [65, 95],
+    "e0_F": [70, 100],
+    "netMigPer1000": [-50, 50],
+    "wageGrowthReal": [-0.05, 0.10],
+    "unemploymentRate": [0, 0.30],
+    "contribRate": [0, 1],
+    "retAge": [55, 75],
+    "basicAmountRatio": [0, 1],
+    "percentageAmountRatio": [0, 1],
+    "realWageIndexShare": [0, 1],
+    "minPensionRatio": [0, 1]
+  }
+}
