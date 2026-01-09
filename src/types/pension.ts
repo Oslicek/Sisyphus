@@ -63,8 +63,6 @@ export interface SliderValues {
   e0_F: number;
   /** Net migration per 1000 population */
   netMigPer1000: number;
-  /** Initial pension as ratio of average wage (e.g., 0.45 = 45%) */
-  pensionWageRatio: number;
   /** Real wage growth rate (decimal, e.g., 0.01 = 1%) */
   wageGrowthReal: number;
   /** Unemployment rate (decimal, e.g., 0.04 = 4%) */
@@ -73,8 +71,16 @@ export interface SliderValues {
   contribRate: number;
   /** Retirement age */
   retAge: number;
-  /** Pension indexation weight (0=CPI only, 1=wage only) */
-  indexWageWeight: number;
+  
+  // Czech pension system parameters
+  /** Basic amount (základní výměra) as ratio of average wage (e.g., 0.10 = 10%) */
+  basicAmountRatio: number;
+  /** Initial percentage amount (procentní výměra) as ratio of average wage */
+  percentageAmountRatio: number;
+  /** Share of real wage growth in indexation (e.g., 0.333 = 1/3) */
+  realWageIndexShare: number;
+  /** Minimum pension as ratio of average wage (e.g., 0.20 = 20%) */
+  minPensionRatio: number;
 }
 
 /**
@@ -85,12 +91,15 @@ export interface SliderRanges {
   e0_M: [number, number];
   e0_F: [number, number];
   netMigPer1000: [number, number];
-  pensionWageRatio: [number, number];
   wageGrowthReal: [number, number];
   unemploymentRate: [number, number];
   contribRate: [number, number];
   retAge: [number, number];
-  indexWageWeight: [number, number];
+  // Czech pension system
+  basicAmountRatio: [number, number];
+  percentageAmountRatio: [number, number];
+  realWageIndexShare: [number, number];
+  minPensionRatio: [number, number];
 }
 
 /**
@@ -156,10 +165,14 @@ export interface PensionParamsData {
   contribRate: number;
   /** Average annual wage in base year */
   avgWage0: number;
-  /** Average annual pension in base year */
-  avgPension0: number;
-  /** Assumed CPI inflation rate */
+  /** Initial basic amount (základní výměra) in base year */
+  basicAmount0: number;
+  /** Initial percentage amount (procentní výměra) in base year */
+  percentageAmount0: number;
+  /** Assumed general CPI inflation rate */
   cpiAssumed: number;
+  /** Pensioner-specific CPI (důchodcovská inflace) - typically slightly higher */
+  pensionerCPI: number;
   /** Baseline unemployment rate for calibration (0-1, e.g., 0.04 = 4%) */
   baselineUnemploymentRate: number;
 }
@@ -207,6 +220,20 @@ export interface PensionDataset {
 // ============================================================================
 
 /**
+ * Czech pension components (dvousložkový důchod)
+ */
+export interface PensionComponents {
+  /** Basic amount (základní výměra) - same for everyone */
+  basicAmount: number;
+  /** Percentage amount (procentní výměra) - based on work history */
+  percentageAmount: number;
+  /** Total average pension */
+  totalPension: number;
+  /** Whether minimum pension was applied */
+  minimumApplied: boolean;
+}
+
+/**
  * Single year projection result
  */
 export interface YearPoint {
@@ -238,11 +265,16 @@ export interface YearPoint {
   dependencyRatio: number;
   /** Average wage in this year */
   avgWage: number;
-  /** Average pension in this year */
+  /** Average pension in this year (total) */
   avgPension: number;
   
+  /** Czech pension system components */
+  pensionComponents: PensionComponents;
+  /** Cumulative real wage gap (for indexation "erasing" mechanism) */
+  cumulativeWageGap: number;
+  
   // Equilibrium data (what's needed for balanced budget)
-  /** Required retirement age for balance (given current pensionWageRatio) */
+  /** Required retirement age for balance (given current pension ratio) */
   requiredRetAge: number | null;
   /** Required pension/wage ratio for balance (given current retAge) */
   requiredPensionRatio: number | null;

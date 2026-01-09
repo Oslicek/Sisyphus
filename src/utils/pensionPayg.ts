@@ -184,6 +184,128 @@ export function calculateAvgPension(
 }
 
 // ============================================================================
+// Czech Pension System (dvousložkový důchod)
+// ============================================================================
+
+import type { PensionComponents } from '../types/pension';
+
+export interface CzechPensionParams {
+  /** Average wage in current year */
+  avgWage: number;
+  /** Basic amount ratio (základní výměra as % of avg wage) */
+  basicAmountRatio: number;
+  /** Minimum pension ratio (as % of avg wage) */
+  minPensionRatio: number;
+  /** Share of real wage growth in indexation (1/3 in current law) */
+  realWageIndexShare: number;
+  /** Pensioner CPI (důchodcovská inflace) */
+  pensionerCPI: number;
+  /** Real wage growth this year */
+  realWageGrowth: number;
+}
+
+/**
+ * Index pension using Czech rules (od 2024):
+ * - Basic amount: always 10% of average wage
+ * - Percentage amount: pensionerCPI + effectiveWageGrowth * realWageIndexShare
+ * - Effective wage growth accounts for "erasing" past real wage drops
+ * 
+ * @param prevComponents - Previous year's pension components
+ * @param params - Current year parameters
+ * @param cumulativeWageGap - Accumulated real wage drops to "erase"
+ * @returns New pension components and updated wage gap
+ */
+export function indexCzechPension(
+  prevComponents: PensionComponents,
+  params: CzechPensionParams,
+  cumulativeWageGap: number
+): { components: PensionComponents; newCumulativeGap: number } {
+  const {
+    avgWage,
+    basicAmountRatio,
+    minPensionRatio,
+    realWageIndexShare,
+    pensionerCPI,
+    realWageGrowth,
+  } = params;
+  
+  // 1. Basic amount = always basicAmountRatio × average wage
+  const basicAmount = avgWage * basicAmountRatio;
+  
+  // 2. Calculate effective wage growth with "erasing" mechanism
+  let effectiveWageGrowth = realWageGrowth;
+  let newCumulativeGap = cumulativeWageGap;
+  
+  if (cumulativeWageGap < 0 && realWageGrowth > 0) {
+    // Positive growth erases past drops first
+    const gapReduction = Math.min(realWageGrowth, -cumulativeWageGap);
+    effectiveWageGrowth = realWageGrowth - gapReduction;
+    newCumulativeGap = cumulativeWageGap + gapReduction;
+  } else if (realWageGrowth < 0) {
+    // Negative growth accumulates in the gap
+    newCumulativeGap = cumulativeWageGap + realWageGrowth;
+    effectiveWageGrowth = 0;
+  }
+  
+  // 3. Index percentage amount: pensionerCPI + realWageIndexShare × effectiveWageGrowth
+  const indexRate = pensionerCPI + realWageIndexShare * Math.max(0, effectiveWageGrowth);
+  const percentageAmount = prevComponents.percentageAmount * (1 + indexRate);
+  
+  // 4. Calculate total and apply minimum
+  let totalPension = basicAmount + percentageAmount;
+  const minPension = avgWage * minPensionRatio;
+  const minimumApplied = totalPension < minPension;
+  
+  if (minimumApplied) {
+    totalPension = minPension;
+  }
+  
+  return {
+    components: {
+      basicAmount,
+      percentageAmount,
+      totalPension,
+      minimumApplied,
+    },
+    newCumulativeGap,
+  };
+}
+
+/**
+ * Calculate initial pension components from slider values
+ * 
+ * @param avgWage0 - Base year average wage
+ * @param basicAmountRatio - Basic amount as % of avg wage
+ * @param percentageAmountRatio - Percentage amount as % of avg wage
+ * @param minPensionRatio - Minimum pension as % of avg wage
+ * @returns Initial pension components
+ */
+export function calculateInitialPension(
+  avgWage0: number,
+  basicAmountRatio: number,
+  percentageAmountRatio: number,
+  minPensionRatio: number
+): PensionComponents {
+  const basicAmount = avgWage0 * basicAmountRatio;
+  const percentageAmount = avgWage0 * percentageAmountRatio;
+  let totalPension = basicAmount + percentageAmount;
+  
+  const minPension = avgWage0 * minPensionRatio;
+  const minimumApplied = totalPension < minPension;
+  
+  if (minimumApplied) {
+    totalPension = minPension;
+  }
+  
+  return {
+    basicAmount,
+    percentageAmount,
+    totalPension,
+    minimumApplied,
+  };
+}
+
+// ============================================================================
 // Equilibrium Calculations (finding parameters for balanced budget)
 // ============================================================================
 

@@ -9,6 +9,7 @@ import type {
   PopulationBySex,
   YearPoint,
   ScenarioResult,
+  PensionComponents,
 } from '../types/pension';
 
 import {
@@ -36,9 +37,10 @@ import {
   calculateDependencyRatio,
   countWorkers,
   calculateAvgWage,
-  calculateAvgPension,
   findRequiredRetirementAge,
   findRequiredPensionRatio,
+  indexCzechPension,
+  calculateInitialPension,
 } from './pensionPayg';
 
 /**
@@ -49,13 +51,21 @@ export interface PreparedParams {
   retAge: number;
   contribRate: number;
   avgWage0: number;
-  avgPension0: number;
-  pensionWageRatio: number;
   wageGrowthReal: number;
   cpiAssumed: number;
-  indexWageWeight: number;
+  pensionerCPI: number;
   srb: number;
   pMale: number;
+  
+  // Czech pension system parameters
+  basicAmountRatio: number;
+  percentageAmountRatio: number;
+  realWageIndexShare: number;
+  minPensionRatio: number;
+  
+  // Initial pension components
+  initialBasicAmount: number;
+  initialPercentageAmount: number;
   
   // Age-specific arrays
   asfr: number[];
@@ -110,21 +120,30 @@ export function prepareProjectionParams(
   // Sex ratio at birth
   const pMale = meta.srb / (1 + meta.srb);
   
-  // Calculate initial pension from wage ratio
-  const avgPension0 = pensionParams.avgWage0 * sliders.pensionWageRatio;
+  // Calculate initial pension components from sliders
+  const avgWage0 = pensionParams.avgWage0;
+  const initialBasicAmount = avgWage0 * sliders.basicAmountRatio;
+  const initialPercentageAmount = avgWage0 * sliders.percentageAmountRatio;
   
   return {
     maxAge,
     retAge: sliders.retAge,
     contribRate: sliders.contribRate,
-    avgWage0: pensionParams.avgWage0,
-    avgPension0,
-    pensionWageRatio: sliders.pensionWageRatio,
+    avgWage0,
     wageGrowthReal: sliders.wageGrowthReal,
     cpiAssumed: pensionParams.cpiAssumed,
-    indexWageWeight: sliders.indexWageWeight,
+    pensionerCPI: pensionParams.pensionerCPI,
     srb: meta.srb,
     pMale,
+    
+    // Czech pension parameters
+    basicAmountRatio: sliders.basicAmountRatio,
+    percentageAmountRatio: sliders.percentageAmountRatio,
+    realWageIndexShare: sliders.realWageIndexShare,
+    minPensionRatio: sliders.minPensionRatio,
+    initialBasicAmount,
+    initialPercentageAmount,
+    
     asfr,
     qxM,
     qxF,
@@ -199,7 +218,7 @@ export function projectOneYear(
 }
 
 /**
- * Calculate PAYG metrics for a given population state
+ * Calculate PAYG metrics for a given population state with Czech pension model
  */
 function calculateYearPoint(
   pop: PopulationBySex,
@@ -207,19 +226,15 @@ function calculateYearPoint(
   year: number,
   yearIndex: number,
   births: number,
-  deaths: number
+  deaths: number,
+  pensionComponents: PensionComponents,
+  cumulativeWageGap: number
 ): YearPoint {
   const empPop: PopulationBySex = { M: params.empM, F: params.empF };
   const wRelPop: PopulationBySex = { M: params.wRelM, F: params.wRelF };
   
   const avgWage = calculateAvgWage(params.avgWage0, params.wageGrowthReal, yearIndex);
-  const avgPension = calculateAvgPension(
-    params.avgPension0, 
-    params.wageGrowthReal, 
-    params.cpiAssumed, 
-    params.indexWageWeight, 
-    yearIndex
-  );
+  const avgPension = pensionComponents.totalPension;
   
   const totalPop = sumPopulation(pop);
   const wageBill = calculateWageBill(pop, empPop, wRelPop, avgWage);
@@ -241,7 +256,7 @@ function calculateYearPoint(
     maxAge: params.maxAge,
   };
   
-  // Required retirement age for balance (given current pension ratio)
+  // Required retirement age for balance (given current pension)
   const requiredRetAge = findRequiredRetirementAge({
     ...equilibriumParams,
     avgPension,
@@ -269,6 +284,8 @@ function calculateYearPoint(
     dependencyRatio,
     avgWage,
     avgPension,
+    pensionComponents,
+    cumulativeWageGap,
     requiredRetAge,
     requiredPensionRatio,
   };
@@ -295,12 +312,20 @@ export function runProjection(
   const points: YearPoint[] = [];
   
   // Population pyramids storage - optimized for slider animation
-  // pyramidsM[yearIndex][age] = male population at that age
   const pyramidsM: number[][] = [];
   const pyramidsF: number[][] = [];
   
+  // Initialize Czech pension components
+  let currentPension = calculateInitialPension(
+    params.avgWage0,
+    params.basicAmountRatio,
+    params.percentageAmountRatio,
+    params.minPensionRatio
+  );
+  let cumulativeWageGap = 0;
+  
   // Year 0 (base year)
-  points.push(calculateYearPoint(currentPop, params, baseYear, 0, 0, 0));
+  points.push(calculateYearPoint(currentPop, params, baseYear, 0, 0, 0, currentPension, cumulativeWageGap));
   pyramidsM.push([...currentPop.M]);
   pyramidsF.push([...currentPop.F]);
   
@@ -309,7 +334,27 @@ export function runProjection(
     const { newPop, births, deaths } = projectOneYear(currentPop, params);
     currentPop = newPop;
     
-    points.push(calculateYearPoint(currentPop, params, baseYear + i, i, births, deaths));
+    // Calculate current year's average wage
+    const avgWage = calculateAvgWage(params.avgWage0, params.wageGrowthReal, i);
+    
+    // Index pension using Czech rules
+    const indexResult = indexCzechPension(
+      currentPension,
+      {
+        avgWage,
+        basicAmountRatio: params.basicAmountRatio,
+        minPensionRatio: params.minPensionRatio,
+        realWageIndexShare: params.realWageIndexShare,
+        pensionerCPI: params.pensionerCPI,
+        realWageGrowth: params.wageGrowthReal,
+      },
+      cumulativeWageGap
+    );
+    
+    currentPension = indexResult.components;
+    cumulativeWageGap = indexResult.newCumulativeGap;
+    
+    points.push(calculateYearPoint(currentPop, params, baseYear + i, i, births, deaths, currentPension, cumulativeWageGap));
     pyramidsM.push([...currentPop.M]);
     pyramidsF.push([...currentPop.F]);
   }

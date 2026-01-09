@@ -19,12 +19,14 @@
     "e0_M": 23.0,
     "e0_F": 25.0,
     "netMigPer1000": 2.0,
-    "pensionWageRatio": 0.45,
     "wageGrowthReal": 0.01,
     "unemploymentRate": 0.04,
-    "contribRate": 0.20,
+    "contribRate": 0.28,
     "retAge": 18,
-    "indexWageWeight": 0.5
+    "basicAmountRatio": 0.10,
+    "percentageAmountRatio": 0.35,
+    "realWageIndexShare": 0.333,
+    "minPensionRatio": 0.20
   },
   "sliderRanges": {
     "tfr": [
@@ -40,20 +42,16 @@
       35
     ],
     "netMigPer1000": [
-      -10,
-      20
-    ],
-    "pensionWageRatio": [
-      0.2,
-      0.8
+      -200,
+      200
     ],
     "wageGrowthReal": [
-      -0.01,
-      0.03
+      -0.1,
+      0.1
     ],
     "unemploymentRate": [
-      0.01,
-      0.20
+      0,
+      1
     ],
     "contribRate": [
       0,
@@ -63,7 +61,19 @@
       15,
       20
     ],
-    "indexWageWeight": [
+    "basicAmountRatio": [
+      0,
+      1
+    ],
+    "percentageAmountRatio": [
+      0,
+      1
+    ],
+    "realWageIndexShare": [
+      0,
+      1
+    ],
+    "minPensionRatio": [
       0,
       1
     ]

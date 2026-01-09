@@ -59,29 +59,19 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     distributionType: 'migration',
   },
   {
-    key: 'pensionWageRatio',
-    label: 'Náhradový poměr',
-    unit: '% mzdy',
-    step: 0.01,
-    format: (v) => (v * 100).toFixed(0),
-    description: 'Průměrný důchod jako procento průměrné mzdy. Např. 45% znamená, že důchod je 45 000, když mzda je 100 000.',
-    // No distribution chart - single value
-  },
-  {
     key: 'wageGrowthReal',
     label: 'Růst mezd (reálný)',
     unit: '%',
     step: 0.001,
     format: (v) => (v * 100).toFixed(1),
-    description: 'Roční růst mezd očištěný o inflaci. Vyšší mzdy = vyšší příspěvky, ale i vyšší budoucí důchody.',
-    // No distribution chart - applies uniformly
+    description: 'Roční růst mezd očištěný o inflaci. Vyšší mzdy = vyšší příspěvky, ale ovlivňuje i valorizaci důchodů.',
   },
   {
     key: 'unemploymentRate',
     label: 'Nezaměstnanost',
     unit: '%',
-    step: 0.005,
-    format: (v) => (v * 100).toFixed(1),
+    step: 0.01,
+    format: (v) => (v * 100).toFixed(0),
     description: 'Celková míra nezaměstnanosti. Vyšší nezaměstnanost = méně pracujících = méně příspěvků do penzijního systému.',
     distributionType: 'employment',
   },
@@ -89,10 +79,9 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     key: 'contribRate',
     label: 'Sazba pojistného',
     unit: '%',
-    step: 0.005,
-    format: (v) => (v * 100).toFixed(1),
+    step: 0.01,
+    format: (v) => (v * 100).toFixed(0),
     description: 'Procento mzdy odváděné na důchodové pojištění. V ČR je aktuálně 28% (zaměstnanec + zaměstnavatel).',
-    // No distribution chart - single value
   },
   {
     key: 'retAge',
@@ -101,16 +90,39 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     step: 1,
     format: (v) => v.toFixed(0),
     description: 'Věk, od kterého lidé pobírají důchod. Vyšší věk = méně důchodců a více pracujících.',
-    // No distribution chart - simple threshold
+  },
+  // Czech pension system parameters
+  {
+    key: 'basicAmountRatio',
+    label: 'Základní výměra',
+    unit: '% mzdy',
+    step: 0.01,
+    format: (v) => (v * 100).toFixed(0),
+    description: 'Základní výměra důchodu (stejná pro všechny) jako % průměrné mzdy. V ČR nyní 10%. Solidární složka důchodu.',
   },
   {
-    key: 'indexWageWeight',
-    label: 'Valorizace důchodů',
+    key: 'percentageAmountRatio',
+    label: 'Procentní výměra',
+    unit: '% mzdy',
+    step: 0.01,
+    format: (v) => (v * 100).toFixed(0),
+    description: 'Počáteční procentní výměra (zásluhová složka) jako % průměrné mzdy. Závisí na odpracovaných letech a výdělcích.',
+  },
+  {
+    key: 'realWageIndexShare',
+    label: 'Podíl mezd ve valorizaci',
     unit: '',
-    step: 0.05,
-    format: (v) => `${(v * 100).toFixed(0)}% mzdy, ${((1 - v) * 100).toFixed(0)}% CPI`,
-    description: 'Jak se zvyšují důchody: podle růstu mezd nebo podle inflace (CPI = index spotřebitelských cen). Mzdová valorizace udržuje životní úroveň důchodců vůči pracujícím, ale je dražší.',
-    // No distribution chart - applies uniformly
+    step: 0.01,
+    format: (v) => v === 0.333 ? '1/3' : v === 0.5 ? '1/2' : (v * 100).toFixed(0) + '%',
+    description: 'Jaká část růstu reálných mezd se promítne do valorizace procentní výměry. Dříve 1/2, od 2024 jen 1/3.',
+  },
+  {
+    key: 'minPensionRatio',
+    label: 'Minimální důchod',
+    unit: '% mzdy',
+    step: 0.01,
+    format: (v) => (v * 100).toFixed(0),
+    description: 'Minimální důchod jako % průměrné mzdy. Od 2026 platí 20% pro starobní a invalidní III. stupně.',
   },
 ];
 

@@ -30,24 +30,28 @@ const testMeta = {
     e0_M: 23.0,
     e0_F: 25.0,
     netMigPer1000: 2.0,
-    pensionWageRatio: 0.45,
     wageGrowthReal: 0.01,
     unemploymentRate: 0.04,
-    contribRate: 0.20,
+    contribRate: 0.28,
     retAge: 18,
-    indexWageWeight: 0.5,
+    basicAmountRatio: 0.10,
+    percentageAmountRatio: 0.35,
+    realWageIndexShare: 0.333,
+    minPensionRatio: 0.20,
   },
   sliderRanges: {
-    tfr: [0.8, 2.6] as [number, number],
+    tfr: [0, 5] as [number, number],
     e0_M: [15, 35] as [number, number],
     e0_F: [15, 35] as [number, number],
-    netMigPer1000: [-10, 20] as [number, number],
-    pensionWageRatio: [0.2, 0.8] as [number, number],
-    wageGrowthReal: [-0.01, 0.03] as [number, number],
-    unemploymentRate: [0.01, 0.2] as [number, number],
-    contribRate: [0.15, 0.4] as [number, number],
+    netMigPer1000: [-200, 200] as [number, number],
+    wageGrowthReal: [-0.1, 0.1] as [number, number],
+    unemploymentRate: [0, 1] as [number, number],
+    contribRate: [0, 1] as [number, number],
     retAge: [15, 20] as [number, number],
-    indexWageWeight: [0, 1] as [number, number],
+    basicAmountRatio: [0, 1] as [number, number],
+    percentageAmountRatio: [0, 1] as [number, number],
+    realWageIndexShare: [0, 1] as [number, number],
+    minPensionRatio: [0, 1] as [number, number],
   },
 };
 
@@ -99,10 +103,12 @@ const testWage = {
 
 const testPensionParams = {
   unit: 'annual' as const,
-  contribRate: 0.2,
+  contribRate: 0.28,
   avgWage0: 100000,
-  avgPension0: 45000,
+  basicAmount0: 10000,
+  percentageAmount0: 35000,
   cpiAssumed: 0.02,
+  pensionerCPI: 0.025,
   baselineUnemploymentRate: 0.04,
 };
 
@@ -145,19 +151,21 @@ describe('prepareProjectionParams', () => {
       e0_M: 23.0,
       e0_F: 25.0,
       netMigPer1000: 2.0,
-      pensionWageRatio: 0.45,
       wageGrowthReal: 0.01,
       unemploymentRate: 0.04,
-      contribRate: 0.20,
+      contribRate: 0.28,
       retAge: 18,
-      indexWageWeight: 0.5,
+      basicAmountRatio: 0.10,
+      percentageAmountRatio: 0.35,
+      realWageIndexShare: 0.333,
+      minPensionRatio: 0.20,
     };
     
     const params = prepareProjectionParams(testDataset, sliders);
     
     expect(params.maxAge).toBe(20);
     expect(params.retAge).toBe(18);
-    expect(params.contribRate).toBe(0.2);
+    expect(params.contribRate).toBe(0.28);
     expect(params.asfr.length).toBe(21);
     expect(params.qxM.length).toBe(21);
     expect(params.qxF.length).toBe(21);
@@ -303,13 +311,15 @@ describe('runProjection', () => {
       tfr: 0.8,           // Very low fertility
       e0_M: 35,           // High life expectancy
       e0_F: 35,
-      netMigPer1000: -10, // High emigration
-      pensionWageRatio: 0.8, // High replacement rate (80% of wage)
-      wageGrowthReal: -0.01, // Wage decline
-      unemploymentRate: 0.15, // High unemployment
-      contribRate: 0.15, // Low contribution rate
+      netMigPer1000: -100, // High emigration
+      wageGrowthReal: -0.05, // Wage decline
+      unemploymentRate: 0.30, // High unemployment
+      contribRate: 0.10, // Low contribution rate
       retAge: 15,         // Early retirement
-      indexWageWeight: 1,
+      basicAmountRatio: 0.20, // Higher basic amount
+      percentageAmountRatio: 0.60, // High percentage amount
+      realWageIndexShare: 0.5, // Higher wage share
+      minPensionRatio: 0.30, // Higher minimum
     };
     
     const result = runProjection(testDataset, extremeSliders, 10);

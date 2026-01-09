@@ -1,8 +1,10 @@
 {
   "unit": "annual",
-  "contribRate": 0.2,
+  "contribRate": 0.28,
   "avgWage0": 100000,
-  "avgPension0": 45000,
+  "basicAmount0": 10000,
+  "percentageAmount0": 35000,
   "cpiAssumed": 0.02,
+  "pensionerCPI": 0.025,
   "baselineUnemploymentRate": 0.04
 }
