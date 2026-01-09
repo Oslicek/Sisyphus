@@ -87,6 +87,10 @@
   margin-bottom: 3rem;
 }
 
+.sectionCompact {
+  margin-bottom: 1rem;
+}
+
 .sectionTitle {
   font-family: 'Bebas Neue', Impact, sans-serif;
   font-size: 1.5rem;

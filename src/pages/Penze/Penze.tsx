@@ -71,7 +71,26 @@ export function Penze() {
         {/* Main content */}
         {!isLoading && !error && sliders && sliderRanges && (
           <>
-            {/* Status indicator */}
+            {/* Sliders */}
+            <section className={styles.sectionCompact}>
+              <PensionSliders
+                values={sliders}
+                ranges={sliderRanges}
+                onChange={setSliders}
+                disabled={isRunning}
+                dataset={dataset ?? undefined}
+              />
+            </section>
+
+            {/* Charts */}
+            {result && (
+              <section className={styles.sectionCompact}>
+                <h2 className={styles.sectionTitle}>Výsledky projekce</h2>
+                <PensionCharts result={result} />
+              </section>
+            )}
+
+            {/* Status indicator - moved below charts */}
             <div className={styles.summaryBox}>
               <div className={styles.summaryItem}>
                 <span className={styles.summaryLabel}>Dataset</span>
@@ -96,25 +115,6 @@ export function Penze() {
                 </>
               )}
             </div>
-
-            {/* Sliders */}
-            <section className={styles.section}>
-              <PensionSliders
-                values={sliders}
-                ranges={sliderRanges}
-                onChange={setSliders}
-                disabled={isRunning}
-                dataset={dataset ?? undefined}
-              />
-            </section>
-
-            {/* Charts */}
-            {result && (
-              <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Výsledky projekce</h2>
-                <PensionCharts result={result} />
-              </section>
-            )}
 
             {/* Model description */}
             <section className={styles.section}>

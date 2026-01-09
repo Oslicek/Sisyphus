@@ -5,6 +5,7 @@
  * All sliders update immediately with debounced projection runs.
  */
 
+import { useRef, useCallback } from 'react';
 import type { SliderValues, SliderRanges, PensionDataset } from '../../../types/pension';
 import { SliderDistributionChart, type DistributionType } from './SliderDistributionChart';
 import styles from './PensionSliders.module.css';
@@ -110,6 +111,8 @@ export function PensionSliders({
   disabled = false,
   dataset,
 }: PensionSlidersProps) {
+  const gridRef = useRef<HTMLDivElement>(null);
+
   const handleSliderChange = (key: keyof SliderValues, newValue: number) => {
     onChange({
       ...values,
@@ -123,6 +126,18 @@ export function PensionSliders({
       horizonYears: newHorizon,
     });
   };
+
+  const scrollLeft = useCallback(() => {
+    if (gridRef.current) {
+      gridRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  }, []);
+
+  const scrollRight = useCallback(() => {
+    if (gridRef.current) {
+      gridRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -145,7 +160,8 @@ export function PensionSliders({
         </div>
       </div>
 
-      <div className={styles.slidersGrid}>
+      <div className={styles.carouselWrapper}>
+        <div className={styles.slidersGrid} ref={gridRef}>
         {SLIDER_CONFIGS.map((config) => {
           const [min, max] = ranges[config.key];
           const value = values[config.key];
@@ -186,12 +202,30 @@ export function PensionSliders({
             </div>
           );
         })}
-      </div>
-      <div className={styles.scrollHint}>
-        <span>Rolujte pro více parametrů</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M5 12h14M12 5l7 7-7 7" />
-        </svg>
+        </div>
+
+        {/* Navigation buttons */}
+        <div className={styles.navButtons}>
+          <button 
+            className={styles.navButton} 
+            onClick={scrollLeft}
+            aria-label="Předchozí parametr"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <span className={styles.navLabel}>Další parametry</span>
+          <button 
+            className={styles.navButton} 
+            onClick={scrollRight}
+            aria-label="Další parametr"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );
