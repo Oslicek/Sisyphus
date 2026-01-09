@@ -37,6 +37,8 @@ import {
   countWorkers,
   calculateAvgWage,
   calculateAvgPension,
+  findRequiredRetirementAge,
+  findRequiredPensionRatio,
 } from './pensionPayg';
 
 /**
@@ -48,6 +50,7 @@ export interface PreparedParams {
   contribRate: number;
   avgWage0: number;
   avgPension0: number;
+  pensionWageRatio: number;
   wageGrowthReal: number;
   cpiAssumed: number;
   indexWageWeight: number;
@@ -113,9 +116,10 @@ export function prepareProjectionParams(
   return {
     maxAge,
     retAge: sliders.retAge,
-    contribRate: pensionParams.contribRate,
+    contribRate: sliders.contribRate,
     avgWage0: pensionParams.avgWage0,
     avgPension0,
+    pensionWageRatio: sliders.pensionWageRatio,
     wageGrowthReal: sliders.wageGrowthReal,
     cpiAssumed: pensionParams.cpiAssumed,
     indexWageWeight: sliders.indexWageWeight,
@@ -227,6 +231,29 @@ function calculateYearPoint(
   const requiredRate = calculateRequiredRate(benefits, wageBill);
   const dependencyRatio = calculateDependencyRatio(pensioners, workers);
   
+  // Calculate equilibrium values (what's needed for balance)
+  const equilibriumParams = {
+    population: pop,
+    employment: empPop,
+    wageRel: wRelPop,
+    avgWage,
+    contribRate: params.contribRate,
+    maxAge: params.maxAge,
+  };
+  
+  // Required retirement age for balance (given current pension ratio)
+  const requiredRetAge = findRequiredRetirementAge({
+    ...equilibriumParams,
+    avgPension,
+  }, 50, 80);
+  
+  // Required pension ratio for balance (given current retirement age)
+  const requiredPensionRatio = findRequiredPensionRatio({
+    ...equilibriumParams,
+    avgWage0: params.avgWage0,
+    retAge: params.retAge,
+  });
+  
   return {
     year,
     totalPop,
@@ -242,6 +269,8 @@ function calculateYearPoint(
     dependencyRatio,
     avgWage,
     avgPension,
+    requiredRetAge,
+    requiredPensionRatio,
   };
 }
 

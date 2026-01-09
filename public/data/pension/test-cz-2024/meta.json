@@ -22,6 +22,7 @@
     "pensionWageRatio": 0.45,
     "wageGrowthReal": 0.01,
     "unemploymentRate": 0.04,
+    "contribRate": 0.20,
     "retAge": 18,
     "indexWageWeight": 0.5
   },
@@ -53,6 +54,10 @@
     "unemploymentRate": [
       0.01,
       0.20
+    ],
+    "contribRate": [
+      0.15,
+      0.40
     ],
     "retAge": [
       15,

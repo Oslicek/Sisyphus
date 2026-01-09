@@ -33,6 +33,7 @@ const testMeta = {
     pensionWageRatio: 0.45,
     wageGrowthReal: 0.01,
     unemploymentRate: 0.04,
+    contribRate: 0.20,
     retAge: 18,
     indexWageWeight: 0.5,
   },
@@ -44,6 +45,7 @@ const testMeta = {
     pensionWageRatio: [0.2, 0.8] as [number, number],
     wageGrowthReal: [-0.01, 0.03] as [number, number],
     unemploymentRate: [0.01, 0.2] as [number, number],
+    contribRate: [0.15, 0.4] as [number, number],
     retAge: [15, 20] as [number, number],
     indexWageWeight: [0, 1] as [number, number],
   },
@@ -146,6 +148,7 @@ describe('prepareProjectionParams', () => {
       pensionWageRatio: 0.45,
       wageGrowthReal: 0.01,
       unemploymentRate: 0.04,
+      contribRate: 0.20,
       retAge: 18,
       indexWageWeight: 0.5,
     };
@@ -304,6 +307,7 @@ describe('runProjection', () => {
       pensionWageRatio: 0.8, // High replacement rate (80% of wage)
       wageGrowthReal: -0.01, // Wage decline
       unemploymentRate: 0.15, // High unemployment
+      contribRate: 0.15, // Low contribution rate
       retAge: 15,         // Early retirement
       indexWageWeight: 1,
     };

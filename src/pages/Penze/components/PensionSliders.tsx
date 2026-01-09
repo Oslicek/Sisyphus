@@ -86,6 +86,15 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     distributionType: 'employment',
   },
   {
+    key: 'contribRate',
+    label: 'Sazba pojistného',
+    unit: '%',
+    step: 0.005,
+    format: (v) => (v * 100).toFixed(1),
+    description: 'Procento mzdy odváděné na důchodové pojištění. V ČR je aktuálně 28% (zaměstnanec + zaměstnavatel).',
+    // No distribution chart - single value
+  },
+  {
     key: 'retAge',
     label: 'Věk odchodu do důchodu',
     unit: 'let',

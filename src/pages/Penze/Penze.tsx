@@ -6,10 +6,12 @@
  * immediately see the impact on pension system balance.
  */
 
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Footer } from '../../components/Footer';
 import { useDocumentMeta } from '../../hooks/useDocumentMeta';
 import { usePensionSimulation } from '../../hooks/usePensionSimulation';
+import type { SimulationMode } from '../../types/pension';
 import { PensionSliders, PensionCharts } from './components';
 import styles from './Penze.module.css';
 
@@ -21,6 +23,8 @@ export function Penze() {
     title: 'Penze – Simulace důchodového systému',
     description: 'Interaktivní simulace průběžného důchodového systému. Zjistěte, jak demografické změny ovlivní penzijní bilanci.',
   });
+
+  const [simulationMode, setSimulationMode] = useState<SimulationMode>('balance');
 
   const {
     isLoading,
@@ -71,6 +75,27 @@ export function Penze() {
         {/* Main content */}
         {!isLoading && !error && sliders && sliderRanges && (
           <>
+            {/* Mode switch */}
+            <div className={styles.modeSwitch}>
+              <button
+                className={`${styles.modeButton} ${simulationMode === 'balance' ? styles.modeButtonActive : ''}`}
+                onClick={() => setSimulationMode('balance')}
+              >
+                📊 Co se stane?
+              </button>
+              <button
+                className={`${styles.modeButton} ${simulationMode === 'equilibrium' ? styles.modeButtonActive : ''}`}
+                onClick={() => setSimulationMode('equilibrium')}
+              >
+                ⚖️ Udržení rovnováhy
+              </button>
+            </div>
+            <p className={styles.modeDescription}>
+              {simulationMode === 'balance'
+                ? 'Simulace ukazuje, jak se vyvine bilance penzijního systému při nastavených parametrech.'
+                : 'Simulace ukazuje, jaké změny věku odchodu nebo náhradového poměru by byly nutné pro vyrovnanou bilanci.'}
+            </p>
+
             {/* Sliders */}
             <section className={styles.sectionCompact}>
               <PensionSliders
@@ -86,7 +111,7 @@ export function Penze() {
             {result && (
               <section className={styles.sectionCompact}>
                 <h2 className={styles.sectionTitle}>Výsledky projekce</h2>
-                <PensionCharts result={result} />
+                <PensionCharts result={result} mode={simulationMode} />
               </section>
             )}
 

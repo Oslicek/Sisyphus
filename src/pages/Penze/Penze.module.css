@@ -237,6 +237,48 @@
   color: white;
 }
 
+.modeSwitch {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.modeButton {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--color-border, #dee2e6);
+  background: white;
+  color: var(--color-text, #1a1a2e);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modeButton:hover {
+  border-color: var(--color-accent, #c41e3a);
+  background: var(--color-bg-subtle, #f8f9fa);
+}
+
+.modeButtonActive {
+  background: var(--color-accent, #c41e3a);
+  border-color: var(--color-accent, #c41e3a);
+  color: white;
+  font-weight: 600;
+}
+
+.modeDescription {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.95rem;
+  color: var(--color-text-muted, #6c757d);
+  margin: 0 0 1.5rem 0;
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 1rem;

@@ -182,3 +182,139 @@ export function calculateAvgPension(
   const indexRate = wageWeight * wageGrowthReal + (1 - wageWeight) * cpi;
   return avgPension0 * Math.pow(1 + indexRate, year);
 }
+
+// ============================================================================
+// Equilibrium Calculations (finding parameters for balanced budget)
+// ============================================================================
+
+export interface EquilibriumParams {
+  population: PopulationBySex;
+  employment: PopulationBySex;
+  wageRel: PopulationBySex;
+  avgWage: number;
+  avgPension: number;
+  contribRate: number;
+  retAge: number;
+  maxAge: number;
+}
+
+/**
+ * Find required retirement age to achieve balanced budget.
+ * Uses bisection search to find retAge where contributions = benefits.
+ * 
+ * @param params - System parameters (avgPension, contribRate are fixed)
+ * @param minAge - Minimum retirement age to search
+ * @param maxAge - Maximum retirement age to search
+ * @param tolerance - Acceptable balance difference (default 0.01)
+ * @param maxIterations - Maximum iterations (default 50)
+ * @returns Required retirement age (may be fractional), or null if impossible
+ */
+export function findRequiredRetirementAge(
+  params: Omit<EquilibriumParams, 'retAge'>,
+  minAge: number = 50,
+  maxAge: number = 80,
+  tolerance: number = 0.01,
+  maxIterations: number = 50
+): number | null {
+  const { population, employment, wageRel, avgWage, avgPension, contribRate } = params;
+  
+  // Calculate wage bill (fixed, doesn't depend on retirement age)
+  const wageBill = calculateWageBill(population, employment, wageRel, avgWage);
+  const contributions = calculateContributions(wageBill, contribRate);
+  
+  // Function to calculate balance at given retirement age
+  const balanceAt = (retAge: number): number => {
+    const pensioners = countPensioners(population, Math.floor(retAge));
+    const benefits = calculateBenefits(pensioners, avgPension);
+    return contributions - benefits;
+  };
+  
+  // Check bounds
+  const balanceAtMin = balanceAt(minAge);
+  const balanceAtMax = balanceAt(maxAge);
+  
+  // If balance is positive even at minimum age, return minimum
+  if (balanceAtMin >= 0) return minAge;
+  
+  // If balance is negative even at maximum age, impossible
+  if (balanceAtMax < 0) return null;
+  
+  // Bisection search
+  let low = minAge;
+  let high = maxAge;
+  
+  for (let i = 0; i < maxIterations; i++) {
+    const mid = (low + high) / 2;
+    const balance = balanceAt(mid);
+    
+    if (Math.abs(balance / contributions) < tolerance) {
+      return mid;
+    }
+    
+    if (balance < 0) {
+      low = mid; // Need higher retirement age
+    } else {
+      high = mid; // Can lower retirement age
+    }
+  }
+  
+  return (low + high) / 2;
+}
+
+/**
+ * Find required pension/wage ratio to achieve balanced budget.
+ * Uses simple algebra: benefits = contributions
+ * pensioners × avgWage × ratio = wageBill × contribRate
+ * ratio = (wageBill × contribRate) / (pensioners × avgWage)
+ * 
+ * @param params - System parameters (retAge, contribRate are fixed)
+ * @returns Required pension/wage ratio (0-1+), or null if impossible
+ */
+export function findRequiredPensionRatio(
+  params: Omit<EquilibriumParams, 'avgPension'> & { avgWage0: number }
+): number | null {
+  const { population, employment, wageRel, avgWage, avgWage0, contribRate, retAge } = params;
+  
+  // Calculate wage bill
+  const wageBill = calculateWageBill(population, employment, wageRel, avgWage);
+  const contributions = calculateContributions(wageBill, contribRate);
+  
+  // Count pensioners
+  const pensioners = countPensioners(population, retAge);
+  
+  if (pensioners === 0) {
+    return 0; // No pensioners = any ratio works
+  }
+  
+  // For balance: pensioners × avgPension = contributions
+  // avgPension = avgWage0 × pensionRatio (for year 0, simplified)
+  // But avgPension may have grown with indexation...
+  // For simplicity, we use avgWage as the reference for ratio
+  const requiredPension = contributions / pensioners;
+  const ratio = requiredPension / avgWage0;
+  
+  // Clamp to reasonable range
+  if (ratio < 0) return 0;
+  if (ratio > 2) return null; // >200% of wage is unrealistic
+  
+  return ratio;
+}
+
+/**
+ * Find required contribution rate to achieve balanced budget.
+ * Simple algebra: contribRate = benefits / wageBill
+ * 
+ * @param params - System parameters
+ * @returns Required contribution rate (0-1+)
+ */
+export function findRequiredContribRate(
+  params: Omit<EquilibriumParams, 'contribRate'>
+): number {
+  const { population, employment, wageRel, avgWage, avgPension, retAge } = params;
+  
+  const wageBill = calculateWageBill(population, employment, wageRel, avgWage);
+  const pensioners = countPensioners(population, retAge);
+  const benefits = calculateBenefits(pensioners, avgPension);
+  
+  return calculateRequiredRate(benefits, wageBill);
+}

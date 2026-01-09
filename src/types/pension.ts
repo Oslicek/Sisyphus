@@ -5,6 +5,17 @@
  */
 
 // ============================================================================
+// Simulation Mode
+// ============================================================================
+
+/**
+ * Simulation mode determines what we're calculating:
+ * - 'balance': Show system balance with given parameters (current behavior)
+ * - 'equilibrium': Find parameters needed to maintain balanced budget
+ */
+export type SimulationMode = 'balance' | 'equilibrium';
+
+// ============================================================================
 // Static Data File Types
 // ============================================================================
 
@@ -58,6 +69,8 @@ export interface SliderValues {
   wageGrowthReal: number;
   /** Unemployment rate (decimal, e.g., 0.04 = 4%) */
   unemploymentRate: number;
+  /** Contribution rate (decimal, e.g., 0.28 = 28%) */
+  contribRate: number;
   /** Retirement age */
   retAge: number;
   /** Pension indexation weight (0=CPI only, 1=wage only) */
@@ -75,6 +88,7 @@ export interface SliderRanges {
   pensionWageRatio: [number, number];
   wageGrowthReal: [number, number];
   unemploymentRate: [number, number];
+  contribRate: [number, number];
   retAge: [number, number];
   indexWageWeight: [number, number];
 }
@@ -226,6 +240,12 @@ export interface YearPoint {
   avgWage: number;
   /** Average pension in this year */
   avgPension: number;
+  
+  // Equilibrium data (what's needed for balanced budget)
+  /** Required retirement age for balance (given current pensionWageRatio) */
+  requiredRetAge: number | null;
+  /** Required pension/wage ratio for balance (given current retAge) */
+  requiredPensionRatio: number | null;
 }
 
 /**

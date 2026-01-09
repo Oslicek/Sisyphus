@@ -284,3 +284,141 @@ describe('integration: test dataset PAYG calculation', () => {
     expect(balance).toBeLessThan(0);
   });
 });
+
+// Import equilibrium functions
+import {
+  findRequiredRetirementAge,
+  findRequiredPensionRatio,
+  findRequiredContribRate,
+} from './pensionPayg';
+
+describe('Equilibrium calculations', () => {
+  // Simple test population
+  const population: PopulationBySex = {
+    M: [500, 500, 500, 500, 500, 500, 500, 500, 500, 500],  // 5000 total
+    F: [500, 500, 500, 500, 500, 500, 500, 500, 500, 500],  // 5000 total
+  };
+  const employment: PopulationBySex = {
+    M: [0, 0, 0.8, 0.8, 0.8, 0.8, 0.8, 0.5, 0.3, 0],
+    F: [0, 0, 0.7, 0.7, 0.7, 0.7, 0.7, 0.4, 0.2, 0],
+  };
+  const wageRel: PopulationBySex = {
+    M: [0, 0, 0.8, 1.0, 1.1, 1.1, 1.0, 0.9, 0.8, 0],
+    F: [0, 0, 0.7, 0.9, 1.0, 1.0, 0.9, 0.8, 0.7, 0],
+  };
+  const avgWage = 100000;
+  const avgWage0 = 100000;
+
+  describe('findRequiredRetirementAge', () => {
+    it('should find retirement age that balances budget', () => {
+      const params = {
+        population,
+        employment,
+        wageRel,
+        avgWage,
+        avgPension: 40000,
+        contribRate: 0.2,
+        maxAge: 9,
+      };
+      
+      const requiredAge = findRequiredRetirementAge(params, 2, 9);
+      
+      // Should return a valid age
+      expect(requiredAge).not.toBeNull();
+      expect(requiredAge).toBeGreaterThanOrEqual(2);
+      expect(requiredAge).toBeLessThanOrEqual(9);
+    });
+
+    it('should return null if balance impossible even at max age', () => {
+      const params = {
+        population,
+        employment,
+        wageRel,
+        avgWage,
+        avgPension: 500000, // Very high pension
+        contribRate: 0.1,    // Low contribution rate
+        maxAge: 9,
+      };
+      
+      const requiredAge = findRequiredRetirementAge(params, 2, 9);
+      
+      // Very high pensions + low contributions = impossible to balance
+      expect(requiredAge).toBeNull();
+    });
+
+    it('should return min age if already balanced at minimum', () => {
+      const params = {
+        population,
+        employment,
+        wageRel,
+        avgWage,
+        avgPension: 1000, // Very low pension
+        contribRate: 0.5,  // High contribution rate
+        maxAge: 9,
+      };
+      
+      const requiredAge = findRequiredRetirementAge(params, 2, 9);
+      
+      // Should return minimum age
+      expect(requiredAge).toBe(2);
+    });
+  });
+
+  describe('findRequiredPensionRatio', () => {
+    it('should find pension ratio that balances budget', () => {
+      const params = {
+        population,
+        employment,
+        wageRel,
+        avgWage,
+        avgWage0,
+        contribRate: 0.2,
+        retAge: 7,
+        maxAge: 9,
+      };
+      
+      const ratio = findRequiredPensionRatio(params);
+      
+      // Should return a valid ratio
+      expect(ratio).not.toBeNull();
+      expect(ratio).toBeGreaterThan(0);
+      expect(ratio).toBeLessThanOrEqual(2);
+    });
+
+    it('should return 0 when no pensioners', () => {
+      const params = {
+        population,
+        employment,
+        wageRel,
+        avgWage,
+        avgWage0,
+        contribRate: 0.2,
+        retAge: 10, // Beyond max age, no pensioners
+        maxAge: 9,
+      };
+      
+      const ratio = findRequiredPensionRatio(params);
+      expect(ratio).toBe(0);
+    });
+  });
+
+  describe('findRequiredContribRate', () => {
+    it('should find contribution rate that covers benefits', () => {
+      const params = {
+        population,
+        employment,
+        wageRel,
+        avgWage,
+        avgPension: 40000,
+        retAge: 7,
+        maxAge: 9,
+      };
+      
+      const rate = findRequiredContribRate(params);
+      
+      // Should return a valid rate
+      expect(rate).toBeGreaterThan(0);
+      expect(rate).toBeLessThan(1);
+    });
+  });
+});
