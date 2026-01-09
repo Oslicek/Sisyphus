@@ -59,6 +59,15 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     distributionType: 'migration',
   },
   {
+    key: 'avgPension0',
+    label: 'Počáteční důchod',
+    unit: 'ročně',
+    step: 1000,
+    format: (v) => v.toLocaleString('cs-CZ'),
+    description: 'Průměrný roční důchod v základním roce. Tato částka se každoročně valorizuje podle nastavení valorizace.',
+    // No distribution chart - single value
+  },
+  {
     key: 'wageGrowthReal',
     label: 'Růst mezd (reálný)',
     unit: '%',

@@ -19,6 +19,7 @@
     "e0_M": 23.0,
     "e0_F": 25.0,
     "netMigPer1000": 2.0,
+    "avgPension0": 45000,
     "wageGrowthReal": 0.01,
     "unemploymentRate": 0.04,
     "retAge": 18,
@@ -40,6 +41,10 @@
     "netMigPer1000": [
       -10,
       20
+    ],
+    "avgPension0": [
+      20000,
+      80000
     ],
     "wageGrowthReal": [
       -0.01,

@@ -52,6 +52,8 @@ export interface SliderValues {
   e0_F: number;
   /** Net migration per 1000 population */
   netMigPer1000: number;
+  /** Initial average annual pension */
+  avgPension0: number;
   /** Real wage growth rate (decimal, e.g., 0.01 = 1%) */
   wageGrowthReal: number;
   /** Unemployment rate (decimal, e.g., 0.04 = 4%) */
@@ -70,6 +72,7 @@ export interface SliderRanges {
   e0_M: [number, number];
   e0_F: [number, number];
   netMigPer1000: [number, number];
+  avgPension0: [number, number];
   wageGrowthReal: [number, number];
   unemploymentRate: [number, number];
   retAge: [number, number];

@@ -112,7 +112,7 @@ export function prepareProjectionParams(
     retAge: sliders.retAge,
     contribRate: pensionParams.contribRate,
     avgWage0: pensionParams.avgWage0,
-    avgPension0: pensionParams.avgPension0,
+    avgPension0: sliders.avgPension0,
     wageGrowthReal: sliders.wageGrowthReal,
     cpiAssumed: pensionParams.cpiAssumed,
     indexWageWeight: sliders.indexWageWeight,
