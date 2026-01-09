@@ -18,11 +18,28 @@ interface PensionChartsProps {
   result: ScenarioResult;
 }
 
-const CHART_LABELS: Record<ChartType, string> = {
-  balance: 'Bilance PAYG',
-  requiredRate: 'Požadovaná sazba',
-  dependencyRatio: 'Poměr závislosti',
-  population: 'Populace',
+interface ChartInfo {
+  label: string;
+  description: string;
+}
+
+const CHART_INFO: Record<ChartType, ChartInfo> = {
+  balance: {
+    label: 'Bilance PAYG',
+    description: 'Rozdíl mezi příspěvky (zelená) a vyplacenými důchody (červená). Záporná bilance = deficit, který musí stát dofinancovat.',
+  },
+  requiredRate: {
+    label: 'Požadovaná sazba',
+    description: 'Jaká sazba pojistného by byla nutná pro vyrovnanou bilanci. Přerušovaná čára ukazuje současnou sazbu 20%.',
+  },
+  dependencyRatio: {
+    label: 'Poměr závislosti',
+    description: 'Počet důchodců na jednoho pracujícího. Čím vyšší poměr, tím větší zátěž pro systém a pracující.',
+  },
+  population: {
+    label: 'Populace',
+    description: 'Celkový počet obyvatel v čase. Závisí na plodnosti, úmrtnosti a migraci.',
+  },
 };
 
 export function PensionCharts({ result }: PensionChartsProps) {
@@ -104,16 +121,18 @@ export function PensionCharts({ result }: PensionChartsProps) {
   return (
     <div className={styles.container}>
       <div className={styles.chartTabs}>
-        {(Object.keys(CHART_LABELS) as ChartType[]).map((type) => (
+        {(Object.keys(CHART_INFO) as ChartType[]).map((type) => (
           <button
             key={type}
             className={`${styles.tab} ${activeChart === type ? styles.tabActive : ''}`}
             onClick={() => setActiveChart(type)}
           >
-            {CHART_LABELS[type]}
+            {CHART_INFO[type].label}
           </button>
         ))}
       </div>
+
+      <p className={styles.chartDescription}>{CHART_INFO[activeChart].description}</p>
 
       <div ref={containerRef} className={styles.chartContainer}>
         <svg ref={chartRef} />

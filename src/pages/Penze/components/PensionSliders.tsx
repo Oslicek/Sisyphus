@@ -14,6 +14,7 @@ interface SliderConfig {
   unit: string;
   step: number;
   format: (value: number) => string;
+  description: string;
 }
 
 const SLIDER_CONFIGS: SliderConfig[] = [
@@ -23,6 +24,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     unit: 'dětí/ženu',
     step: 0.05,
     format: (v) => v.toFixed(2),
+    description: 'Průměrný počet dětí na jednu ženu. Hodnota 2,1 znamená zachování populace. Vyšší plodnost = více budoucích pracujících.',
   },
   {
     key: 'e0_M',
@@ -30,6 +32,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     unit: 'let',
     step: 0.5,
     format: (v) => v.toFixed(1),
+    description: 'Střední délka života mužů při narození. Delší život = více let v důchodu = vyšší náklady systému.',
   },
   {
     key: 'e0_F',
@@ -37,6 +40,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     unit: 'let',
     step: 0.5,
     format: (v) => v.toFixed(1),
+    description: 'Střední délka života žen při narození. Ženy se dožívají déle, takže pobírají důchod déle.',
   },
   {
     key: 'netMigPer1000',
@@ -44,6 +48,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     unit: '‰',
     step: 0.5,
     format: (v) => v.toFixed(1),
+    description: 'Rozdíl mezi imigrací a emigrací na 1000 obyvatel. Kladná migrace = příliv pracujících, pomáhá bilanci.',
   },
   {
     key: 'wageGrowthReal',
@@ -51,6 +56,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     unit: '%',
     step: 0.001,
     format: (v) => (v * 100).toFixed(1),
+    description: 'Roční růst mezd očištěný o inflaci. Vyšší mzdy = vyšší příspěvky, ale i vyšší budoucí důchody.',
   },
   {
     key: 'empMultiplier',
@@ -58,6 +64,7 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     unit: '×',
     step: 0.01,
     format: (v) => v.toFixed(2),
+    description: 'Násobitel míry zaměstnanosti. 1,0 = beze změny. Vyšší zaměstnanost = více přispěvatelů do systému.',
   },
   {
     key: 'retAge',
@@ -65,13 +72,15 @@ const SLIDER_CONFIGS: SliderConfig[] = [
     unit: 'let',
     step: 1,
     format: (v) => v.toFixed(0),
+    description: 'Věk, od kterého lidé pobírají důchod. Vyšší věk = méně důchodců a více pracujících.',
   },
   {
     key: 'indexWageWeight',
-    label: 'Valorizace (váha mezd)',
+    label: 'Valorizace důchodů',
     unit: '',
     step: 0.05,
     format: (v) => `${(v * 100).toFixed(0)}% mzdy, ${((1 - v) * 100).toFixed(0)}% CPI`,
+    description: 'Jak se zvyšují důchody: podle růstu mezd nebo inflace (CPI). Mzdová valorizace je štědřejší, ale dražší.',
   },
 ];
 
@@ -136,6 +145,7 @@ export function PensionSliders({
                   {config.format(value)} {config.unit}
                 </span>
               </div>
+              <p className={styles.sliderDescription}>{config.description}</p>
               <input
                 type="range"
                 min={min}
