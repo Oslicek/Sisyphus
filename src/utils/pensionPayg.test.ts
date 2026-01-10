@@ -10,6 +10,13 @@ import {
   countWorkers,
   calculateAvgWage,
   calculateAvgPension,
+  // New AHA chart functions
+  calculateWorkersPerPensioner,
+  calculateLifetimeContribution,
+  calculateLifetimePension,
+  calculateGenerationalBalance,
+  buildLifetimeAccountData,
+  buildGenerationalAccountData,
 } from './pensionPayg';
 import type { PopulationBySex } from '../types/pension';
 
@@ -465,6 +472,129 @@ describe('indexCzechPension', () => {
     // Total after indexation would be ~91k, but minimum is 150k
     expect(result.components.totalPension).toBe(150000);
     expect(result.components.minimumApplied).toBe(true);
+  });
+});
+
+// ============================================================================
+// New AHA Charts Calculations
+// ============================================================================
+
+describe('calculateWorkersPerPensioner', () => {
+  it('should return inverse of dependency ratio', () => {
+    // 2 workers per pensioner when dependency ratio is 0.5
+    expect(calculateWorkersPerPensioner(0.5)).toBe(2.0);
+  });
+
+  it('should return 1.25 when dependency ratio is 0.8', () => {
+    expect(calculateWorkersPerPensioner(0.8)).toBe(1.25);
+  });
+
+  it('should return 0 when no workers (Infinity dependency)', () => {
+    expect(calculateWorkersPerPensioner(Infinity)).toBe(0);
+  });
+
+  it('should return Infinity when no pensioners', () => {
+    expect(calculateWorkersPerPensioner(0)).toBe(Infinity);
+  });
+});
+
+describe('calculateLifetimeContribution', () => {
+  it('should calculate cumulative contributions for years worked', () => {
+    // Worker with 40k annual wage, 28% rate, 10 years
+    const result = calculateLifetimeContribution(40000, 0.28, 10);
+    expect(result).toBe(40000 * 0.28 * 10); // 112,000
+  });
+
+  it('should return 0 for 0 years worked', () => {
+    expect(calculateLifetimeContribution(40000, 0.28, 0)).toBe(0);
+  });
+
+  it('should handle varying wages across years', () => {
+    // Average 50k wage, 28% rate, 40 years
+    const result = calculateLifetimeContribution(50000, 0.28, 40);
+    expect(result).toBeCloseTo(560000, 0);
+  });
+});
+
+describe('calculateLifetimePension', () => {
+  it('should calculate cumulative pension received', () => {
+    // 15k annual pension, 20 years of retirement
+    const result = calculateLifetimePension(15000, 20);
+    expect(result).toBe(300000);
+  });
+
+  it('should return 0 for 0 years retired', () => {
+    expect(calculateLifetimePension(15000, 0)).toBe(0);
+  });
+});
+
+describe('calculateGenerationalBalance', () => {
+  it('should show negative balance when contributions exceed pensions', () => {
+    const lifetimeContrib = 500000;
+    const lifetimePension = 300000;
+    expect(calculateGenerationalBalance(lifetimeContrib, lifetimePension)).toBe(-200000);
+  });
+
+  it('should show positive balance when pensions exceed contributions', () => {
+    const lifetimeContrib = 200000;
+    const lifetimePension = 400000;
+    expect(calculateGenerationalBalance(lifetimeContrib, lifetimePension)).toBe(200000);
+  });
+
+  it('should return 0 when balanced', () => {
+    expect(calculateGenerationalBalance(300000, 300000)).toBe(0);
+  });
+});
+
+describe('buildLifetimeAccountData', () => {
+  it('should build contribution and pension curves for a birth cohort', () => {
+    // Simple test data - 5 year projection, retire at year 3
+    const points = [
+      { year: 2024, avgWage: 40000, avgPension: 15000 },
+      { year: 2025, avgWage: 41000, avgPension: 15500 },
+      { year: 2026, avgWage: 42000, avgPension: 16000 },
+      { year: 2027, avgWage: 43000, avgPension: 16500 },
+      { year: 2028, avgWage: 44000, avgPension: 17000 },
+    ];
+    
+    const result = buildLifetimeAccountData(
+      points,
+      2024, // birthYear
+      20,   // workStartAge
+      65,   // retAge
+      0.28  // contribRate
+    );
+    
+    expect(result).toHaveLength(5);
+    expect(result[0].year).toBe(2024);
+    expect(result[0].cumulativeContrib).toBeGreaterThanOrEqual(0);
+    expect(result[0].cumulativePension).toBe(0); // Not retired yet in first year
+  });
+});
+
+describe('buildGenerationalAccountData', () => {
+  it('should calculate lifetime balance for multiple birth cohorts', () => {
+    const points = [
+      { year: 2024, avgWage: 40000, avgPension: 15000 },
+      { year: 2025, avgWage: 41000, avgPension: 15500 },
+      { year: 2026, avgWage: 42000, avgPension: 16000 },
+    ];
+    
+    const result = buildGenerationalAccountData(
+      points,
+      2024,  // baseYear
+      [1960, 1970, 1980, 1990], // birth cohorts
+      20,    // workStartAge
+      65,    // retAge
+      0.28,  // contribRate
+      85     // lifeExpectancy
+    );
+    
+    expect(result).toHaveLength(4);
+    expect(result[0].birthYear).toBe(1960);
+    expect(result[0]).toHaveProperty('lifetimeBalance');
+    expect(result[0]).toHaveProperty('totalContrib');
+    expect(result[0]).toHaveProperty('totalPension');
   });
 });
 

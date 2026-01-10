@@ -57,7 +57,7 @@ function generateAreaPath(
   data: number[], 
   width: number, 
   height: number,
-  startAge: number = 0
+  _startAge: number = 0
 ): string {
   if (data.length === 0) return '';
   

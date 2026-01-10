@@ -263,6 +263,8 @@ export interface YearPoint {
   requiredRate: number;
   /** Dependency ratio (pensioners / workers) */
   dependencyRatio: number;
+  /** Workers per pensioner (inverse of dependency ratio - more intuitive) */
+  workersPerPensioner: number;
   /** Average wage in this year */
   avgWage: number;
   /** Average pension in this year (total) */

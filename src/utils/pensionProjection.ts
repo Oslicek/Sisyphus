@@ -35,6 +35,7 @@ import {
   calculateBalance,
   calculateRequiredRate,
   calculateDependencyRatio,
+  calculateWorkersPerPensioner,
   countWorkers,
   calculateAvgWage,
   findRequiredRetirementAge,
@@ -90,7 +91,7 @@ export function prepareProjectionParams(
   dataset: PensionDataset,
   sliders: SliderValues
 ): PreparedParams {
-  const { meta, mortalityCurves, fertilityCurve, laborParticipation, wageProfile, migrationShape, pensionParams, basePopulation } = dataset;
+  const { meta, mortalityCurves, fertilityCurve, laborParticipation, wageProfile, migrationShape, pensionParams, basePopulation: _basePopulation } = dataset;
   const maxAge = meta.maxAge;
   
   // Get base mortality rates (mx)
@@ -282,6 +283,7 @@ function calculateYearPoint(
     balance,
     requiredRate,
     dependencyRatio,
+    workersPerPensioner: calculateWorkersPerPensioner(dependencyRatio),
     avgWage,
     avgPension,
     pensionComponents,

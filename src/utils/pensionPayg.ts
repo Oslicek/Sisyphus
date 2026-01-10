@@ -120,6 +120,19 @@ export function calculateDependencyRatio(pensioners: number, workers: number): n
 }
 
 /**
+ * Calculate workers per pensioner (inverse of dependency ratio)
+ * More intuitive for users: "In 2050, only 1.4 workers will support each pensioner"
+ * 
+ * @param dependencyRatio - Dependency ratio (pensioners/workers)
+ * @returns Workers per pensioner
+ */
+export function calculateWorkersPerPensioner(dependencyRatio: number): number {
+  if (dependencyRatio === Infinity) return 0;
+  if (dependencyRatio === 0) return Infinity;
+  return 1 / dependencyRatio;
+}
+
+/**
  * Count effective workers (population × employment rate)
  * 
  * @param population - Population by sex and age
@@ -437,4 +450,263 @@ export function findRequiredContribRate(
   const benefits = calculateBenefits(pensioners, avgPension);
   
   return calculateRequiredRate(benefits, wageBill);
+}
+
+// ============================================================================
+// AHA Charts: Lifetime and Generational Account Calculations
+// ============================================================================
+
+/**
+ * Calculate total lifetime contributions for a worker
+ * Simple model: avgWage × contribRate × yearsWorked
+ * 
+ * @param avgWage - Average annual wage
+ * @param contribRate - Contribution rate (0-1)
+ * @param yearsWorked - Number of years worked
+ * @returns Total lifetime contribution
+ */
+export function calculateLifetimeContribution(
+  avgWage: number,
+  contribRate: number,
+  yearsWorked: number
+): number {
+  return avgWage * contribRate * yearsWorked;
+}
+
+/**
+ * Calculate total lifetime pension received
+ * Simple model: avgPension × yearsRetired
+ * 
+ * @param avgPension - Average annual pension
+ * @param yearsRetired - Number of years in retirement
+ * @returns Total lifetime pension received
+ */
+export function calculateLifetimePension(
+  avgPension: number,
+  yearsRetired: number
+): number {
+  return avgPension * yearsRetired;
+}
+
+/**
+ * Calculate generational balance (pension received - contributions made)
+ * Positive = received more than contributed (beneficiary)
+ * Negative = contributed more than received (net contributor)
+ * 
+ * @param lifetimeContrib - Total contributions over working life
+ * @param lifetimePension - Total pension received in retirement
+ * @returns Balance (pension - contribution)
+ */
+export function calculateGenerationalBalance(
+  lifetimeContrib: number,
+  lifetimePension: number
+): number {
+  return lifetimePension - lifetimeContrib;
+}
+
+/**
+ * Data point for lifetime account chart
+ */
+export interface LifetimeAccountPoint {
+  year: number;
+  age: number;
+  cumulativeContrib: number;
+  cumulativePension: number;
+  balance: number;
+}
+
+/**
+ * Build lifetime account data for a person born in a given year
+ * Shows cumulative contributions while working and cumulative pension while retired
+ * 
+ * @param points - Projection year points (must have avgWage and avgPension)
+ * @param birthYear - Year the person was born
+ * @param workStartAge - Age they start working (e.g., 20)
+ * @param retAge - Retirement age
+ * @param contribRate - Contribution rate
+ * @returns Array of cumulative contribution and pension data by year
+ */
+export function buildLifetimeAccountData(
+  points: Array<{ year: number; avgWage: number; avgPension: number }>,
+  birthYear: number,
+  workStartAge: number,
+  retAge: number,
+  contribRate: number
+): LifetimeAccountPoint[] {
+  const result: LifetimeAccountPoint[] = [];
+  let cumulativeContrib = 0;
+  let cumulativePension = 0;
+  
+  for (const point of points) {
+    const age = point.year - birthYear;
+    
+    // Working years: accumulate contributions
+    if (age >= workStartAge && age < retAge) {
+      cumulativeContrib += point.avgWage * contribRate;
+    }
+    
+    // Retirement years: accumulate pension
+    if (age >= retAge) {
+      cumulativePension += point.avgPension;
+    }
+    
+    result.push({
+      year: point.year,
+      age,
+      cumulativeContrib,
+      cumulativePension,
+      balance: cumulativePension - cumulativeContrib,
+    });
+  }
+  
+  return result;
+}
+
+/**
+ * Data point for generational account chart
+ */
+export interface GenerationalAccountPoint {
+  birthYear: number;
+  totalContrib: number;
+  totalPension: number;
+  lifetimeBalance: number;
+  /** Years of data available for this cohort */
+  dataYears: number;
+}
+
+/**
+ * Build generational account data for multiple birth cohorts
+ * Shows lifetime balance (pension - contributions) for people born in different years
+ * 
+ * IMPORTANT: This includes estimated HISTORICAL contributions/pensions before baseYear!
+ * Historical values are estimated by backward extrapolation using wage growth rate.
+ * 
+ * @param points - Projection year points
+ * @param baseYear - First year of projection
+ * @param birthCohorts - Array of birth years to calculate for
+ * @param workStartAge - Age they start working
+ * @param retAge - Retirement age
+ * @param contribRate - Contribution rate
+ * @param lifeExpectancy - Expected lifespan for extrapolation
+ * @param historicalWageGrowth - Assumed historical real wage growth (default 2%)
+ * @param historicalContribRate - Historical contribution rate (default 25% - was lower in past)
+ * @returns Array of generational balance data
+ */
+export function buildGenerationalAccountData(
+  points: Array<{ year: number; avgWage: number; avgPension: number }>,
+  baseYear: number,
+  birthCohorts: number[],
+  workStartAge: number,
+  retAge: number,
+  contribRate: number,
+  lifeExpectancy: number,
+  historicalWageGrowth: number = 0.02,
+  historicalContribRate: number = 0.25
+): GenerationalAccountPoint[] {
+  const lastYear = points[points.length - 1]?.year ?? baseYear;
+  const firstPoint = points[0];
+  const lastPoint = points[points.length - 1];
+  
+  if (!firstPoint || !lastPoint) {
+    return [];
+  }
+  
+  const baseWage = firstPoint.avgWage;
+  const basePension = firstPoint.avgPension;
+  
+  return birthCohorts.map(birthYear => {
+    let totalContrib = 0;
+    let totalPension = 0;
+    let dataYears = 0;
+    
+    const workStartYear = birthYear + workStartAge;
+    const retireYear = birthYear + retAge;
+    const deathYear = birthYear + lifeExpectancy;
+    
+    // =========================================
+    // 1. HISTORICAL period (before baseYear)
+    // =========================================
+    
+    // Historical working years (before projection)
+    const historicalWorkStart = Math.max(workStartYear, 1950); // Don't go before 1950
+    const historicalWorkEnd = Math.min(retireYear, baseYear);
+    
+    if (historicalWorkEnd > historicalWorkStart) {
+      for (let year = historicalWorkStart; year < historicalWorkEnd; year++) {
+        // Estimate historical wage by backward extrapolation
+        const yearsBeforeBase = baseYear - year;
+        const historicalWage = baseWage / Math.pow(1 + historicalWageGrowth, yearsBeforeBase);
+        totalContrib += historicalWage * historicalContribRate;
+        dataYears++;
+      }
+    }
+    
+    // Historical pension years (if already retired before projection)
+    const historicalRetStart = Math.max(retireYear, 1990); // Don't go before 1990
+    const historicalRetEnd = Math.min(deathYear, baseYear);
+    
+    if (historicalRetEnd > historicalRetStart) {
+      for (let year = historicalRetStart; year < historicalRetEnd; year++) {
+        // Estimate historical pension (pensions grow slower than wages)
+        const yearsBeforeBase = baseYear - year;
+        const historicalPension = basePension / Math.pow(1 + historicalWageGrowth * 0.7, yearsBeforeBase);
+        totalPension += historicalPension;
+        dataYears++;
+      }
+    }
+    
+    // =========================================
+    // 2. PROJECTION period (within points[])
+    // =========================================
+    
+    for (const point of points) {
+      const age = point.year - birthYear;
+      
+      // Working years within projection
+      if (age >= workStartAge && age < retAge) {
+        totalContrib += point.avgWage * contribRate;
+        dataYears++;
+      }
+      
+      // Retirement years within projection
+      if (age >= retAge && age <= lifeExpectancy) {
+        totalPension += point.avgPension;
+        dataYears++;
+      }
+    }
+    
+    // =========================================
+    // 3. FUTURE period (after projection ends)
+    // =========================================
+    
+    const lastAge = lastYear - birthYear;
+    
+    // Extrapolate remaining working years
+    if (lastAge < retAge && lastAge >= workStartAge) {
+      const remainingWorkYears = retAge - lastAge - 1;
+      totalContrib += lastPoint.avgWage * contribRate * remainingWorkYears;
+    }
+    
+    // Extrapolate retirement years
+    if (lastAge >= retAge) {
+      const remainingRetYears = lifeExpectancy - lastAge;
+      if (remainingRetYears > 0) {
+        totalPension += lastPoint.avgPension * remainingRetYears;
+      }
+    } else if (lastAge < retAge) {
+      // Person hasn't retired yet in projection - extrapolate full retirement
+      const retYears = lifeExpectancy - retAge;
+      if (retYears > 0) {
+        totalPension += lastPoint.avgPension * retYears;
+      }
+    }
+    
+    return {
+      birthYear,
+      totalContrib,
+      totalPension,
+      lifetimeBalance: totalPension - totalContrib,
+      dataYears,
+    };
+  });
 }

@@ -183,6 +183,9 @@
   color: var(--color-text-muted, #6c757d);
   margin: 0 0 0.75rem 0;
   line-height: 1.4;
+  /* Fixed height for 3 lines to align all sliders */
+  height: calc(0.8rem * 1.4 * 3);
+  overflow: hidden;
 }
 
 .slider {
